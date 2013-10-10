@@ -92,6 +92,18 @@ class StylometricFeatureEvaluator:
     def averageWordFrequencyClass(self, words):
         # This feature is defined here:
         # http://www.uni-weimar.de/medien/webis/publications/papers/stein_2006d.pdf
+        #
+        # What should we do if the frequency of a given word is 0? (causes div by 0 problem)
+        # Unfortunately the reference in the Meyer Zu Eissen and Stein article is to a
+        # German website and seems unrelated: http://wortschatz.uni-leipzig.de/
+        #
+        # One option is to use some sort of smoothing. Plus-one would be the simpleset, but
+        # we might want to do a bit of thinking about how much effect this will have on word
+        # class
+        
+        # Additionally, perhaps we should create a corpus class that supports functions such
+        # as corpus.getFrequency(word) and a corpus could be passed into averageWordFrequency
+        # as an argument. Lets do this.
     
         word_freq_dict = {}
         for word in nltk.corpus.brown.words():
