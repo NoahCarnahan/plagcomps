@@ -3,7 +3,7 @@
 # plagcomps rules
 # by Marcus, Noah, and Cole
 
-import nltk, re
+import nltk, re, math
 
 class StylometricFeatureEvaluator:
 
@@ -89,6 +89,28 @@ class StylometricFeatureEvaluator:
         return  float(total) / max(len(sentences), 1) # avoid division by 0
     
     
+    def averageWordFrequencyClass(self, words):
+        # This feature is defined here:
+        # http://www.uni-weimar.de/medien/webis/publications/papers/stein_2006d.pdf
+    
+        word_freq_dict = {}
+        for word in nltk.corpus.brown.words():
+            word = word.lower() # Do we care about case?
+            word_freq_dict[word] = word_freq_dict.get(word, 0) + 1
+        
+        corpus_word_freq_by_rank = sorted(word_freq_dict.items(), key=lambda x: x[1], reverse=True)
+        occurences_of_most_freq_word = corpus_word_freq_by_rank[0][1]
+    
+        total = 0
+        word_total = 0
+        for word in words:            
+            freq_class = math.floor(math.log((float(occurences_of_most_freq_word)/word_freq_dict.get(word.lower(), 0)),2))
+            total += freq_class
+            word_total += 1
+        return total/word_total
+        
+    
+    
     def _is_punctuation(self, word):
         ''' Returns true if the given word is just punctuation. '''
         match_obj = re.match(self.punctuation_re, word)
@@ -102,7 +124,10 @@ class StylometricFeatureEvaluator:
         print 'Extracted Stylometric Feature Vector: <avg_word_length, avg_words_in_sentence>'      
         print self.getFeatures(0, len(self.input_file), "char")
         print self.getFeatures(0, 2, "sentence")
-        print self.getFeatures(0, 2, "bad")
+        print
+        print "Average word frequency class of 'The small cat jumped'"
+        print self.averageWordFrequencyClass(["The", "small", "cat", "jumped"])
+        
 
 if __name__ == "__main__":
     StylometricFeatureEvaluator("foo.txt").test()
