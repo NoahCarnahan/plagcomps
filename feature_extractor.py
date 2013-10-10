@@ -105,6 +105,9 @@ class StylometricFeatureEvaluator:
         # as corpus.getFrequency(word) and a corpus could be passed into averageWordFrequency
         # as an argument. Lets do this.
     
+    
+        # This dictionary could perhaps be replaced by a nltk.probability.FreqDist
+        # http://nltk.org/api/nltk.html#nltk.probability.FreqDist
         word_freq_dict = {}
         for word in nltk.corpus.brown.words():
             word = word.lower() # Do we care about case?
