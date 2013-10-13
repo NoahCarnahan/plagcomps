@@ -5,6 +5,32 @@
 
 import nltk, re, math
 
+'''
+Class that extends the nltk PunktWordTokenizer. Unfortunately, PunktWordTokenizer doesn't 
+implement the span_tokenize() method, so we implemented it here.
+'''
+class CopyCatPunkWordTokenizer(nltk.tokenize.punkt.PunktBaseClass,nltk.tokenize.punkt.TokenizerI):
+    def __init__(self, train_text=None, verbose=False, lang_vars=nltk.tokenize.punkt.PunktLanguageVars(), token_cls=nltk.tokenize.punkt.PunktToken):
+        nltk.tokenize.punkt.PunktBaseClass.__init__(self, lang_vars=lang_vars, token_cls=token_cls)
+
+    '''Returns a list of strings that are the individual words of the given text.'''
+    def tokenize(self, text):
+        return self._lang_vars.word_tokenize(text)
+
+    '''Returns a list of tuples, each containing the start and end index for the respective
+       words returned by tokenize().'''
+    def span_tokenize(self, text):
+        return [(sl[0], sl[1]) for sl in self._slices_from_text(text)]
+
+    def _slices_from_text(self, text):
+        last_break = 0
+        indices = []
+        for match in self._lang_vars._word_tokenizer_re().finditer(text):
+            context = match.group()
+            indices.append((match.start(), match.end()))
+        return indices
+
+
 class StylometricFeatureEvaluator:
 
     def __init__(self, filepath):
