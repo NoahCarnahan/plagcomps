@@ -17,34 +17,105 @@ class StylometricFeatureEvaluator:
         f = open(filepath, 'r')
         self.input_file = f.read()
         f.close()
-        self.words = self.parseWords(self.input_file)
-        self.sentences = self.parseSentences(self.input_file)
-        self.paragraphs = self.parseParagraphs(self.input_file)
-    
-    def parseWords(self, text):
-        return nltk.wordpunct_tokenize(text)
         
-    def parseParagraphs(self, text):
-        return text.splitlines()
+        self.words = self.getWordIndices(self.input_file)
+        self.sentences = self.getSentenceIndices(self.input_file)
+        self.paragraphs = self.getParagraphIndices(self.input_file)
     
-    def parseSentences(self, text):
-        return nltk.sent_tokenize(text)
-
-    def getAllByAtom(self, atom_type):
-        '''
-        Returns document as parsed by <atom_type>
-        '''
-        if atom_type == 'word':
-            return self.words
-        elif atom_type == 'sentence':
-            return self.sentences
-        elif atom_type == 'paragraph':
-            return self.paragraphs
-        elif atom_type == 'char':
-            print 'Will fix this later'
-        else:
-            raise ValueError("atom_type string must be 'char', 'word', 'sentence' or 'paragraph', not '" + str(atom_type) + "'.")
+        self.word_length_sum_table = self.initWorldLengthSumTable()
+        self.sentence_length_sum_table = self.initSentenceLengthSumTable()
     
+    def getWordIndices(self, text):
+        '''
+        Returns a list of tuples representing the locations of words in the document.
+        Each tuple contains the start charcter index and end character index of the word.
+        For example getWordIndices("Hi there") = [(0,1),(3,7)]
+        '''
+        pass
+    
+    def getSentenceIndices(self, text):
+        '''
+        Returns a list of tuples representing the locations of sentences in the document.
+        Each tuple contains the start character index and end character index of the sentence.
+        For example getWordIndices("Hi there. Whats up!") = [(0,8),(10,18)]
+        '''
+        pass
+    
+    def getParagraphIndices(self, text):
+        '''
+        Returns a list of tuples representing the locations of paragraphs in the document.
+        Each tuple contains the start character index and end character index of the paragraph.
+        For example getWordIndices("Hi there. Whats up!") = [(0,18)]
+        '''
+        pass
+    
+    def getWordIndices(self, start_index, end_index):
+        '''
+        Returns the start index and end index into the self.word list corresponding to the words between
+        the given character indicies.
+        Example:
+        words = [(0, 1), (3, 8), (10, 14), (16, 18)]
+        getWordsIndices(4, 13) = (1, 2)
+        getWordsIndices(9, 15) = (2, 2)
+        getWordsIndices(15, 15) = exception!
+        '''
+        pass
+    
+    def getSentenceIndices(self, start_index, end_index):
+        '''
+        Returns the start index and end index into the self.sentences list corresponding to the words
+        between the given character indicies.
+        Example:
+        sentences = [(0,8),(10,18)]
+        getSentenceIndices(1, 15) = (0, 1)
+        '''
+        pass
+    
+    def getParagraphIndices(self, start_index, end_index):
+        '''
+        Returns the start index and end index into the self.paragrpahs list corresponding to the words
+        between the given character indicies.
+        Example:
+        paragraphs = [(0, 18)]
+        getParagraphIndices(1, 15) = (1, 1)
+        '''
+        pass
+    
+    def initWorldLengthSumTable(self):
+        '''
+        Initializes the word_length_sum_table. word_length_sum_table[i] is the sum of the lengths
+        of words from 0 to i.
+        
+        TODO: Check if words are punctuation?
+        '''
+        sum_table = [0] # This value allows the for loop to be cleaner. Notice that I remove it later.
+        
+        for start, end in self.words:
+            sum_table.append(len(self.input_file[start, end]) + sum_table[-1])
+        sum_table.pop(0)
+        
+        return sum_table
+    
+    def initSentenceLengthSumTable(self):
+        '''
+        Initializes the sentence_length_sum_table. sentence_length_sum_table[i] is the sum of the number
+        of words in sentences 0 to i.
+        
+        TODO: Check if words are punctuation?
+        '''
+        sum_table = [0]
+        for start, end in self.sentences:
+            sum = 0
+            start_index_into_word_list, end_index_into_word_list = getWordIndices(start, end)
+            for index_into_word_list in range(start_index_into_word_list, end_index_into_word_list):
+                start_index_into_characters, end_index_into_characters = self.words[index_into_word_list]
+                word = self.input_file[start_index_into_characters, end_index_into_characters]
+                sum += 1
+            sum_table.append(sum + sum_table[-1])
+        sum_table.pop(0)
+        return sum_table
+    
+    # TODO: Refactor this method
     def getFeatures(self, start_index, end_index, atom_type):
         ''' Returns a list of extracted stylometric features from the specified chunk of the document.
             The start and end indices use the same logic as indexing a string or list in Python.
@@ -78,32 +149,28 @@ class StylometricFeatureEvaluator:
         return [avg_word_length, avg_sentence_length]
     
 
-    def averageWordLength(self, words):
-        ''' Returns the average word length for the given list of words. 
-            Doesn't count puncuation as words. '''
-        total = 0
-        num_words = 0
-        for word in words:
-            # if the word is just punctuation, don't count it as a word
-            if not (self._is_punctuation(word)):
-                total += len(word)
-                num_words += 1
-        return float(total) / max(num_words, 1) # if there are no legitimate words, just set denominator to 1 to avoid division by 0
+    def averageWordLength(self, word_list_index_start, word_list_index_end):
+        '''
+        Returns the average word length of words between the given indicies into self.words.
         
+        TODO: Words that are just punctuation?
+        '''
+        total_word_length = self.word_length_sum_table[word_list_index_end] - word_length_sum_table[word_list_index_start]
+        num_of_words = (word_list_index_end + 1) - word_list_index_start
+        return float(total_word_length)/max(num_of_words, 1) # if there are no legitimate words, just set denominator to 1 to avoid division by 0
     
-    def averageSentenceLength(self, sentences):
-        ''' Returns the average words-per-sentence for the given list of sentences. '''
-        total = 0
-        num_sentences = 0
-        for sentence in sentences:
-            num_words = 0
-            for word in self.parseWords(sentence):
-                if not (self._is_punctuation(word)):
-                    num_words += 1
-            total += num_words
-        return  float(total) / max(len(sentences), 1) # avoid division by 0
+    def averageSentenceLength(self, sentence_list_index_start, sentence_list_index_end):
+        '''
+        Returns the average words-per-sentence for the sentences betwen the given indicies into self.sentences.
+        
+        TODO: Words that are just punctuation?    
+        '''
+        total_words_per_sentences = self.sentence_length_sum_table[sentence_list_index_end] - sentence_length_sum_table[sentence_list_index_start]
+        num_of_sentences = (sentence_list_index_start + 1) - sentence_list_index_end
+        
+        return float(total_word_length)/max(num_of_words, 1) # avoid division by 0
     
-    
+    #TODO: Refactor this method
     def averageWordFrequencyClass(self, words):
         # This feature is defined here:
         # http://www.uni-weimar.de/medien/webis/publications/papers/stein_2006d.pdf
