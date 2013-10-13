@@ -29,6 +29,21 @@ class StylometricFeatureEvaluator:
     
     def parseSentences(self, text):
         return nltk.sent_tokenize(text)
+
+    def getAllByAtom(self, atom_type):
+        '''
+        Returns document as parsed by <atom_type>
+        '''
+        if atom_type == 'word':
+            return self.words
+        elif atom_type == 'sentence':
+            return self.sentences
+        elif atom_type == 'paragraph':
+            return self.paragraphs
+        elif atom_type == 'char':
+            print 'Will fix this later'
+        else:
+            raise ValueError("atom_type string must be 'char', 'word', 'sentence' or 'paragraph', not '" + str(atom_type) + "'.")
     
     def getFeatures(self, start_index, end_index, atom_type):
         ''' Returns a list of extracted stylometric features from the specified chunk of the document.
