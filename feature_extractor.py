@@ -44,22 +44,23 @@ class StylometricFeatureEvaluator:
         self.input_file = f.read()
         f.close()
         
-        self.words = self.getWordIndices(self.input_file)
-        self.sentences = self.getSentenceIndices(self.input_file)
-        self.paragraphs = self.getParagraphIndices(self.input_file)
+        self.words = self.initWordList(self.input_file)
+        self.sentences = self.initSentenceList(self.input_file)
+        self.paragraphs = self.initParagrpahList(self.input_file)
     
         self.word_length_sum_table = self.initWorldLengthSumTable()
         self.sentence_length_sum_table = self.initSentenceLengthSumTable()
     
-    def getWordIndices(self, text):
+    def initWordList(self, text):
         '''
         Returns a list of tuples representing the locations of words in the document.
         Each tuple contains the start charcter index and end character index of the word.
         For example getWordIndices("Hi there") = [(0,1),(3,7)]
         '''
+        
         pass
     
-    def getSentenceIndices(self, text):
+    def initSentenceList(self, text):
         '''
         Returns a list of tuples representing the locations of sentences in the document.
         Each tuple contains the start character index and end character index of the sentence.
@@ -67,11 +68,11 @@ class StylometricFeatureEvaluator:
         '''
         pass
     
-    def getParagraphIndices(self, text):
+    def initParagrpahList(self, text):
         '''
         Returns a list of tuples representing the locations of paragraphs in the document.
         Each tuple contains the start character index and end character index of the paragraph.
-        For example getWordIndices("Hi there. Whats up!") = [(0,18)]
+        For example getWordIndices("Hi there. Whats up!") = [(0,19)]
         '''
         pass
     
@@ -81,9 +82,9 @@ class StylometricFeatureEvaluator:
         the given character indicies.
         Example:
         words = [(0, 1), (3, 8), (10, 14), (16, 18)]
-        getWordsIndices(4, 13) = (1, 2)
-        getWordsIndices(9, 15) = (2, 2)
-        getWordsIndices(15, 15) = exception!
+        getWordsIndices(4, 13) = (1, 3)
+        getWordsIndices(9, 15) = (2, 3)
+        getWordsIndices(15, 16) = exception!
         '''
         pass
     
@@ -92,8 +93,8 @@ class StylometricFeatureEvaluator:
         Returns the start index and end index into the self.sentences list corresponding to the words
         between the given character indicies.
         Example:
-        sentences = [(0,8),(10,18)]
-        getSentenceIndices(1, 15) = (0, 1)
+        sentences = [(0,8),(10,19)]
+        getSentenceIndices(1, 15) = (0, 2)
         '''
         pass
     
@@ -103,7 +104,7 @@ class StylometricFeatureEvaluator:
         between the given character indicies.
         Example:
         paragraphs = [(0, 18)]
-        getParagraphIndices(1, 15) = (1, 1)
+        getParagraphIndices(1, 15) = (0, 1)
         '''
         pass
     
@@ -129,6 +130,7 @@ class StylometricFeatureEvaluator:
         
         TODO: Check if words are punctuation?
         '''
+        #TODO: make this method use getWordIndices
         sum_table = [0]
         for start, end in self.sentences:
             sum = 0
