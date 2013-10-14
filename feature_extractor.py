@@ -44,9 +44,9 @@ class StylometricFeatureEvaluator:
         self.input_file = f.read()
         f.close()
         
-        self.words = self.initWordList(self.input_file)
-        self.sentences = self.initSentenceList(self.input_file)
-        self.paragraphs = self.initParagrpahList(self.input_file)
+        self.word_spans = self.initWordList(self.input_file)
+        self.sentence_spans = self.initSentenceList(self.input_file)
+        self.paragraph_spans = self.initParagrpahList(self.input_file)
     
         self.word_length_sum_table = self.initWorldLengthSumTable()
         self.sentence_length_sum_table = self.initSentenceLengthSumTable()
@@ -76,35 +76,38 @@ class StylometricFeatureEvaluator:
         '''
         pass
     
-    def getWordIndices(self, start_index, end_index):
+    def getWordSpans(self, start_index, end_index):
         '''
-        Returns the start index and end index into the self.word list corresponding to the words between
-        the given character indicies.
+        Returns a list of word spans from the self.word_spans list corresponding to the
+        words between the given character indicies.
+
         Example:
-        words = [(0, 1), (3, 8), (10, 14), (16, 18)]
-        getWordsIndices(4, 13) = (1, 3)
-        getWordsIndices(9, 15) = (2, 3)
+        self.word_spans = [(0, 1), (3, 8), (10, 14), (16, 18)]
+        getWordsIndices(4, 13) = [(3,8), (10,14)]
+        getWordsIndices(9, 15) = [(10, 14)]
         getWordsIndices(15, 16) = exception!
         '''
         pass
     
-    def getSentenceIndices(self, start_index, end_index):
+    def getSentenceSpans(self, start_index, end_index):
         '''
-        Returns the start index and end index into the self.sentences list corresponding to the words
-        between the given character indicies.
+        Returns a list of sentence spans from the self.sentence_spans list corresponding
+        to the words between the given character indicies.
+        
         Example:
-        sentences = [(0,8),(10,19)]
-        getSentenceIndices(1, 15) = (0, 2)
+        self.sentence_spans = [(0,8),(10,19)]
+        getSentenceIndices(1, 15) = [(0,8),(10,19)]
         '''
         pass
     
-    def getParagraphIndices(self, start_index, end_index):
+    def getParagraphSpans(self, start_index, end_index):
         '''
-        Returns the start index and end index into the self.paragrpahs list corresponding to the words
-        between the given character indicies.
+        Returns a list of paragraphs spans from the self.paragraph_spans list
+        corresponding to the words between the given character indicies.
+        
         Example:
-        paragraphs = [(0, 18)]
-        getParagraphIndices(1, 15) = (0, 1)
+        self.paragraph_spans = [(0, 18)]
+        getParagraphIndices(1, 15) = [(0, 18)]
         '''
         pass
     
@@ -117,7 +120,7 @@ class StylometricFeatureEvaluator:
         '''
         sum_table = [0] # This value allows the for loop to be cleaner. Notice that I remove it later.
         
-        for start, end in self.words:
+        for start, end in self.word_spans:
             sum_table.append(len(self.input_file[start, end]) + sum_table[-1])
         sum_table.pop(0)
         
@@ -132,11 +135,11 @@ class StylometricFeatureEvaluator:
         '''
         #TODO: make this method use getWordIndices
         sum_table = [0]
-        for start, end in self.sentences:
+        for start, end in self.sentence_spans:
             sum = 0
             start_index_into_word_list, end_index_into_word_list = getWordIndices(start, end)
             for index_into_word_list in range(start_index_into_word_list, end_index_into_word_list):
-                start_index_into_characters, end_index_into_characters = self.words[index_into_word_list]
+                start_index_into_characters, end_index_into_characters = self.word_spans[index_into_word_list]
                 word = self.input_file[start_index_into_characters, end_index_into_characters]
                 sum += 1
             sum_table.append(sum + sum_table[-1])
@@ -156,16 +159,16 @@ class StylometricFeatureEvaluator:
             word_chunk = self.parseWords(input_file_chunk)
             sentence_chunk = self.parseSentences(input_file_chunk)
         elif atom_type == 'word':
-            word_chunk = self.words[start_index : end_index]
+            word_chunk = self.word_spans[start_index : end_index]
             sentence_chunk = self.parseSentences(" ".join(word_chunk))
             # This method of building sentences might not be ideal. "$3.88" will be parsed
             # into ["$","3",".","88"] then joined back together as "$ 3 . 88". Unsure of
             # what other situations this could be problematic for...
         elif atom_type == 'sentence':
-            sentence_chunk = self.sentences[start_index : end_index]
+            sentence_chunk = self.sentence_spans[start_index : end_index]
             word_chunk = self.parseWords(" ".join(sentence_chunk))
         elif atom_type == 'paragraph':
-            paragraph_chunk = self.paragraphs[start_index : end_index]
+            paragraph_chunk = self.paragraph_spans[start_index : end_index]
             word_chunk = self.parseWords(" ".join(paragraph_chunk))
             sentence_chunk = self.parseSentences(" ".join(paragraph_chunk))
         else:
@@ -179,7 +182,7 @@ class StylometricFeatureEvaluator:
 
     def averageWordLength(self, word_list_index_start, word_list_index_end):
         '''
-        Returns the average word length of words between the given indicies into self.words.
+        Returns the average word length of words between the given indicies into self.word_spans.
         
         TODO: Words that are just punctuation?
         '''
@@ -189,7 +192,7 @@ class StylometricFeatureEvaluator:
     
     def averageSentenceLength(self, sentence_list_index_start, sentence_list_index_end):
         '''
-        Returns the average words-per-sentence for the sentences betwen the given indicies into self.sentences.
+        Returns the average words-per-sentence for the sentences betwen the given indicies into self.sentence_spans.
         
         TODO: Words that are just punctuation?    
         '''
@@ -242,9 +245,9 @@ class StylometricFeatureEvaluator:
         return match_obj and len(match_obj.group()) == len(word)
     
     def test(self):
-        print 'words: ', self.words
-        print 'sentences: ', self.sentences
-        print 'paragraphs: ', self.paragraphs
+        print 'words: ', self.word_spans
+        print 'sentences: ', self.sentence_spans
+        print 'paragraphs: ', self.paragraph_spans
         print
         print 'Extracted Stylometric Feature Vector: <avg_word_length, avg_words_in_sentence>'      
         print self.getFeatures(0, len(self.input_file), "char")
