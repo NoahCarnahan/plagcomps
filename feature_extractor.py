@@ -9,7 +9,7 @@ import nltk, re, math
 Class that extends the nltk PunktWordTokenizer. Unfortunately, PunktWordTokenizer doesn't 
 implement the span_tokenize() method, so we implemented it here.
 '''
-class CopyCatPunkWordTokenizer(nltk.tokenize.punkt.PunktBaseClass,nltk.tokenize.punkt.TokenizerI):
+class CopyCatPunktWordTokenizer(nltk.tokenize.punkt.PunktBaseClass,nltk.tokenize.punkt.TokenizerI):
     def __init__(self, train_text=None, verbose=False, lang_vars=nltk.tokenize.punkt.PunktLanguageVars(), token_cls=nltk.tokenize.punkt.PunktToken):
         nltk.tokenize.punkt.PunktBaseClass.__init__(self, lang_vars=lang_vars, token_cls=token_cls)
 
@@ -48,34 +48,90 @@ class StylometricFeatureEvaluator:
         self.sentence_spans = self.initSentenceList(self.input_file)
         self.paragraph_spans = self.initParagrpahList(self.input_file)
     
-        self.word_length_sum_table = self.initWorldLengthSumTable()
-        self.sentence_length_sum_table = self.initSentenceLengthSumTable()
+        #self.word_length_sum_table = self.initWorldLengthSumTable()
+        #self.sentence_length_sum_table = self.initSentenceLengthSumTable()
     
     def initWordList(self, text):
         '''
         Returns a list of tuples representing the locations of words in the document.
         Each tuple contains the start charcter index and end character index of the word.
-        For example getWordIndices("Hi there") = [(0,1),(3,7)]
+        For example initWordList("Hi there") = [(0,1),(3,7)]
         '''
-        
-        pass
+        tokenizer = CopyCatPunktWordTokenizer()
+        return tokenizer.span_tokenize(text)
     
     def initSentenceList(self, text):
         '''
         Returns a list of tuples representing the locations of sentences in the document.
         Each tuple contains the start character index and end character index of the sentence.
-        For example getWordIndices("Hi there. Whats up!") = [(0,8),(10,18)]
+        For example initSentenceList("Hi there. Whats up!") = [(0,8),(10,18)]
         '''
-        pass
+        tokenizer = nltk.PunktSentenceTokenizer()
+        return tokenizer.span_tokenize(text)
     
     def initParagrpahList(self, text):
         '''
         Returns a list of tuples representing the locations of paragraphs in the document.
         Each tuple contains the start character index and end character index of the paragraph.
-        For example getWordIndices("Hi there. Whats up!") = [(0,19)]
+        For example initParagrpahList("Hi there. Whats up!") = [(0,19)]
         '''
-        pass
-    
+        # It's unclear how a paragraph is defined. For now, just treat newlines as paragraph separators
+        paragraph_texts = text.splitlines()
+        spans = []
+        start_index = 0
+        for paragraph in paragraph_texts:
+            start = text.find(paragraph, start_index)
+            spans.append((start, start+len(paragraph)))
+            start_index = start + len(paragraph)
+        return spans
+
+    def _binarySearchForSpanIndex(self, spans, index, first):
+        ''' Perform a binary search across the list of spans to find the index in the spans that
+            corresponds to the given character index from the source document. The parameter <first>
+            indicates whether or not we're searching for the first or second element of the spans. '''
+        # clamps to the first or last character index
+        if index >= spans[-1][1]:
+            index = spans[- 1][1]
+        elif index < 0:
+            index = 0
+        element = 0 if first else 1
+        lower = 0
+        upper = len(spans)-1
+        prev_span_index = (upper+lower)/2
+        cur_span_index = prev_span_index
+        cur_span = spans[cur_span_index]
+        while True:
+            if cur_span[element] == index: # found the exact index
+                return cur_span_index
+            elif cur_span[element] > index: # we need to look to the left
+                if lower >= upper:
+                    if element == 0:
+                        return cur_span_index - 1
+                    else:
+                        if index >= cur_span[0]:
+                            return cur_span_index
+                        elif index <= spans[cur_span_index-1][1]:
+                            return cur_span_index - 1
+                        else:
+                            return cur_span_index
+                prev_span_index = cur_span_index
+                upper = cur_span_index - 1
+                cur_span_index = (upper+lower)/2
+                cur_span = spans[cur_span_index]
+            elif cur_span[element] < index: # we need to look to the right
+                if lower >= upper:
+                    if element == 0:
+                        if index <= cur_span[1]:
+                            return cur_span_index
+                        else:
+                            return cur_span_index + 1
+                    else:
+                        return cur_span_index + 1
+                prev_span_index = cur_span_index
+                lower = cur_span_index + 1
+                cur_span_index = (upper+lower)/2
+                cur_span = spans[cur_span_index]
+
     def getWordSpans(self, start_index, end_index):
         '''
         Returns a list of word spans from the self.word_spans list corresponding to the
@@ -85,9 +141,11 @@ class StylometricFeatureEvaluator:
         self.word_spans = [(0, 1), (3, 8), (10, 14), (16, 18)]
         getWordsIndices(4, 13) = [(3,8), (10,14)]
         getWordsIndices(9, 15) = [(10, 14)]
-        getWordsIndices(15, 16) = exception!
+        getWordsIndices(15, 16) = exception! --> Should it be an exception? It's not right now.
         '''
-        pass
+        first_index = self._binarySearchForSpanIndex(self.word_spans, start_index, True)
+        second_index = self._binarySearchForSpanIndex(self.word_spans, end_index, False)
+        return [span for span in self.word_spans[first_index : second_index+1]]
     
     def getSentenceSpans(self, start_index, end_index):
         '''
@@ -121,7 +179,7 @@ class StylometricFeatureEvaluator:
         sum_table = [0] # This value allows the for loop to be cleaner. Notice that I remove it later.
         
         for start, end in self.word_spans:
-            sum_table.append(len(self.input_file[start, end]) + sum_table[-1])
+            sum_table.append(len(self.input_file[start : end]) + sum_table[-1])
         sum_table.pop(0)
         
         return sum_table
@@ -133,7 +191,7 @@ class StylometricFeatureEvaluator:
         
         TODO: Check if words are punctuation?
         '''
-        #TODO: make this method use getWordIndices
+        #TODO: make this method use initWordList
         sum_table = [0]
         for start, end in self.sentence_spans:
             sum = 0
@@ -248,6 +306,8 @@ class StylometricFeatureEvaluator:
         print 'words: ', self.word_spans
         print 'sentences: ', self.sentence_spans
         print 'paragraphs: ', self.paragraph_spans
+        print
+        print 'word spans: ', self.getWordSpans(0, 17)
         print
         print 'Extracted Stylometric Feature Vector: <avg_word_length, avg_words_in_sentence>'      
         print self.getFeatures(0, len(self.input_file), "char")
