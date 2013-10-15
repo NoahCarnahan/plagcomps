@@ -135,28 +135,32 @@ class StylometricFeatureEvaluator:
     def getWordSpans(self, start_index, end_index):
         '''
         Returns a list of word spans from the self.word_spans list corresponding to the
-        words between the given character indicies.
+        words between the given character indicies. start_index and end_index are character
+        indices from the original document.
 
         Example:
         self.word_spans = [(0, 1), (3, 8), (10, 14), (16, 18)]
-        getWordsIndices(4, 13) = [(3,8), (10,14)]
-        getWordsIndices(9, 15) = [(10, 14)]
-        getWordsIndices(15, 16) = exception! --> Should it be an exception? It's not right now.
+        getWordSpans(4, 13) = [(3,8), (10,14)]
+        getWordSpans(9, 15) = [(10, 14)]
+        getWordSpans(15, 16) = exception! --> Should it be an exception? It's not right now.
         '''
         first_index = self._binarySearchForSpanIndex(self.word_spans, start_index, True)
         second_index = self._binarySearchForSpanIndex(self.word_spans, end_index, False)
-        return [span for span in self.word_spans[first_index : second_index+1]]
+        return self.word_spans[first_index : second_index+1]
     
     def getSentenceSpans(self, start_index, end_index):
         '''
         Returns a list of sentence spans from the self.sentence_spans list corresponding
-        to the words between the given character indicies.
+        to the words between the given character indicies. start_index and end_index are character
+        indices from the original document.
         
         Example:
         self.sentence_spans = [(0,8),(10,19)]
-        getSentenceIndices(1, 15) = [(0,8),(10,19)]
+        getSentenceSpans(1, 15) = [(0,8),(10,19)]
         '''
-        pass
+        first_index = self._binarySearchForSpanIndex(self.sentence_spans, start_index, True)
+        second_index = self._binarySearchForSpanIndex(self.sentence_spans, end_index, False)
+        return self.sentence_spans[first_index : second_index+1]
     
     def getParagraphSpans(self, start_index, end_index):
         '''
@@ -167,7 +171,9 @@ class StylometricFeatureEvaluator:
         self.paragraph_spans = [(0, 18)]
         getParagraphIndices(1, 15) = [(0, 18)]
         '''
-        pass
+        first_index = self._binarySearchForSpanIndex(self.paragraph_spans, start_index, True)
+        second_index = self._binarySearchForSpanIndex(self.paragraph_spans, end_index, False)
+        return self.paragraph_spans[first_index : second_index+1]
     
     def initWorldLengthSumTable(self):
         '''
@@ -308,6 +314,8 @@ class StylometricFeatureEvaluator:
         print 'paragraphs: ', self.paragraph_spans
         print
         print 'word spans: ', self.getWordSpans(0, 17)
+        print 'sentence spans: ', self.getSentenceSpans(40, 300)
+        print 'paragraph spans: ', self.getParagraphSpans(17, 200)
         print
         print 'Extracted Stylometric Feature Vector: <avg_word_length, avg_words_in_sentence>'      
         print self.getFeatures(0, len(self.input_file), "char")
