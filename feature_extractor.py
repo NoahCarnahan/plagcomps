@@ -5,21 +5,24 @@
 
 import nltk, re, math
 
-'''
-Class that extends the nltk PunktWordTokenizer. Unfortunately, PunktWordTokenizer doesn't 
-implement the span_tokenize() method, so we implemented it here.
-'''
+
 class CopyCatPunktWordTokenizer(nltk.tokenize.punkt.PunktBaseClass,nltk.tokenize.punkt.TokenizerI):
+    '''
+    Class that extends the nltk PunktWordTokenizer. Unfortunately, PunktWordTokenizer doesn't 
+    implement the span_tokenize() method, so we implemented it here.
+    '''
     def __init__(self, train_text=None, verbose=False, lang_vars=nltk.tokenize.punkt.PunktLanguageVars(), token_cls=nltk.tokenize.punkt.PunktToken):
         nltk.tokenize.punkt.PunktBaseClass.__init__(self, lang_vars=lang_vars, token_cls=token_cls)
 
-    '''Returns a list of strings that are the individual words of the given text.'''
+    
     def tokenize(self, text):
+        '''Returns a list of strings that are the individual words of the given text.'''
         return self._lang_vars.word_tokenize(text)
 
-    '''Returns a list of tuples, each containing the start and end index for the respective
-       words returned by tokenize().'''
+    
     def span_tokenize(self, text):
+        '''Returns a list of tuples, each containing the start and end index for the respective
+            words returned by tokenize().'''
         return [(sl[0], sl[1]) for sl in self._slices_from_text(text)]
 
     def _slices_from_text(self, text):
@@ -55,7 +58,7 @@ class StylometricFeatureEvaluator:
         '''
         Returns a list of tuples representing the locations of words in the document.
         Each tuple contains the start charcter index and end character index of the word.
-        For example initWordList("Hi there") = [(0,1),(3,7)]
+        For example initWordList("Hi there") = [(0,2),(3,8)]
         '''
         tokenizer = CopyCatPunktWordTokenizer()
         return tokenizer.span_tokenize(text)
@@ -64,7 +67,7 @@ class StylometricFeatureEvaluator:
         '''
         Returns a list of tuples representing the locations of sentences in the document.
         Each tuple contains the start character index and end character index of the sentence.
-        For example initSentenceList("Hi there. Whats up!") = [(0,8),(10,18)]
+        For example initSentenceList("Hi there. Whats up!") = [(0,9),(10,19)]
         '''
         tokenizer = nltk.PunktSentenceTokenizer()
         return tokenizer.span_tokenize(text)
@@ -156,7 +159,7 @@ class StylometricFeatureEvaluator:
         self.word_spans = [(0, 1), (3, 8), (10, 14), (16, 18)]
         getWordSpans(4, 13) = [(3,8), (10,14)]
         getWordSpans(9, 15) = [(10, 14)]
-        getWordSpans(15, 16) = exception! --> Should it be an exception? It's not right now.
+        getWordSpans(15, 16) = []
         '''
         first_index = self._binarySearchForSpanIndex(self.word_spans, start_index, True)
         second_index = self._binarySearchForSpanIndex(self.word_spans, end_index, False)
