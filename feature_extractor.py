@@ -50,6 +50,7 @@ class StylometricFeatureEvaluator:
     
         self.word_length_sum_table = self.initWordLengthSumTable()
         self.sentence_length_sum_table = self.initSentenceLengthSumTable()
+        print 'sent: ', self.sentence_length_sum_table
     
     def initWordList(self, text):
         '''
@@ -136,7 +137,8 @@ class StylometricFeatureEvaluator:
         '''
         Returns a list of word spans from the self.word_spans list corresponding to the
         words between the given character indicies. start_index and end_index are character
-        indices from the original document.
+        indices from the original document. Also returns a tuple containing the actual
+        indeces of the words in the word_spans list.
 
         Example:
         self.word_spans = [(0, 1), (3, 8), (10, 14), (16, 18)]
@@ -146,13 +148,14 @@ class StylometricFeatureEvaluator:
         '''
         first_index = self._binarySearchForSpanIndex(self.word_spans, start_index, True)
         second_index = self._binarySearchForSpanIndex(self.word_spans, end_index, False)
-        return self.word_spans[first_index : second_index+1]
+        return self.word_spans[first_index : second_index+1], (first_index, second_index)
     
     def getSentenceSpans(self, start_index, end_index):
         '''
         Returns a list of sentence spans from the self.sentence_spans list corresponding
         to the words between the given character indicies. start_index and end_index are character
-        indices from the original document.
+        indices from the original document. Also returns a tuple containing the actual
+        indeces of the sentences in the sentence_spans list.
         
         Example:
         self.sentence_spans = [(0,8),(10,19)]
@@ -160,12 +163,13 @@ class StylometricFeatureEvaluator:
         '''
         first_index = self._binarySearchForSpanIndex(self.sentence_spans, start_index, True)
         second_index = self._binarySearchForSpanIndex(self.sentence_spans, end_index, False)
-        return self.sentence_spans[first_index : second_index+1]
+        return self.sentence_spans[first_index : second_index+1], (first_index, second_index)
     
     def getParagraphSpans(self, start_index, end_index):
         '''
         Returns a list of paragraphs spans from the self.paragraph_spans list
-        corresponding to the words between the given character indicies.
+        corresponding to the words between the given character indicies. Also returns a tuple 
+        containing the actual indeces of the paragraphs in the paragraph_spans list.
         
         Example:
         self.paragraph_spans = [(0, 18)]
@@ -173,7 +177,7 @@ class StylometricFeatureEvaluator:
         '''
         first_index = self._binarySearchForSpanIndex(self.paragraph_spans, start_index, True)
         second_index = self._binarySearchForSpanIndex(self.paragraph_spans, end_index, False)
-        return self.paragraph_spans[first_index : second_index+1]
+        return self.paragraph_spans[first_index : second_index+1], (first_index, second_index)
     
     def initWordLengthSumTable(self):
         '''
@@ -198,7 +202,7 @@ class StylometricFeatureEvaluator:
         sum_table = [0]
         for start, end in self.sentence_spans:
             word_sum = 0
-            word_spans = self.getWordSpans(start, end)
+            word_spans = self.getWordSpans(start, end)[0]
             word_sum += len(word_spans)
             sum_table.append(word_sum + sum_table[-1])
         sum_table.pop(0)
@@ -211,32 +215,56 @@ class StylometricFeatureEvaluator:
             The atom_type parameter specifies what your start_index and end_index parameters refer to.
             For example, if you wanted to query the stylometric features for sentences 0 through 4, you 
             would call this function as getFeatures(0, 4, "sentence"). '''
-            
+        # TODO: clamp the start_index and end_index parameters to lowest and highest possible values
+
         if atom_type == 'char':
-            input_file_chunk = self.input_file[start_index : end_index]
-            word_chunk = self.parseWords(input_file_chunk)
-            sentence_chunk = self.parseSentences(input_file_chunk)
+            # fetch word spans specified by character indices
+            word_spans, word_spans_indices = self.getWordSpans(start_index, end_index)
+            first_word_index = word_spans_indices[0]
+            last_word_index = word_spans_indices[1]
+
+            #fetch sentence spans specified by character indices
+            sentence_spans, sentence_spans_indices = self.getSentenceSpans(start_index, end_index)
+            first_sentence_index = sentence_spans_indices[0]
+            last_sentence_index = sentence_spans_indices[1]
         elif atom_type == 'word':
-            word_chunk = self.word_spans[start_index : end_index]
-            sentence_chunk = self.parseSentences(" ".join(word_chunk))
-            # This method of building sentences might not be ideal. "$3.88" will be parsed
-            # into ["$","3",".","88"] then joined back together as "$ 3 . 88". Unsure of
-            # what other situations this could be problematic for...
+            first_word_index = start_index
+            last_word_index = end_index
+
+            # fetch sentence spans specified by word indices
+            sentence_spans, sentence_spans_indices = self.getSentenceSpans(self.word_spans[start_index][0], self.word_spans[end_index][1])
+            first_sentence_index = sentence_spans_indices[0]
+            last_sentence_index = sentence_spans_indices[1]
         elif atom_type == 'sentence':
-            sentence_chunk = self.sentence_spans[start_index : end_index]
-            word_chunk = self.parseWords(" ".join(sentence_chunk))
+            # fetch word spans specified by sentence indices
+            word_spans, word_spans_indices = self.getWordSpans(self.sentence_spans[start_index][0], self.sentence_spans[end_index][1])
+            first_word_index = word_spans_indices[0]
+            last_word_index = word_spans_indices[1]
+
+            first_sentence_index = start_index
+            last_sentence_index = end_index
         elif atom_type == 'paragraph':
-            paragraph_chunk = self.paragraph_spans[start_index : end_index]
-            word_chunk = self.parseWords(" ".join(paragraph_chunk))
-            sentence_chunk = self.parseSentences(" ".join(paragraph_chunk))
+            # fetch word spans specified by paragraph indices
+            word_spans, word_spans_indices = self.getWordSpans(self.paragraph_spans[start_index][0], self.paragraph_spans[end_index][1])
+            first_word_index = word_spans_indices[0]
+            last_word_index = word_spans_indices[1]
+
+            # fetch sentence spans specified by paragraph indices
+            sentence_spans, sentence_spans_indices = self.getSentenceSpans(self.paragraph_spans[start_index][0], self.paragraph_spans[end_index][1])
+            first_sentence_index = sentence_spans_indices[0]
+            last_sentence_index = sentence_spans_indices[1]
         else:
             raise ValueError("atom_type string must be 'char', 'word', 'sentence' or 'paragraph', not '" + str(atom_type) + "'.")
 
-        avg_word_length = self.averageWordLength(word_chunk)
-        avg_sentence_length = self.averageSentenceLength(sentence_chunk)
+        avg_word_length = self.averageWordLength(first_word_index, last_word_index)
+        avg_sentence_length = self.averageSentenceLength(first_sentence_index, last_sentence_index)
         
         return [avg_word_length, avg_sentence_length]
     
+    def _getSumTableEntry(self, sum_table, index):
+        if index < 0:
+            return 0
+        return sum_table[index]
 
     def averageWordLength(self, word_list_index_start, word_list_index_end):
         '''
@@ -244,9 +272,9 @@ class StylometricFeatureEvaluator:
         
         TODO: Words that are just punctuation?
         '''
-        total_word_length = self.word_length_sum_table[word_list_index_end] - word_length_sum_table[word_list_index_start]
-        num_of_words = (word_list_index_end + 1) - word_list_index_start
-        return float(total_word_length)/max(num_of_words, 1) # if there are no legitimate words, just set denominator to 1 to avoid division by 0
+        total_word_length = self._getSumTableEntry(self.word_length_sum_table, word_list_index_end) - self._getSumTableEntry(self.word_length_sum_table, word_list_index_start-1)
+        num_words = (word_list_index_end + 1) - word_list_index_start
+        return float(total_word_length)/max(num_words, 1) # if there are no legitimate words, just set denominator to 1 to avoid division by 0
     
     def averageSentenceLength(self, sentence_list_index_start, sentence_list_index_end):
         '''
@@ -254,10 +282,9 @@ class StylometricFeatureEvaluator:
         
         TODO: Words that are just punctuation?    
         '''
-        total_words_per_sentences = self.sentence_length_sum_table[sentence_list_index_end] - sentence_length_sum_table[sentence_list_index_start]
-        num_of_sentences = (sentence_list_index_start + 1) - sentence_list_index_end
-        
-        return float(total_word_length)/max(num_of_words, 1) # avoid division by 0
+        total_words_per_sentences = self._getSumTableEntry(self.sentence_length_sum_table, sentence_list_index_end) - self._getSumTableEntry(self.sentence_length_sum_table, sentence_list_index_start-1)
+        num_sentences = (sentence_list_index_end + 1) - sentence_list_index_start
+        return float(total_words_per_sentences)/max(num_sentences, 1) # avoid division by 0
     
     #TODO: Refactor this method
     def averageWordFrequencyClass(self, words):
@@ -311,10 +338,9 @@ class StylometricFeatureEvaluator:
         print
         print 'Extracted Stylometric Feature Vector: <avg_word_length, avg_words_in_sentence>'      
         print self.getFeatures(0, len(self.input_file), "char")
-        print self.getFeatures(0, 2, "sentence")
         print
-        print "Average word frequency class of 'The small cat jumped'"
-        print self.averageWordFrequencyClass(["The", "small", "cat", "jumped"])
+        # print "Average word frequency class of 'The small cat jumped'"
+        # print self.averageWordFrequencyClass(["The", "small", "cat", "jumped"])
         
 
 if __name__ == "__main__":
