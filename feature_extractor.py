@@ -228,8 +228,11 @@ class StylometricFeatureEvaluator:
             For example, if you wanted to query the stylometric features for sentences 0 through 4, you 
             would call this function as getFeatures(0, 4, "sentence"). '''
         # TODO: clamp the start_index and end_index parameters to lowest and highest possible values
+        start_index = max(start_index, 0)
 
         if atom_type == 'char':
+            end_index = min(end_index, len(self.input_file)-1) # clamp to end
+
             # fetch word spans specified by character indices
             word_spans, word_spans_indices = self.getWordSpans(start_index, end_index)
             first_word_index = word_spans_indices[0]
@@ -240,6 +243,8 @@ class StylometricFeatureEvaluator:
             first_sentence_index = sentence_spans_indices[0]
             last_sentence_index = sentence_spans_indices[1]
         elif atom_type == 'word':
+            end_index = min(end_index, len(self.word_spans)-1)
+
             first_word_index = start_index
             last_word_index = end_index
 
@@ -248,6 +253,8 @@ class StylometricFeatureEvaluator:
             first_sentence_index = sentence_spans_indices[0]
             last_sentence_index = sentence_spans_indices[1]
         elif atom_type == 'sentence':
+            end_index = min(end_index, len(self.sentence_spans)-1)
+
             # fetch word spans specified by sentence indices
             word_spans, word_spans_indices = self.getWordSpans(self.sentence_spans[start_index][0], self.sentence_spans[end_index][1])
             first_word_index = word_spans_indices[0]
@@ -256,6 +263,8 @@ class StylometricFeatureEvaluator:
             first_sentence_index = start_index
             last_sentence_index = end_index
         elif atom_type == 'paragraph':
+            end_index = min(end_index, len(self.paragraph_spans)-1)
+
             # fetch word spans specified by paragraph indices
             word_spans, word_spans_indices = self.getWordSpans(self.paragraph_spans[start_index][0], self.paragraph_spans[end_index][1])
             first_word_index = word_spans_indices[0]

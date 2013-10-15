@@ -17,7 +17,7 @@ class Controller:
 		'''
 		# TODO generalize this for char/word/paragraph/other atom types
 		features = []
-		for i in range(len(self.feature_evaluator.getAllByAtom(atom_type))):
+		for i in range(len(self.feature_evaluator.getAllByAtom(atom_type))-1):
 			features.append(self.feature_evaluator.getFeatures(i, i + 1, atom_type))
 
 		return features
