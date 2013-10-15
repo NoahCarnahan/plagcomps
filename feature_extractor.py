@@ -48,8 +48,8 @@ class StylometricFeatureEvaluator:
         self.sentence_spans = self.initSentenceList(self.input_file)
         self.paragraph_spans = self.initParagrpahList(self.input_file)
     
-        #self.word_length_sum_table = self.initWorldLengthSumTable()
-        #self.sentence_length_sum_table = self.initSentenceLengthSumTable()
+        self.word_length_sum_table = self.initWordLengthSumTable()
+        self.sentence_length_sum_table = self.initSentenceLengthSumTable()
     
     def initWordList(self, text):
         '''
@@ -175,7 +175,7 @@ class StylometricFeatureEvaluator:
         second_index = self._binarySearchForSpanIndex(self.paragraph_spans, end_index, False)
         return self.paragraph_spans[first_index : second_index+1]
     
-    def initWorldLengthSumTable(self):
+    def initWordLengthSumTable(self):
         '''
         Initializes the word_length_sum_table. word_length_sum_table[i] is the sum of the lengths
         of words from 0 to i.
@@ -183,11 +183,9 @@ class StylometricFeatureEvaluator:
         TODO: Check if words are punctuation?
         '''
         sum_table = [0] # This value allows the for loop to be cleaner. Notice that I remove it later.
-        
         for start, end in self.word_spans:
             sum_table.append(len(self.input_file[start : end]) + sum_table[-1])
         sum_table.pop(0)
-        
         return sum_table
     
     def initSentenceLengthSumTable(self):
@@ -197,16 +195,12 @@ class StylometricFeatureEvaluator:
         
         TODO: Check if words are punctuation?
         '''
-        #TODO: make this method use initWordList
         sum_table = [0]
         for start, end in self.sentence_spans:
-            sum = 0
-            start_index_into_word_list, end_index_into_word_list = getWordIndices(start, end)
-            for index_into_word_list in range(start_index_into_word_list, end_index_into_word_list):
-                start_index_into_characters, end_index_into_characters = self.word_spans[index_into_word_list]
-                word = self.input_file[start_index_into_characters, end_index_into_characters]
-                sum += 1
-            sum_table.append(sum + sum_table[-1])
+            word_sum = 0
+            word_spans = self.getWordSpans(start, end)
+            word_sum += len(word_spans)
+            sum_table.append(word_sum + sum_table[-1])
         sum_table.pop(0)
         return sum_table
     
@@ -300,8 +294,6 @@ class StylometricFeatureEvaluator:
             total += freq_class
             word_total += 1
         return total/word_total
-        
-    
     
     def _is_punctuation(self, word):
         ''' Returns true if the given word is just punctuation. '''
