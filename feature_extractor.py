@@ -50,7 +50,6 @@ class StylometricFeatureEvaluator:
     
         self.word_length_sum_table = self.initWordLengthSumTable()
         self.sentence_length_sum_table = self.initSentenceLengthSumTable()
-        print 'sent: ', self.sentence_length_sum_table
     
     def initWordList(self, text):
         '''
@@ -132,6 +131,19 @@ class StylometricFeatureEvaluator:
                 lower = cur_span_index + 1
                 cur_span_index = (upper+lower)/2
                 cur_span = spans[cur_span_index]
+
+    def getAllByAtom(self, atom_type):
+        ''' Returns document as parsed by <atom_type> '''
+        if atom_type == 'word':
+            return self.word_spans
+        elif atom_type == 'sentence':
+            return self.sentence_spans
+        elif atom_type == 'paragraph':
+            return self.paragraph_spans
+        elif atom_type == 'char':
+            print 'Will fix this later'
+        else:
+            raise ValueError("atom_type string must be 'char', 'word', 'sentence' or 'paragraph', not '" + str(atom_type) + "'.")
 
     def getWordSpans(self, start_index, end_index):
         '''
