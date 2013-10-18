@@ -16,7 +16,7 @@ class Controller:
 		Uses <self.feature_evaluator> to extract <atom_type> features
 		'''
 		features = []
-		for i in xrange(len(self.feature_evaluator.getAllByAtom(atom_type))):
+		for i in xrange(len(self.feature_evaluator.getAllByAtom(atom_type)) - 1):
 			# For the <i_th> atom, extract the features
 			features.append(self.feature_evaluator.getFeatures(i, i + 1, atom_type))
 
