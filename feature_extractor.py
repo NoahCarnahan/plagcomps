@@ -77,6 +77,8 @@ class StylometricFeatureEvaluator:
         
         return [avg_word_length, avg_sentence_length]
     
+    def get_specific_features(self, feature_list, start_index, end_index, atom_type):
+        pass
 
     def averageWordLength(self, words):
         ''' Returns the average word length for the given list of words. 

@@ -13,11 +13,11 @@ class Controller:
 
 	def extractFeatures(self, atom_type):
 		'''
-		Uses <self.feature_evaluator> to extract sentence features
+		Uses <self.feature_evaluator> to extract <atom_type> features
 		'''
-		# TODO generalize this for char/word/paragraph/other atom types
 		features = []
-		for i in range(len(self.feature_evaluator.getAllByAtom(atom_type))):
+		for i in xrange(len(self.feature_evaluator.getAllByAtom(atom_type))):
+			# For the <i_th> atom, extract the features
 			features.append(self.feature_evaluator.getFeatures(i, i + 1, atom_type))
 
 		return features
