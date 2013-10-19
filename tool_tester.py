@@ -15,6 +15,7 @@ class ToolTester:
         self.clusters = self.c.clusterFeatures(self.features, "kmeans", 2)
         
         self.plagiarised_spans = None
+        self._is_plagiarised_cache = None
     
     def get_plagiarised_spans(self):
         '''
@@ -38,11 +39,19 @@ class ToolTester:
         Returns True if the given character index is part of a passage that has been plagiarized
         (based on the group truth)
         '''
-        # linear bad!
-        for i in self.get_plagiarised_spans():
-            if i[0] <= char < i[1]:
-                return True
-        return False
+        # Cache would probably be faster if it was a list instead of a dict...
+        if self._is_plagiarised_cache == None:
+            self._is_plagiarised_cache = {}
+        if char in self._is_plagiarised_cache:
+            return self._is_plagiarised_cache[char]
+        else:
+            # linear bad!
+            for i in self.get_plagiarised_spans():
+                if i[0] <= char < i[1]:
+                    self._is_plagiarised_cache[char] = True
+                    return True
+            self._is_plagiarised_cache[char] = False
+            return False
 
     def _get_cluster(self, char):
         '''
@@ -78,19 +87,20 @@ class ToolTester:
         total = 0
         print "Total characters =", len(self.c.feature_evaluator.input_file)
         for char1 in range(len(self.c.feature_evaluator.input_file)):
-            print "On character", char1, "..."
             try:
+                print "On character", char1, "..."
                 for char2 in range(len(self.c.feature_evaluator.input_file)):
-                    if self._in_same_baseline_group(char1, char2) and self._in_same_x_group(char1, char2):
-                        matching += 1
+                    self._in_same_baseline_group(char1, char2) # This shows that even just looking at the baseline is too slow...
+                    #if self._in_same_baseline_group(char1, char2) and self._in_same_x_group(char1, char2):
+                    #    matching += 1
                     total += 1
-            except:
+            except IndexError:
                 pass
         return float(matching) / total
             
 
 if __name__ == "__main__":
-    t = ToolTester("suspicious-document00999")
+    t = ToolTester("suspicious-document00997")
     print t.atoms
     print t.clusters
     # Why are these different lengths?
@@ -102,4 +112,5 @@ if __name__ == "__main__":
     
     print t.get_plagiarised_spans()
 
+    print t._in_same_baseline_group(10, 11475)
     print t.main()
