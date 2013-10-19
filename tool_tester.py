@@ -9,10 +9,10 @@ class ToolTester:
         self.text_file_path = path_start + suspect + ".txt"
         self.xml_file_path = path_start + suspect + ".xml"
 
-        c = Controller(self.text_file_path)
-        self.atoms = c.feature_evaluator.getAllByAtom("sentence")
-        self.features = c.extractFeatures("sentence")
-        self.clusters = c.clusterFeatures(self.features, "kmeans", 2)
+        self.c = Controller(self.text_file_path)
+        self.atoms = self.c.feature_evaluator.getAllByAtom("sentence")
+        self.features = self.c.extractFeatures("sentence")
+        self.clusters = self.c.clusterFeatures(self.features, "kmeans", 2)
         
         self.plagiarised_spans = None
     
@@ -39,7 +39,7 @@ class ToolTester:
         (based on the group truth)
         '''
         # linear bad!
-        for i in self.get_plagiarised_spans:
+        for i in self.get_plagiarised_spans():
             if i[0] <= char < i[1]:
                 return True
         return False
@@ -54,6 +54,40 @@ class ToolTester:
             if self.atoms[atom_number][0] <= char < self.atoms[atom_number][1]:
                 return self.clusters[atom_number]
         return False
+    
+    def _in_same_baseline_group(self, char1, char2):
+        '''
+        Returns True if both given characters are plagiarized or if both given characters
+        are not plagiarized according to the baseline.
+        If one of the characters is part of a plagiarized passage and one is not, returns
+        False.
+        char1 and char2 are character indicies into the document.
+        '''
+        return self._is_plagiarised(char1) == self._is_plagiarised(char2)
+    
+    #TODO: REPLACE x WITH SOME WORD!! should it be "custom", "test", "classified", "tool", what?
+    def _in_same_x_group(self, char1, char2):
+        '''
+        If our tool puts char1 and char2 in the same group, return True. Otherwise return 
+        False.
+        '''
+        return self._get_cluster(char1) == self._get_cluster(char2)
+    
+    def main(self):
+        matching = 0
+        total = 0
+        print "Total characters =", len(self.c.feature_evaluator.input_file)
+        for char1 in range(len(self.c.feature_evaluator.input_file)):
+            print "On character", char1, "..."
+            try:
+                for char2 in range(len(self.c.feature_evaluator.input_file)):
+                    if self._in_same_baseline_group(char1, char2) and self._in_same_x_group(char1, char2):
+                        matching += 1
+                    total += 1
+            except:
+                pass
+        return float(matching) / total
+            
 
 if __name__ == "__main__":
     t = ToolTester("suspicious-document00999")
@@ -67,3 +101,5 @@ if __name__ == "__main__":
     print t._get_cluster(33890)
     
     print t.get_plagiarised_spans()
+
+    print t.main()
