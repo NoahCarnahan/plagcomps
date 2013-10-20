@@ -16,9 +16,14 @@ class Controller:
 		Uses <self.feature_evaluator> to extract <atom_type> features
 		'''
 		features = []
+		feature_list = ['averageWordLength', 'averageSentenceLength']
 		for i in xrange(len(self.feature_evaluator.getAllByAtom(atom_type)) - 1):
 			# For the <i_th> atom, extract the features
-			features.append(self.feature_evaluator.getFeatures(i, i + 1, atom_type))
+			passage = self.feature_evaluator.get_specific_features(feature_list, i, i + 1, atom_type)
+			# NOTE (nj) right now just parsing out the numeric vectors, despite the 
+			# fact that <passage> contains more data
+			only_numeric_features = passage.features.values()
+			features.append(only_numeric_features)
 
 		return features
 
