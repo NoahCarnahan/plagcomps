@@ -209,7 +209,7 @@ class ToolTester:
             
 
 if __name__ == "__main__":
-    t = ToolTester("suspicious-document01004")
+    t = ToolTester("suspicious-document00999")
 
     # Why are these different lengths sometimes?
     #print len(t.sentence_spans)
