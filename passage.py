@@ -9,12 +9,12 @@ class Passage:
 	as well
 	'''
 	
-	def __init__(self, doc_name, atom_type, start, end, features):
+	def __init__(self, doc_name, atom_type, start, end, features = {}):
 		self.doc_name = doc_name
 		self.atom_type = atom_type
 		self.start = start
 		self.end = end
-		self.features = {}
+		self.features = features
 		self.cluster_num = None
 
 
