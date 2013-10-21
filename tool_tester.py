@@ -1,26 +1,41 @@
 from controller import Controller
+
 import xml.etree.ElementTree as ET
+from collections import Counter
+
+DEBUG = False
+
+#TODO:
+# Why does len(t.sentence_spans) != len(t.sentence_clusters) some times? (all the time?)
+# Come up with a name for the other metric
+
+#NOTES:
+# The metric which I am calling the atom-to-atom metric compares every atom to every
+# other atom and returns:
+# |{pair (x, y) : x and y in same ground truth group AND x and y in same predicted groups}| / (total number of pairs)
 
 class ToolTester:
     
-    def __init__(self, suspect):
+    def __init__(self, suspect, atom_type):
+        #atom_type = "word", "sentence", or "paragraph"
+        #atom_type specifies what atoms the clusterer should use
     
         path_start = "/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents/part1/"
         self.text_file_path = path_start + suspect + ".txt"
         self.xml_file_path = path_start + suspect + ".xml"
 
         self.c = Controller(self.text_file_path)
-        self.sentence_spans = self.c.feature_evaluator.getAllByAtom("sentence")
-        self.sentence_features = self.c.extractFeatures("sentence")
-        self.sentence_clusters = self.c.clusterFeatures(self.sentence_features, "kmeans", 2)
         
-        self._smaller_cluster = None #The name (which is an int) of the smallest cluster.
+        # TODO: Finish implementation of getAllByAtom so that it returns something when type is "char"
+        self.atom_spans = self.c.feature_evaluator.getAllByAtom(atom_type)
+        self.atom_features = self.c.extractFeatures(atom_type)
+        self.atom_clusters = self.c.clusterFeatures(self.atom_features, "kmeans", 2)
+        
+        self._smallest_cluster = None #The number of the smallest cluster.
         self._plagiarized_spans = None
         
-        self._is_plagiarized_cache = None
+        self._is_char_plagiarized_cache = None
         
-        
-     
     def get_plagiarized_spans(self):
         '''
         Using the ground truth, return a list of spans representing the passages of the
@@ -38,53 +53,89 @@ class ToolTester:
             
         return self._plagiarized_spans
     
-    def _get_smaller_cluster(self):
+    def _get_smallest_cluster(self):
         '''
-        Return the name of (its an int) the smallest of the two clusters. Assumes only two clusters!
+        Return the number of the smallest of the two clusters.
         '''
-        if self._smaller_cluster == None:
-            size_0 = 0
-            size_1 = 0
-            for i in self.sentence_clusters:
-                if i == 0:
-                    size_0 += 1
-                elif i == 1:
-                    size_1 += 1
-            if size_0 < size_1:
-                self._smaller_cluster = 0
-            elif size_1 < size_0:
-                self._smaller_cluster = 1
-        return self._smaller_cluster
+        if self._smallest_cluster == None:
+            self._smallest_cluster = Counter(self.atom_clusters).most_common()[-1][0]
+        return self._smallest_cluster
+    
+    def _is_plagiarized(self, a):
+        '''
+        a is an index into self.atom_spans. self.atom_spans[a] is a (start index, end index)
+        span representing the location of the atom in the suspicious document.
+        Return True if the first character of the atom is in a plagiarized span.
+        '''
+        # TODO: Consider other ways to judge if an atom is plagiarized or not. For example, look to see if the WHOLE atom in a plagiarized segment (?)
+        for i in self.get_plagiarized_spans():
+            if i[0] <= self.atom_spans[a][0] < i[1]:
+                return True
+        return False
+
+    def _is_in_smallest_cluster(self, a):
+        '''
+        a is an index into self.atom_spans
+        Returns True if the given atom a is in the smaller of the two clusters.
+        '''
+        return self.atom_clusters[a] == self._get_smallest_cluster()
+    
+    def main(self):
+        '''
+        Returns (number of correctly classified atoms) / (number of atoms)
+        Assumes that the smaller of the two predicted clusters is the cluster of plagiarized passages
+        '''
+        #TODO: Name this metric and rename this function appropriately
         
+        if DEBUG:
+            if len(self.get_plagiarized_spans()) == 0:
+                print "NOTE: no plagiarzed passages in this document"
+            print "Total sentences:", len(self.c.feature_evaluator.sentence_spans)
+            amount_done = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+            amount_done_i = 0
+            
+        correct = 0
+        total = 0
         
-    def _is_plagiarized(self, char):
+        for a in range(len(self.atom_spans)):
+            if DEBUG and float(total) / len(self.atom_spans) > amount_done[amount_done_i] / 100.0:
+                print str(amount_done[amount_done_i])+"% done..."
+                amount_done_i += 1
+            try:
+                if self._is_plagiarized(a) == self._is_in_smallest_cluster(a):
+                    correct +=1
+                total += 1
+            except IndexError as e:
+                #TODO: Why the hell does this indexing error happen :(
+                if DEBUG:
+                    print e
+        
+        return float(correct) / total
+    
+    #####
+    # The following methods are used for the atom-to-atom metric and may no longer work
+    # given the changes that were made for the new metric.
+    #####
+
+    def _is_char_plagiarized(self, char):
+        #NOTE: This can be replaced by _is_plagiarized once feature_evaluator is completed.
         '''
         Returns True if the given character index is part of a passage that has been plagiarized
         (based on the group truth)
         '''
         # Cache would probably be faster if it was a list instead of a dict...
-        if self._is_plagiarized_cache == None:
-            self._is_plagiarized_cache = {}
-        if char in self._is_plagiarized_cache:
-            return self._is_plagiarized_cache[char]
+        if self._is_char_plagiarized_cache == None:
+            self._is_char_plagiarized_cache = {}
+        if char in self._is_char_plagiarized_cache:
+            return self._is_char_plagiarized_cache[char]
         else:
             # linear bad!
             for i in self.get_plagiarized_spans():
                 if i[0] <= char < i[1]:
-                    self._is_plagiarized_cache[char] = True
+                    self._is_char_plagiarized_cache[char] = True
                     return True
-            self._is_plagiarized_cache[char] = False
+            self._is_char_plagiarized_cache[char] = False
             return False
-    
-    def _is_sentence_plagiarized(self, s):
-        '''
-        Returns true if the first character of the sentence is in a plagiarized span. This may not
-        be the best way to judge if a sentence is plagiarized or not, but it is easy!
-        '''
-        for i in self.get_plagiarized_spans():
-            if i[0] <= self.sentence_spans[s][0] < i[1]:
-                return True
-        return False
 
     def _get_cluster(self, char):
         '''
@@ -97,15 +148,6 @@ class ToolTester:
                 return self.sentence_clusters[atom_number]
         return False
     
-    def _get_sentence_cluster(self, s):
-        '''
-        Return the number of the cluster created by our tool that the given sentence span is a part of.
-        '''
-        for atom_index in range(len(self.sentence_spans)):
-            if self.sentence_spans[atom_index] == s:
-                return self.sentence_clusters[atom_index]
-        return False
-    
     def _in_same_ground_truth_group(self, char1, char2):
         '''
         Returns True if both given characters are plagiarized or if both given characters
@@ -114,8 +156,8 @@ class ToolTester:
         False.
         char1 and char2 are character indicies into the document.
         '''
-        return self._is_plagiarized(char1) == self._is_plagiarized(char2)
-    
+        return self._is_char_plagiarized(char1) == self._is_char_plagiarized(char2)
+
     def _in_same_ground_truth_sentence_group(self, s1, s2):
         '''
         Returns True if both given sentences are plagiarized or if both given sentences are not
@@ -123,29 +165,25 @@ class ToolTester:
         Returns False otherwise.
         '''
         return self._is_sentence_plagiarized(s1) == self._is_sentence_plagiarized(s2)
-    
+
     def _in_same_predicted_group(self, char1, char2):
         '''
         If our tool puts char1 and char2 in the same group, return True. Otherwise return 
         False.
         '''
         return self._get_cluster(char1) == self._get_cluster(char2)
-    
+
     def _in_same_predicted_sentence_group(self, s1, s2):
         '''
         If our tool puts s1 and s2 (both are sentnces) in the same group, return True. Otherwise,
         Return False.
         '''
         return self._get_sentence_cluster(s1) == self._get_sentence_cluster(s2)
-    
-    def _is_in_smaller_cluster(self, s):
-        '''
-        Returns True if the given sentnce s is in the smaller of the two clusters.
-        '''
-        return self._get_sentence_cluster(2) == self._get_smaller_cluster()
-    
-    
+
     def main_2(self):
+        '''
+        Returns the value of the atom-to-atom metric where the atoms are characters
+        '''
         matching = 0
         total = 0
         print "Total characters =", len(self.c.feature_evaluator.input_file)
@@ -160,8 +198,11 @@ class ToolTester:
                 except IndexError:
                     pass
         return float(matching) / total
-    
+
     def main_3(self):
+        '''
+        Returns the value of the atom-to-atom metric where the atoms are sentences
+        '''
         matching = 0
         total = 0
         for sentence1 in range(len(self.c.feature_evaluator.sentence_spans)):
@@ -174,45 +215,7 @@ class ToolTester:
                 except IndexError:
                     pass
         return float(matching) / total
-    
-    def main(self):
-        '''
-        Returns (number of correctly classified sentnces) / (number of sentences)
-        Assumes that the smaller of the two predicted clusters is the cluster of plagiarized passages.
-        '''
         
-        right = 0
-        total = 0
-        
-        print "Total sentences:", len(self.c.feature_evaluator.sentence_spans)
-        amount_done = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
-        amount_done_i = 0
-        
-        if len(self.get_plagiarized_spans()) == 0:
-            print "NOTE: no plagiarzed passages in this document"
-            
-        for s in range(len(self.c.feature_evaluator.sentence_spans)):
-        
-            # debug code:
-            #print "On sentece", s            
-            if float(total) / len(self.c.feature_evaluator.sentence_spans) > amount_done[amount_done_i] / 100.0:
-                print str(amount_done[amount_done_i])+"% done..."
-                amount_done_i += 1
-            
-            if self._is_sentence_plagiarized(s) == self._is_in_smaller_cluster(s):
-                right += 1
-            total += 1
-        return float(right) / total
-        
-                        
-                    
-            
-
 if __name__ == "__main__":
-    t = ToolTester("suspicious-document00999")
-
-    # Why are these different lengths sometimes?
-    #print len(t.sentence_spans)
-    #print len(t.sentence_clusters)
-
+    t = ToolTester("suspicious-document00969", "paragraph")
     print t.main()
