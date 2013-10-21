@@ -49,6 +49,7 @@ class StylometricFeatureEvaluator:
         self.input_file = f.read()
         f.close()
         
+        self.character_spans = [(x, x+1) for x in range(len(self.input_file))]
         self.word_spans = self.initWordList(self.input_file)
         self.sentence_spans = self.initSentenceList(self.input_file)
         self.paragraph_spans = self.initParagraphList(self.input_file)
@@ -146,7 +147,7 @@ class StylometricFeatureEvaluator:
         elif atom_type == 'paragraph':
             return self.paragraph_spans
         elif atom_type == 'char':
-            print 'Will fix this later'
+            return self.character_spans
         else:
             raise ValueError("atom_type string must be 'char', 'word', 'sentence' or 'paragraph', not '" + str(atom_type) + "'.")
 
