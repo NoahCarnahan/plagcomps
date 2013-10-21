@@ -494,7 +494,7 @@ class StylometricFeatureEvaluator:
         
     def test_general_extraction(self):
         feature_list = ['averageWordLength', 'averageSentenceLength']
-        extracted = self.get_specific_features(feature_list, 0, len(self.input_file), 'word')
+        extracted = self.get_specific_features(feature_list, 0, len(self.word_spans), 'word')
         print extracted.features
 
 
