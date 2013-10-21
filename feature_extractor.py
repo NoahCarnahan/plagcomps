@@ -398,7 +398,7 @@ class StylometricFeatureEvaluator:
         
         TODO: Words that are just punctuation?
         '''
-        print 'in averageWordLength with', first_word_index, last_word_index
+        #print 'in averageWordLength with', first_word_index, last_word_index
         total_word_length = self._getSumTableEntry(self.word_length_sum_table, last_word_index) - self._getSumTableEntry(self.word_length_sum_table, first_word_index-1)
         num_words = (last_word_index + 1) - first_word_index
         return float(total_word_length)/max(num_words, 1) # if there are no legitimate words, just set denominator to 1 to avoid division by 0

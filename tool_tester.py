@@ -3,10 +3,9 @@ from controller import Controller
 import xml.etree.ElementTree as ET
 from collections import Counter
 
-DEBUG = False
+DEBUG = True
 
 #TODO:
-# Why does len(t.sentence_spans) != len(t.sentence_clusters) some times? (all the time?)
 # Come up with a name for the other metric
 
 #NOTES:
@@ -26,7 +25,6 @@ class ToolTester:
 
         self.c = Controller(self.text_file_path)
         
-        # TODO: Finish implementation of getAllByAtom so that it returns something when type is "char"
         self.atom_spans = self.c.feature_evaluator.getAllByAtom(atom_type)
         self.atom_features = self.c.extractFeatures(atom_type)
         self.atom_clusters = self.c.clusterFeatures(self.atom_features, "kmeans", 2)
@@ -101,14 +99,10 @@ class ToolTester:
             if DEBUG and float(total) / len(self.atom_spans) > amount_done[amount_done_i] / 100.0:
                 print str(amount_done[amount_done_i])+"% done..."
                 amount_done_i += 1
-            try:
-                if self._is_plagiarized(a) == self._is_in_smallest_cluster(a):
-                    correct +=1
-                total += 1
-            except IndexError as e:
-                #TODO: Why the hell does this indexing error happen :(
-                if DEBUG:
-                    print e
+
+            if self._is_plagiarized(a) == self._is_in_smallest_cluster(a):
+                correct +=1
+            total += 1
         
         return float(correct) / total
     
