@@ -9,12 +9,22 @@ class Passage:
 	as well
 	'''
 	
-	def __init__(self, doc_name, atom_type, start, end, features = {}):
+	def __init__(self, doc_name, atom_type, start_word_index, end_word_index, text, features = {}):
 		self.doc_name = doc_name
 		self.atom_type = atom_type
-		self.start = start
-		self.end = end
+		self.start_word_index = start_word_index
+		self.end_char_index = end_word_index
+		self.text = text
 		self.features = features
 		self.cluster_num = None
+
+	def __str__(self):
+		return 'Text: ' + self.text + \
+		'\nFeatures: ' + str(self.features) +  \
+		'\nCluster num: ' + str(self.cluster_num) + \
+		'\n------------'
+
+	def assign_cluster(self, cluster_num):
+		self.cluster_num = cluster_num
 
 

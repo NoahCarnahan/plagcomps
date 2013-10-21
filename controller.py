@@ -11,55 +11,67 @@ class Controller:
 		# Make printing legible
 		self.printer = pprint.PrettyPrinter(indent = 2)
 
-	def extractFeatures(self, atom_type):
+	def get_passages(self, atom_type, feature_list, cluster_method, k):
 		'''
-		Uses <self.feature_evaluator> to extract <atom_type> features
+		Extracts the features in <feature_list>, splitting by <atom_type>.
+		Clusters using <cluster_method>
 		'''
-		features = []
-		feature_list = ['averageWordLength', 'averageSentenceLength']
-		for i in xrange(len(self.feature_evaluator.getAllByAtom(atom_type)) - 1):
-			# For the <i_th> atom, extract the features
+		all_passages = []
+		for i in xrange(len(self.feature_evaluator.getAllByAtom(atom_type))):
 			passage = self.feature_evaluator.get_specific_features(feature_list, i, i + 1, atom_type)
-			# NOTE (nj) right now just parsing out the numeric vectors, despite the 
-			# fact that <passage> contains more data
-			only_numeric_features = passage.features.values()
-			features.append(only_numeric_features)
+			all_passages.append(passage)
 
-		return features
+		# Assigns cluster numbers to each passage object stored in <all_passages>
+		self.cluster_features(all_passages, cluster_method, k)
 
-	def clusterFeatures(self, features, method, k):
+		return all_passages
+
+
+	def cluster_features(self, passages, method, k):
 		'''
-		Clusters <features> using <method> from <self.cluster_util>
 		'''
+		# Extract numeric features
+		# NOTE (nj) we may want to change this at some point in order to 
+		# give more weight to certain features
+		stylo_features = [p.features.values() for p in passages]
+
 		if method == 'kmeans':
-			return self.cluster_util.kmeans(features, k)
+			assignments = self.cluster_util.kmeans(stylo_features, k)
 		elif method == 'agglom':
-			return self.cluster_util.agglom(features, k)
+			assignments = self.cluster_util.agglom(stylo_features, k)
 
-	def printClusterAssignments(self, assignments, atom_type):
+		for i in range(len(assignments)):
+			passages[i].assign_cluster(assignments[i])
+
+	def print_cluster_assignments(self, passages):
 		'''
 		Prints the sentences in each cluster, as assigned by <assignments>
 		'''
-		all_clusters = set(assignments)
-		cluster_to_atoms = {}
-		all_atoms = self.feature_evaluator.getAllByAtom(atom_type)
+		text_split_by_atom = self.feature_evaluator.getAllByAtom(passages[0].atom_type)
+		all_text = self.feature_evaluator.input_file
+		
+		all_clusters = set([p.cluster_num for p in passages])
+		cluster_to_atoms = dict([(c, []) for c in all_clusters])
 
-		for cluster in all_clusters:
-			atom_indices = [i for i in range(len(assignments)) if assignments[i] == cluster]
-			cluster_to_atoms[cluster] = [all_atoms[i] for i in atom_indices]
+		for p in passages:
+			cluster_to_atoms[p.cluster_num].append(p.text)
+	
 		self.printer.pprint(cluster_to_atoms)
 
 
-	def test(self, atom_type, method, k):
+	def test(self, atom_type, feature_list, cluster_method, k):
 		'''
 		Clusters the sentence features and prints the resulting clusters
 		'''
-		print 'Using %s and %s with %i clusters\n\n' % (atom_type, method, k)
-		features = self.extractFeatures(atom_type)
-		cluster_assignments = self.clusterFeatures(features, method, k)
-		self.printClusterAssignments(cluster_assignments, atom_type)
+		print 'Using %s and %s with %i clusters\n\n' % (atom_type, cluster_method, k)
+		passages = self.get_passages(atom_type, feature_list, cluster_method, k)
+		for p in passages:
+			print p
+		self.print_cluster_assignments(passages)
+		
 
 if __name__ == '__main__':
-	Controller('foo.txt').test('sentence', 'agglom', 3)
+	c = Controller('foo.txt')
+	c.test('sentence', ['averageWordLength', 'averageSentenceLength'], 'kmeans', 2)
 
 

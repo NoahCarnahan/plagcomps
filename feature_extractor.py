@@ -53,7 +53,7 @@ class StylometricFeatureEvaluator:
         self.word_spans = self.initWordList(self.input_file)
         self.sentence_spans = self.initSentenceList(self.input_file)
         self.paragraph_spans = self.initParagraphList(self.input_file)
-    
+        
         self.word_length_sum_table = self.initWordLengthSumTable()
         self.sentence_length_sum_table = self.initSentenceLengthSumTable()
     
@@ -196,6 +196,27 @@ class StylometricFeatureEvaluator:
         first_index = self._binarySearchForSpanIndex(self.paragraph_spans, start_index, True)
         second_index = self._binarySearchForSpanIndex(self.paragraph_spans, end_index, False)
         return self.paragraph_spans[first_index : second_index+1], (first_index, second_index)
+
+    def get_character_boundaries(self, atom_type, atom_start, atom_end):
+        '''
+        Returns the starting and ending indices, in all of <self.input_file>, of the 
+        atom_type starting at <atom_start> and ending at <atom_end> - 1, i.e. in the 
+        same manner as indexing a python list or string
+        '''
+        if atom_type == 'char':
+            start_index = self.character_spans[atom_start][0]
+            end_index = self.character_spans[atom_end - 1][1]
+        elif atom_type == 'word':
+            start_index = self.word_spans[atom_start][0]
+            end_index = self.word_spans[atom_end - 1][1]
+        elif atom_type == 'sentence':
+            start_index = self.sentence_spans[atom_start][0]
+            end_index = self.sentence_spans[atom_end - 1][1]
+        elif atom_type == 'paragraph':
+            start_index = self.paragraph_spans[atom_start][0]
+            end_index = self.paragraph_spans[atom_end - 1][1]
+
+        return start_index, end_index
     
     def initWordLengthSumTable(self):
         '''
@@ -314,8 +335,11 @@ class StylometricFeatureEvaluator:
 
             passage_features[func_name] = func(**params_to_pass)
 
-        
-        passage = Passage(self.document_name, atom_type, start_index, end_index, passage_features)
+        # Store the character start/end of the given passage in Passage objects
+        global_start, global_end = self.get_character_boundaries(atom_type, start_index, end_index)
+        text = self.input_file[global_start : global_end]
+
+        passage = Passage(self.document_name, atom_type, global_start, global_end, text, passage_features)
         return passage
 
     def _fetch_boundary_indices(self, atom_type, start_index, end_index):
@@ -398,7 +422,6 @@ class StylometricFeatureEvaluator:
         
         TODO: Words that are just punctuation?
         '''
-        print 'in averageWordLength with', first_word_index, last_word_index
         total_word_length = self._getSumTableEntry(self.word_length_sum_table, last_word_index) - self._getSumTableEntry(self.word_length_sum_table, first_word_index-1)
         num_words = (last_word_index + 1) - first_word_index
         return float(total_word_length)/max(num_words, 1) # if there are no legitimate words, just set denominator to 1 to avoid division by 0
@@ -471,7 +494,7 @@ class StylometricFeatureEvaluator:
         
     def test_general_extraction(self):
         feature_list = ['averageWordLength', 'averageSentenceLength']
-        extracted = self.get_specific_features(feature_list, 0, len(self.input_file), 'char')
+        extracted = self.get_specific_features(feature_list, 0, len(self.input_file), 'word')
         print extracted.features
 
 
