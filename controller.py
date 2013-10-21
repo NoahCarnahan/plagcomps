@@ -13,12 +13,17 @@ class Controller:
 
 	def extractFeatures(self, atom_type):
 		'''
-		Uses <self.feature_evaluator> to extract sentence features
+		Uses <self.feature_evaluator> to extract <atom_type> features
 		'''
-		# TODO generalize this for char/word/paragraph/other atom types
 		features = []
-		for i in range(len(self.feature_evaluator.getAllByAtom(atom_type))-1):
-			features.append(self.feature_evaluator.getFeatures(i, i + 1, atom_type))
+		feature_list = ['averageWordLength', 'averageSentenceLength']
+		for i in xrange(len(self.feature_evaluator.getAllByAtom(atom_type)) - 1):
+			# For the <i_th> atom, extract the features
+			passage = self.feature_evaluator.get_specific_features(feature_list, i, i + 1, atom_type)
+			# NOTE (nj) right now just parsing out the numeric vectors, despite the 
+			# fact that <passage> contains more data
+			only_numeric_features = passage.features.values()
+			features.append(only_numeric_features)
 
 		return features
 

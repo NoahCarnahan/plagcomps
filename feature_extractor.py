@@ -3,7 +3,8 @@
 # plagcomps rules
 # by Marcus, Noah, and Cole
 
-import nltk, re, math
+import nltk, re, math, os, inspect
+from passage import *
 
 
 class CopyCatPunktWordTokenizer(nltk.tokenize.punkt.PunktBaseClass,nltk.tokenize.punkt.TokenizerI):
@@ -37,6 +38,7 @@ class CopyCatPunktWordTokenizer(nltk.tokenize.punkt.PunktBaseClass,nltk.tokenize
 class StylometricFeatureEvaluator:
 
     def __init__(self, filepath):
+        self.document_name = os.path.basename(filepath)
         self.setDocument(filepath)
         self.punctuation_re = re.compile(r'[\W\d]+', re.UNICODE) # slightly modified from nltk source
     
@@ -49,7 +51,7 @@ class StylometricFeatureEvaluator:
         
         self.word_spans = self.initWordList(self.input_file)
         self.sentence_spans = self.initSentenceList(self.input_file)
-        self.paragraph_spans = self.initParagrpahList(self.input_file)
+        self.paragraph_spans = self.initParagraphList(self.input_file)
     
         self.word_length_sum_table = self.initWordLengthSumTable()
         self.sentence_length_sum_table = self.initSentenceLengthSumTable()
@@ -72,7 +74,7 @@ class StylometricFeatureEvaluator:
         tokenizer = nltk.PunktSentenceTokenizer()
         return tokenizer.span_tokenize(text)
     
-    def initParagrpahList(self, text):
+    def initParagraphList(self, text):
         '''
         Returns a list of tuples representing the locations of paragraphs in the document.
         Each tuple contains the start character index and end character index of the paragraph.
@@ -285,29 +287,129 @@ class StylometricFeatureEvaluator:
         
         return [avg_word_length, avg_sentence_length]
     
+    def get_specific_features(self, feature_list, start_index, end_index, atom_type):
+        ''' 
+        Extracts the features passed in <feature_list> of <atom_type> between
+        <start_index> and <end_index>, using "snap-out" indexing (see _fetch_boundary_indices)
+
+        Every feature in <feature_list> should be a string corresponding to a method name
+        in this class, and should accept as arguments either 'first_sentence_index' and 'last_sentence_index'
+        or 'first_word_index' and 'last_word_index'
+
+        Returns a Passage object, which stores information about the document, location of excerpt,
+        and more. See the <Package> class for more documentation 
+        '''
+        boundaries = self._fetch_boundary_indices(atom_type, start_index, end_index)
+
+        # For each feature in <feature_list>, store the result of calling <func_name> i.e.
+        # func_name => func_name()
+        passage_features = {}
+        for func_name in feature_list:
+            # Parse the function from <self> and pass it only the parameters it expects
+            # to receive
+            func = getattr(self, func_name)
+            accepted_params = inspect.getargspec(func).args
+            params_to_pass = dict((p, boundaries[p]) for p in boundaries if p in accepted_params)
+
+            passage_features[func_name] = func(**params_to_pass)
+
+        
+        passage = Passage(self.document_name, atom_type, start_index, end_index, passage_features)
+        return passage
+
+    def _fetch_boundary_indices(self, atom_type, start_index, end_index):
+        '''
+        Returns a dictionary with keys 'first_word_index', 'last_word_index',
+        'first_sentence_index', 'last_sentence_index'
+        of <atom_type> starting at <start_index> and expanding to <end_index>
+        Uses "snap-out" indexing, i.e. includes entire words/sentences even if the indices
+        don't include an entire word/sentence. 
+        Example:
+
+        "The cow jumped over the moon. It was awesome. "
+        If we queried start_index of 3 and end_index of 7, the <first_sentence_index> returned
+        would be 0 and the <last_sentence_index> would be the index of the "."
+        '''
+        start_index = max(start_index, 0)
+
+        if atom_type == 'char':
+            end_index = min(end_index, len(self.input_file)-1) # clamp to end
+
+            # fetch word spans specified by character indices
+            word_spans, word_spans_indices = self.getWordSpans(start_index, end_index)
+            first_word_index = word_spans_indices[0]
+            last_word_index = word_spans_indices[1]
+
+            # fetch sentence spans specified by character indices
+            sentence_spans, sentence_spans_indices = self.getSentenceSpans(start_index, end_index)
+            first_sentence_index = sentence_spans_indices[0]
+            last_sentence_index = sentence_spans_indices[1]
+        elif atom_type == 'word':
+            end_index = min(end_index, len(self.word_spans)-1)
+
+            first_word_index = start_index
+            last_word_index = end_index
+
+            # fetch sentence spans specified by word indices
+            sentence_spans, sentence_spans_indices = self.getSentenceSpans(self.word_spans[start_index][0], self.word_spans[end_index][1])
+            first_sentence_index = sentence_spans_indices[0]
+            last_sentence_index = sentence_spans_indices[1]
+        elif atom_type == 'sentence':
+            end_index = min(end_index, len(self.sentence_spans)-1)
+
+            # fetch word spans specified by sentence indices
+            word_spans, word_spans_indices = self.getWordSpans(self.sentence_spans[start_index][0], self.sentence_spans[end_index][1])
+            first_word_index = word_spans_indices[0]
+            last_word_index = word_spans_indices[1]
+
+            first_sentence_index = start_index
+            last_sentence_index = end_index
+        elif atom_type == 'paragraph':
+            end_index = min(end_index, len(self.paragraph_spans)-1)
+
+            # fetch word spans specified by paragraph indices
+            word_spans, word_spans_indices = self.getWordSpans(self.paragraph_spans[start_index][0], self.paragraph_spans[end_index][1])
+            first_word_index = word_spans_indices[0]
+            last_word_index = word_spans_indices[1]
+
+            # fetch sentence spans specified by paragraph indices
+            sentence_spans, sentence_spans_indices = self.getSentenceSpans(self.paragraph_spans[start_index][0], self.paragraph_spans[end_index][1])
+            first_sentence_index = sentence_spans_indices[0]
+            last_sentence_index = sentence_spans_indices[1]
+        else:
+            raise ValueError("atom_type string must be 'char', 'word', 'sentence' or 'paragraph', not '" + str(atom_type) + "'.")
+
+        return {
+            'first_word_index' : first_word_index,
+            'last_word_index' : last_word_index,
+            'first_sentence_index' : first_sentence_index,
+            'last_sentence_index' : last_sentence_index
+        }
+
     def _getSumTableEntry(self, sum_table, index):
         if index < 0:
             return 0
         return sum_table[index]
 
-    def averageWordLength(self, word_list_index_start, word_list_index_end):
+    def averageWordLength(self, first_word_index, last_word_index):
         '''
         Returns the average word length of words between the given indicies into self.word_spans.
         
         TODO: Words that are just punctuation?
         '''
-        total_word_length = self._getSumTableEntry(self.word_length_sum_table, word_list_index_end) - self._getSumTableEntry(self.word_length_sum_table, word_list_index_start-1)
-        num_words = (word_list_index_end + 1) - word_list_index_start
+        print 'in averageWordLength with', first_word_index, last_word_index
+        total_word_length = self._getSumTableEntry(self.word_length_sum_table, last_word_index) - self._getSumTableEntry(self.word_length_sum_table, first_word_index-1)
+        num_words = (last_word_index + 1) - first_word_index
         return float(total_word_length)/max(num_words, 1) # if there are no legitimate words, just set denominator to 1 to avoid division by 0
     
-    def averageSentenceLength(self, sentence_list_index_start, sentence_list_index_end):
+    def averageSentenceLength(self, first_sentence_index, last_sentence_index):
         '''
         Returns the average words-per-sentence for the sentences betwen the given indicies into self.sentence_spans.
         
         TODO: Words that are just punctuation?    
         '''
-        total_words_per_sentences = self._getSumTableEntry(self.sentence_length_sum_table, sentence_list_index_end) - self._getSumTableEntry(self.sentence_length_sum_table, sentence_list_index_start-1)
-        num_sentences = (sentence_list_index_end + 1) - sentence_list_index_start
+        total_words_per_sentences = self._getSumTableEntry(self.sentence_length_sum_table, last_sentence_index) - self._getSumTableEntry(self.sentence_length_sum_table, first_sentence_index-1)
+        num_sentences = (last_sentence_index + 1) - first_sentence_index
         return float(total_words_per_sentences)/max(num_sentences, 1) # avoid division by 0
     
     #TODO: Refactor this method
@@ -366,6 +468,14 @@ class StylometricFeatureEvaluator:
         # print "Average word frequency class of 'The small cat jumped'"
         # print self.averageWordFrequencyClass(["The", "small", "cat", "jumped"])
         
+    def test_general_extraction(self):
+        feature_list = ['averageWordLength', 'averageSentenceLength']
+        extracted = self.get_specific_features(feature_list, 0, len(self.input_file), 'char')
+        print extracted.features
+
 
 if __name__ == "__main__":
-    StylometricFeatureEvaluator("foo.txt").test()
+    evaluator = StylometricFeatureEvaluator("foo.txt")
+    evaluator.test()
+    evaluator.test_general_extraction()
+    print 'and done'
