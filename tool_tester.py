@@ -66,7 +66,7 @@ class ToolTester:
         '''
         # TODO: Consider other ways to judge if an atom is plagiarized or not. For example, look to see if the WHOLE atom in a plagiarized segment (?)
         for i in self.get_plagiarized_spans():
-            if i[0] <= p.start < i[1]:
+            if i[0] <= p.start_word_index < i[1]:
                 return True
         return False
 
@@ -105,7 +105,7 @@ class ToolTester:
         
         return float(correct) / total
     
-    def atom-to-atom(self):
+    def atom_to_atom(self):
         '''
         Returns the value of the atom-to-atom metric.
         '''
@@ -120,4 +120,4 @@ class ToolTester:
         
 if __name__ == "__main__":
     t = ToolTester("suspicious-document00969", "paragraph")
-    print t.atom-to-atom()
+    print t.atom_to_atom()
