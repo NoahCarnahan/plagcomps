@@ -50,9 +50,12 @@ class StylometricFeatureEvaluator:
 		self.word_spans = self.initWordList(self.input_file)
 		self.sentence_spans = self.initSentenceList(self.input_file)
 		self.paragraph_spans = self.initParagrpahList(self.input_file)
+		self.posTags = self.initTagList(self.input_file)
 	
 		self.word_length_sum_table = self.initWordLengthSumTable()
 		self.sentence_length_sum_table = self.initSentenceLengthSumTable()
+		self.pos_frequency_count_table = self.initPosFrequencyTable()
+
 	
 	def initWordList(self, text):
 		'''
@@ -87,6 +90,15 @@ class StylometricFeatureEvaluator:
 			spans.append((start, start+len(paragraph)))
 			start_index = start + len(paragraph)
 		return spans
+
+	def initTagList(self, text):
+		taggedWords = []
+		wordSpans = self.getWordSpans(0, len(text))
+		for word in wordSpans[0]:
+			word = [self.input_file[word[0]:word[1]]]
+			taggedWords.append(nltk.tag.pos_tag(word)[0])
+		print taggedWords
+		return taggedWords
 
 	def _binarySearchForSpanIndex(self, spans, index, first):
 		''' Perform a binary search across the list of spans to find the index in the spans that
@@ -147,16 +159,6 @@ class StylometricFeatureEvaluator:
 			print 'Will fix this later'
 		else:
 			raise ValueError("atom_type string must be 'char', 'word', 'sentence' or 'paragraph', not '" + str(atom_type) + "'.")
-
-	def getPosFrequencies(self, tagList):
-		posFrequencies = {}
-		for words in tagList:
-			try:
-				posFrequencies[words[1]] += 1
-			except:
-				posFrequencies[words[1]] = 1
-		print posFrequencies
-		return posFrequencies
 
 	def getWordSpans(self, start_index, end_index):
 		'''
@@ -232,6 +234,23 @@ class StylometricFeatureEvaluator:
 			sum_table.append(word_sum + sum_table[-1])
 		sum_table.pop(0)
 		return sum_table
+
+	def initPosFrequencyTable(self):
+		sum_table = [0]
+		count = [0,0,0,0,0] #("JJ", "NN", "VB", "RB", "OTHER")
+		for words in self.posTags:
+			if "JJ" in words[1]:
+				count[0] += 1
+			elif "NN" in words[1]:
+				count[1] += 1
+			elif "VB" in words[1]:
+				count[2] += 1
+			elif "RB" in words[1]:
+				count[3] += 1
+			else:
+				count[4] += 1
+			sum_table.append(count)
+		return sum_table
 	
 	# TODO: Refactor this method
 	def getFeatures(self, start_index, end_index, atom_type):
@@ -287,15 +306,7 @@ class StylometricFeatureEvaluator:
 			sentence_spans, sentence_spans_indices = self.getSentenceSpans(self.paragraph_spans[start_index][0], self.paragraph_spans[end_index][1])
 			first_sentence_index = sentence_spans_indices[0]
 			last_sentence_index = sentence_spans_indices[1]
-
-		elif atom_type == 'pos':
-			taggedWords = []
-			wordSpans = self.getWordSpans(start_index, end_index)
-			for word in wordSpans[0]:
-				word = [self.input_file[word[0]:word[1]]]
-				taggedWords.append(nltk.tag.pos_tag(word)[0])
-			print taggedWords
-			counts = self.getPosFrequencies(taggedWords)
+			
 
 		else:
 			raise ValueError("atom_type string must be 'char', 'word', 'sentence' or 'paragraph', not '" + str(atom_type) + "'.")
@@ -384,7 +395,7 @@ class StylometricFeatureEvaluator:
 		print self.getFeatures(0, len(self.input_file), "char")
 		print
 		print "--"*20
-		print self.getFeatures(0, len(self.input_file), "pos")
+		#print self.getFeatures(0, len(self.input_file), "pos")
 		# print "Average word frequency class of 'The small cat jumped'"
 		# print self.averageWordFrequencyClass(["The", "small", "cat", "jumped"])
 		
