@@ -51,10 +51,15 @@ class StylometricFeatureEvaluator:
 		self.sentence_spans = self.initSentenceList(self.input_file)
 		self.paragraph_spans = self.initParagrpahList(self.input_file)
 		self.posTags = self.initTagList(self.input_file)
+
+		print self.posTags
 	
 		self.word_length_sum_table = self.initWordLengthSumTable()
 		self.sentence_length_sum_table = self.initSentenceLengthSumTable()
 		self.pos_frequency_count_table = self.initPosFrequencyTable()
+		self.word_frequency_class_table = self.init_word_frequency_class_table(self.input_file)
+		self.punctuation_table = self.init_punctuation_table()
+		self.stopWords_table = self.init_stopWord_table(self.input_file)
 
 	
 	def initWordList(self, text):
@@ -97,7 +102,6 @@ class StylometricFeatureEvaluator:
 		for word in wordSpans[0]:
 			word = [self.input_file[word[0]:word[1]]]
 			taggedWords.append(nltk.tag.pos_tag(word)[0])
-		print taggedWords
 		return taggedWords
 
 	def _binarySearchForSpanIndex(self, spans, index, first):
@@ -236,9 +240,10 @@ class StylometricFeatureEvaluator:
 		return sum_table
 
 	def initPosFrequencyTable(self):
-		sum_table = [0]
-		count = [0,0,0,0,0] #("JJ", "NN", "VB", "RB", "OTHER")
+		sum_table = []
+		myCount = [0,0,0,0,0]
 		for words in self.posTags:
+			count = myCount[:]  #("JJ", "NN", "VB", "RB", "OTHER")
 			if "JJ" in words[1]:
 				count[0] += 1
 			elif "NN" in words[1]:
@@ -249,8 +254,77 @@ class StylometricFeatureEvaluator:
 				count[3] += 1
 			else:
 				count[4] += 1
+			myCount = count[:]
 			sum_table.append(count)
 		return sum_table
+
+	def init_punctuation_table(self):
+		sum_table = []
+		myCount = 0
+		for char in self.input_file:
+			if char in ",./<>?;':[]{}\|!@#$%^&*()`~-_\"":
+				myCount += 1
+			sum_table.append(myCount)
+		print sum_table
+		return sum_table
+
+	def init_stopWord_table(self, text):
+		sum_table = []
+		myCount = 0
+		wordSpans = self.getWordSpans(0, len(text))
+		for span in wordSpans[0]:
+			word = self.input_file[span[0]:span[1]]
+			print word
+			if word in nltk.corpus.stopwords.words('english'):
+				myCount += 1
+			sum_table.append(myCount)
+		print 'stopwords', sum_table
+		return sum_table
+
+	#TODO: Refactor this method
+	def init_word_frequency_class_table(self, text):
+		# This feature is defined here:
+		# http://www.uni-weimar.de/medien/webis/publications/papers/stein_2006d.pdf
+		#
+		# What should we do if the frequency of a given word is 0? (causes div by 0 problem)
+		# Unfortunately the reference in the Meyer Zu Eissen and Stein article is to a
+		# German website and seems unrelated: http://wortschatz.uni-leipzig.de/
+		#
+		# One option is to use some sort of smoothing. Plus-one would be the simpleset, but
+		# we might want to do a bit of thinking about how much effect this will have on word
+		# class
+		
+		# Additionally, perhaps we should create a corpus class that supports functions such
+		# as corpus.getFrequency(word) and a corpus could be passed into averageWordFrequency
+		# as an argument. Lets do this.
+	
+	
+		# This dictionary could perhaps be replaced by a nltk.probability.FreqDist
+		# http://nltk.org/api/nltk.html#nltk.probability.FreqDist
+		word_freq_dict = {}
+		wordSpans = self.getWordSpans(0, len(text))
+		for span in wordSpans[0]:
+			word = self.input_file[span[0]:span[1]]
+			word = word.lower() # Do we care about case?
+			word_freq_dict[word] = word_freq_dict.get(word, 0) + 1
+		
+		corpus_word_freq_by_rank = sorted(word_freq_dict.items(), key=lambda x: x[1], reverse=True)
+		occurences_of_most_freq_word = corpus_word_freq_by_rank[0][1]
+	
+
+		# zach/tony:
+		# this creates a table where each entry holds the summation of the WFC of all previous words
+		# division (for averaging) will be done in the querying step
+		word_frequency_class_table = []
+		total = 0
+		for i in range(len(wordSpans[0])):
+			span = wordSpans[0][i]
+			word = self.input_file[span[0]:span[1]]			
+			freq_class = math.floor(math.log((float(occurences_of_most_freq_word)/word_freq_dict.get(word.lower(), 0)),2))
+			total += freq_class
+			word_frequency_class_table.append(total)
+
+		return word_frequency_class_table
 	
 	# TODO: Refactor this method
 	def getFeatures(self, start_index, end_index, atom_type):
@@ -311,10 +385,15 @@ class StylometricFeatureEvaluator:
 		else:
 			raise ValueError("atom_type string must be 'char', 'word', 'sentence' or 'paragraph', not '" + str(atom_type) + "'.")
 
-		#avg_word_length = self.averageWordLength(first_word_index, last_word_index)
-		#avg_sentence_length = self.averageSentenceLength(first_sentence_index, last_sentence_index)
+		avg_word_length = self.averageWordLength(first_word_index, last_word_index)
+		avg_sentence_length = self.averageSentenceLength(first_sentence_index, last_sentence_index)
+		posPercentageVector = self.getPosPercentageVector(first_word_index, last_word_index)
+		avg_word_frequency_class = self.get_avg_word_frequency_class(first_word_index, last_word_index)
+		punctuation_percentage = self.get_punctuation_percentage(first_word_index, last_word_index)
+		stopword_percentage = self.get_stopword_percentage(first_word_index, last_word_index)
+
 		
-		#return [avg_word_length, avg_sentence_length]
+		return [avg_word_length, avg_sentence_length, posPercentageVector, avg_word_frequency_class, punctuation_percentage, stopword_percentage]
 	
 	def _getSumTableEntry(self, sum_table, index):
 		if index < 0:
@@ -341,41 +420,35 @@ class StylometricFeatureEvaluator:
 		num_sentences = (sentence_list_index_end + 1) - sentence_list_index_start
 		return float(total_words_per_sentences)/max(num_sentences, 1) # avoid division by 0
 
-	#TODO: Refactor this method
-	def averageWordFrequencyClass(self, words):
-		# This feature is defined here:
-		# http://www.uni-weimar.de/medien/webis/publications/papers/stein_2006d.pdf
-		#
-		# What should we do if the frequency of a given word is 0? (causes div by 0 problem)
-		# Unfortunately the reference in the Meyer Zu Eissen and Stein article is to a
-		# German website and seems unrelated: http://wortschatz.uni-leipzig.de/
-		#
-		# One option is to use some sort of smoothing. Plus-one would be the simpleset, but
-		# we might want to do a bit of thinking about how much effect this will have on word
-		# class
-		
-		# Additionally, perhaps we should create a corpus class that supports functions such
-		# as corpus.getFrequency(word) and a corpus could be passed into averageWordFrequency
-		# as an argument. Lets do this.
-	
-	
-		# This dictionary could perhaps be replaced by a nltk.probability.FreqDist
-		# http://nltk.org/api/nltk.html#nltk.probability.FreqDist
-		word_freq_dict = {}
-		for word in nltk.corpus.brown.words():
-			word = word.lower() # Do we care about case?
-			word_freq_dict[word] = word_freq_dict.get(word, 0) + 1
-		
-		corpus_word_freq_by_rank = sorted(word_freq_dict.items(), key=lambda x: x[1], reverse=True)
-		occurences_of_most_freq_word = corpus_word_freq_by_rank[0][1]
-	
-		total = 0
-		word_total = 0
-		for word in words:			
-			freq_class = math.floor(math.log((float(occurences_of_most_freq_word)/word_freq_dict.get(word.lower(), 0)),2))
-			total += freq_class
-			word_total += 1
-		return total/word_total
+	def getPosPercentageVector(self, word_index_start, word_index_end):
+		'''
+		Take in two entries from the frequency count table and create a vector with percentages of
+		PoS occurrences between those entries.
+		'''
+		endWord = self.pos_frequency_count_table[word_index_end]
+		startWord = self.pos_frequency_count_table[word_index_start]
+		newList = []
+		for i in range(len(endWord)):
+			newList.append((endWord[i] - startWord[i])/float(word_index_end - word_index_start))
+		return newList
+
+	def get_avg_word_frequency_class(self, word_index_start, word_index_end):
+		'''
+		Perform querying on the word_frequency_class_table and divide by the number of words
+		'''
+		total = self.word_frequency_class_table[word_index_end] - self.word_frequency_class_table[word_index_start]
+		return total / float(word_index_end - word_index_start)
+
+	def get_punctuation_percentage(self, word_index_start, word_index_end):
+		'''
+		Gets the punctuation count in the text between two indices 
+		'''
+		total = self.punctuation_table[word_index_end] - self.punctuation_table[word_index_start]
+		return total / float(word_index_end - word_index_start)
+
+	def get_stopword_percentage(self, word_index_start, word_index_end):
+		total = self.stopWords_table[word_index_end] - self.stopWords_table[word_index_start]
+		return total / float(word_index_end - word_index_start)
 	
 	def _is_punctuation(self, word):
 		''' Returns true if the given word is just punctuation. '''
