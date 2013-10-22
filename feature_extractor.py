@@ -50,9 +50,11 @@ class StylometricFeatureEvaluator:
         self.word_spans = self.initWordList(self.input_file)
         self.sentence_spans = self.initSentenceList(self.input_file)
         self.paragraph_spans = self.initParagrpahList(self.input_file)
+	#self.unknown_word_counts = self.init_unknown_word_counts(self.input_file, self.word_spans)
     
         self.word_length_sum_table = self.initWordLengthSumTable()
         self.sentence_length_sum_table = self.initSentenceLengthSumTable()
+	#self.unknown_word_sum_table = self.init_unknown_word_sum_table()
     
     def initWordList(self, text):
         '''
@@ -87,6 +89,25 @@ class StylometricFeatureEvaluator:
             spans.append((start, start+len(paragraph)))
             start_index = start + len(paragraph)
         return spans
+
+    def init_pos_sum_table(self, text, word_spans):
+	'''
+	returns a list of lists, where each sublist holds the cumulative count of words within
+	pos categories
+	e.g. retVal[i] = [0,1,1,0] if the first two words have been POS1 and POS2 (in our indexing)
+	'''
+
+	retVal = []
+	for span in word_spans:
+	    word = text[span[0]:span[1]]
+	    # TODO we could extend this by appending the actual lists outputted by the nltk word-check
+	    # which would allow for more powerful features using this buildup
+	    if _is_word(word):
+		retVal.append(true)
+	    else:
+		retVal.append(false)
+
+	return retVal
 
     def _binarySearchForSpanIndex(self, spans, index, first):
         ''' Perform a binary search across the list of spans to find the index in the spans that
@@ -222,6 +243,9 @@ class StylometricFeatureEvaluator:
             sum_table.append(word_sum + sum_table[-1])
         sum_table.pop(0)
         return sum_table
+
+    #def init_pos_word_sum_table(self):
+	
     
     # TODO: Refactor this method
     def getFeatures(self, start_index, end_index, atom_type):
@@ -309,7 +333,15 @@ class StylometricFeatureEvaluator:
         total_words_per_sentences = self._getSumTableEntry(self.sentence_length_sum_table, sentence_list_index_end) - self._getSumTableEntry(self.sentence_length_sum_table, sentence_list_index_start-1)
         num_sentences = (sentence_list_index_end + 1) - sentence_list_index_start
         return float(total_words_per_sentences)/max(num_sentences, 1) # avoid division by 0
-    
+   
+    def get_percentage_unknown_words(self, words):
+	'''returns the percentage of the words that are unknown by the nltk.wordnet corpus'''
+	count_unknown_words = 0
+	for word in words:
+	    if not _is_word(word):
+		count_unknown_words += 1
+	return count_unknown_words / max(len(words), 1)
+ 
     #TODO: Refactor this method
     def averageWordFrequencyClass(self, words):
         # This feature is defined here:
@@ -350,7 +382,11 @@ class StylometricFeatureEvaluator:
         ''' Returns true if the given word is just punctuation. '''
         match_obj = re.match(self.punctuation_re, word)
         return match_obj and len(match_obj.group()) == len(word)
-    
+	   
+    def _is_word(self, word):
+	'''returns whether this word exists in the nltk default dictionary'''
+	return nltk.corpus.wordnet.synsets(word)
+	
     def test(self):
         print 'words: ', self.word_spans
         print 'sentences: ', self.sentence_spans
@@ -363,6 +399,7 @@ class StylometricFeatureEvaluator:
         print 'Extracted Stylometric Feature Vector: <avg_word_length, avg_words_in_sentence>'      
         print self.getFeatures(0, len(self.input_file), "char")
         print
+
         # print "Average word frequency class of 'The small cat jumped'"
         # print self.averageWordFrequencyClass(["The", "small", "cat", "jumped"])
         
