@@ -56,7 +56,7 @@ class ToolTester:
         Return the number of the smallest of the two clusters.
         '''
         if self._smallest_cluster == None:
-            cluster_nums = [x for p.cluster_num in self.passages]
+            cluster_nums = [p.cluster_num for p in self.passages]
             self._smallest_cluster = Counter(cluster_nums).most_common()[-1][0]
         return self._smallest_cluster
     
@@ -87,14 +87,14 @@ class ToolTester:
         if DEBUG:
             if len(self.get_plagiarized_spans()) == 0:
                 print "NOTE: no plagiarzed passages in this document"
-            print "Total sentences:", len(self.c.feature_evaluator.sentence_spans)
+            print "Total passages:", len(self.passages)
             amount_done = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
             amount_done_i = 0
             
         correct = 0
         total = 0
         
-        for p in passages:
+        for p in self.passages:
             if DEBUG and float(total) / len(self.passages) > amount_done[amount_done_i] / 100.0:
                 print str(amount_done[amount_done_i])+"% done..."
                 amount_done_i += 1
@@ -109,9 +109,20 @@ class ToolTester:
         '''
         Returns the value of the atom-to-atom metric.
         '''
+        # NOTE: This is waaaaaaay slow. Maybe one day we can figure out how to optimize it.
+        
+        if DEBUG:
+            if len(self.get_plagiarized_spans()) == 0:
+                print "NOTE: no plagiarzed passages in this document"
+            print "Total passages:", len(self.passages)
+            p_count = 0    
+                
         matching = 0
         total = 0
         for p1 in self.passages:
+            if DEBUG:
+                p_count  += 1
+                print "On passage", p_count
             for p2 in self.passages:
                 if (self._is_plagiarized(p1) == self._is_plagiarized(p2)) and (p1.cluster_num == p2.cluster_num):
                     matching += 1
@@ -120,4 +131,5 @@ class ToolTester:
         
 if __name__ == "__main__":
     t = ToolTester("suspicious-document00969", "paragraph")
+    print t.main()
     print t.atom_to_atom()
