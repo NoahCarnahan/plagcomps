@@ -1,42 +1,100 @@
+
+from scipy.stats import scoreatpercentile
+import matplotlib.pyplot as plt
 import xml.etree.ElementTree as ET
 import os
 
-corpus_dir = '/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/'
+CORPUS_DIR = '/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents/'
 
-def explore_dir(dir_name = 'suspicious-documents/part1/'):
-	full_dir_path = corpus_dir + dir_name
-	all_files = os.listdir(full_dir_path)
+class Document:
 
-	xml_files = [f for f in all_files if f[-4:] == '.xml']
+	def __init__(self, name, doc_length, plag_passage_lengths):
+		self.name = name
+		self.doc_length = doc_length
+		self.plag_passage_lengths = plag_passage_lengths
+		self.num_plag_passages = len(plag_passage_lengths)
+		if len(plag_passage_lengths) > 0:
+			self.prop_of_plag_text = float(sum(plag_passage_lengths)) / len(plag_passage_lengths)
+		else:
+			self.prop_of_plag_text = 0.0
 
-	# [doc_name] is the number of plagarised passages in <doc_name>
-	num_plag_passages = {}
+	def __str__(self):
+		return '%s\t\t %i\t\t %i\t\t %f' % (self.name, self.num_plag_passages, self.doc_length, self.prop_of_plag_text)
 
-	# Length of each plagiarism case
+
+def summarize_data():
+	for directory in os.listdir(CORPUS_DIR):
+		all_docs = explore_dir(directory)
+		summarize_docs(directory, all_docs)
+		print '---\n'*4
+
+def summarize_docs(dirname, docs):
+	print 'In directory', dirname
+	num_plag = sum([d.num_plag_passages > 0 for d in docs])
+	print float(num_plag) / len(docs), 'of the documents had some plagiarism'
+
+	print 'The document lengths had the following distribution'
+	five_num_summary([d.doc_length for d in docs])
+
 	all_plag_lengths = []
+	for d in docs:
+		all_plag_lengths.extend(d.plag_passage_lengths)
+
+	print 'The lengths of the instances of plag. had the following distribution'
+	five_num_summary(all_plag_lengths)
+
+
+def explore_dir(dir_name):
+	# Parse out base names of all files in <dir_name>
+	full_dir_path = CORPUS_DIR + dir_name + '/'
+	
+	all_file_bases = get_base_file_names(full_dir_path)
 	feature_types = set()
+	all_docs = []
 
-	avg_len_plag_passages = {}
+	for file_base in all_file_bases:
+		xml_full_path = full_dir_path + file_base + '.xml'
+		text_full_path = full_dir_path + file_base + '.txt'
 
-	for xml_file_name in xml_files:
-		tree = ET.parse(full_dir_path + xml_file_name)
-		total_plags = 0
+		doc_length = len(file(text_full_path, 'r').read())
+
+		tree = ET.parse(xml_full_path)
+
+		plag_lengths = []
 
 		for feature in tree.iter('feature'):
 			feature_types.add(feature.get('name'))
 			
 			if feature.get('name') == 'artificial-plagiarism':
 				length = int(feature.get('this_length'))
-				all_plag_lengths.append(length)
-				total_plags += 1
-
-		num_plag_passages[xml_file_name] = total_plags
-
-	print num_plag_passages.values()
-	print all_plag_lengths
+				plag_lengths.append(length)
+				
+		doc = Document(file_base, doc_length, plag_lengths)
+		all_docs.append(doc)
 
 
-	print feature_types
+	return all_docs
+
+def get_base_file_names(full_dir_path):
+	all_files = os.listdir(full_dir_path)
+	all_file_bases = [f[:-4] for f in all_files if f[-4:] == '.xml']
+
+	return all_file_bases
+
+
+def five_num_summary(arr):
+	'''
+	Prints <min, 25th percentile, median, 75th percentile, max>
+	of data stored in <arr>
+	'''
+	min_val = min(arr)
+	first_quart = scoreatpercentile(arr, 25)
+	median = scoreatpercentile(arr, 50)
+	third_quart = scoreatpercentile(arr, 75)
+	max_val = max(arr)
+
+	print min_val, first_quart, median, third_quart, max_val
+	print 'Mean', sum(arr) / float(len(arr)), '\n'
 
 if __name__ == '__main__':
-	explore_dir() 
+	summarize_data() 
