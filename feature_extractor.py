@@ -42,7 +42,6 @@ class StylometricFeatureEvaluator:
 		self.setDocument(filepath)
 		self.punctuation_re = re.compile(r'[\W\d]+', re.UNICODE) # slightly modified from nltk source
 	
-	
 	def setDocument(self, filepath):
 		''' Reads in the file and constructs a list of words, sentences, and paragraphs from it. '''
 		f = open(filepath, 'r')
@@ -434,13 +433,6 @@ class StylometricFeatureEvaluator:
 			func = getattr(self, func_name)
 			accepted_params = inspect.getargspec(func).args
 			params_to_pass = dict((p, boundaries[p]) for p in boundaries if p in accepted_params)
-			print func
-			print "--"*20
-			print func_name
-			print "--"*20
-			print accepted_params
-			print "--"*20
-			print boundaries
 			passage_features[func_name] = func(**params_to_pass)
 
 		# Store the character start/end of the given passage in Passage objects

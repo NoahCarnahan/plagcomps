@@ -1,4 +1,5 @@
 from controller import Controller
+from trial import Trial
 
 import xml.etree.ElementTree as ET
 from collections import Counter
@@ -14,59 +15,52 @@ DEBUG = True
 
 class ToolTester:
     
-    def __init__(self, suspect, atom_type):
-        #atom_type = "word", "sentence", or "paragraph"
-        #atom_type specifies what atoms the clusterer should use
+    def __init__(self, atom_type, feature_list, file_list):
+        '''
+        <file_list> should be relative to suspicious-documents/
+        '''
+        # atom_type = "word", "sentence", or "paragraph"
+        # atom_type specifies what atoms the clusterer should use
     
-        path_start = "/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents/part1/"
-        self.text_file_path = path_start + suspect + ".txt"
-        self.xml_file_path = path_start + suspect + ".xml"
-
-        self.c = Controller(self.text_file_path)
+        path_start = "/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents/"
+        self.base_file_paths = [path_start + f for f in file_list]
+        self.atom_type = atom_type
+        self.feature_list = feature_list
+        self.file_list = file_list
         
-        #self.atom_spans = self.c.feature_evaluator.getAllByAtom(atom_type)
-        #self.atom_features = self.c.extractFeatures(atom_type)
-        #self.atom_clusters = self.c.clusterFeatures(self.atom_features, "kmeans", 2)
-        self.passages = self.c.get_passages(atom_type, ["averageWordLength", "averageSentenceLength"], "kmeans", 2)
-        
-        self._smallest_cluster = None #The number of the smallest cluster.
-        self._plagiarized_spans = None
-        
-        #self._is_char_plagiarized_cache = None
-        
-    def get_plagiarized_spans(self):
+    def get_plagiarized_spans(self, xml_file_path):
         '''
         Using the ground truth, return a list of spans representing the passages of the
         text that are plagiarized. 
         '''
-        if self._plagiarized_spans == None:
-            spans = []
-            tree = ET.parse(self.xml_file_path)
-            for feature in tree.iter("feature"):
-                if feature.get("name") == "artificial-plagiarism": # are there others?
-                    start = int(feature.get("this_offset"))
-                    end = start + int(feature.get("this_length"))
-                    spans.append((start, end))
-            self._plagiarized_spans = spans
+        spans = []
+        tree = ET.parse(xml_file_path)
+        for feature in tree.iter("feature"):
+            if feature.get("name") == "artificial-plagiarism": # are there others?
+                start = int(feature.get("this_offset"))
+                end = start + int(feature.get("this_length"))
+                spans.append((start, end))
             
-        return self._plagiarized_spans
+        return spans
     
-    def _get_smallest_cluster(self):
+    def _get_smallest_cluster(self, passages):
         '''
         Return the number of the smallest of the two clusters.
         '''
-        if self._smallest_cluster == None:
-            cluster_nums = [p.cluster_num for p in self.passages]
-            self._smallest_cluster = Counter(cluster_nums).most_common()[-1][0]
-        return self._smallest_cluster
+        
+        cluster_nums = [p.cluster_num for p in passages]
+        smallest_cluster = Counter(cluster_nums).most_common()[-1][0]
+        
+        return smallest_cluster
     
-    def _is_plagiarized(self, p):
+    def _is_plagiarized(self, p, plagiarized_spans):
         '''
         p is a passage. Return True if the first character of the passage is in a plagiarized span.
         '''
-        # TODO: Consider other ways to judge if an atom is plagiarized or not. For example, look to see if the WHOLE atom in a plagiarized segment (?)
-        for i in self.get_plagiarized_spans():
-            if i[0] <= p.start_word_index < i[1]:
+        # TODO: Consider other ways to judge if an atom is plagiarized or not. 
+        # For example, look to see if the WHOLE atom in a plagiarized segment (?)
+        for s in plagiarized_spans:
+            if s[0] <= p.start_word_index < s[1]:
                 return True
         return False
 
@@ -77,33 +71,91 @@ class ToolTester:
         '''
         return p.cluster_num == self._get_smallest_cluster()
     
-    def main(self):
+    def test_one_file(self, file_base, features = 'all'):
         '''
-        Returns (number of correctly classified passages) / (number of passages)
+        <features> should either be a list of features to test, or 'all'
+        if we want to use all of <self.feature_list>
+
+        Returns a Trial object which holds the document's name, features used,
+        number of correctly classified passages, and total number of passages
         Assumes that the smaller of the two predicted clusters is the cluster of plagiarized passages
         '''
         #TODO: Name this metric and rename this function appropriately
-        
+            
+        c = Controller(file_base + '.txt')
+        if features == 'all':
+            features = self.feature_list
+
+        passages = c.get_passages(self.atom_type, features, "kmeans", 2)
+        plagiarzed_spans = self.get_plagiarized_spans(file_base + '.xml')
+        smallest_cluster = self._get_smallest_cluster(passages)
+
         if DEBUG:
-            if len(self.get_plagiarized_spans()) == 0:
-                print "NOTE: no plagiarzed passages in this document"
-            print "Total passages:", len(self.passages)
+            print "Total passages:", len(passages)
             amount_done = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
             amount_done_i = 0
-            
+
         correct = 0
         total = 0
         
-        for p in self.passages:
-            if DEBUG and float(total) / len(self.passages) > amount_done[amount_done_i] / 100.0:
+        for p in passages:
+            if DEBUG and float(total) / len(passages) > amount_done[amount_done_i] / 100.0:
                 print str(amount_done[amount_done_i])+"% done..."
                 amount_done_i += 1
 
-            if self._is_plagiarized(p) == self._is_in_smallest_cluster(p):
+            actually_plagiarized = self._is_plagiarized(p, plagiarzed_spans)
+            if (actually_plagiarized and p.cluster_num == smallest_cluster) or \
+               (not actually_plagiarized and p.cluster_num != smallest_cluster):
                 correct +=1
             total += 1
         
-        return float(correct) / total
+        trial = Trial(file_base, features, correct, total)
+        return trial
+
+    def test_all_files(self, features = 'all'):
+        '''
+        Using 
+        '''
+        all_trials = []
+        for base_path in self.base_file_paths:
+            print 'Testing', base_path
+            result_trial = self.test_one_file(base_path, features)
+            all_trials.append(result_trial)
+
+        return all_trials
+
+    def test_features_individually(self):
+        '''
+        For each feature in <self.feature_list>, use ONLY that feature 
+        and test every file in <self.file_list>
+
+        Output the results of each trial using <self.write_out_trials>
+        '''
+        # feature => trial objects for that (those) feature(s)
+        all_trials = []
+        for single_feature in self.feature_list:
+            print 'Testing', single_feature
+            all_trials.extend(self.test_all_files([single_feature]))
+
+        self.write_out_trials(all_trials)
+
+    def write_out_trials(self, trials, outfile = 'test_trial.csv'):
+        '''
+        For each trial in <trials>, write a CSV representation of the trial's
+        results to <outfile>
+        '''
+        f = open(outfile, 'w')
+        header = ', '.join(self.feature_list + ['docname', 'correct', 'total']) + '\n'
+        f.write(header)
+        
+        for t in trials:
+            trial_as_csv = t.format_csv(self.feature_list)
+            print 'here is a trial'
+            print trial_as_csv
+            f.write(trial_as_csv)
+
+        print 'Wrote', outfile
+        f.close()
     
     def atom_to_atom(self):
         '''
@@ -130,6 +182,14 @@ class ToolTester:
         return float(matching) / total
         
 if __name__ == "__main__":
-    t = ToolTester("suspicious-document00969", "paragraph")
-    print t.main()
-    print t.atom_to_atom()
+    all_features = [
+        'averageWordLength',
+        'averageSentenceLength',
+        'getPosPercentageVector',
+        'get_avg_word_frequency_class',
+        'get_punctuation_percentage',
+        'get_stopword_percentage'
+    ]
+    t = ToolTester('sentence', all_features, ['part1/suspicious-document00969'])
+
+    print t.test_features_individually()

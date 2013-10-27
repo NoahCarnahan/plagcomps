@@ -71,7 +71,15 @@ class Controller:
 		
 
 if __name__ == '__main__':
-	c = Controller('foo.txt')
-	c.test('sentence', ['averageWordLength', 'averageSentenceLength'], 'kmeans', 2)
+	#c = Controller('foo.txt')
+	c = Controller('/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents/part1/suspicious-document00969.txt')
+	features = [
+		'averageWordLength',
+		'averageSentenceLength',
+		'get_avg_word_frequency_class',
+		'get_punctuation_percentage',
+		'get_stopword_percentage'
+	]
+	c.test('sentence', features, 'kmeans', 2)
 
 
