@@ -19,7 +19,9 @@ class Controller:
 		all_passages = []
 		for i in xrange(len(self.feature_evaluator.getAllByAtom(atom_type))):
 			passage = self.feature_evaluator.get_specific_features(feature_list, i, i + 1, atom_type)
-			all_passages.append(passage)
+			# Avoid edge cases where features aren't parseable (i.e. a 'passage' of one word)
+			if passage != None:
+				all_passages.append(passage)
 
 		# Assigns cluster numbers to each passage object stored in <all_passages>
 		self.cluster_features(all_passages, cluster_method, k)

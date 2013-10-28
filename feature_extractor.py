@@ -424,6 +424,10 @@ class StylometricFeatureEvaluator:
 		'''
 		boundaries = self._fetch_boundary_indices(atom_type, start_index, end_index)
 
+		# If the passage is one word long, we hit issues in trying to parse grammatical features
+		if boundaries['first_word_index'] == boundaries['last_word_index']:
+			return None
+
 		# For each feature in <feature_list>, store the result of calling <func_name> i.e.
 		# func_name => func_name()
 		passage_features = {}
@@ -435,6 +439,7 @@ class StylometricFeatureEvaluator:
 			params_to_pass = dict((p, boundaries[p]) for p in boundaries if p in accepted_params)
 			passage_features[func_name] = func(**params_to_pass)
 
+		
 		# Store the character start/end of the given passage in Passage objects
 		global_start, global_end = self.get_character_boundaries(atom_type, start_index, end_index)
 		text = self.input_file[global_start : global_end]
