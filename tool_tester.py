@@ -180,6 +180,20 @@ class ToolTester:
 
         self.write_out_trials(all_trials)
 
+    def test_full_feature_set(self):
+        '''
+       
+        '''
+        # feature => trial objects for that (those) feature(s)
+        all_trials = []
+        for single_file in self.base_file_paths:
+            print 'Working on', single_file
+            c = Controller(single_file + '.txt')
+            
+            all_trials.append(self.test_one_feature_set(c, self.feature_list, single_file))
+
+        self.write_out_trials(all_trials, 'results/full_set_first_training_test.csv')
+
 
     def write_out_trials(self, trials, outfile = 'test_trial.csv'):
         '''
@@ -249,8 +263,4 @@ if __name__ == "__main__":
     
 
     t = ToolTester('sentence', all_features, first_test_files)
-
-    # #t = ToolTester('sentence', all_features, ['part1/suspicious-document00496']) #527
-    # t = ToolTester('sentence', all_features, ['part1/suspicious-document00527']) #527
-
-    cProfile.run('t.test_features_individually()')
+    t.test_full_feature_set()
