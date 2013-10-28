@@ -3,6 +3,7 @@ from trial import Trial
 
 import xml.etree.ElementTree as ET
 from collections import Counter
+import cProfile
 
 DEBUG = True
 
@@ -95,8 +96,6 @@ class ToolTester:
             amount_done = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
             amount_done_i = 0
 
-        #correct = 0
-        #total = 0
         tp = 0
         fp = 0
         tn = 0
@@ -133,6 +132,36 @@ class ToolTester:
 
         return all_trials
 
+    def test_one_feature_set(self, controller_obj, feature_set, file_base):
+        all_trials = []
+
+        
+        passages = controller_obj.get_passages(self.atom_type, feature_set, "kmeans", 2)
+        print len(passages), 'total passages'
+        plagiarzed_spans = self.get_plagiarized_spans(file_base + '.xml')
+        smallest_cluster = self._get_smallest_cluster(passages)
+
+        tp = 0
+        fp = 0
+        tn = 0
+        fn = 0
+        
+        for p in passages:
+            actually_plagiarized = self._is_plagiarized(p, plagiarzed_spans)
+            
+            if (actually_plagiarized and p.cluster_num == smallest_cluster):
+                tp += 1
+            elif (not actually_plagiarized and p.cluster_num != smallest_cluster):
+                tn += 1
+            elif (actually_plagiarized and p.cluster_num != smallest_cluster):
+                fn += 1
+            elif (not actually_plagiarized and p.cluster_num == smallest_cluster):
+                fp += 1
+        
+        trial = Trial(file_base, feature_set, tp, fp, tn, fn)
+
+        return trial
+
     def test_features_individually(self):
         '''
         For each feature in <self.feature_list>, use ONLY that feature 
@@ -142,11 +171,15 @@ class ToolTester:
         '''
         # feature => trial objects for that (those) feature(s)
         all_trials = []
-        for single_feature in self.feature_list:
-            print 'Testing', single_feature
-            all_trials.extend(self.test_all_files([single_feature]))
+        for single_file in self.base_file_paths:
+            print 'Working on', single_file
+            c = Controller(single_file + '.txt')
+            for single_feature in self.feature_list:
+                print 'Using this feature:', single_feature
+                all_trials.append(self.test_one_feature_set(c, [single_feature], single_file))
 
         self.write_out_trials(all_trials)
+
 
     def write_out_trials(self, trials, outfile = 'test_trial.csv'):
         '''
@@ -154,7 +187,8 @@ class ToolTester:
         results to <outfile>
         '''
         f = open(outfile, 'w')
-        header = ', '.join(self.feature_list + ['docname', 'correct', 'total']) + '\n'
+        header = Trial.format_header(self.feature_list)
+        #header = ', '.join(self.feature_list + ['docname', 'correct', 'total']) + '\n'
         f.write(header)
         
         for t in trials:
@@ -191,14 +225,32 @@ class ToolTester:
         return float(matching) / total
         
 if __name__ == "__main__":
+    # all_features = [
+    #     'averageWordLength',
+    #     'averageSentenceLength',
+    #     'getPosPercentageVector',
+    #     'get_avg_word_frequency_class',
+    #     'get_punctuation_percentage',
+    #     'get_stopword_percentage'
+    # ]
     all_features = [
         'averageWordLength',
         'averageSentenceLength',
-        'getPosPercentageVector',
         'get_avg_word_frequency_class',
         'get_punctuation_percentage',
         'get_stopword_percentage'
     ]
-    t = ToolTester('sentence', ["averageWordLength"], ['part1/suspicious-document00527']) #527
+    test_file_listing = file('corpus_partition/training_set_files.txt')
+    all_test_files = [f.strip() for f in test_file_listing.readlines()]
+    test_file_listing.close()
 
-    print t.test_features_individually()
+    # Just try the first 120 for the moment
+    first_test_files = all_test_files[:120]
+    
+
+    t = ToolTester('sentence', all_features, first_test_files)
+
+    # #t = ToolTester('sentence', all_features, ['part1/suspicious-document00496']) #527
+    # t = ToolTester('sentence', all_features, ['part1/suspicious-document00527']) #527
+
+    cProfile.run('t.test_features_individually()')
