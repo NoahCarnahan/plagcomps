@@ -95,21 +95,30 @@ class ToolTester:
             amount_done = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
             amount_done_i = 0
 
-        correct = 0
-        total = 0
+        #correct = 0
+        #total = 0
+        tp = 0
+        fp = 0
+        tn = 0
+        fn = 0
         
         for p in passages:
-            if DEBUG and float(total) / len(passages) > amount_done[amount_done_i] / 100.0:
+            if DEBUG and float(tp+fp+tn+fn) / len(passages) > amount_done[amount_done_i] / 100.0:
                 print str(amount_done[amount_done_i])+"% done..."
                 amount_done_i += 1
 
             actually_plagiarized = self._is_plagiarized(p, plagiarzed_spans)
-            if (actually_plagiarized and p.cluster_num == smallest_cluster) or \
-               (not actually_plagiarized and p.cluster_num != smallest_cluster):
-                correct +=1
-            total += 1
+            
+            if (actually_plagiarized and p.cluster_num == smallest_cluster):
+                tp += 1
+            elif (not actually_plagiarized and p.cluster_num != smallest_cluster):
+                tn += 1
+            elif (actually_plagiarized and p.cluster_num != smallest_cluster):
+                fn += 1
+            elif (not actually_plagiarized and p.cluster_num == smallest_cluster):
+                fp += 1
         
-        trial = Trial(file_base, features, correct, total)
+        trial = Trial(file_base, features, tp, fp, tn, fn)
         return trial
 
     def test_all_files(self, features = 'all'):
@@ -190,6 +199,6 @@ if __name__ == "__main__":
         'get_punctuation_percentage',
         'get_stopword_percentage'
     ]
-    t = ToolTester('sentence', all_features, ['part1/suspicious-document00969'])
+    t = ToolTester('sentence', ["averageWordLength"], ['part1/suspicious-document00527']) #527
 
     print t.test_features_individually()
