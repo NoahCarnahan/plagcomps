@@ -14,9 +14,13 @@ import os
 import random
 import sys
 
-training_percent = .5
+training_percent = .7
+devtest_percent = .1
+test_percent = .2
+
 if len(sys.argv) == 2:
     training_percent = float(sys.argv[1])
+    devtest_percent = float(sys.argv[2])
 
 intrinsic_corpus_path = "/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents"
 intrinsic_dirs = ["part1/","part2/","part3/","part4/"]
@@ -43,8 +47,10 @@ assert(worked)
 random.shuffle(all_files)
 
 # Partition it
-cut_off = int(round( len(all_files)*training_percent ))
-training_set = all_files[:cut_off]
-test_set = all_files[cut_off:]
+cut_off_1 = int(round( len(all_files)*training_percent ))
+cut_off_2 = int(round(len(all_files)*devtest_percent )) + cut_off_1
+training_set = all_files[:cut_off_1]
+devtest_set = all_files[cut_off_1:cut_off_2]
+test_set = all_files[cut_off_2:]
 
-print {"train":training_set, "test":test_set}
+print "groups = " + str({"train":training_set, "devtest":devtest_set, "test":test_set})
