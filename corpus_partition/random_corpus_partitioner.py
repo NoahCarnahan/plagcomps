@@ -53,13 +53,13 @@ def partition_corpus(training_percent = .7):
     print len(training_set)
     print len(test_set)
 
-    training_set_file = file('training_set_files.txt', 'w')
+    training_set_file = file('change_this_manually_as_well.txt', 'w')
     for trainer in training_set:
         rel_path_start = trainer[1].index('/part')
         training_set_file.write(trainer[1][rel_path_start:-4] + '\n')
     training_set_file.close()
 
-    test_and_tuning_set_file = file('test_and_tuning_set_files.txt', 'w')
+    test_and_tuning_set_file = file('change_this_manually.txt', 'w')
     for test_and_tuning in test_set:
         rel_path_start = test_and_tuning[1].index('/part')
         test_and_tuning_set_file.write(test_and_tuning[1][rel_path_start:-4] + '\n')
