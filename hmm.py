@@ -1,4 +1,4 @@
-import cluster
+import cluster, feature_extractor
 import math, random
 import scipy.stats
 
@@ -27,6 +27,54 @@ class State :
 			prob = scipy.stats.norm(self.ft_list_means[i], self.ft_list_variances[i]).cdf(upper) - scipy.stats.norm(self.ft_list_means[i], self.ft_list_variances[i]).cdf(lower)
 			probability *= prob
 		return probability
+
+def baum_welch(filename):
+	'''
+	Performs the Baum-Welch algorithm to learn the unknown state transition and emission
+	probabilities. The results of this algorithm will be used in turn by the viterbi
+	algorithm.
+	
+	We may or may not implement this later. It's extremely tricky and confusing to update
+	the gaussian parameters...
+	'''
+	pass
+	
+def train_parameters(feature_vectors, states, initial_state_probs):
+	for a in xrange(1000):
+		viterbi_path = viterbi(feature_vectors, states, initial_state_probs)
+		print viterbi_path
+		for state in states:
+			print 'means:',state.ft_list_means
+			print 'vars: ',state.ft_list_variances
+		print
+		means_sum = [[0 for j in xrange(len(feature_vectors[0]))] for i in xrange(len(states))]
+		index = 0
+		for state in viterbi_path:
+			means_sum[state] = [x+y for x, y in zip(means_sum[state], feature_vectors[index])]
+			index += 1
+		means = [state.ft_list_means for state in states]
+		for i in xrange(len(states)):
+			num_states = viterbi_path.count(i)
+			if num_states > 0:
+				means[i] = [mean/num_states for mean in means_sum[i]]
+		
+		variances_sum = [[0 for j in xrange(len(feature_vectors[0]))] for i in xrange(len(states))]
+		index = 0
+		for state in viterbi_path:
+			variances_sum[state] = [x+(mean-y)**2 for x, y, mean in zip(variances_sum[state], feature_vectors[index], means[state])]
+			index += 1
+		variances = [state.ft_list_variances for state in states]
+		for i in xrange(len(states)):
+			num_states = viterbi_path.count(i)
+			if num_states > 0:
+				variances[i] = [variance/num_states for variance in variances_sum[i]]
+		
+		for i in xrange(len(states)):
+			states[i].ft_list_means = [(x+y)/2 for x, y in zip(means[i], states[i].ft_list_means)]
+			states[i].ft_list_variances = [(x+y)/2 for x, y in zip(variances[i], states[i].ft_list_variances)]
+
+	return viterbi(feature_vectors, states, initial_state_probs)
+
 
 def viterbi(feature_vectors, states, initial_state_probs):
 	''' Performs the viterbi algorithm where <feature_vectors> is a list of observed feature vectors.
@@ -72,15 +120,13 @@ def viterbi(feature_vectors, states, initial_state_probs):
 	
 def test():
 	a = State(["averageWordLength", "averageSentenceLength"], (0.98,0.02))
-	a.ft_list_means = [5.0, 9.0]
-	a.ft_list_variances = [1.0, 1.3]
 	b = State(["averageWordLength", "averageSentenceLength"], (0.02,0.98))
 	b.ft_list_means = [10.0, 14.0]
-	b.ft_list_variances = [1.0, 1.3]
+	a.ft_list_means = [5.0, 9.0]
 	observed_features = [[5.0, 9.0], [5.0, 9.0], [10.0, 14.0], [5.0, 9.0], [10.0, 14.0]]
 	states = [a, b]
 	initial_probs = [0.98, 0.02]
-	viterbi_path = viterbi(observed_features, states, initial_probs)
+	viterbi_path = train_parameters(observed_features, states, initial_probs)
 	# this test should return [0, 0, 1, 0, 1]
 	print viterbi_path
 
