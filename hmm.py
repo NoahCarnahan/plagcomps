@@ -3,17 +3,12 @@ import math, random
 import scipy.stats
 
 class State :
-	def __init__(self, ft_list, trans_probs):
+	def __init__(self, num, ft_list, trans_probs):
 		self.feature_list = ft_list
+		self.num = num
 		self.ft_list_means = [random.random()*15.0 for i in xrange(len(self.feature_list))]
-		self.ft_list_variances = [random.random()*5.0 for i in xrange(len(self.feature_list))]
+		self.ft_list_variances = [random.random()*5.0+3.0 for i in xrange(len(self.feature_list))]
 		self.trans_probs = trans_probs 
-	
-	def emit(self):
-			return [random.normalvariate(ft_list_means[i], ft_list_variances[i]) for i in xrange(len(self.feature_list))]
-			
-	def transition(self):
-			return random.random() < self.trans_prob
 	
 	def get_emission_probability(self, feature_vector):
 		''' Returns the probability of this state outputting the given feature_vector. 
@@ -26,7 +21,7 @@ class State :
 			lower = math.floor(z_score) * self.ft_list_variances[i] + self.ft_list_means[i]
 			prob = scipy.stats.norm(self.ft_list_means[i], self.ft_list_variances[i]).cdf(upper) - scipy.stats.norm(self.ft_list_means[i], self.ft_list_variances[i]).cdf(lower)
 			probability *= prob
-		return probability
+		return probability + 0.00001
 
 def baum_welch(filename):
 	'''
@@ -40,13 +35,20 @@ def baum_welch(filename):
 	pass
 	
 def train_parameters(feature_vectors, states, initial_state_probs):
-	for a in xrange(1000):
-		viterbi_path = viterbi(feature_vectors, states, initial_state_probs)
-		print viterbi_path
+	prev_viterbi_max = -1
+	viterbi_path, viterbi_max = viterbi(feature_vectors, states, initial_state_probs)
+	print 'diff: ', abs(viterbi_max-prev_viterbi_max)
+	for l in xrange(1000):
+		print 'diff: ', abs(viterbi_max-prev_viterbi_max)
+		num_states = [viterbi_path.count(i) for i in xrange(len(states))]
+
+		print viterbi_path, viterbi_max
 		for state in states:
 			print 'means:',state.ft_list_means
 			print 'vars: ',state.ft_list_variances
+			print 'trans_probs: ', state.trans_probs
 		print
+		# calculate means of observed outputs with each state
 		means_sum = [[0 for j in xrange(len(feature_vectors[0]))] for i in xrange(len(states))]
 		index = 0
 		for state in viterbi_path:
@@ -54,10 +56,11 @@ def train_parameters(feature_vectors, states, initial_state_probs):
 			index += 1
 		means = [state.ft_list_means for state in states]
 		for i in xrange(len(states)):
-			num_states = viterbi_path.count(i)
-			if num_states > 0:
-				means[i] = [mean/num_states for mean in means_sum[i]]
+			num = num_states[i]
+			if num > 0:
+				means[i] = [mean/num for mean in means_sum[i]]
 		
+		# calculate variances of boserved outputs with each state
 		variances_sum = [[0 for j in xrange(len(feature_vectors[0]))] for i in xrange(len(states))]
 		index = 0
 		for state in viterbi_path:
@@ -65,13 +68,42 @@ def train_parameters(feature_vectors, states, initial_state_probs):
 			index += 1
 		variances = [state.ft_list_variances for state in states]
 		for i in xrange(len(states)):
-			num_states = viterbi_path.count(i)
-			if num_states > 0:
-				variances[i] = [variance/num_states for variance in variances_sum[i]]
+			num = num_states[i]
+			if num > 0:
+				variances[i] = [variance/num for variance in variances_sum[i]]
 		
+		# updates gaussian parameters
 		for i in xrange(len(states)):
 			states[i].ft_list_means = [(x+y)/2 for x, y in zip(means[i], states[i].ft_list_means)]
 			states[i].ft_list_variances = [(x+y)/2 for x, y in zip(variances[i], states[i].ft_list_variances)]
+
+		#update transission probabilities
+		trans_possibilities = {}
+		trans_counts = {}
+		for s in xrange(len(states)):
+			trans_possibilities[s] = {}
+			trans_counts[s] = {}
+			for t in xrange(len(states)):
+				trans_possibilities[s][t] = 0
+				trans_counts[s][t] = 0
+
+		for i in xrange(len(viterbi_path)-1):
+			state = viterbi_path[i]
+			next_state = viterbi_path[i+1]
+			for s in xrange(len(states)):
+				trans_possibilities[state][s] += 1
+			trans_counts[state][next_state] += 1
+
+		for s in xrange(len(states)):
+			for t in xrange(len(states)):
+				old_prob = states[s].trans_probs[t]
+				if trans_possibilities[s][t] > 0:
+					new_prob = trans_counts[s][t] / float(trans_possibilities[s][t])
+					states[s].trans_probs[t] = (old_prob + new_prob) / 2
+
+		prev_viterbi_max = viterbi_max
+		viterbi_path, viterbi_max = viterbi(feature_vectors, states, initial_state_probs)
+
 
 	return viterbi(feature_vectors, states, initial_state_probs)
 
@@ -86,7 +118,7 @@ def viterbi(feature_vectors, states, initial_state_probs):
 	table = [[0 for j in xrange(len(states))] for i in xrange(len(feature_vectors))]
 	table2 = [[-1 for j in xrange(len(states))] for i in xrange(len(feature_vectors))]
 	for i in xrange(len(table[0])):
-		table[0][i] = initial_state_probs[i]
+		table[0][i] = initial_state_probs[i]*states[i].get_emission_probability(feature_vectors[0])
 	
 	# use dynamic programming to fill out the probability and back-pointer matrices
 	for i in xrange(1,len(table)):
@@ -116,16 +148,22 @@ def viterbi(feature_vectors, states, initial_state_probs):
 		prev_state = table2[i][cur_state]
 		vpath.insert(0, prev_state)
 		cur_state = table2[i-1][prev_state]
-	return vpath
+	return vpath, cur_max
 	
 def test():
-	a = State(["averageWordLength", "averageSentenceLength"], (0.98,0.02))
-	b = State(["averageWordLength", "averageSentenceLength"], (0.02,0.98))
-	b.ft_list_means = [10.0, 14.0]
-	a.ft_list_means = [5.0, 9.0]
-	observed_features = [[5.0, 9.0], [5.0, 9.0], [10.0, 14.0], [5.0, 9.0], [10.0, 14.0]]
+	a = State(0, ["averageWordLength", "averageSentenceLength"], {0: 0.5, 1: 0.5})
+	b = State(1, ["averageWordLength", "averageSentenceLength"], {0: 0.5, 1:0.5})
+	a.ft_list_means = [random.random()*10.0 + 4, random.random()*10.0 + 4]
+	b.ft_list_means = [random.random()*10.0 + 4, random.random()*10.0 + 4]
+	observed_features = [[5.0, 9.0], [5.0, 9.0], [10.0, 14.0], [10.0, 14.0]]
+	for i in xrange(20):
+		observed_features.append([5.0, 9.0])
+		observed_features.append([5.0, 9.0])
+		observed_features.append([5.0, 9.0])
+		
+
 	states = [a, b]
-	initial_probs = [0.98, 0.02]
+	initial_probs = [0.5, 0.5]
 	viterbi_path = train_parameters(observed_features, states, initial_probs)
 	# this test should return [0, 0, 1, 0, 1]
 	print viterbi_path
