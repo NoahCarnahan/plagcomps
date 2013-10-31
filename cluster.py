@@ -22,7 +22,14 @@ class StylometricCluster:
 		
 		# Initialize <k> clusters to be points in input vectors
 		centroids, assigned_clusters = kmeans2(normalized_features, k, minit = 'points')
-		return list(assigned_clusters)
+		
+		#print "Centroids are:", centroids
+		#print "Type:", type(centroids)
+		#print "centroids[0]:", centroids[0]
+		#print "type(centroids[0]):", type(centroids[0])
+		#print "list(centroids):", list(centroids)
+		
+		return list(assigned_clusters), centroids
 
 	def agglom(self, stylo_vectors, k):
 		'''

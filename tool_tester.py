@@ -4,6 +4,8 @@ from trial import Trial
 import xml.etree.ElementTree as ET
 from collections import Counter
 import cProfile
+import numpy
+import scipy
 
 DEBUG = True
 
@@ -132,7 +134,26 @@ class ToolTester:
 
         return all_trials
 
-    def test_one_feature_set(self, controller_obj, feature_set, file_base):
+    def _is_above_plagiarism_threshold(self, passage, threshold, plag_centroid, notplag_centroid):
+        if threshold == None:
+            return p.cluster_num == smallest_cluster
+        return self._get_certainty(passage, plag_centroid, notplag_centroid) >= threshold
+    
+    def _get_certainty(self, passage, plag_centroid, notplag_centroid):
+        #print "plagcentroid type:", type(plag_centroid)
+        #print "plagcentroid:", plag_centroid
+        #print "p.features type:", type(passage.features)
+        #print "p.features:", passage.features
+        #print "p.features.values():", passage.features.values()
+        
+        d_from_plag_c = float(scipy.spatial.distance.pdist(numpy.matrix([plag_centroid, passage.features.values()]), "euclidean")[0])
+        d_from_notplag_c = float(scipy.spatial.distance.pdist(numpy.matrix([notplag_centroid, passage.features.values()]), "euclidean")[0])
+        cert = 1 - d_from_plag_c / (d_from_plag_c + d_from_notplag_c)
+        #print cert
+        return cert
+        #  1 - [ (distance from plag_centroid) / (distance from plag_centroid + distance from notplag_centroid) ]
+
+    def test_one_feature_set(self, controller_obj, feature_set, file_base, threshold = None):
         all_trials = []
 
         
@@ -140,6 +161,11 @@ class ToolTester:
         print len(passages), 'total passages'
         plagiarzed_spans = self.get_plagiarized_spans(file_base + '.xml')
         smallest_cluster = self._get_smallest_cluster(passages)
+        
+        
+        centroids = controller_obj.get_centroids()
+        plag_centroid = centroids[smallest_cluster]
+        notplag_centroid = centroids[1 if smallest_cluster == 0 else 0] #assumes k=2!
 
         tp = 0
         fp = 0
@@ -149,13 +175,13 @@ class ToolTester:
         for p in passages:
             actually_plagiarized = self._is_plagiarized(p, plagiarzed_spans)
             
-            if (actually_plagiarized and p.cluster_num == smallest_cluster):
+            if (actually_plagiarized and self._is_above_plagiarism_threshold(p, threshold, plag_centroid, notplag_centroid)):
                 tp += 1
-            elif (not actually_plagiarized and p.cluster_num != smallest_cluster):
+            elif (not actually_plagiarized and not self._is_above_plagiarism_threshold(p, threshold, plag_centroid, notplag_centroid)):
                 tn += 1
-            elif (actually_plagiarized and p.cluster_num != smallest_cluster):
+            elif (actually_plagiarized and not self._is_above_plagiarism_threshold(p, threshold, plag_centroid, notplag_centroid)):
                 fn += 1
-            elif (not actually_plagiarized and p.cluster_num == smallest_cluster):
+            elif (not actually_plagiarized and self._is_above_plagiarism_threshold(p, threshold, plag_centroid, notplag_centroid)):
                 fp += 1
         
         trial = Trial(file_base, feature_set, tp, fp, tn, fn)
@@ -180,7 +206,7 @@ class ToolTester:
 
         self.write_out_trials(all_trials)
 
-    def test_full_feature_set(self):
+    def test_full_feature_set(self, threshold = None):
         '''
        
         '''
@@ -190,9 +216,9 @@ class ToolTester:
             print 'Working on', single_file
             c = Controller(single_file + '.txt')
             
-            all_trials.append(self.test_one_feature_set(c, self.feature_list, single_file))
+            all_trials.append(self.test_one_feature_set(c, self.feature_list, single_file, threshold))
 
-        self.write_out_trials(all_trials, 'results/full_set_first_training_test.csv')
+        self.write_out_trials(all_trials, 'results/noah_test_'+str(threshold)+'.csv')
 
 
     def write_out_trials(self, trials, outfile = 'test_trial.csv'):
@@ -247,20 +273,18 @@ if __name__ == "__main__":
     #     'get_punctuation_percentage',
     #     'get_stopword_percentage'
     # ]
+    
     all_features = [
-        'averageWordLength',
         'averageSentenceLength',
-        'get_avg_word_frequency_class',
-        'get_punctuation_percentage',
-        'get_stopword_percentage'
+        'averageWordLength'
     ]
     test_file_listing = file('corpus_partition/training_set_files.txt')
     all_test_files = [f.strip() for f in test_file_listing.readlines()]
     test_file_listing.close()
 
-    # Just try the first 120 for the moment
-    first_test_files = all_test_files[:120]
+    # Just try the first 50 for the moment
+    first_test_files = all_test_files[:15]
     
-
-    t = ToolTester('sentence', all_features, first_test_files)
-    t.test_full_feature_set()
+    t = ToolTester('paragraph', all_features, first_test_files)
+    for thresh in (.4, .6):
+        t.test_full_feature_set(thresh)

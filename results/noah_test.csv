@@ -1,0 +1,2 @@
+averageSentenceLength, averageWordLength, docname, true_pos, false_pos, true_neg, false_neg
+1, 1, /part1/suspicious-document00536, 0, 186, 428, 0

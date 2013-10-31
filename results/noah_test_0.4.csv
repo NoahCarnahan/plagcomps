@@ -1,0 +1,16 @@
+averageSentenceLength, averageWordLength, docname, true_pos, false_pos, true_neg, false_neg
+1, 1, /part1/suspicious-document00536, 0, 614, 0, 0
+1, 1, /part1/suspicious-document01957, 0, 5484, 0, 0
+1, 1, /part2/suspicious-document03297, 0, 369, 0, 0
+1, 1, /part3/suspicious-document04761, 0, 705, 0, 0
+1, 1, /part1/suspicious-document01846, 0, 231, 0, 0
+1, 1, /part1/suspicious-document01078, 43, 293, 0, 0
+1, 1, /part2/suspicious-document02157, 0, 240, 0, 0
+1, 1, /part2/suspicious-document03352, 257, 296, 0, 2
+1, 1, /part1/suspicious-document00437, 0, 4258, 19, 0
+1, 1, /part3/suspicious-document05340, 0, 113, 0, 0
+1, 1, /part1/suspicious-document00932, 2015, 8660, 0, 0
+1, 1, /part2/suspicious-document02141, 0, 1177, 1, 0
+1, 1, /part1/suspicious-document00659, 0, 3502, 19, 0
+1, 1, /part1/suspicious-document01811, 0, 9353, 6, 0
+1, 1, /part1/suspicious-document00126, 0, 8996, 3, 0
