@@ -41,7 +41,10 @@ class Controller:
 			assignments = self.cluster_util.kmeans(stylo_features, k)
 		elif method == 'agglom':
 			assignments = self.cluster_util.agglom(stylo_features, k)
+		elif method == 'hmm':
+			assignments = self.cluster_util.hmm(stylo_features, k)
 
+		print 'assignments:', assignments
 		for i in range(len(assignments)):
 			passages[i].assign_cluster(assignments[i])
 
@@ -73,7 +76,6 @@ class Controller:
 		
 
 if __name__ == '__main__':
-	#c = Controller('foo.txt')
 	c = Controller('/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents/part1/suspicious-document00969.txt')
 	features = [
 		'averageWordLength',
@@ -83,5 +85,4 @@ if __name__ == '__main__':
 		'get_stopword_percentage'
 	]
 	c.test('sentence', features, 'kmeans', 2)
-
 
