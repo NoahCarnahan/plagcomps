@@ -58,7 +58,8 @@ class StylometricCluster:
 		Uses a hidden markov model to assign states to the observed feature vector outputs.
 		Observed outputs assigned to identical states are assigned to the same cluster.
 		'''
-		return hmm.hmm_cluster(stylo_vectors, k)
+		centroids, assigned_clusters = hmm.hmm_cluster(stylo_vectors, k)
+		return assigned_clusters
 			
 		
 		

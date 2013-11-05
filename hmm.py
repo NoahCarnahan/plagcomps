@@ -29,7 +29,7 @@ class State :
 		
 def hmm_cluster(stylo_vectors, k):
 	'''
-	Return a list of assigned clusters.
+	Return a list of k centroids and a list of the assigned clusters.
 	'''
 	# initialize uniform transition probabilities with respect to k
 	trans_probs = {}
@@ -58,8 +58,22 @@ def hmm_cluster(stylo_vectors, k):
 	initial_state_probs = [math.log(1.0/k)]*k
 	
 	trained_path, trained_path_viterbi_prob = train_parameters(stylo_vectors, states, initial_state_probs)
-	print trained_path
-	return trained_path
+	clusters_indices = {i: [] for i in xrange(k)}
+	for i in xrange(len(trained_path)):
+		clusters_indices[trained_path[i]].append(i)
+
+	# calculate centroids of each cluster
+	centroids = []
+	for i in xrange(k):
+		centroid = [0.0 for x in xrange(len(stylo_vectors[0]))]
+		for s in clusters_indices[i]:
+			centroid = [sum(a) for a in zip(centroid, stylo_vectors[s])]
+		if len(clusters_indices[i]) > 0:
+			centroids.append([a/len(clusters_indices[i]) for a in centroid])
+		else:
+			centroids.append(centroid)
+
+	return centroids, trained_path
 	
 def train_parameters(feature_vectors, states, initial_state_probs):
 	prev_viterbi_max = 1.0
