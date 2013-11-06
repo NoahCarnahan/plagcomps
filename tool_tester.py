@@ -219,7 +219,8 @@ class ToolTester:
     
 def test():
 
-    features = ['get_punctuation_percentage']
+    features = ['averageSentenceLength', 'averageWordLength', 'get_avg_word_frequency_class','get_punctuation_percentage','get_stopword_percentage']
+    #features = ['get_avg_word_frequency_class']
     test_file_listing = file('corpus_partition/training_set_files.txt')
     all_test_files = [f.strip() for f in test_file_listing.readlines()]
     test_file_listing.close()
@@ -231,7 +232,11 @@ def test():
     
     # TODO: Add functions for accuracy and recall charts
     # TODO: Add the option to bust the cache
-     
+
+def foo():
+    # cluster strat, docs, atom, features
+    pass
+
 if __name__ == "__main__":
    test()
 
