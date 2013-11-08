@@ -1,4 +1,4 @@
-from sqlalchemy import Table, Column, Sequence, Integer, String, Float, DateTime, ForeignKey
+from sqlalchemy import Table, Column, Sequence, Integer, String, Float, DateTime, ForeignKey, and_
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm.collections import attribute_mapped_collection
@@ -9,91 +9,40 @@ Base = declarative_base()
 
 def evaluate(features, cluster_type, atom_type, docs):
     
+    reduced_docs = _get_reduced_docs(atom_type, docs)
+    plag_likelyhoods = []
+    
+    for d in reduced_docs:
+        c = cluster(d.get_feature_vectors(features), cluster_type)
+        plag_likelyhoods.append(c)
+    
+    roc_path, roc_auc = _roc(reduced_docs, plag_likelyhoods)
+
+def _get_reduced_docs(atom_type, docs):
+
+    reduced_docs = []
     for doc in docs:
-        # attempt to retrieve a ReducedDoc from the database by doc_name and atom_type.
-        # If it exists, add it to reduced_docs. Otherwise:
-        r = ReducedDoc(doc, atom_type)
-        # persist r
+        try:
+            r = session.query(ReducedDoc).filter(_and(ReducedDoc.doc_name == doc, ReducedDoc.atom_type == atom_type)).one()
+        except NoResultFound, e:
+            r = ReducedDoc(doc_name, atom_type)
+        reduced_docs.append(r)
         
-        feature_vectors = r.get_feature_vectors(features)
-        # run our clustering machine on the feature vector
-        
+    return reduced_docs
 
-class Evaluation(Base):
-	
-	__tablename__ = "evaluation"
-	
-	id = Column(Integer, Sequence("evaluation_id_seq"), primary_key=True)
-	# Can we create a constraint that says there must be at least one clustering? assert in constructor?
-	# Why not store just the parameters?
-	# Some clustering methods are non deterministic, thus it is possible that evaluations
-	# would be different even if the parameters are the same...
-	# Lets store parameters and Clustering objects. That way if we devise some tests that
-	# care about the clusterings and not just the parameters we are covered.
-	clusterings = relationship("Clustering", secondary=Table('association', Base.metadata,
-															Column('left_id', Integer, ForeignKey('evaluation.id')),
-														    Column('right_id', Integer, ForeignKey('clustering.id'))
-													   ))
-	
-	au_roc = Column(Float)
-	roc_path = Column(String)
-	# ... and more ...
-	
-	def __init__(self, clusterings):
-		self.clusterings = clusterings
-	
-	def __repr__(self):
-		return "<Evaluation()>"
-	
-
-class Clustering(Base):
-    '''
-    A Clustering represents the a clustering of the passages from self.reduced_doc using
-    self.features and the self.strategy clustering strategy.
-    '''
+def _cluster(feature_vectors, cluster_type):
     
-    __tablename__ = "clustering"
-    
-    id = Column(Integer, Sequence("clustering_id_seq"), primary_key=True)
-    features = Column(ARRAY(String))
-    
-    reduced_doc_id = Column(Integer, ForeignKey('reduced_doc.id'))
-    reduced_doc = relationship("ReducedDoc")
-    
-    strategy = Column(String)
-    seed = Column(Integer)
-    plag_centroid = Column(ARRAY(Float))
-    notplag_centroid = Column(ARRAY(Float))
-    assignments = Column(ARRAY(Integer))
-    
-    def __init__(self, reduced_doc, features, strategy):
-        self.reduced_doc = reduced_doc
-        self.features = features
-        self.strategy = strategy
-        self._perform_clustering()
-    
-    def _perform_clustering(self):
-        # Do the clustering and set 
-        #   self.plag_centroid
-        #   self.notplag_centroid
-        #   self.seed
-        #   self.assignments
+    if cluster_type == "kmeans":
+        #TODO: write me
+    elif cluster_type == "agglom":
         pass
-        
-        
-    
-    # This constructor exists for testing purposes only at the moment.
-    # I don't think it will be useful in the completed framework.
-    def __init__(self, reduced_doc, features, strategy, plag_c, notplag_c):
-        self.reduced_doc = reduced_doc
-        self.features = features
-        self.strategy = strategy
-        self.plag_centroid = plag_c
-        self.notplag_centroid = notplag_c
-    
-    def __repr__(self):
-        return "<Clustering('%s','%s')>" % (self.features, self.strategy)
-    
+        #TODO: write me
+    else:
+        raise ValueError("Unacceptable cluster_type")
+
+def _roc(reduced_docs, plag_likelyhoods):
+    pass
+
 
 class ReducedDoc(Base):
     '''
@@ -133,9 +82,9 @@ class ReducedDoc(Base):
         Returns a list of feature vectors for each passage in the document. The components
         of the feature vectors are in order of the features list.
         '''
-        return zip(*[self._get_feature(x) for x in features])
+        return zip(*[self._get_feature_values(x) for x in features])
         
-    def _get_feature(feature):
+    def _get_feature_values(feature):
         '''
         Returns the list of feature values for the given feature, instantiating them if
         need be.
@@ -148,7 +97,6 @@ class ReducedDoc(Base):
             self._features[feature] = feature_values
             # Do something to save these changes to the object?
             return self._features[feature]
-
 
 class _ReducedDocFeature(Base):
     '''
@@ -178,8 +126,6 @@ class _Feature(Base):
     feature = Column(ARRAY(Float))
     def __init__(self, feature):
         self.feature = feature
-
-
 
 if __name__ == "__main__":
     r = ReducedDoc("part1/foo", "sentence")
