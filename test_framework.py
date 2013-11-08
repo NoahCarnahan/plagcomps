@@ -1,6 +1,7 @@
 import datetime
 import cluster.StylometricCluster
 
+from controller import Controller
 from feature_extractor import *
 
 from sqlalchemy import Table, Column, Sequence, Integer, String, Float, DateTime, ForeignKey, and_
@@ -13,6 +14,10 @@ from sqlalchemy.ext.associationproxy import association_proxy
 Base = declarative_base()
 
 def evaluate(features, cluster_type, k, atom_type, docs):
+    '''
+    Returns a variety of statistics (which ones exactly TBD) telling us how the tool performs with
+    the given parameters.
+    '''
     
     reduced_docs = _get_reduced_docs(atom_type, docs)
     plag_likelyhoods = []
@@ -24,7 +29,11 @@ def evaluate(features, cluster_type, k, atom_type, docs):
     roc_path, roc_auc = _roc(reduced_docs, plag_likelyhoods)
 
 def _get_reduced_docs(atom_type, docs):
-
+    '''
+    Returns ReducedDoc objects for the given atom_type for each of the strings in docs. docs is a
+    list of paths. This function retrieves the corresponding ReducedDocs from the database if they
+    exist.
+    '''
     reduced_docs = []
     for doc in docs:
         try:
@@ -62,6 +71,9 @@ class ReducedDoc(Base):
     id = Column(Integer, Sequence("reduced_doc_id_seq"), primary_key=True)
     doc_name = Column(String)
     atom_type = Column(String)
+    _spans = Column(ARRAY(Integer))
+    _plagiarized_spans = Column(ARRAY(Integer))
+    
 
     # The miracle of features is explained here:
     # http://docs.sqlalchemy.org/en/rel_0_7/orm/extensions/associationproxy.html#proxying-dictionaries
@@ -80,6 +92,10 @@ class ReducedDoc(Base):
         self.atom_type = atom_type
         self.timestamp = datetime.datetime.now()
         self.version_numer = 1
+        
+        #TODO: init self._spans here!
+        #TODO: init self._plagiarized_spans here! (see tool_tester.py line 132)
+        
     
     def __repr__(self):
         return "<ReducedDoc('%s','%s')>" % (self.doc_name, self.atom_type)
@@ -90,6 +106,14 @@ class ReducedDoc(Base):
         of the feature vectors are in order of the features list.
         '''
         return zip(*[self._get_feature_values(x) for x in features])
+    
+    def passage_is_plagiarized(p_index):
+        '''
+        Returns True if the passage at index p_index was plagiarized (According to the ground truth)
+        Returns False otherwise.
+        '''
+        pass
+        # See tooltester line 132.
         
     def _get_feature_values(feature):
         '''
