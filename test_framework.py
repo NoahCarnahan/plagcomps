@@ -57,7 +57,39 @@ def _cluster(feature_vectors, cluster_type, k):
         raise ValueError("Unacceptable cluster_type. Use 'kmeans', 'agglom', or 'hmm'.")
 
 def _roc(reduced_docs, plag_likelyhoods):
-    pass
+    actuals = []
+    confidences = []
+    
+    for doc_index in xrange(len(reduced_docs)):
+        doc = reduced_docs[doc_index]
+        spans = doc.get_spans()
+        for span_index in xrange(len(spans)):
+            span = spans[span_index]
+            actuals.append(1 if doc.span_is_plagiarized(span) else 0)
+            confidences.append(plag_likelyhoods[doc_index][span_index])
+    
+    # actuals is a list of ground truth classifications for passages
+    # confidences is a list of confidence scores for passages
+    # So, if confidences[i] = .3 and actuals[i] = 1 then passage i is plagiarised and
+    # we are .3 certain that it is plagiarism (So its in the non-plag cluster).
+    fpr, tpr, thresholds = sklearn.metrics.roc_curve(actuals, confidences, pos_label=1)
+    roc_auc = sklearn.metrics.auc(fpr, tpr)
+    
+    # The following code is from http://scikit-learn.org/stable/auto_examples/plot_roc.html
+    pyplot.clf()
+    pyplot.plot(fpr, tpr, label='ROC curve (area = %0.2f)' % roc_auc)
+    pyplot.plot([0, 1], [0, 1], 'k--')
+    pyplot.xlim([0.0, 1.0])
+    pyplot.ylim([0.0, 1.0])
+    pyplot.xlabel('False Positive Rate')
+    pyplot.ylabel('True Positive Rate')
+    pyplot.title('Receiver operating characteristic')
+    pyplot.legend(loc="lower right")
+    
+    path = "figures/roc"+str(time.time())+".pdf"
+    pyplot.savefig(path)
+    data_store.store_roc(trials, path, roc_auc)
+    return path, roc_auc
 
 
 class ReducedDoc(Base):
@@ -100,16 +132,20 @@ class ReducedDoc(Base):
     def __repr__(self):
         return "<ReducedDoc('%s','%s')>" % (self.doc_name, self.atom_type)
     
-    def get_feature_vectors(features):
+    def get_feature_vectors(self, features):
         '''
         Returns a list of feature vectors for each passage in the document. The components
         of the feature vectors are in order of the features list.
         '''
         return zip(*[self._get_feature_values(x) for x in features])
     
-    def passage_is_plagiarized(p_index):
+    def get_spans(self):
+        return self._spans
+        
+    
+    def span_is_plagiarized(self, span):
         '''
-        Returns True if the passage at index p_index was plagiarized (According to the ground truth)
+        Returns True if the span was plagiarized (according to the ground truth).
         Returns False otherwise.
         '''
         pass
