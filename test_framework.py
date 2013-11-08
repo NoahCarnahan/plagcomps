@@ -1,3 +1,8 @@
+import datetime
+import cluster.StylometricCluster
+
+from feature_extractor import *
+
 from sqlalchemy import Table, Column, Sequence, Integer, String, Float, DateTime, ForeignKey, and_
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
@@ -7,13 +12,13 @@ from sqlalchemy.ext.associationproxy import association_proxy
 
 Base = declarative_base()
 
-def evaluate(features, cluster_type, atom_type, docs):
+def evaluate(features, cluster_type, k, atom_type, docs):
     
     reduced_docs = _get_reduced_docs(atom_type, docs)
     plag_likelyhoods = []
     
     for d in reduced_docs:
-        c = cluster(d.get_feature_vectors(features), cluster_type)
+        c = _cluster(d.get_feature_vectors(features), cluster_type, k)
         plag_likelyhoods.append(c)
     
     roc_path, roc_auc = _roc(reduced_docs, plag_likelyhoods)
@@ -26,19 +31,21 @@ def _get_reduced_docs(atom_type, docs):
             r = session.query(ReducedDoc).filter(_and(ReducedDoc.doc_name == doc, ReducedDoc.atom_type == atom_type)).one()
         except NoResultFound, e:
             r = ReducedDoc(doc_name, atom_type)
+            session.add(r)
         reduced_docs.append(r)
         
     return reduced_docs
 
-def _cluster(feature_vectors, cluster_type):
-    
+def _cluster(feature_vectors, cluster_type, k):
+    s = StylometricCluster
     if cluster_type == "kmeans":
-        #TODO: write me
+        return s.kmeans(feature_vectors, k)
     elif cluster_type == "agglom":
-        pass
-        #TODO: write me
+        return s.agglom(feature_vectors, k)
+    elif cluster_type == "hmm":
+        return s.hmm(feature_vectors, k)
     else:
-        raise ValueError("Unacceptable cluster_type")
+        raise ValueError("Unacceptable cluster_type. Use 'kmeans', 'agglom', or 'hmm'.")
 
 def _roc(reduced_docs, plag_likelyhoods):
     pass
@@ -71,7 +78,7 @@ class ReducedDoc(Base):
     def __init__(self, name, atom_type):
         self.doc_name = name
         self.atom_type = atom_type
-        #self.timestamp = ...
+        self.timestamp = datetime.datetime.now()
         self.version_numer = 1
     
     def __repr__(self):
@@ -93,9 +100,13 @@ class ReducedDoc(Base):
             return self._features[feature]
         except KeyError:
             # Run our tool to get the feature values...
-            # feature_values = ...
+            feature_evaluator = StylometricFeatureEvaluator(self.doc_name)
+            feature_values = []
+        		for i in xrange(len(feature_evaluator.getAllByAtom(self.atom_type))):
+		    	passage = feature_evaluator.get_specific_features([feature], i, i + 1, self.atom_type)
+		        feature_values.append(passage.features)
             self._features[feature] = feature_values
-            # Do something to save these changes to the object?
+            # TODO: Do something to save these changes to the object?
             return self._features[feature]
 
 class _ReducedDocFeature(Base):

@@ -5,7 +5,6 @@ from scipy.cluster.hierarchy import linkage, fcluster
 from collections import Counter
 import hmm
 
-
 class StylometricCluster:
 
     def kmeans(self, stylo_vectors, k):
