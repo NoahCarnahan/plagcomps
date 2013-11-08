@@ -2,7 +2,7 @@ from numpy import array
 from scipy.cluster.vq import kmeans2, whiten
 from scipy.spatial.distance import pdist
 from scipy.cluster.hierarchy import linkage, fcluster
-
+import hmm
 
 class StylometricCluster:
 
@@ -54,3 +54,19 @@ class StylometricCluster:
 		assigned_clusters = fcluster(linkage_mat, k, criterion = 'maxclust')
 
 		return list(assigned_clusters)
+		
+	def hmm(self, stylo_vectors, k):
+		'''
+		Given a list of stylo_vectors, where each element is itself a feature vector,
+		return the assigned clusters of each stylo_vector to clusters 0, 1, ..., k - 1
+		where the i_th element in the returned list represents the cluster assigned
+		to the i_th input vector
+		
+		Uses a hidden markov model to assign states to the observed feature vector outputs.
+		Observed outputs assigned to identical states are assigned to the same cluster.
+		'''
+		centroids, assigned_clusters = hmm.hmm_cluster(stylo_vectors, k)
+		return assigned_clusters
+			
+		
+		
