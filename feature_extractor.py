@@ -34,7 +34,26 @@ class CopyCatPunktWordTokenizer(nltk.tokenize.punkt.PunktBaseClass,nltk.tokenize
 			indices.append((match.start(), match.end()))
 		return indices
 
-
+def get_spans(text, atom_type):
+    if atom_type == "word":
+        tokenizer = CopyCatPunktWordTokenizer()
+        return tokenizer.span_tokenize(text)
+    elif atom_type == "sentence":
+        tokenizer = nltk.PunktSentenceTokenizer()
+    	return tokenizer.span_tokenize(text)
+    elif atom_type == "paragraph":
+        # It's unclear how a paragraph is defined. For now, just treat newlines as paragraph separators
+        paragraph_texts = text.splitlines()
+        spans = []
+        start_index = 0
+        for paragraph in paragraph_texts:
+            start = text.find(paragraph, start_index)
+            spans.append((start, start+len(paragraph)))
+            start_index = start + len(paragraph)
+        return spans
+    else:
+        raise ValueError("Unacceptable atom type.")
+   
 class StylometricFeatureEvaluator:
 
 	def __init__(self, filepath):
@@ -67,8 +86,7 @@ class StylometricFeatureEvaluator:
 		Each tuple contains the start charcter index and end character index of the word.
 		For example initWordList("Hi there") = [(0,2),(3,8)]
 		'''
-		tokenizer = CopyCatPunktWordTokenizer()
-		return tokenizer.span_tokenize(text)
+		return get_spans(text, "word")
 	
 	def initSentenceList(self, text):
 		'''
@@ -76,8 +94,7 @@ class StylometricFeatureEvaluator:
 		Each tuple contains the start character index and end character index of the sentence.
 		For example initSentenceList("Hi there. Whats up!") = [(0,9),(10,19)]
 		'''
-		tokenizer = nltk.PunktSentenceTokenizer()
-		return tokenizer.span_tokenize(text)
+		return get_spans(text, "sentence")
 	
 	def initParagrpahList(self, text):
 		'''
@@ -86,14 +103,7 @@ class StylometricFeatureEvaluator:
 		For example initParagrpahList("Hi there. Whats up!") = [(0,19)]
 		'''
 		# It's unclear how a paragraph is defined. For now, just treat newlines as paragraph separators
-		paragraph_texts = text.splitlines()
-		spans = []
-		start_index = 0
-		for paragraph in paragraph_texts:
-			start = text.find(paragraph, start_index)
-			spans.append((start, start+len(paragraph)))
-			start_index = start + len(paragraph)
-		return spans
+		return get_spans(text, "paragraph")
 
 	def initTagList(self, text):
 		taggedWords = []

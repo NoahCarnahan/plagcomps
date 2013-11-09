@@ -125,9 +125,21 @@ class ReducedDoc(Base):
         self.timestamp = datetime.datetime.now()
         self.version_numer = 1
         
-        #TODO: init self._spans here!
-        #TODO: init self._plagiarized_spans here! (see tool_tester.py line 132)
+        # set self._spans
+        f = open(filepath, 'r')
+		text = f.read()
+		f.close()
+		self._spans = feature_extractor.get_spans(text, self.atom_type)
         
+        # set self._plagiarized_spans
+        xml_file_path = self.doc_name + ".xml"
+        self._plagairzed_spans = []
+        tree = ET.parse(xml_file_path)
+        for feature in tree.iter("feature"):
+            if feature.get("name") == "artificial-plagiarism": # are there other types?
+                start = int(feature.get("this_offset"))
+                end = start + int(feature.get("this_length"))
+                spans.append((start, end))
     
     def __repr__(self):
         return "<ReducedDoc('%s','%s')>" % (self.doc_name, self.atom_type)
@@ -160,7 +172,7 @@ class ReducedDoc(Base):
             return self._features[feature]
         except KeyError:
             # Run our tool to get the feature values...
-            feature_evaluator = StylometricFeatureEvaluator(self.doc_name)
+            feature_evaluator = feature_extractor.StylometricFeatureEvaluator(self.doc_name)
             feature_values = []
         		for i in xrange(len(feature_evaluator.getAllByAtom(self.atom_type))):
 		    	passage = feature_evaluator.get_specific_features([feature], i, i + 1, self.atom_type)
@@ -207,15 +219,3 @@ if __name__ == "__main__":
     print r._features["a"]
     print r._features["b"]
     print r._features
-    
-    c1 = Clustering(r, ["a","b"], "kmeansfoo", [.1,.6], [.3,.1])
-    c2 = Clustering(r, ["a","b"], "aglomfoo", [.2,.3], [.3,.1])
-        
-    e1 = Evaluation([c1,c2])
-    print e1.clusterings
-    e2 = Evaluation([c1])
-    print e2.clusterings
-
-    
-    
-    
