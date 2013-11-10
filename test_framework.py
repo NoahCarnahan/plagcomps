@@ -1,17 +1,22 @@
 import datetime
-import cluster.StylometricCluster
+import xml.etree.ElementTree as ET
 
+from cluster import StylometricCluster
 from controller import Controller
-from feature_extractor import *
+import feature_extractor
+import dbconstants
 
+import sqlalchemy
 from sqlalchemy import Table, Column, Sequence, Integer, String, Float, DateTime, ForeignKey, and_
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy.orm import relationship, backref, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm.collections import attribute_mapped_collection
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.ext.associationproxy import association_proxy
 
 Base = declarative_base()
+
+
 
 def evaluate(features, cluster_type, k, atom_type, docs):
     '''
@@ -26,7 +31,7 @@ def evaluate(features, cluster_type, k, atom_type, docs):
         c = _cluster(d.get_feature_vectors(features), cluster_type, k)
         plag_likelyhoods.append(c)
     
-    roc_path, roc_auc = _roc(reduced_docs, plag_likelyhoods)
+    roc_path, roc_auc = _roc(reduced_docs, plag_likelyhoods, features, cluster_type, k, atom_type)
 
 def _get_reduced_docs(atom_type, docs):
     '''
@@ -41,12 +46,13 @@ def _get_reduced_docs(atom_type, docs):
         except NoResultFound, e:
             r = ReducedDoc(doc_name, atom_type)
             session.add(r)
+            session.commit()
         reduced_docs.append(r)
         
     return reduced_docs
 
 def _cluster(feature_vectors, cluster_type, k):
-    s = StylometricCluster
+    s = StylometricCluster()
     if cluster_type == "kmeans":
         return s.kmeans(feature_vectors, k)
     elif cluster_type == "agglom":
@@ -56,7 +62,7 @@ def _cluster(feature_vectors, cluster_type, k):
     else:
         raise ValueError("Unacceptable cluster_type. Use 'kmeans', 'agglom', or 'hmm'.")
 
-def _roc(reduced_docs, plag_likelyhoods):
+def _roc(reduced_docs, plag_likelyhoods, features = None, cluster_type = None, k = None, atom_type = None):
     actuals = []
     confidences = []
     
@@ -70,7 +76,7 @@ def _roc(reduced_docs, plag_likelyhoods):
     
     # actuals is a list of ground truth classifications for passages
     # confidences is a list of confidence scores for passages
-    # So, if confidences[i] = .3 and actuals[i] = 1 then passage i is plagiarised and
+    # So, if confidences[i] = .3 and actuals[i] = 1 then passage i is plagiarized and
     # we are .3 certain that it is plagiarism (So its in the non-plag cluster).
     fpr, tpr, thresholds = sklearn.metrics.roc_curve(actuals, confidences, pos_label=1)
     roc_auc = sklearn.metrics.auc(fpr, tpr)
@@ -83,14 +89,17 @@ def _roc(reduced_docs, plag_likelyhoods):
     pyplot.ylim([0.0, 1.0])
     pyplot.xlabel('False Positive Rate')
     pyplot.ylabel('True Positive Rate')
-    pyplot.title('Receiver operating characteristic')
+    if features and cluster_type and k and atom_type:
+        pyplot.title("ROC, %s, %s %s, %s" % (atom_type, cluster_type, k, features)) 
+    else:
+        pyplot.title('Receiver operating characteristic')
+    pyplot.title()
     pyplot.legend(loc="lower right")
     
     path = "figures/roc"+str(time.time())+".pdf"
     pyplot.savefig(path)
     data_store.store_roc(trials, path, roc_auc)
     return path, roc_auc
-
 
 class ReducedDoc(Base):
     '''
@@ -102,6 +111,8 @@ class ReducedDoc(Base):
     
     id = Column(Integer, Sequence("reduced_doc_id_seq"), primary_key=True)
     doc_name = Column(String)
+    _full_path = Column(String)
+    _full_xml_path = Column(String)
     atom_type = Column(String)
     _spans = Column(ARRAY(Integer))
     _plagiarized_spans = Column(ARRAY(Integer))
@@ -120,21 +131,29 @@ class ReducedDoc(Base):
     version_number = Column(Integer)
     
     def __init__(self, name, atom_type):
-        self.doc_name = name
+    
+        self.doc_name = name # doc_name example: '/part1/suspicious-document00536'
+        base_path = "/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents"
+        self._full_path = base_path + self.doc_name + ".txt"
+        self._full_xml_path = base_path + self.doc_name + ".xml"
         self.atom_type = atom_type
         self.timestamp = datetime.datetime.now()
         self.version_numer = 1
         
+        # NOTE: because feature_evaluator.get_specific_features doesn't actually return a
+        # passage object for each span, we can't set self._spans until that has been run.
+        # I don't like it though, because we have to raise an error now if self.get_spans()
+        # is called before any feature_vectors have been calculated.
+        
         # set self._spans
-        f = open(filepath, 'r')
-		text = f.read()
-		f.close()
-		self._spans = feature_extractor.get_spans(text, self.atom_type)
+        #f = open(self._full_path, 'r')
+        #text = f.read()
+        #f.close()
+        #self._spans = feature_extractor.get_spans(text, self.atom_type)
         
         # set self._plagiarized_spans
-        xml_file_path = self.doc_name + ".xml"
-        self._plagairzed_spans = []
-        tree = ET.parse(xml_file_path)
+        self._plagiarized_spans = []
+        tree = ET.parse(self._full_xml_path)
         for feature in tree.iter("feature"):
             if feature.get("name") == "artificial-plagiarism": # are there other types?
                 start = int(feature.get("this_offset"))
@@ -152,18 +171,26 @@ class ReducedDoc(Base):
         return zip(*[self._get_feature_values(x) for x in features])
     
     def get_spans(self):
-        return self._spans
-        
+        if self._spans == None:
+            raise Exception("See note in ReducedDoc.__init__")
+        else:
+            return self._spans
     
     def span_is_plagiarized(self, span):
         '''
-        Returns True if the span was plagiarized (according to the ground truth).
-        Returns False otherwise.
-        '''
-        pass
-        # See tooltester line 132.
+        Returns True if the span was plagiarized (according to the ground truth). Returns
+        False otherwise. A span is considered plagiarized if the first character of the
+        span is in a plagiarized span.
         
-    def _get_feature_values(feature):
+        '''
+        # TODO: Consider other ways to judge if an atom is plagiarized or not. 
+        #       For example, look to see if the WHOLE atom in a plagiarized segment (?)
+        for s in self._plagiarized_spans:
+            if s[0] <= p[0] < s[1]:
+                return True
+        return False
+        
+    def _get_feature_values(self, feature):
         '''
         Returns the list of feature values for the given feature, instantiating them if
         need be.
@@ -171,14 +198,28 @@ class ReducedDoc(Base):
         try:
             return self._features[feature]
         except KeyError:
-            # Run our tool to get the feature values...
-            feature_evaluator = feature_extractor.StylometricFeatureEvaluator(self.doc_name)
+        
+            # TODO: The code here is more or less copy-pasted from controller. We should
+            #       probably modify controller instead.
+        
+            # Run our tool to get the feature values and spans
+            feature_evaluator = feature_extractor.StylometricFeatureEvaluator(self._full_path)
+            all_passages = []
+            for i in xrange(len(feature_evaluator.getAllByAtom(self.atom_type))):
+                passage = feature_evaluator.get_specific_features([feature], i, i + 1, self.atom_type)
+                if passage != None:
+                    all_passages.append(passage)
+            spans = []
             feature_values = []
-        		for i in xrange(len(feature_evaluator.getAllByAtom(self.atom_type))):
-		    	passage = feature_evaluator.get_specific_features([feature], i, i + 1, self.atom_type)
-		        feature_values.append(passage.features)
+            for p in all_passages:
+                spans.append((p.start_word_index, p.end_char_index))
+                feature_values.append(p.features.values()[0])
+            assert(self._spans == None or self._spans == spans)
+            self._spans = spans
+            
+            
             self._features[feature] = feature_values
-            # TODO: Do something to save these changes to the object?
+            session.commit()
             return self._features[feature]
 
 class _ReducedDocFeature(Base):
@@ -210,12 +251,37 @@ class _Feature(Base):
     def __init__(self, feature):
         self.feature = feature
 
+# an Engine, which the Session will use for connection resources
+url = "postgresql://%s:%s@%s" % (dbconstants.username, dbconstants.password, dbconstants.dbname)
+engine = sqlalchemy.create_engine(url)
+# create tables if they don't already exist
+Base.metadata.create_all(engine)
+# create a configured "Session" class
+Session = sessionmaker(bind=engine)
+
 if __name__ == "__main__":
-    r = ReducedDoc("part1/foo", "sentence")
-    print r
-    print r.doc_name
-    r._features["a"] = [.1,.2,.3]
-    r._features["b"] = [.6,.3,.1]
-    print r._features["a"]
-    print r._features["b"]
+    # create a Session
+    session = Session()
+    
+    # retrive my reducedDoc
+    r = session.query(ReducedDoc).filter(ReducedDoc.atom_type == "paragraph").one()
+    print r._features.keys()
+    r.get_feature_vectors(["averageWordLength"])
+    print r._features.keys()
     print r._features
+    
+    #session.add(r)
+    #session.commit()
+    
+    
+    
+    
+    #r = ReducedDoc("/part1/suspicious-document00536", "paragraph")
+    
+    #print r
+    #r.get_feature_vectors(["averageWordLength", "averageSentenceLength"])
+    #print r.span_is_plagiarized(r.get_spans()[20])
+    
+    #print evaluate(["averageWordLength", "averageSentenceLength"], "kmeans", 2, "paragraph", ["/part1/suspicious-document00536"])
+    
+    session.close()

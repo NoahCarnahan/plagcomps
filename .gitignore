@@ -1,3 +1,6 @@
+dbconstants.py
+db_constants.py
+
 *.py[cod]
 
 # C extensions
