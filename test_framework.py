@@ -17,6 +17,7 @@ from sqlalchemy.ext.associationproxy import association_proxy
 Base = declarative_base()
 
 
+def populate_database
 
 def evaluate(features, cluster_type, k, atom_type, docs):
     '''
@@ -146,10 +147,10 @@ class ReducedDoc(Base):
         # is called before any feature_vectors have been calculated.
         
         # set self._spans
-        #f = open(self._full_path, 'r')
-        #text = f.read()
-        #f.close()
-        #self._spans = feature_extractor.get_spans(text, self.atom_type)
+        f = open(self._full_path, 'r')
+        text = f.read()
+        f.close()
+        self._spans = feature_extractor.get_spans(text, self.atom_type)
         
         # set self._plagiarized_spans
         self._plagiarized_spans = []
@@ -209,14 +210,11 @@ class ReducedDoc(Base):
                 passage = feature_evaluator.get_specific_features([feature], i, i + 1, self.atom_type)
                 if passage != None:
                     all_passages.append(passage)
-            spans = []
+                else:
+                    raise Exception("This should never happen.")
             feature_values = []
             for p in all_passages:
-                spans.append((p.start_word_index, p.end_char_index))
-                feature_values.append(p.features.values()[0])
-            assert(self._spans == None or self._spans == spans)
-            self._spans = spans
-            
+                feature_values.append(p.features.values()[0])            
             
             self._features[feature] = feature_values
             session.commit()

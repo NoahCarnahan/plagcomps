@@ -37,22 +37,28 @@ class CopyCatPunktWordTokenizer(nltk.tokenize.punkt.PunktBaseClass,nltk.tokenize
 def get_spans(text, atom_type):
     if atom_type == "word":
         tokenizer = CopyCatPunktWordTokenizer()
-        return tokenizer.span_tokenize(text)
+        spans = tokenizer.span_tokenize(text)
     elif atom_type == "sentence":
         tokenizer = nltk.PunktSentenceTokenizer()
-        return tokenizer.span_tokenize(text)
+        spans = tokenizer.span_tokenize(text)
     elif atom_type == "paragraph":
         # It's unclear how a paragraph is defined. For now, just treat newlines as paragraph separators
         paragraph_texts = text.splitlines()
-        spans = []
+        s = []
         start_index = 0
         for paragraph in paragraph_texts:
             start = text.find(paragraph, start_index)
-            spans.append((start, start+len(paragraph)))
+            s.append((start, start+len(paragraph)))
             start_index = start + len(paragraph)
-        return spans
+        spans = s
     else:
         raise ValueError("Unacceptable atom type.")
+    
+    sanitized_spans = []
+    for s in spans:
+        if not s[0] == s[1]:
+            sanitized_spans.append(s)
+    return sanitized_spans
    
 class StylometricFeatureEvaluator:
 
