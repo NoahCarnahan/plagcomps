@@ -1,5 +1,11 @@
 import datetime
 import xml.etree.ElementTree as ET
+import time
+
+import sklearn.metrics
+import matplotlib
+matplotlib.use('pdf')
+import matplotlib.pyplot as pyplot
 
 from cluster import StylometricCluster
 from controller import Controller
@@ -32,13 +38,13 @@ def populate_database(atom_type, num):
     
     features = ['averageSentenceLength', 'averageWordLength', 'get_avg_word_frequency_class','get_punctuation_percentage','get_stopword_percentage']
     
-    reduced_docs = _get_reduced_docs(atom_type, first_test_files, session)
     count = 0
-    for d in reduced_docs:
+    for doc in first_test_files:
         count += 1
         print "On document", count
+        d = _get_reduced_docs(atom_type, [doc], session)[0]
         d.get_feature_vectors(features, session)
-    
+
     session.close()
 
 def evaluate(features, cluster_type, k, atom_type, docs):
@@ -121,12 +127,10 @@ def _roc(reduced_docs, plag_likelyhoods, features = None, cluster_type = None, k
         pyplot.title("ROC, %s, %s %s, %s" % (atom_type, cluster_type, k, features)) 
     else:
         pyplot.title('Receiver operating characteristic')
-    pyplot.title()
     pyplot.legend(loc="lower right")
     
     path = "figures/roc"+str(time.time())+".pdf"
     pyplot.savefig(path)
-    data_store.store_roc(trials, path, roc_auc)
     return path, roc_auc
 
 class ReducedDoc(Base):
@@ -215,7 +219,7 @@ class ReducedDoc(Base):
         # TODO: Consider other ways to judge if an atom is plagiarized or not. 
         #       For example, look to see if the WHOLE atom in a plagiarized segment (?)
         for s in self._plagiarized_spans:
-            if s[0] <= p[0] < s[1]:
+            if s[0] <= span[0] < s[1]:
                 return True
         return False
         
@@ -308,6 +312,29 @@ def _test():
         print r.get_feature_vectors(['averageSentenceLength', 'averageWordLength', 'get_avg_word_frequency_class','get_punctuation_percentage','get_stopword_percentage'], session)
     session.close()
 
+def _populate_EVERYTHING():
+
+    test_file_listing = file('corpus_partition/training_set_files.txt')
+    all_test_files = [f.strip() for f in test_file_listing.readlines()]
+    test_file_listing.close()
+
+    session = Session()
+
+    for doc in all_test_files:
+        for atom_type in ["word","sentence", "paragraph"]:
+            for feature in ['averageSentenceLength', 'averageWordLength', 'get_avg_word_frequency_class','get_punctuation_percentage','get_stopword_percentage']:
+                d = _get_reduced_docs(atom_type, [doc], session)[0]
+                d.get_feature_vectors([feature], session)
+    session.close()
+
 if __name__ == "__main__":
-    populate_database("paragraph", 100)
+    _populate_EVERYTHING()
+
+    #populate_database("sentence", 100)
+    
+    #test_file_listing = file('corpus_partition/training_set_files.txt')
+    #all_test_files = [f.strip() for f in test_file_listing.readlines()]
+    #test_file_listing.close()
+    #first_test_files = all_test_files[:100]
+    #print evaluate(["get_avg_word_frequency_class"], "kmeans", 2, "paragraph", first_test_files)
     
