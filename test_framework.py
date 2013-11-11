@@ -17,24 +17,44 @@ from sqlalchemy.ext.associationproxy import association_proxy
 Base = declarative_base()
 
 
-def populate_database
+def prepopulate_database(atom_type, num):
+    
+    session = Session()
+    
+    test_file_listing = file('corpus_partition/training_set_files.txt')
+    all_test_files = [f.strip() for f in test_file_listing.readlines()]
+    test_file_listing.close()
+    first_test_files = all_test_files[0:num]
+    
+    features = ['averageSentenceLength', 'averageWordLength', 'get_avg_word_frequency_class','get_punctuation_percentage','get_stopword_percentage']
+    
+    reduced_docs = _get_reduced_docs(atom_type, first_test_files, session)
+    for d in reduced_docs:
+        d.get_feature_vectors(features, session)
+    
+    session.close()
 
 def evaluate(features, cluster_type, k, atom_type, docs):
     '''
     Returns a variety of statistics (which ones exactly TBD) telling us how the tool performs with
     the given parameters.
     '''
+    session = Session()
     
-    reduced_docs = _get_reduced_docs(atom_type, docs)
+    reduced_docs = _get_reduced_docs(atom_type, docs, session)
     plag_likelyhoods = []
     
     for d in reduced_docs:
-        c = _cluster(d.get_feature_vectors(features), cluster_type, k)
+        c = _cluster(d.get_feature_vectors(features, session), cluster_type, k)
         plag_likelyhoods.append(c)
     
     roc_path, roc_auc = _roc(reduced_docs, plag_likelyhoods, features, cluster_type, k, atom_type)
+    
+    session.close()
+    
+    return roc_path, roc_auc
 
-def _get_reduced_docs(atom_type, docs):
+def _get_reduced_docs(atom_type, docs, session):
     '''
     Returns ReducedDoc objects for the given atom_type for each of the strings in docs. docs is a
     list of paths. This function retrieves the corresponding ReducedDocs from the database if they
@@ -43,9 +63,9 @@ def _get_reduced_docs(atom_type, docs):
     reduced_docs = []
     for doc in docs:
         try:
-            r = session.query(ReducedDoc).filter(_and(ReducedDoc.doc_name == doc, ReducedDoc.atom_type == atom_type)).one()
-        except NoResultFound, e:
-            r = ReducedDoc(doc_name, atom_type)
+            r = session.query(ReducedDoc).filter(and_(ReducedDoc.doc_name == doc, ReducedDoc.atom_type == atom_type)).one()
+        except sqlalchemy.orm.exc.NoResultFound, e:
+            r = ReducedDoc(doc, atom_type)
             session.add(r)
             session.commit()
         reduced_docs.append(r)
@@ -164,12 +184,12 @@ class ReducedDoc(Base):
     def __repr__(self):
         return "<ReducedDoc('%s','%s')>" % (self.doc_name, self.atom_type)
     
-    def get_feature_vectors(self, features):
+    def get_feature_vectors(self, features, session):
         '''
         Returns a list of feature vectors for each passage in the document. The components
         of the feature vectors are in order of the features list.
         '''
-        return zip(*[self._get_feature_values(x) for x in features])
+        return zip(*[self._get_feature_values(x, session) for x in features])
     
     def get_spans(self):
         if self._spans == None:
@@ -191,7 +211,7 @@ class ReducedDoc(Base):
                 return True
         return False
         
-    def _get_feature_values(self, feature):
+    def _get_feature_values(self, feature, session):
         '''
         Returns the list of feature values for the given feature, instantiating them if
         need be.
