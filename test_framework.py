@@ -17,7 +17,11 @@ from sqlalchemy.ext.associationproxy import association_proxy
 Base = declarative_base()
 
 
-def prepopulate_database(atom_type, num):
+def populate_database(atom_type, num):
+    '''
+    Populates the database with the first num training files parsed with the given atom_type.
+    This method populates all features.
+    '''
     
     session = Session()
     
@@ -29,7 +33,10 @@ def prepopulate_database(atom_type, num):
     features = ['averageSentenceLength', 'averageWordLength', 'get_avg_word_frequency_class','get_punctuation_percentage','get_stopword_percentage']
     
     reduced_docs = _get_reduced_docs(atom_type, first_test_files, session)
+    count = 0
     for d in reduced_docs:
+        count += 1
+        print "On document", count
         d.get_feature_vectors(features, session)
     
     session.close()
@@ -167,10 +174,11 @@ class ReducedDoc(Base):
         # is called before any feature_vectors have been calculated.
         
         # set self._spans
-        f = open(self._full_path, 'r')
-        text = f.read()
-        f.close()
-        self._spans = feature_extractor.get_spans(text, self.atom_type)
+        #f = open(self._full_path, 'r')
+        #text = f.read()
+        #f.close()
+        #self._spans = feature_extractor.get_spans(text, self.atom_type)
+        self._spans = None
         
         # set self._plagiarized_spans
         self._plagiarized_spans = []
@@ -230,11 +238,25 @@ class ReducedDoc(Base):
                 passage = feature_evaluator.get_specific_features([feature], i, i + 1, self.atom_type)
                 if passage != None:
                     all_passages.append(passage)
-                else:
-                    raise Exception("This should never happen.")
+                #else:
+                #    raise Exception("This should never happen.")
             feature_values = []
             for p in all_passages:
                 feature_values.append(p.features.values()[0])            
+            
+            # Build self.spans
+            spans = []
+            for p in all_passages:
+                spans.append([p.start_word_index, p.end_char_index])
+                #TODO: Do we really want these "snapped out" spans to be the spans that are saved? I think not...
+            if self._spans:
+                assert(self._spans == spans)
+                #for i in range(len(self._spans)):
+                #    if self._spans[i] != spans[i]:
+                #        print i, self._spans[i], spans[i]
+                #        assert(False)
+            self._spans = spans
+                
             
             self._features[feature] = feature_values
             session.commit()
@@ -287,5 +309,5 @@ def _test():
     session.close()
 
 if __name__ == "__main__":
-    prepopulate_database("paragraph", 5)
+    populate_database("paragraph", 100)
     

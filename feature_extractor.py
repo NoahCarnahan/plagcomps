@@ -54,11 +54,12 @@ def get_spans(text, atom_type):
     else:
         raise ValueError("Unacceptable atom type.")
     
-    sanitized_spans = []
-    for s in spans:
-        if not s[0] == s[1]:
-            sanitized_spans.append(s)
-    return sanitized_spans
+    #sanitized_spans = []
+    #for s in spans:
+    #    if not s[0] == s[1]:
+    #        sanitized_spans.append(s)
+    #return sanitized_spans
+    return spans
    
 class StylometricFeatureEvaluator:
 
