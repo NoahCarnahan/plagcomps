@@ -24,7 +24,7 @@ def prepopulate_database(atom_type, num):
     test_file_listing = file('corpus_partition/training_set_files.txt')
     all_test_files = [f.strip() for f in test_file_listing.readlines()]
     test_file_listing.close()
-    first_test_files = all_test_files[0:num]
+    first_test_files = all_test_files[:num]
     
     features = ['averageSentenceLength', 'averageWordLength', 'get_avg_word_frequency_class','get_punctuation_percentage','get_stopword_percentage']
     
@@ -179,7 +179,7 @@ class ReducedDoc(Base):
             if feature.get("name") == "artificial-plagiarism": # are there other types?
                 start = int(feature.get("this_offset"))
                 end = start + int(feature.get("this_length"))
-                spans.append((start, end))
+                self._plagiarized_spans.append((start, end))
     
     def __repr__(self):
         return "<ReducedDoc('%s','%s')>" % (self.doc_name, self.atom_type)
@@ -277,29 +277,15 @@ Base.metadata.create_all(engine)
 # create a configured "Session" class
 Session = sessionmaker(bind=engine)
 
-if __name__ == "__main__":
-    # create a Session
+def _test():
+    
     session = Session()
-    
-    # retrive my reducedDoc
-    r = session.query(ReducedDoc).filter(ReducedDoc.atom_type == "paragraph").one()
-    print r._features.keys()
-    r.get_feature_vectors(["averageWordLength"])
-    print r._features.keys()
-    print r._features
-    
-    #session.add(r)
-    #session.commit()
-    
-    
-    
-    
-    #r = ReducedDoc("/part1/suspicious-document00536", "paragraph")
-    
-    #print r
-    #r.get_feature_vectors(["averageWordLength", "averageSentenceLength"])
-    #print r.span_is_plagiarized(r.get_spans()[20])
-    
-    #print evaluate(["averageWordLength", "averageSentenceLength"], "kmeans", 2, "paragraph", ["/part1/suspicious-document00536"])
-    
+    #rs = session.query(ReducedDoc).filter(ReducedDoc.atom_type == "paragraph").all()
+    rs =  _get_reduced_docs("paragraph", ["/part1/suspicious-document00536", "/part1/suspicious-document01957", "/part2/suspicious-document03297"], session)
+    for r in rs:
+        print r.get_feature_vectors(['averageSentenceLength', 'averageWordLength', 'get_avg_word_frequency_class','get_punctuation_percentage','get_stopword_percentage'], session)
     session.close()
+
+if __name__ == "__main__":
+    prepopulate_database("paragraph", 5)
+    
