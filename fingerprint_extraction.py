@@ -2,7 +2,7 @@
 # Module for generating fingerprints from documents.
 
 import nltk
-import string, random, re
+import string, random, re, operator
 
 # TODO: omit words tokenized by nltk that are just puncuation
 # TODO: for anchor selection, get some empirical data about the frequency of permutations of 3-charactor strings are
@@ -10,7 +10,7 @@ import string, random, re
 class FingerprintExtractor:
 
 	def __init__(self):
-		self.hash_span = 1000
+		self.hash_span = 100000
 		self.anchors = []
 		pass
 
@@ -91,12 +91,43 @@ class FingerprintExtractor:
 				fingerprint.append(self._gen_string_hash(match.group(0)))
 		return fingerprint
 
+class FingerprintEvaluator:
+
+	def __init__(self, source_filenames, n=3, fingerprint="full"):
+		self.extractor = FingerprintExtractor()
+		self.n = n
+		self.fingerprint = fingerprint
+		self.source_fingerprints = {}
+		for filename in source_filenames:
+			with open(filename) as f:
+				text = ""
+				for line in f:
+					text += line + "\n"
+				self.source_fingerprints[filename] = " ".join([str(x) for x in self.extractor.get_fingerprint(text, n, fingerprint)])	
+
+	def classify_document(self, filename):
+		with open(filename) as f:
+			text = ""
+			for line in f:
+				text += line + "\n"
+			fingerprints = self.extractor.get_fingerprint(text, self.n, self.fingerprint)
+			regex = "|".join([str(fingerprint) for fingerprint in fingerprints])
+			source_documents = {}
+			for source in self.source_fingerprints:
+				num_matches = len(re.findall(regex, self.source_fingerprints[source]))
+				source_documents[source] = num_matches
+			print sorted(source_documents.items() , key = operator.itemgetter(1), reverse=True)
+
 
 if __name__ == '__main__':
 	ex = FingerprintExtractor()
 	corp = nltk.corpus.gutenberg
 
+	ev = FingerprintEvaluator(["sample_corpus/source1.txt", "sample_corpus/source2.txt", "sample_corpus/source3.txt"])
+	for test in range(1,5):
+		print test, 
+		ev.classify_document("sample_corpus/test" + str(test) + ".txt")
 
-	print ex.get_fingerprint(corp.raw("austen-sense.txt"), 3, "anchor")
-	print ex.get_fingerprint(corp.raw("austen-emma.txt"), 3, "anchor")
+	#print ex.get_fingerprint(corp.raw("austen-sense.txt"), 3, "anchor")
+	#print ex.get_fingerprint(corp.raw("austen-emma.txt"), 3, "anchor")
 
