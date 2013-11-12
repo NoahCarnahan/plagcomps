@@ -92,16 +92,15 @@ class ExtrinsicTester:
         return spans
 
     def plot_ROC_curve(self):
+        '''
+        Outputs an ROC figure based on our plagiarism classifications and the 
+        ground truth of each atom.
+        '''
         trials, actuals = self._get_trials()
-        
+
         # actuals is a list of ground truth classifications for passages
-        # confidences is a list of confidence scores for passages
-        # So, if confidences[i] = .3 and actuals[i] = 1 then passage i is plagiarised and
-        # we are .3 certain that it is plagiarism (So its in the non-plag cluster).
+        # trials is a list consisting of 0s and 1s. 1 means we think the atom is plagiarized
         fpr, tpr, thresholds = sklearn.metrics.roc_curve(actuals, trials, pos_label=1)
-        print 'trials:', trials
-        print 'actuals:', actuals
-        print fpr, tpr, thresholds
         roc_auc = sklearn.metrics.auc(fpr, tpr)
 
         # The following code is from http://scikit-learn.org/stable/auto_examples/plot_roc.html
@@ -112,7 +111,7 @@ class ExtrinsicTester:
         pyplot.ylim([0.0, 1.0])
         pyplot.xlabel('False Positive Rate')
         pyplot.ylabel('True Positive Rate')
-        pyplot.title('Receiver Operating Characteristic')
+        pyplot.title('Receiver Operating Characteristic -- Extrinsic w/ '+self.fingerprint_method+' fingerprinting')
         pyplot.legend(loc="lower right")
         
         path = "figures/roc_extrinsic_"+str(time.time())+"_"+self.fingerprint_method+".pdf"
@@ -124,14 +123,14 @@ class ExtrinsicTester:
         Split document into atoms and return a list of TRUE/FALSEs 
         corresponding to whether or not each chunk was plagiarized.
         '''
-        return [1 if random.random() < 0.5 else 0 for i in xrange(len(atoms))]
+        return [1 if random.random() < .5 else 0 for i in xrange(len(atoms))]
 
 
 if __name__ == "__main__":
     test_file_listing = file('extrinsic_corpus_partition/extrinsic_training_set_files.txt')
     all_test_files = [f.strip() for f in test_file_listing.readlines()]
     test_file_listing.close()
-    first_test_files = all_test_files[0:2]
+    first_test_files = all_test_files[0:25]
     print first_test_files
 
     tester = ExtrinsicTester("paragraph", "anchor", first_test_files)
