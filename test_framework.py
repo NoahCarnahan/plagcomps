@@ -8,7 +8,6 @@ matplotlib.use('pdf')
 import matplotlib.pyplot as pyplot
 
 from cluster import StylometricCluster
-from controller import Controller
 import feature_extractor
 import dbconstants
 
@@ -22,6 +21,7 @@ from sqlalchemy.ext.associationproxy import association_proxy
 
 Base = declarative_base()
 
+DEBUG = True
 
 def populate_database(atom_type, num):
     '''
@@ -47,6 +47,13 @@ def populate_database(atom_type, num):
 
     session.close()
 
+def evaluate_n_documents(features, cluster_type, k, atom_type, n):
+    test_file_listing = file('corpus_partition/training_set_files.txt')
+    all_test_files = [f.strip() for f in test_file_listing.readlines()]
+    test_file_listing.close()
+    first_test_files = all_test_files[:n]
+    return evaluate(features, cluster_type, k, atom_type, first_test_files)
+
 def evaluate(features, cluster_type, k, atom_type, docs):
     '''
     Returns a variety of statistics (which ones exactly TBD) telling us how the tool performs with
@@ -57,7 +64,11 @@ def evaluate(features, cluster_type, k, atom_type, docs):
     reduced_docs = _get_reduced_docs(atom_type, docs, session)
     plag_likelyhoods = []
     
+    count = 0
     for d in reduced_docs:
+        count += 1
+        if DEBUG:
+            print "On document", d, ". The", count, "th document."
         c = _cluster(d.get_feature_vectors(features, session), cluster_type, k)
         plag_likelyhoods.append(c)
     
@@ -328,13 +339,14 @@ def _populate_EVERYTHING():
     session.close()
 
 if __name__ == "__main__":
-    _populate_EVERYTHING()
+    #_populate_EVERYTHING()
 
     #populate_database("sentence", 100)
     
     #test_file_listing = file('corpus_partition/training_set_files.txt')
     #all_test_files = [f.strip() for f in test_file_listing.readlines()]
     #test_file_listing.close()
-    #first_test_files = all_test_files[:100]
-    #print evaluate(["get_avg_word_frequency_class"], "kmeans", 2, "paragraph", first_test_files)
+    #first_test_files = all_test_files[:26]
+    #print evaluate(['averageSentenceLength', 'averageWordLength', 'get_avg_word_frequency_class'], "kmeans", 2, "word", first_test_files)
     
+    print evaluate_n_documents(['get_avg_word_frequency_class'], "hmm", 2, "paragraph", 100)
