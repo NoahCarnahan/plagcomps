@@ -3,7 +3,7 @@
 # plagcomps rules
 # by Marcus, Noah, and Cole
 
-import nltk, re, math, os, inspect
+import nltk, re, math, os, inspect, random, scipy
 from passage import *
 
 
@@ -64,10 +64,45 @@ def get_spans(text, atom_type):
 class StylometricFeatureEvaluator:
 
     def __init__(self, filepath):
-        self.document_name = os.path.basename(filepath)
-        self.setDocument(filepath)
+        if filepath != None:
+            self.document_name = os.path.basename(filepath)
+            self.setDocument(filepath)
         self.punctuation_re = re.compile(r'[\W\d]+', re.UNICODE) # slightly modified from nltk source
+
+    def extract_corpus_paragraph_features(self, corpus_paras, feature_name):
+        '''instantiates a StylometricFeatureEvaluator from a nltk corpus paragraph list
+        example: StylometricFeatureEvaluator(nltk.corpus.gutenberg.paras('austen-jane')
+        returns a list of values of the given feature for each paragraph'''
+
+        self.document_name = "corpus_document"
+        full_text = ""
     
+        #print 'we have', len(corpus_paras), 'paras to combine'
+        for paragraph in corpus_paras:
+            paragraph_text = " ".join(paragraph[0])
+            full_text += paragraph_text + "\n\n"
+        #    print 'my full text is', full_text
+
+        self.input_file = full_text
+
+        self.word_spans = self.initWordList(self.input_file)
+        self.sentence_spans = self.initSentenceList(self.input_file)
+        self.paragraph_spans = self.initParagrpahList(self.input_file)
+        self.posTags = self.initTagList(self.input_file)
+
+        self.word_length_sum_table = self.initWordLengthSumTable()
+        self.sentence_length_sum_table = self.initSentenceLengthSumTable()
+        self.pos_frequency_count_table = self.initPosFrequencyTable()
+        self.word_frequency_class_table = self.init_word_frequency_class_table(self.input_file)
+        self.punctuation_table = self.init_punctuation_table()
+        self.stopWords_table = self.init_stopWord_table(self.input_file)
+
+        feature_vector = []
+        for i in range(len(self.paragraph_spans) - 1):
+            feature_vector.append(self.get_specific_features([feature_name], i, i+1, 'paragraph'))
+        return feature_vector
+    
+
     def setDocument(self, filepath):
         ''' Reads in the file and constructs a list of words, sentences, and paragraphs from it. '''
         f = open(filepath, 'r')
@@ -615,8 +650,50 @@ class StylometricFeatureEvaluator:
         extracted = self.get_specific_features(feature_list, 0, len(self.word_spans), 'word')
         print extracted.features
 
+def independent_feature_test():
+    same_doc_outfile = open('test_features_on_self.txt', 'w')
+    similar_doc_outfile = open('test_features_on_similar.txt', 'w')
+    different_doc_outfile = open('test_features_on_different.txt', 'w')
+    percent_paragraphs = .10
+    feature_tester = StylometricFeatureEvaluator(None)
+    my_corpus = nltk.corpus.gutenberg
+    feature_dict = {}
+    for feature in ['averageWordLength', 'averageSentenceLength', 'get_punctuation_percentage', 'get_avg_word_frequency_class', 'get_stopword_percentage']:
+        document_comparison_dict = {}
+        for fileid in my_corpus.fileids():
+            num_paragraphs = min(100, int(percent_paragraphs * len( my_corpus.paras(fileid))))
+            main_file_feature_vector = []
+            try:
+                passages = feature_tester.extract_corpus_paragraph_features(random.sample(my_corpus.paras(fileid), num_paragraphs), feature)
+            except ValueError:
+                passages = feature_tester.extract_corpus_paragraph_features(my_corpus.paras(fileid), feature)
+            for passage in passages:
+                main_file_feature_vector.append(passage.features[feature])
+            for other_file in my_corpus.fileids():
+                pair = min(fileid, other_file) + "+" + max(fileid, other_file)
+                if not document_comparison_dict.get(pair):
+                    file_feature_vector = []
+                    num_paragraphs = min(100, int(percent_paragraphs * len( my_corpus.paras(other_file))))
+                    try:
+                        passages = feature_tester.extract_corpus_paragraph_features(random.sample(my_corpus.paras(fileid), num_paragraphs), feature)
+                    except ValueError:
+                        passages = feature_tester.extract_corpus_paragraph_features(my_corpus.paras(fileid), feature)
+                    for passage in passages:
+                        file_feature_vector.append(passage.features[feature])
+                    stats = scipy.stats.ttest_ind(main_file_feature_vector, file_feature_vector)
+                    document_comparison_dict[pair] = stats[1]
+                    print feature, fileid + " + " + other_file, stats[1]
+                    if fileid == other_file:
+                        outfile = same_doc_outfile
+                    elif fileid.startswith(other_file.split('-')[0]):
+                        outfile = similar_doc_outfile
+                    else:
+                        outfile = different_doc_outfile
+                    outfile.write(feature + "\t" + fileid + "+" + other_file + "\t" + str(stats[1]) + "\r\n")
+    
 if __name__ == "__main__":
-    evaluator = StylometricFeatureEvaluator("foo.txt")
-    evaluator.test()
-    evaluator.test_general_extraction()
-    print 'and done'
+    #evaluator = StylometricFeatureEvaluator("foo.txt")
+    #evaluator.test()
+    #evaluator.test_general_extraction()
+
+    independent_feature_test()
