@@ -2,8 +2,8 @@
 # Module for generating fingerprints from documents.
 
 import nltk
-import string, random, re
 import itertools
+import string, random, re, operator
 
 # TODO: omit words tokenized by nltk that are just puncuation
 # TODO: for anchor selection, get some empirical data about the frequency of permutations of 3-charactor strings are
@@ -11,9 +11,8 @@ import itertools
 class FingerprintExtractor:
 
 	def __init__(self):
-		self.hash_span = 1000
 		self.anchors = ['ul', 'ay', 'oo', 'yo', 'si', 'ca', 'am', 'ie', 'mo', 'rt']
-		pass
+		self.hash_span = 100000
 
 	def _gen_string_hash(self, in_string):
 		'''
@@ -112,11 +111,62 @@ class FingerprintExtractor:
 				fingerprint.append(self._gen_string_hash(match.group(0)))
 		return fingerprint
 
+class FingerprintEvaluator:
+
+	def __init__(self, source_filenames, fingerprint="full", n=3):
+		self.extractor = FingerprintExtractor()
+		self.n = n
+		self.fingerprint = fingerprint
+		self.source_fingerprints = {}
+		print "beginning source fingerprinting"		
+		for filename in source_filenames:
+			with open(filename) as f:
+				text = ""
+				for line in f:
+					text += line + "\n"
+				self.source_fingerprints[filename] = self.extractor.get_fingerprint(text, n, fingerprint)
+				print "finished fingerprinting", filename
+
+	def classify_document(self, filename):
+		with open(filename) as f:
+			text = ""
+			for line in f:
+				text += line + "\n"
+			fingerprints = self.extractor.get_fingerprint(text, self.n, self.fingerprint)
+			print "got fingerprint for query document"
+			source_documents = {}
+			for source in self.source_fingerprints:
+				source_documents[source] = jaccard_similarity(fingerprints, self.source_fingerprints[source])
+			print sorted(source_documents.items() , key = operator.itemgetter(1), reverse=True)
+
+def jaccard_similarity(a, b):
+	'''a and b are lists (multisets) of fingerprints of which we want to find the similarity'''
+	intersection_size = len(set(a).intersection(set(b)))
+	# len([k for k in a if k in b])
+	union_size = len(a) + len(b) - intersection_size
+	if union_size > 0:
+		return float(intersection_size) / union_size
+	else:
+		return 0
 
 if __name__ == '__main__':
 	ex = FingerprintExtractor()
 	corp = nltk.corpus.gutenberg
 
-	print ex.get_fingerprint(corp.raw("austen-sense.txt"), 3, "anchor")
-	print ex.get_fingerprint(corp.raw("austen-emma.txt"), 3, "anchor")
+	sources = ["sample_corpus/source1.txt", "sample_corpus/source2.txt", "sample_corpus/source3.txt"]
+	full = FingerprintEvaluator(sources, "full")
+	kth = FingerprintEvaluator(sources, "kth_in_sent")
+	anchor = FingerprintEvaluator(sources, "anchor")
 
+#	ev = FingerprintEvaluator(["sample_corpus/easy_source.txt"])
+#	ev.classify_document("sample_corpus/easy_test.txt")
+
+	for test in range(1,5):
+		print "test" + str(test) 
+		full.classify_document("sample_corpus/test" + str(test) + ".txt")
+		kth.classify_document("sample_corpus/test" + str(test) + ".txt")
+		anchor.classify_document("sample_corpus/test" + str(test) + ".txt")
+
+	#print ex.get_fingerprint(corp.raw("austen-sense.txt"), 3, "anchor")
+	#print ex.get_fingerprint(corp.raw("austen-emma.txt"), 3, "anchor")
+ 

@@ -1,0 +1,3 @@
+﻿This is a really short source that isn't all that super exciting. It should have some nice fingerprints that hopefully match its plagiarized copy which is named easy_test.txt. Pretty cool stuff.
+
+It also has another couple of lines which are not in the test document but are also here and are very exciting. This will make jaccard similarity not quite 1.0 but probably about 0.6.
