@@ -27,12 +27,14 @@ DEBUG = True
 
 def populate_database(atom_type, num):
     '''
-    Populates the database with the first num training files parsed with the given atom_type.
-    This method populates all features.
+    Populate the database with the first num training files parsed with the given atom_type.
+    This method populates all files with averageSentenceLength, averageWordLength,
+    get_avg_word_frequency_class, get_punctuation_percentage, and get_stopword_percentage.
     '''
     
     session = Session()
     
+    # Get the first num training files
     test_file_listing = file('corpus_partition/training_set_files.txt')
     all_test_files = [f.strip() for f in test_file_listing.readlines()]
     test_file_listing.close()
@@ -51,17 +53,31 @@ def populate_database(atom_type, num):
     session.close()
 
 def evaluate_n_documents(features, cluster_type, k, atom_type, n):
+    '''
+    Return the evaluation (roc curve path, area under the roc curve) of the first n training
+    documents parsed by atom_type, using the given features, cluster_type, and number of clusters k.
+    '''
+    # Get the first n training files
     test_file_listing = file('corpus_partition/training_set_files.txt')
     all_test_files = [f.strip() for f in test_file_listing.readlines()]
     test_file_listing.close()
     first_test_files = all_test_files[:n]
+    
     return evaluate(features, cluster_type, k, atom_type, first_test_files)
 
 def evaluate(features, cluster_type, k, atom_type, docs):
     '''
-    Returns a variety of statistics (which ones exactly TBD) telling us how the tool performs with
-    the given parameters.
+    Return the roc curve path and area under the roc curve for the given list of documents parsed
+    by atom_type, using the given features, cluster_type, and number of clusters k.
+    
+    features is a list of strings where each string is the name of a StylometricFeatureEvaluator method.
+    cluster_type is "kmeans", "hmm", or "agglom".
+    k is an integer.
+    atom_type is "word", "sentence", or "paragraph".
+    docs should be a list in the form ["/part1/suspicious-document01290", ... ]
     '''
+    # TODO: Return more statistics, not just roc curve things. 
+    
     session = Session()
     
     reduced_docs = _get_reduced_docs(atom_type, docs, session)
@@ -76,19 +92,18 @@ def evaluate(features, cluster_type, k, atom_type, docs):
         plag_likelyhoods.append(c)
     
     roc_path, roc_auc = _roc(reduced_docs, plag_likelyhoods, features, cluster_type, k, atom_type)
-    
     session.close()
-    
     return roc_path, roc_auc
 
-def stats_evaluate_n_documents(features, atom_type, n):   
+def stats_evaluate_n_documents(features, atom_type, n):
+
     test_file_listing = file('corpus_partition/training_set_files.txt')
     all_test_files = [f.strip() for f in test_file_listing.readlines()]
     test_file_listing.close()
     first_test_files = all_test_files[:n]
-    return feature_stats_evaluate(features, atom_type, first_test_files)
+    return _feature_stats_evaluate(features, atom_type, first_test_files)
 
-def feature_stats_evaluate(features, atom_type, docs):
+def _feature_stats_evaluate(features, atom_type, docs):
     session = Session()
     
     document_dict = {}
@@ -137,9 +152,9 @@ def feature_stats_evaluate(features, atom_type, docs):
 
 def _get_reduced_docs(atom_type, docs, session):
     '''
-    Returns ReducedDoc objects for the given atom_type for each of the strings in docs. docs is a
-    list of paths. This function retrieves the corresponding ReducedDocs from the database if they
-    exist.
+    Return ReducedDoc objects for the given atom_type for each of the documents in docs. docs is a
+    list of strings like "/part2/suspicious-document02456". This function retrieves the corresponding
+    ReducedDocs from the database if they exist, otherwise it creates new ReducedDoc objects.
     '''
     reduced_docs = []
     for doc in docs:
@@ -154,6 +169,11 @@ def _get_reduced_docs(atom_type, docs, session):
     return reduced_docs
 
 def _cluster(feature_vectors, cluster_type, k):
+    '''
+    Return a list of confidence values between 0 and 1. The ith element of the list is our
+    confidence that the ith feature vector in feature_vectors is plagiarised based on a clustering
+    of type cluster_type (into k clusters).
+    '''
     s = StylometricCluster()
     if cluster_type == "kmeans":
         return s.kmeans(feature_vectors, k)

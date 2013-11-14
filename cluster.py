@@ -5,6 +5,8 @@ from scipy.cluster.hierarchy import linkage, fcluster
 from collections import Counter
 import hmm
 
+#TODO: Why does the StylometricCluster class exist? Lets get rid of it and just leave its methods.
+
 class StylometricCluster:
 
     def kmeans(self, stylo_vectors, k):
