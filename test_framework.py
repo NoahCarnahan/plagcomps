@@ -41,7 +41,8 @@ def populate_database(atom_type, num):
     count = 0
     for doc in first_test_files:
         count += 1
-        print "On document", count
+        if DEBUG:
+            print "On document", count
         d = _get_reduced_docs(atom_type, [doc], session)[0]
         d.get_feature_vectors(features, session)
 
@@ -335,6 +336,7 @@ def _populate_EVERYTHING():
         for atom_type in ["word","sentence", "paragraph"]:
             for feature in ['averageSentenceLength', 'averageWordLength', 'get_avg_word_frequency_class','get_punctuation_percentage','get_stopword_percentage']:
                 d = _get_reduced_docs(atom_type, [doc], session)[0]
+                print "Calculating", feature, "for", str(d), str(datetime.datetime.now())
                 d.get_feature_vectors([feature], session)
     session.close()
 
@@ -349,4 +351,4 @@ if __name__ == "__main__":
     #first_test_files = all_test_files[:26]
     #print evaluate(['averageSentenceLength', 'averageWordLength', 'get_avg_word_frequency_class'], "kmeans", 2, "word", first_test_files)
     
-    print evaluate_n_documents(['get_avg_word_frequency_class'], "hmm", 2, "paragraph", 100)
+    print evaluate_n_documents(['get_avg_word_frequency_class'], "kmeans", 2, "word", 200)
