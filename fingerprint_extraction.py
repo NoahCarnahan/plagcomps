@@ -3,6 +3,7 @@
 
 import nltk
 import string, random, re
+import itertools
 
 # TODO: omit words tokenized by nltk that are just puncuation
 # TODO: for anchor selection, get some empirical data about the frequency of permutations of 3-charactor strings are
@@ -11,7 +12,7 @@ class FingerprintExtractor:
 
 	def __init__(self):
 		self.hash_span = 1000
-		self.anchors = []
+		self.anchors = ['ul', 'ay', 'oo', 'yo', 'si', 'ca', 'am', 'ie', 'mo', 'rt']
 		pass
 
 	def _gen_string_hash(self, in_string):
@@ -70,20 +71,40 @@ class FingerprintExtractor:
 			fingerprint.append(self._gen_string_hash(" ".join(split_sent[min(k, L - min(n, L)) : min(k + n, L)])))
 		return fingerprint
 
-	def _gen_anchors(self):
-		if self.anchors:
-			return self.anchors
-		num_anchors = 20
-		anchor_length = 2
-		# anchors could be the SAME!
-		self.anchors = ["".join(random.sample(string.ascii_lowercase, anchor_length)) for i in xrange(num_anchors)]
-		return self.anchors
+	def gen_anchors(anchor_length = 2, num_anchors=10):
+		"""
+		This function should be called whenever we want to generate a new list of
+		anchors. Just set self.anchors equal to the result of this function.
+		"""
+		alphabet = string.ascii_lowercase
+		# look at all permutations
+		anchor_counts = {}
+		for anchor in itertools.product(alphabet, repeat=anchor_length):
+			anchor = "".join(anchor)
+			anchor_counts[anchor] = 0
+		print anchor_counts
+
+		corp = nltk.corpus.gutenberg
+		for filename in corp.fileids():
+			print 'Counting anchors in', filename
+			for anchor in anchor_counts.keys():
+				results = re.findall(anchor, corp.raw(filename))
+				anchor_counts[anchor] += len(results)
+
+		# sort keys in decreasing order
+		anchors = anchor_counts.keys()
+		anchors = filter(lambda x: anchor_counts[x] != 0, sorted(anchors, key=lambda x: anchor_counts[x], reverse=True))
+		for a in anchors:
+			print a, anchor_counts[a]
+
+		start_index = int(0.15*len(anchors))
+		return anchors[start_index:start_index+num_anchors]
 		
 
 	def _get_anchor_fingerprint(self, document, n):
 		# anchors are start or middle of n-gram?
 		fingerprint = []
-		for anchor in self._gen_anchors():
+		for anchor in self.anchors:
 			# Our regular expression puts the word containing the anchor in the middle of the n-gram
 			# tie is resolved with an extra word at the end
 			regex = '\w+\s+' * ((n - 1) / 2) + '\w*' + anchor + '\w*' + '\s+\w+' * ((n - (n%2) )/2)
@@ -95,7 +116,6 @@ class FingerprintExtractor:
 if __name__ == '__main__':
 	ex = FingerprintExtractor()
 	corp = nltk.corpus.gutenberg
-
 
 	print ex.get_fingerprint(corp.raw("austen-sense.txt"), 3, "anchor")
 	print ex.get_fingerprint(corp.raw("austen-emma.txt"), 3, "anchor")
