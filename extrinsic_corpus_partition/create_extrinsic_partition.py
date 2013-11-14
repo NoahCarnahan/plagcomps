@@ -13,8 +13,10 @@ import sys
 def main(training_percent = 0.7):
     random.seed(1337)
 
-    suspects_base_path = "/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents"
+    suspects_base_path = "/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents/"
     suspects_dirs = ["part1/", "part2/", "part3/", "part4/", "part5/", "part6/", "part7/", "part8/"]
+    sources_base_path = "/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/source-documents/"
+    sources_dirs = ["part1/", "part2/", "part3/", "part4/", "part5/", "part6/", "part7/", "part8/"]
 
      # Without extensions
     all_base_files = []
@@ -68,8 +70,11 @@ def main(training_percent = 0.7):
     for filenames in training_suspect_partition:
         tree = ET.parse(filenames[1])
         for feature in tree.iter("feature"):
-            if feature.get("name") == "artificial-plagiarism" and feature.get("source_reference"):
-                training_sources[feature.get("source_reference")[:-4]] = 1
+            if feature.get("name") == "artificial-plagiarism" and feature.get("source_reference") and feature.get("source_reference")[:-4] not in training_sources:
+                # figure out which partX the doc is in...so annoying...
+                for p in sources_dirs:
+                    if os.path.exists(sources_base_path + p + feature.get("source_reference")):
+                        training_sources["/" + p + feature.get("source_reference")[:-4]] = 1
         num_files += 1
         if num_files%100 == 0:
             print num_files,
@@ -83,8 +88,11 @@ def main(training_percent = 0.7):
     for filenames in testing_suspect_partition:
         tree = ET.parse(filenames[1])
         for feature in tree.iter("feature"):
-            if feature.get("name") == "artificial-plagiarism" and feature.get("source_reference"):
-                testing_sources[feature.get("source_reference")[:-4]] = 1
+            if feature.get("name") == "artificial-plagiarism" and feature.get("source_reference") and feature.get("source_reference")[:-4] not in training_sources:
+                # figure out which partX the doc is in...so annoying...
+                for p in sources_dirs:
+                    if os.path.exists(sources_base_path + p + feature.get("source_reference")):
+                        testing_sources["/" + p + feature.get("source_reference")[:-4]] = 1
         num_files += 1
         if num_files%100 == 0:
             print num_files,
