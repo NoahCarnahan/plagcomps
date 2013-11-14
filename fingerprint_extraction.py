@@ -6,7 +6,6 @@ import itertools
 import string, random, re, operator
 
 # TODO: omit words tokenized by nltk that are just puncuation
-# TODO: for anchor selection, get some empirical data about the frequency of permutations of 3-charactor strings are
 
 class FingerprintExtractor:
 
@@ -113,31 +112,31 @@ class FingerprintExtractor:
 
 class FingerprintEvaluator:
 
-	def __init__(self, source_filenames, fingerprint="full", n=3):
+	def __init__(self, source_filepaths, fingerprint_method="full", n=3):
 		self.extractor = FingerprintExtractor()
 		self.n = n
-		self.fingerprint = fingerprint
+		self.fingerprint_method = fingerprint_method
 		self.source_fingerprints = {}
-		print "beginning source fingerprinting"		
-		for filename in source_filenames:
-			with open(filename) as f:
+		# we'll just be querying the database eventually...
+		print "beginning source fingerprinting of", len(source_filepaths), "sources..."
+		for filename in source_filepaths:
+			with open(filename+'.txt') as f:
 				text = ""
 				for line in f:
 					text += line + "\n"
-				self.source_fingerprints[filename] = self.extractor.get_fingerprint(text, n, fingerprint)
+				self.source_fingerprints[filename] = self.extractor.get_fingerprint(text, n, fingerprint_method)
 				print "finished fingerprinting", filename
 
-	def classify_document(self, filename):
-		with open(filename) as f:
-			text = ""
-			for line in f:
-				text += line + "\n"
-			fingerprints = self.extractor.get_fingerprint(text, self.n, self.fingerprint)
-			print "got fingerprint for query document"
-			source_documents = {}
-			for source in self.source_fingerprints:
-				source_documents[source] = jaccard_similarity(fingerprints, self.source_fingerprints[source])
-			print sorted(source_documents.items() , key = operator.itemgetter(1), reverse=True)
+	def classify_document(self, doc):
+		'''
+		Returns a list of (source_filename, similarity) tuples sorted in descreasing similarity to the 
+		input document.
+		'''
+		fingerprint = self.extractor.get_fingerprint(doc, self.n, self.fingerprint_method)
+		source_documents = {}
+		for source in self.source_fingerprints:
+			source_documents[source] = jaccard_similarity(fingerprint, self.source_fingerprints[source])
+		return sorted(source_documents.items() , key = operator.itemgetter(1), reverse=True)
 
 def jaccard_similarity(a, b):
 	'''a and b are lists (multisets) of fingerprints of which we want to find the similarity'''
@@ -153,7 +152,7 @@ if __name__ == '__main__':
 	ex = FingerprintExtractor()
 	corp = nltk.corpus.gutenberg
 
-	sources = ["sample_corpus/source1.txt", "sample_corpus/source2.txt", "sample_corpus/source3.txt"]
+	sources = ["sample_corpus/source1", "sample_corpus/source2", "sample_corpus/source3"]
 	full = FingerprintEvaluator(sources, "full")
 	kth = FingerprintEvaluator(sources, "kth_in_sent")
 	anchor = FingerprintEvaluator(sources, "anchor")
@@ -163,9 +162,15 @@ if __name__ == '__main__':
 
 	for test in range(1,5):
 		print "test" + str(test) 
-		full.classify_document("sample_corpus/test" + str(test) + ".txt")
-		kth.classify_document("sample_corpus/test" + str(test) + ".txt")
-		anchor.classify_document("sample_corpus/test" + str(test) + ".txt")
+		full_doc = open("sample_corpus/test"+str(test)+".txt", 'r')
+		print full.classify_document(full_doc.read())
+		full_doc.close()
+		kth_doc = open("sample_corpus/test"+str(test)+".txt", 'r')
+		print kth.classify_document(kth_doc.read())
+		kth_doc.close()
+		anch_doc = open("sample_corpus/test"+str(test)+".txt", 'r')
+		print anchor.classify_document(anch_doc.read())
+		anch_doc.close()
 
 	#print ex.get_fingerprint(corp.raw("austen-sense.txt"), 3, "anchor")
 	#print ex.get_fingerprint(corp.raw("austen-emma.txt"), 3, "anchor")

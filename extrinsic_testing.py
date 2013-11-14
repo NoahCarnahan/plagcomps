@@ -10,23 +10,25 @@ import matplotlib.pyplot as pyplot
 import os
 import time
 import nltk
+import fingerprint_extraction
 
 class ExtrinsicTester:
 
-    def __init__(self, atom_type, fingerprint_method, file_list):
+    def __init__(self, atom_type, fingerprint_method, suspect_file_list, source_file_list):
         self.suspicious_path_start = "/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents"
-        self.corpus_path_start = "/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/source-documents/"
+        self.corpus_path_start = "/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/source-documents"
         source_dirs = os.listdir(self.corpus_path_start)
-        self.source_file_paths = []
-        for d in source_dirs:
-            p = os.path.join(self.corpus_path_start, d)
-            for f in os.listdir(p):
-                self.source_file_paths.append(os.path.join(p, f))
+        self.source_file_paths = [self.corpus_path_start + f for f in source_file_list]
+        self.suspect_file_paths = [self.suspicious_path_start + f for f in suspect_file_list]
 
-        self.base_file_paths = [self.suspicious_path_start + f for f in file_list]
+        # uncomment these two lines to test on reasonable sized corpus
+        # self.source_file_paths = ["sample_corpus/source1", "sample_corpus/source2", "sample_corpus/source3"]
+        # self.suspect_file_paths = ["sample_corpus/test1", "sample_corpus/test2", "sample_corpus/test3", "sample_corpus/test4"]
+
         self.atom_type = atom_type
         self.fingerprint_method = fingerprint_method
-        self.file_list = file_list
+        self.suspect_file_list = suspect_file_list
+        self.evaluator = fingerprint_extraction.FingerprintEvaluator(self.source_file_paths, fingerprint_method, 3)
 
     def _get_trials(self):
         '''
@@ -36,15 +38,18 @@ class ExtrinsicTester:
         '''
         classifications = []
         actuals = []
-        for f in self.base_file_paths:
+        for f in self.suspect_file_paths:
             suspicious_document = open(f+'.txt')
             doc = suspicious_document.read()
             atoms = [a for a in doc.splitlines()]
             suspicious_document.close()
-            atom_classifications = self.classify_document(atoms, self.atom_type, self.source_file_paths, self.fingerprint_method)
+            atom_classifications = self.evaluator.classify_document(doc)
+            # just take the most similar source document's similarity as the confidence of plagiarism for now.
+            similarity = atom_classifications[0][1]
+
             acts = self._get_actuals(doc, f+'.xml')
             actuals += acts
-            classifications += atom_classifications
+            classifications += [similarity for i in xrange(len(acts))] # just classify each paragraph in a document as the same similarity
         return classifications, actuals
 
     def _get_actuals(self, document_text, xml_filepath):
@@ -118,20 +123,33 @@ class ExtrinsicTester:
         pyplot.savefig(path)
 
 
-    def classify_document(self, atoms, atom_type, corpus_filenames, fingerprint_method):
-        '''
-        Split document into atoms and return a list of TRUE/FALSEs 
-        corresponding to whether or not each chunk was plagiarized.
-        '''
-        return [1 if random.random() < .5 else 0 for i in xrange(len(atoms))]
-
-
 if __name__ == "__main__":
-    test_file_listing = file('extrinsic_corpus_partition/extrinsic_training_set_files.txt')
-    all_test_files = [f.strip() for f in test_file_listing.readlines()]
-    test_file_listing.close()
-    first_test_files = all_test_files[0:25]
-    print first_test_files
+    num_files = 5
 
-    tester = ExtrinsicTester("paragraph", "anchor", first_test_files)
+    suspect_file_listing = open('extrinsic_corpus_partition/extrinsic_training_suspect_files.txt', 'r')
+    suspect_file_list = []
+    i = 0
+    for line in suspect_file_listing:
+        suspect_file_list.append(line.strip())
+        i += 1
+        if i >= num_files:
+            break
+    suspect_file_listing.close()
+
+    source_file_listing = open('extrinsic_corpus_partition/extrinsic_training_source_files.txt', 'r')
+    source_file_list = []
+    for line in source_file_listing:
+        source_file_list.append(line.strip())
+    source_file_listing.close()
+    
+    print 'Testing first', num_files, ' suspect files using a corpus of ', len(source_file_list),' source documents:'
+    print 'Suspect filenames:', suspect_file_list
+
+    tester = ExtrinsicTester("paragraph", "full", suspect_file_list, source_file_list)
+    tester.plot_ROC_curve()
+
+    tester = ExtrinsicTester("paragraph", "kth_in_sent", suspect_file_list, source_file_list)
+    tester.plot_ROC_curve()
+
+    tester = ExtrinsicTester("paragraph", "anchor", suspect_file_list, source_file_list)
     tester.plot_ROC_curve()
