@@ -19,6 +19,8 @@ from sqlalchemy.orm.collections import attribute_mapped_collection
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.ext.associationproxy import association_proxy
 
+import scipy, random
+
 Base = declarative_base()
 
 DEBUG = True
@@ -78,6 +80,60 @@ def evaluate(features, cluster_type, k, atom_type, docs):
     session.close()
     
     return roc_path, roc_auc
+
+def stats_evaluate_n_documents(features, atom_type, n):   
+    test_file_listing = file('corpus_partition/training_set_files.txt')
+    all_test_files = [f.strip() for f in test_file_listing.readlines()]
+    test_file_listing.close()
+    first_test_files = all_test_files[:n]
+    return feature_stats_evaluate(features, atom_type, first_test_files)
+
+def feature_stats_evaluate(features, atom_type, docs):
+    session = Session()
+    
+    document_dict = {}
+    percent_paragraphs = .10
+    same_doc_outfile = open('test_features_on_self.txt', 'w')
+    different_doc_outfile = open('test_features_on_different.txt', 'w')
+
+    reduced_docs = _get_reduced_docs(atom_type, docs, session)
+    for d in reduced_docs:
+        document_dict[d.doc_name] = {}
+
+        paragraph_feature_list = d.get_feature_vectors(features, session)
+        spans = d.get_spans()
+        
+        # builds the dictionary for feature vectors for each non-plagiarized paragraph in each document        
+        for paragraph_index in range(len(paragraph_feature_list)):
+            if not d.span_is_plagiarized(spans[paragraph_index]):
+                for feature_index in range(len(features)):
+                    # ask zach/noah what this line does
+                    document_dict[d.doc_name][features[feature_index]] = document_dict[d.doc_name].get(features[feature_index], [])+ [paragraph_feature_list[paragraph_index][feature_index]]
+
+    for feature in features:
+        for doc in document_dict:    
+            # take two samples and compare them for our same_doc test, then pick one of the samples and save it for our later tests
+            feature_vect = document_dict[doc][feature] 
+            sample = random.sample(feature_vect, max(2, int(len(feature_vect)*percent_paragraphs*2)))
+            sample_one = sample[:len(sample)/2]
+            sample_two = sample[len(sample)/2:]
+            print "SAMPLES:", sample_one, sample_two
+            stats = scipy.stats.ttest_ind(sample_one, sample_two)
+            same_doc_outfile.write(feature + "\t" + doc + "\t" + str(stats[1]) + "\r\n")
+            document_dict[doc][feature] = sample_one
+
+    for feature in features:
+        for first in document_dict: 
+            for second in document_dict:
+                 if first != second:
+                     sample_one = document_dict[first][feature]
+                     sample_two = document_dict[second][feature]
+                     stats = scipy.stats.ttest_ind(sample_one, sample_two)
+                     different_doc_outfile.write(feature + "\t" + first + "," + second + "\t" + str(stats[1]) + "\r\n") 
+
+    same_doc_outfile.close()
+    different_doc_outfile.close()
+    session.close() 
 
 def _get_reduced_docs(atom_type, docs, session):
     '''
@@ -351,4 +407,5 @@ if __name__ == "__main__":
     #first_test_files = all_test_files[:26]
     #print evaluate(['averageSentenceLength', 'averageWordLength', 'get_avg_word_frequency_class'], "kmeans", 2, "word", first_test_files)
     
-    print evaluate_n_documents(['get_avg_word_frequency_class'], "kmeans", 2, "word", 200)
+    #print evaluate_n_documents(['get_avg_word_frequency_class'], "hmm", 2, "paragraph", 100)
+    stats_evaluate_n_documents(['get_avg_word_frequency_class'], "paragraph", 100)
