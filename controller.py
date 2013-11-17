@@ -31,6 +31,8 @@ class Controller:
 
 	def cluster_features(self, passages, method, k):
 		'''
+		Assigns clusters to the given passage objects after clustering with method and k.
+		Returns None.
 		'''
 		# Extract numeric features
 		# NOTE (nj) we may want to change this at some point in order to 
