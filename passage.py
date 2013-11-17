@@ -25,6 +25,9 @@ class Passage:
 		'\n------------'
 
 	def assign_cluster(self, cluster_num):
+		'''
+		Sets self.cluster_num to cluster_num. Returns None.
+		'''
 		self.cluster_num = cluster_num
 
 
