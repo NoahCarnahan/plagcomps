@@ -185,6 +185,9 @@ def _cluster(feature_vectors, cluster_type, k):
         raise ValueError("Unacceptable cluster_type. Use 'kmeans', 'agglom', or 'hmm'.")
 
 def _roc(reduced_docs, plag_likelyhoods, features = None, cluster_type = None, k = None, atom_type = None):
+    
+    # http://scikit-learn.org/0.13/auto_examples/plot_roc.html
+    
     actuals = []
     confidences = []
     
