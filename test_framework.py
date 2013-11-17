@@ -95,7 +95,11 @@ def evaluate(features, cluster_type, k, atom_type, docs):
     session.close()
     return roc_path, roc_auc
 
-def stats_evaluate_n_documents(features, atom_type, n):
+def _stats_evaluate_n_documents(features, atom_type, n):
+    '''
+    Does _feature_stats_evaluate(features, atom_type, doc) on the first n docuemtns of the training
+    set. Returns None.
+    '''
 
     test_file_listing = file('corpus_partition/training_set_files.txt')
     all_test_files = [f.strip() for f in test_file_listing.readlines()]
@@ -104,6 +108,10 @@ def stats_evaluate_n_documents(features, atom_type, n):
     return _feature_stats_evaluate(features, atom_type, first_test_files)
 
 def _feature_stats_evaluate(features, atom_type, docs):
+    '''
+    This function writes data to two files. The data is used by an R script to generate box plots
+    that show the significance of the given features within the given documents. Returns None.
+    '''
     session = Session()
     
     document_dict = {}
@@ -185,7 +193,20 @@ def _cluster(feature_vectors, cluster_type, k):
         raise ValueError("Unacceptable cluster_type. Use 'kmeans', 'agglom', or 'hmm'.")
 
 def _roc(reduced_docs, plag_likelyhoods, features = None, cluster_type = None, k = None, atom_type = None):
+    '''
+    Generates a reciever operator characterstic (roc) curve and returns both the path to a pdf
+    containing a plot of this curve and the area under the curve. reduced_docs is a list of
+    ReducedDocs, plag_likelyhoods is a list of lists whrere plag_likelyhoods[i][j] corresponds
+    to the likelyhood that the jth span in the ith reduced_doc was plagiarized.
     
+    The optional parameters allow for a more verbose title of the graph in the pdf document.
+    
+    Note that all passages have equal weight for this curve. So, if one document is considerably
+    longer than the others and our tool does especially poorly on this document, it will look as
+    if the tool is bad (which is not necessarily a bad thing).
+    '''
+
+    # This function was modeled in part from this example:
     # http://scikit-learn.org/0.13/auto_examples/plot_roc.html
     
     actuals = []
@@ -254,7 +275,11 @@ class ReducedDoc(Base):
     version_number = Column(Integer)
     
     def __init__(self, name, atom_type):
-    
+        '''
+        Initializes a ReducedDoc. No feature vectors will be calculated at instantiation time.
+        get_feature_vectors triggers the lazy instantiation of these values.
+        '''
+        
         self.doc_name = name # doc_name example: '/part1/suspicious-document00536'
         base_path = "/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents"
         self._full_path = base_path + self.doc_name + ".txt"
@@ -295,6 +320,10 @@ class ReducedDoc(Base):
         return zip(*[self._get_feature_values(x, session) for x in features])
     
     def get_spans(self):
+        '''
+        Returns a list of lists. The ith list contains the start and end characters for the ith
+        passage in this document.
+        '''
         if self._spans == None:
             raise Exception("See note in ReducedDoc.__init__")
         else:
@@ -404,6 +433,10 @@ def _test():
     session.close()
 
 def _populate_EVERYTHING():
+    '''
+    Populate the database with ReducedDocs for all documents, atom types, and features.
+    This takes days.
+    '''
 
     test_file_listing = file('corpus_partition/training_set_files.txt')
     all_test_files = [f.strip() for f in test_file_listing.readlines()]
@@ -431,4 +464,4 @@ if __name__ == "__main__":
     #print evaluate(['averageSentenceLength', 'averageWordLength', 'get_avg_word_frequency_class'], "kmeans", 2, "word", first_test_files)
     
     #print evaluate_n_documents(['get_avg_word_frequency_class'], "hmm", 2, "paragraph", 100)
-    stats_evaluate_n_documents(['get_avg_word_frequency_class'], "paragraph", 100)
+    _stats_evaluate_n_documents(['get_avg_word_frequency_class'], "paragraph", 100)
