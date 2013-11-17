@@ -16,6 +16,9 @@ class ROCTrial:
             
     
     def get_success_statistics(self, threshold = None):
+        '''
+        Returns true and false positive and negative rates for this trial.
+        '''
         false_positives = 0
         false_negatives = 0
         true_positives = 0
@@ -40,6 +43,9 @@ class ROCTrial:
           
 
     def get_false_positive_rate(self, threshold = None):
+        '''
+        Returns the false positive rate.
+        '''
         stats = self.get_success_statistics(threshold)
         fp = stats["fp"]
         tn = stats["tn"]
@@ -49,6 +55,9 @@ class ROCTrial:
             return 0
     
     def get_true_positive_rate(self, threshold = None):
+        '''
+        Returns the true positive rate.
+        '''
         stats = self.get_success_statistics(threshold)
         tp = stats["tp"]
         fn = stats["fn"]
