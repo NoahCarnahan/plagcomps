@@ -158,19 +158,19 @@ class ToolTester:
             trials.append(t)
         return trials
             
-    def _save_trial(self, trial):   
+    def _save_trial(self, trial):
+        '''
+        Save the given trial object.
+        '''
         data_store.store_trial(trial)
         if DEBUG:
             print "Saved new trial for", trial.doc_name
     
     def _load_trial(self, doc_name, features, atom_type, cluster_strategy):
+        '''
+        Load the trial object corresponding to the given parameters.
+        '''
         return data_store.load_trial(doc_name, features, atom_type, cluster_strategy)
-
-    def _save_figure(self, fig):
-        pass
-    
-    def _get_figure_path(self, stuff):
-        pass
     
     def generate_roc_plot(self):
         '''

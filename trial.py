@@ -59,11 +59,18 @@ class Trial:
         return full_path[suffix_index:]
 
     def get_pct_correct(self):
+        '''
+        Return the number of correctly classfied passages over the total number of passages
+        '''
         return float(self.num_correct) / self.total
     
     def get_percision(self):
+        '''Return the number of true positives over the number of true postives plus false positives'''
         return float(self.true_positives) / (self.true_positives + self.false_positives)
     
     def get_recall(self):
+        '''
+        Return the number of true positives over the number of true positives plus false negatives.
+        '''
         return float(self.true_positives) / (self.true_positives + self.false_negatives)
 

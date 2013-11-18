@@ -463,5 +463,5 @@ if __name__ == "__main__":
     #first_test_files = all_test_files[:26]
     #print evaluate(['averageSentenceLength', 'averageWordLength', 'get_avg_word_frequency_class'], "kmeans", 2, "word", first_test_files)
     
-    #print evaluate_n_documents(['get_avg_word_frequency_class'], "hmm", 2, "paragraph", 100)
-    _stats_evaluate_n_documents(['get_avg_word_frequency_class'], "paragraph", 100)
+    print evaluate_n_documents(['get_punctuation_percentage'], "kmeans", 2, "paragraph", 100)
+    #_stats_evaluate_n_documents(['get_avg_word_frequency_class'], "paragraph", 100)
