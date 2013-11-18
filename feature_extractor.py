@@ -402,7 +402,6 @@ class StylometricFeatureEvaluator:
 
         return word_frequency_class_table
     
-    # TODO: Refactor this method
     def getFeatures(self, start_index, end_index, atom_type):
         ''' Returns a list of extracted stylometric features from the specified chunk of the document.
             The start and end indices use the same logic as indexing a string or list in Python.
