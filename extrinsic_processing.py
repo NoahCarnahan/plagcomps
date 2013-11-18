@@ -120,7 +120,7 @@ class FingerPrint(Base):
 			text = f.read()
 			f.close()
 
-			spans = feature_extractor.get_spans(text, self.atom_type)
+			paragraph_spans = feature_extractor.get_spans(text, self.atom_type)
 
 
 			fe = fingerprint_extraction.FingerprintExtractor()
@@ -151,7 +151,7 @@ def testRun():
 	session = Session()
 	documents = ["/part7/suspicious-document12675", "/part1/suspicious-document01932", "/part5/suspicious-document09634", "/part2/suspicious-document02851"]
 	for docs in documents:
-		fp = _query_fingerprint(docs, "full", 3, 5, "full", session)
+		fp = _query_fingerprint(docs, "full", 3, 5, "paragraph", session)
 		print fp.get_fingerprints(session)[0:4]
 	session.close()
 
@@ -168,12 +168,24 @@ def populate_database():
 	counter = 0
 
 	for filename in all_test_files:
-		for method in ["full", "kth_in_sent"]:
+		for method in ["full"]:
 			for n in range(3,6):
 				for k in [5,10]:
 					print "Calculating fingerprint for ", filename, " using ", method , "and ", n, "-gram"
 					fp = _query_fingerprint(filename, method, n, k, "full", session)
 					print fp.get_fingerprints(session)[0:4]
+					counter += 1
+					if counter%1000 == 0:
+						print counter
+						print "Progress: ", counter/float(len(all_test_files)*2*3*2)
+
+	for filename in all_test_files:
+		for method in ["full"]:
+			for n in range(3,6):
+				for k in [5,10]:
+					print "Calculating fingerprint for ", filename, " using ", method , "and ", n, "-gram"
+					fp = _query_fingerprint(filename, method, n, k, "paragraph", session)
+					print fp.get_fingerprints(session)[0][0:4]
 					counter += 1
 					if counter%1000 == 0:
 						print counter
