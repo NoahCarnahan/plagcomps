@@ -35,6 +35,9 @@ class CopyCatPunktWordTokenizer(nltk.tokenize.punkt.PunktBaseClass,nltk.tokenize
         return indices
 
 def get_spans(text, atom_type):
+    '''
+    Returna list of passage spans from the given text atomized by atom_type.
+    '''
     if atom_type == "word":
         tokenizer = CopyCatPunktWordTokenizer()
         spans = tokenizer.span_tokenize(text)
@@ -148,6 +151,10 @@ class StylometricFeatureEvaluator:
         return get_spans(text, "paragraph")
 
     def initTagList(self, text):
+        '''
+        Return a list of parts of speech where the ith item in the list is the part of speech of the
+        ith word in the given text.
+        '''
         taggedWords = []
         wordSpans = self.getWordSpans(0, len(text))
         for word in wordSpans[0]:
@@ -620,6 +627,9 @@ class StylometricFeatureEvaluator:
         return total / float(last_word_index - first_word_index)
 
     def get_stopword_percentage(self, first_word_index, last_word_index):
+        '''
+        Return the percentage of words that are stop words in the text between the two given indicies.
+        '''
         total = self.stopWords_table[last_word_index] - self.stopWords_table[first_word_index]
         return total / float(last_word_index - first_word_index)
     
@@ -651,6 +661,12 @@ class StylometricFeatureEvaluator:
         print extracted.features
 
 def independent_feature_test():
+    '''
+    This function writes data to two files. The data is used by an R script to generate box plots
+    that show the significance of the given features within a corpus of project gutenberg texts.
+    Returns None.
+    '''
+    
     same_doc_outfile = open('test_features_on_self.txt', 'w')
     similar_doc_outfile = open('test_features_on_similar.txt', 'w')
     different_doc_outfile = open('test_features_on_different.txt', 'w')
