@@ -319,6 +319,10 @@ class StylometricFeatureEvaluator:
         return sum_table
 
     def initPosFrequencyTable(self):
+	'''
+	instatiates a table of part-of-speech counts 
+	this is currently not being used for a feature
+	'''
         sum_table = []
         myCount = [0,0,0,0,0]
         for words in self.posTags:
@@ -338,6 +342,10 @@ class StylometricFeatureEvaluator:
         return sum_table
 
     def init_punctuation_table(self):
+	'''
+	instatiates the table for the punctuation counts which allows for constant-time
+	querying of punctuation percentages within a particular passage
+	'''
         sum_table = []
         myCount = 0
         for char in self.input_file:
@@ -347,6 +355,11 @@ class StylometricFeatureEvaluator:
         return sum_table
 
     def init_stopWord_table(self, text):
+	'''
+	instatiates the table for stopword counts which allows for constant-time
+	querying of stopword percentages within a particular passage
+	'''
+
         sum_table = []
         myCount = 0
         wordSpans = self.getWordSpans(0, len(text))
@@ -359,20 +372,22 @@ class StylometricFeatureEvaluator:
 
     #TODO: Refactor this method
     def init_word_frequency_class_table(self, text):
-        # This feature is defined here:
-        # http://www.uni-weimar.de/medien/webis/publications/papers/stein_2006d.pdf
-        #
-        # What should we do if the frequency of a given word is 0? (causes div by 0 problem)
-        # Unfortunately the reference in the Meyer Zu Eissen and Stein article is to a
-        # German website and seems unrelated: http://wortschatz.uni-leipzig.de/
-        #
-        # One option is to use some sort of smoothing. Plus-one would be the simpleset, but
-        # we might want to do a bit of thinking about how much effect this will have on word
-        # class
+	'''
+        This feature is defined here:
+        http://www.uni-weimar.de/medien/webis/publications/papers/stein_2006d.pdf
         
-        # Additionally, perhaps we should create a corpus class that supports functions such
-        # as corpus.getFrequency(word) and a corpus could be passed into averageWordFrequency
-        # as an argument. Lets do this.
+        What should we do if the frequency of a given word is 0? (causes div by 0 problem)
+        Unfortunately the reference in the Meyer Zu Eissen and Stein article is to a
+        German website and seems unrelated: http://wortschatz.uni-leipzig.de/
+        
+        One option is to use some sort of smoothing. Plus-one would be the simpleset, but
+        we might want to do a bit of thinking about how much effect this will have on word
+        class
+        
+        Additionally, perhaps we should create a corpus class that supports functions such
+        as corpus.getFrequency(word) and a corpus could be passed into averageWordFrequency
+        as an argument. Lets do this.
+	'''
     
     
         # This dictionary could perhaps be replaced by a nltk.probability.FreqDist
