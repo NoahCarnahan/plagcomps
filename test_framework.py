@@ -25,6 +25,37 @@ Base = declarative_base()
 
 DEBUG = True
 
+def run_intrinsic(features, cluster_type, k, atom_type, doc):
+	'''
+	Perform intrinsic plagiarism detection with the given parameters.
+	
+	doc should be an absolute path for a document, like "/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents/part7/suspicious-document12675.txt"
+	features is a list of strings where each string is the name of a StylometricFeatureEvaluator method.
+    cluster_type is "kmeans", "hmm", or "agglom".
+    k is an integer.
+    atom_type is "word", "sentence", or "paragraph".
+	
+	Returns a list in the form [(0, 50, .231),(51, 78, .955), ...]
+  	list[0][0] is the start index of the first passage.
+  	list[0][1] is the end index os the first passage.
+  	list[0][2] is the likelihood that that passage was plagiarized.
+  	list[1][0] is the start index of the second passage.
+  	etc...
+	'''
+	session = Session()
+	
+	d = _get_reduced_docs(atom_type, [doc], session)[0]
+	c = _cluster(d.get_feature_vectors(features, session), cluster_type, k)
+	ret = []
+	spans = d.get_spans()
+	for span_index in xrange(len(spans)):
+		span = spans[span_index]
+		ret.append((span[0], span[1], c[span_index]))
+	
+	session.close()
+	
+	return ret
+
 def populate_database(atom_type, num):
     '''
     Populate the database with the first num training files parsed with the given atom_type.
@@ -36,7 +67,7 @@ def populate_database(atom_type, num):
     
     # Get the first num training files
     test_file_listing = file('corpus_partition/training_set_files.txt')
-    all_test_files = [f.strip() for f in test_file_listing.readlines()]
+    all_test_files = ["/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents" + f.strip() + ".txt" for f in test_file_listing.readlines()]
     test_file_listing.close()
     first_test_files = all_test_files[:num]
     
@@ -59,7 +90,7 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n):
     '''
     # Get the first n training files
     test_file_listing = file('corpus_partition/training_set_files.txt')
-    all_test_files = [f.strip() for f in test_file_listing.readlines()]
+    all_test_files = ["/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents" + f.strip() + ".txt" for f in test_file_listing.readlines()]
     test_file_listing.close()
     first_test_files = all_test_files[:n]
     
@@ -74,14 +105,14 @@ def evaluate(features, cluster_type, k, atom_type, docs):
     cluster_type is "kmeans", "hmm", or "agglom".
     k is an integer.
     atom_type is "word", "sentence", or "paragraph".
-    docs should be a list in the form ["/part1/suspicious-document01290", ... ]
+    docs should be a list of full path strings.
     '''
     # TODO: Return more statistics, not just roc curve things. 
     
     session = Session()
     
     reduced_docs = _get_reduced_docs(atom_type, docs, session)
-    plag_likelyhoods = []
+    plag_likelihoods = []
     
     count = 0
     for d in reduced_docs:
@@ -89,9 +120,9 @@ def evaluate(features, cluster_type, k, atom_type, docs):
         if DEBUG:
             print "On document", d, ". The", count, "th document."
         c = _cluster(d.get_feature_vectors(features, session), cluster_type, k)
-        plag_likelyhoods.append(c)
+        plag_likelihoods.append(c)
     
-    roc_path, roc_auc = _roc(reduced_docs, plag_likelyhoods, features, cluster_type, k, atom_type)
+    roc_path, roc_auc = _roc(reduced_docs, plag_likelihoods, features, cluster_type, k, atom_type)
     session.close()
     return roc_path, roc_auc
 
@@ -102,7 +133,7 @@ def _stats_evaluate_n_documents(features, atom_type, n):
     '''
 
     test_file_listing = file('corpus_partition/training_set_files.txt')
-    all_test_files = [f.strip() for f in test_file_listing.readlines()]
+    all_test_files = ["/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents" + f.strip() + ".txt" for f in test_file_listing.readlines()]
     test_file_listing.close()
     first_test_files = all_test_files[:n]
     return _feature_stats_evaluate(features, atom_type, first_test_files)
@@ -121,7 +152,7 @@ def _feature_stats_evaluate(features, atom_type, docs):
 
     reduced_docs = _get_reduced_docs(atom_type, docs, session)
     for d in reduced_docs:
-        document_dict[d.doc_name] = {}
+        document_dict[d._short_name] = {}
 
         paragraph_feature_list = d.get_feature_vectors(features, session)
         spans = d.get_spans()
@@ -131,7 +162,7 @@ def _feature_stats_evaluate(features, atom_type, docs):
             if not d.span_is_plagiarized(spans[paragraph_index]):
                 for feature_index in range(len(features)):
                     # ask zach/noah what this line does
-                    document_dict[d.doc_name][features[feature_index]] = document_dict[d.doc_name].get(features[feature_index], [])+ [paragraph_feature_list[paragraph_index][feature_index]]
+                    document_dict[d._short_name][features[feature_index]] = document_dict[d._short_name].get(features[feature_index], [])+ [paragraph_feature_list[paragraph_index][feature_index]]
 
     for feature in features:
         for doc in document_dict:    
@@ -161,13 +192,14 @@ def _feature_stats_evaluate(features, atom_type, docs):
 def _get_reduced_docs(atom_type, docs, session):
     '''
     Return ReducedDoc objects for the given atom_type for each of the documents in docs. docs is a
-    list of strings like "/part2/suspicious-document02456". This function retrieves the corresponding
-    ReducedDocs from the database if they exist, otherwise it creates new ReducedDoc objects.
+    list of strings like "/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents/part2/suspicious-document02456.txt".
+    They must be full paths. This function retrieves the corresponding ReducedDocs from
+    the database if they exist, otherwise it creates new ReducedDoc objects.
     '''
     reduced_docs = []
     for doc in docs:
         try:
-            r = session.query(ReducedDoc).filter(and_(ReducedDoc.doc_name == doc, ReducedDoc.atom_type == atom_type)).one()
+            r = session.query(ReducedDoc).filter(and_(ReducedDoc.full_path == doc, ReducedDoc.atom_type == atom_type)).one()
         except sqlalchemy.orm.exc.NoResultFound, e:
             r = ReducedDoc(doc, atom_type)
             session.add(r)
@@ -192,12 +224,12 @@ def _cluster(feature_vectors, cluster_type, k):
     else:
         raise ValueError("Unacceptable cluster_type. Use 'kmeans', 'agglom', or 'hmm'.")
 
-def _roc(reduced_docs, plag_likelyhoods, features = None, cluster_type = None, k = None, atom_type = None):
+def _roc(reduced_docs, plag_likelihoods, features = None, cluster_type = None, k = None, atom_type = None):
     '''
     Generates a reciever operator characterstic (roc) curve and returns both the path to a pdf
     containing a plot of this curve and the area under the curve. reduced_docs is a list of
-    ReducedDocs, plag_likelyhoods is a list of lists whrere plag_likelyhoods[i][j] corresponds
-    to the likelyhood that the jth span in the ith reduced_doc was plagiarized.
+    ReducedDocs, plag_likelihoods is a list of lists whrere plag_likelihoods[i][j] corresponds
+    to the likelihood that the jth span in the ith reduced_doc was plagiarized.
     
     The optional parameters allow for a more verbose title of the graph in the pdf document.
     
@@ -218,7 +250,7 @@ def _roc(reduced_docs, plag_likelyhoods, features = None, cluster_type = None, k
         for span_index in xrange(len(spans)):
             span = spans[span_index]
             actuals.append(1 if doc.span_is_plagiarized(span) else 0)
-            confidences.append(plag_likelyhoods[doc_index][span_index])
+            confidences.append(plag_likelihoods[doc_index][span_index])
     
     # actuals is a list of ground truth classifications for passages
     # confidences is a list of confidence scores for passages
@@ -254,8 +286,8 @@ class ReducedDoc(Base):
     __tablename__ = "reduced_doc"
     
     id = Column(Integer, Sequence("reduced_doc_id_seq"), primary_key=True)
-    doc_name = Column(String)
-    _full_path = Column(String)
+    _short_name = Column(String)
+    full_path = Column(String)
     _full_xml_path = Column(String)
     atom_type = Column(String)
     _spans = Column(ARRAY(Integer))
@@ -274,16 +306,21 @@ class ReducedDoc(Base):
     timestamp = Column(DateTime)
     version_number = Column(Integer)
     
-    def __init__(self, name, atom_type):
+    def __init__(self, path, atom_type):
         '''
         Initializes a ReducedDoc. No feature vectors will be calculated at instantiation time.
         get_feature_vectors triggers the lazy instantiation of these values.
         '''
         
-        self.doc_name = name # doc_name example: '/part1/suspicious-document00536'
-        base_path = "/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents"
-        self._full_path = base_path + self.doc_name + ".txt"
-        self._full_xml_path = base_path + self.doc_name + ".xml"
+       
+        #base_path = "/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents"
+        
+        self.full_path = path
+        # _short_name example: '/part1/suspicious-document00536'
+        self._short_name = "/"+self.full_path.split("/")[-2] +"/"+ self.full_path.split("/")[-1] 
+        self._full_xml_path = path[:-3] + "xml"
+        
+        
         self.atom_type = atom_type
         self.timestamp = datetime.datetime.now()
         self.version_numer = 1
@@ -294,7 +331,7 @@ class ReducedDoc(Base):
         # is called before any feature_vectors have been calculated.
         
         # set self._spans
-        #f = open(self._full_path, 'r')
+        #f = open(self.full_path, 'r')
         #text = f.read()
         #f.close()
         #self._spans = feature_extractor.get_spans(text, self.atom_type)
@@ -310,7 +347,7 @@ class ReducedDoc(Base):
                 self._plagiarized_spans.append((start, end))
     
     def __repr__(self):
-        return "<ReducedDoc('%s','%s')>" % (self.doc_name, self.atom_type)
+        return "<ReducedDoc('%s','%s')>" % (self._short_name, self.atom_type)
     
     def get_feature_vectors(self, features, session):
         '''
@@ -356,7 +393,7 @@ class ReducedDoc(Base):
             #       probably modify controller instead.
         
             # Run our tool to get the feature values and spans
-            feature_evaluator = feature_extractor.StylometricFeatureEvaluator(self._full_path)
+            feature_evaluator = feature_extractor.StylometricFeatureEvaluator(self.full_path)
             all_passages = []
             for i in xrange(len(feature_evaluator.getAllByAtom(self.atom_type))):
                 passage = feature_evaluator.get_specific_features([feature], i, i + 1, self.atom_type)
@@ -426,10 +463,16 @@ Session = sessionmaker(bind=engine)
 def _test():
     
     session = Session()
-    #rs = session.query(ReducedDoc).filter(ReducedDoc.atom_type == "paragraph").all()
-    rs =  _get_reduced_docs("paragraph", ["/part1/suspicious-document00536", "/part1/suspicious-document01957", "/part2/suspicious-document03297"], session)
+    
+    test_file_listing = file('corpus_partition/training_set_files.txt')
+    all_test_files = ["/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents" + f.strip() + ".txt" for f in test_file_listing.readlines()]
+    test_file_listing.close()
+    first_test_files = all_test_files[:3]
+    
+    rs =  _get_reduced_docs("paragraph", first_test_files, session)
     for r in rs:
         print r.get_feature_vectors(['averageSentenceLength', 'averageWordLength', 'get_avg_word_frequency_class','get_punctuation_percentage','get_stopword_percentage'], session)
+    
     session.close()
 
 def _populate_EVERYTHING():
@@ -439,7 +482,7 @@ def _populate_EVERYTHING():
     '''
 
     test_file_listing = file('corpus_partition/training_set_files.txt')
-    all_test_files = [f.strip() for f in test_file_listing.readlines()]
+    all_test_files = ["/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents" + f.strip() + ".txt" for f in test_file_listing.readlines()]
     test_file_listing.close()
 
     session = Session()
@@ -453,15 +496,19 @@ def _populate_EVERYTHING():
     session.close()
 
 if __name__ == "__main__":
-    #_populate_EVERYTHING()
+    _populate_EVERYTHING()
 
     #populate_database("sentence", 100)
     
     #test_file_listing = file('corpus_partition/training_set_files.txt')
-    #all_test_files = [f.strip() for f in test_file_listing.readlines()]
+    #all_test_files = ["/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents" + f.strip() + ".txt" for f in test_file_listing.readlines()]
     #test_file_listing.close()
     #first_test_files = all_test_files[:26]
     #print evaluate(['averageSentenceLength', 'averageWordLength', 'get_avg_word_frequency_class'], "kmeans", 2, "word", first_test_files)
     
-    print evaluate_n_documents(['get_punctuation_percentage'], "kmeans", 2, "paragraph", 100)
+    #print evaluate_n_documents(['get_punctuation_percentage'], "kmeans", 2, "paragraph", 100)
     #_stats_evaluate_n_documents(['get_avg_word_frequency_class'], "paragraph", 100)
+    
+    #print run_intrinsic(["averageWordLength"], "kmeans", 2, "paragraph", "/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents/part7/suspicious-document12675.txt")
+    
+    #_test()
