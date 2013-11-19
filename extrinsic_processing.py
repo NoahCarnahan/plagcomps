@@ -46,7 +46,12 @@ class FingerPrint(Base):
 	n = Column(Integer)
 	k = Column(Integer)
 	atom_type = Column(String)
-	fingerprint = Column(ARRAY(Integer))
+	fingerprint = association_proxy(
+					"paragraph_fingerprints",
+					"pf",
+					creator=lambda k, v:
+						_ParagraphIndex(special_key=k, pf=v)
+				)
 
 	timestamp = Column(DateTime)
 	version_number = Column(Integer)
@@ -88,7 +93,7 @@ class FingerPrint(Base):
 		pseudo-private function to return fingerprint, returns previously calculated fingerprint if it exists.
 		Otherwise, it calculates the fingerprint and returns.  Uses the full text for fingerprint calculations.
 		'''
-		if self.fingerprint == None:
+		if self.fingerprint == None or len(self.fingerprint) == 0:
 
 			f = open(self._doc_path, 'r')
 			text = f.read()
@@ -97,11 +102,11 @@ class FingerPrint(Base):
 
 			fe = fingerprint_extraction.FingerprintExtractor()
 			if self.method == "full":
-				self.fingerprint = fe._get_full_fingerprint(text, self.n)
+				self.fingerprint[0] = fe._get_full_fingerprint(text, self.n)
 			elif self.method == "kth_in_sent":
-				self.fingerprint = fe._get_kth_in_sent_fingerprint(text, self.n, self.k)
+				self.fingerprint[0] = fe._get_kth_in_sent_fingerprint(text, self.n, self.k)
 			elif self.method == "anchor":
-				self.fingerprint = fe._get_anchor_fingerprints(text, self.n)
+				self.fingerprint[0] = fe._get_anchor_fingerprint(text, self.n)
 
 			session.commit()
 			return self.fingerprint
@@ -114,7 +119,9 @@ class FingerPrint(Base):
 		pseudo-private function to return fingerprint, returns previously calculated fingerprint if it exists.
 		Otherwise, it calculates the fingerprint and returns.  Uses paragraphs for fingerprint calculations.
 		'''
-		if self.fingerprint == None:
+
+		if self.fingerprint == None or len(self.fingerprint) == 0:
+
 
 			f = open(self._doc_path, 'r')
 			text = f.read()
@@ -122,9 +129,9 @@ class FingerPrint(Base):
 
 			paragraph_spans = feature_extractor.get_spans(text, self.atom_type)
 
+			index = 0
 
 			fe = fingerprint_extraction.FingerprintExtractor()
-			paragraph_fingerprints = []
 			for span in paragraph_spans:
 				paragraph = text[span[0]:span[1]]
 				if self.method == "full":
@@ -132,27 +139,51 @@ class FingerPrint(Base):
 				elif self.method == "kth_in_sent":
 					fingerprint = fe._get_kth_in_sent_fingerprint(paragraph, self.n, self.k)
 				elif self.method == "anchor":
-					fingerprint = fe._get_anchor_fingerprints(paragraph, self.n)
-				paragraph_fingerprints.append(fingerprint)
-
-			self.fingerprint = paragraph_fingerprints
+					fingerprint = fe._get_anchor_fingerprint(paragraph, self.n)
+				if len(fingerprint) == 0:
+					continue
+				else:
+					self.fingerprint[index] = fingerprint
+				index += 1
 
 			session.commit()
-			return self.paragraph_fingerprints(self.paragraph_index)
+			return self.fingerprint
 
 		else:
+
 			return self.fingerprint
 				
+class _ParagraphIndex(Base):
+	__tablename__ = "paragraph_indices"
+	fingerprint_id = Column(Integer, ForeignKey('fingerprints.id'), primary_key=True)
+	paragraph_fingerprints_id = Column(Integer, ForeignKey('paragraph_fingerprints.id'), primary_key=True)
+	special_key = Column(Integer)
+	fingerprint = relationship(FingerPrint, backref=backref(
+			"paragraph_fingerprints",
+			collection_class=attribute_mapped_collection("special_key"),
+			cascade="all, delete-orphan"
+			)
+		)
+	kw = relationship("_ParagraphFingerprint")
+	pf = association_proxy('kw', 'pf')
+
+class _ParagraphFingerprint(Base):
+	__tablename__ = "paragraph_fingerprints"
+	id = Column(Integer, primary_key=True)
+	pf = Column(ARRAY(Integer))
+	def __init__(self, pf):
+		self.pf=pf
+
 
 def testRun():
 	'''
 	this is a testRun
 	'''
 	session = Session()
-	documents = ["/part7/suspicious-document12675", "/part1/suspicious-document01932", "/part5/suspicious-document09634", "/part2/suspicious-document02851"]
+	documents = ["/part4/suspicious-document06242", "/part5/suspicious-document08911", "/part3/suspicious-document04127", "/part6/suspicious-document11686"]
 	for docs in documents:
-		fp = _query_fingerprint(docs, "full", 3, 5, "paragraph", session)
-		print fp.get_fingerprints(session)[0:4]
+		fp = _query_fingerprint(docs, "full", 3, 5, "full", session)
+		print fp.get_fingerprints(session)[0][0:4]
 	session.close()
 
 def populate_database():
@@ -168,28 +199,17 @@ def populate_database():
 	counter = 0
 
 	for filename in all_test_files:
-		for method in ["full"]:
+		for method in ["full", "anchor"]:
 			for n in range(3,6):
-				for k in [5,10]:
-					print "Calculating fingerprint for ", filename, " using ", method , "and ", n, "-gram"
-					fp = _query_fingerprint(filename, method, n, k, "full", session)
-					print fp.get_fingerprints(session)[0:4]
-					counter += 1
-					if counter%1000 == 0:
-						print counter
-						print "Progress: ", counter/float(len(all_test_files)*2*3*2)
-
-	for filename in all_test_files:
-		for method in ["full"]:
-			for n in range(3,6):
-				for k in [5,10]:
-					print "Calculating fingerprint for ", filename, " using ", method , "and ", n, "-gram"
-					fp = _query_fingerprint(filename, method, n, k, "paragraph", session)
-					print fp.get_fingerprints(session)[0][0:4]
-					counter += 1
-					if counter%1000 == 0:
-						print counter
-						print "Progress: ", counter/float(len(all_test_files)*2*3*2)
+				for k in [0]:
+					for atom_type in ["full", "paragraph"]:
+						print counter," : Calculating fingerprint for ", filename, " using ", method , "and ", n, "-gram and granularity ", atom_type, "."
+						fp = _query_fingerprint(filename, method, n, k, atom_type, session)
+						print fp.get_fingerprints(session)[0][0:4]
+						if counter%1000 == 0:
+							print counter
+							print "Progress: ", counter/float(len(all_test_files)*2*3*2)
+		counter += 1
 
 	session.close()
 
@@ -201,5 +221,4 @@ Session = sessionmaker(bind=engine)
 if __name__ == "__main__":
 	#testRun()
 	#unitTest()
-	#grabTest()
 	populate_database()
