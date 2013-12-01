@@ -94,7 +94,16 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n):
     test_file_listing.close()
     first_test_files = all_test_files[:n]
     
-    return evaluate(features, cluster_type, k, atom_type, first_test_files)
+    roc_path, roc_auc = evaluate(features, cluster_type, k, atom_type, first_test_files)
+    
+    # Store the figures in the database
+    session = Session()
+    f = _Figure(roc_path, "roc", roc_auc, sorted(features), cluster_type, k, atom_type, n)
+    session.add(f)
+    session.commit()
+    session.close()
+    
+    return roc_path, roc_auc
 
 def evaluate(features, cluster_type, k, atom_type, docs):
     '''
@@ -452,6 +461,40 @@ class _Feature(Base):
     def __init__(self, feature):
         self.feature = feature
 
+class _Figure(Base):
+    '''
+    This class allows us to store meta data about pdf figures that we create.
+    '''
+    
+    __tablename__ = "figure"
+    id = Column(Integer, Sequence("figure_id_seq"), primary_key=True)
+    timestamp = Column(DateTime)
+    
+    figure_path = Column(String)
+    figure_type = Column(String)
+    auc = Column(Float)
+    
+    features = Column(ARRAY(String))
+    cluster_type = Column(String)
+    k = Column(Integer)
+    atom_type = Column(String)
+    n = Column(Integer)
+    
+    def __init__(self, figure_path, figure_type, auc, features, cluster_type, k, atom_type, n):
+        
+        self.figure_path = figure_path
+        self.timestamp = datetime.datetime.now()
+        self.figure_type = figure_type
+        self.auc = auc
+        self.features = features
+        self.cluster_type = cluster_type
+        self.k = k
+        self.atom_type = atom_type
+        self.n = n
+    
+
+    
+
 # an Engine, which the Session will use for connection resources
 url = "postgresql://%s:%s@%s" % (dbconstants.username, dbconstants.password, dbconstants.dbname)
 engine = sqlalchemy.create_engine(url)
@@ -496,7 +539,7 @@ def _populate_EVERYTHING():
     session.close()
 
 if __name__ == "__main__":
-    _populate_EVERYTHING()
+    #_populate_EVERYTHING()
 
     #populate_database("sentence", 100)
     
@@ -506,9 +549,5 @@ if __name__ == "__main__":
     #first_test_files = all_test_files[:26]
     #print evaluate(['averageSentenceLength', 'averageWordLength', 'get_avg_word_frequency_class'], "kmeans", 2, "word", first_test_files)
     
-    #print evaluate_n_documents(['get_punctuation_percentage'], "kmeans", 2, "paragraph", 100)
-    #_stats_evaluate_n_documents(['get_avg_word_frequency_class'], "paragraph", 100)
-    
-    #print run_intrinsic(["averageWordLength"], "kmeans", 2, "paragraph", "/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents/part7/suspicious-document12675.txt")
-    
-    #_test()
+    for i in ['averageSentenceLength', 'averageWordLength', 'get_avg_word_frequency_class','get_punctuation_percentage','get_stopword_percentage']:
+        print evaluate_n_documents([i], "kmeans", 2, "sentence", 1500)
