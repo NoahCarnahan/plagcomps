@@ -8,6 +8,7 @@ matplotlib.use('pdf')
 import matplotlib.pyplot as pyplot
 
 from cluster import StylometricCluster
+from shared.util import IntrinsicUtility
 import feature_extractor
 import dbconstants
 
@@ -66,15 +67,13 @@ def populate_database(atom_type, num):
     session = Session()
     
     # Get the first num training files
-    test_file_listing = file('corpus_partition/training_set_files.txt')
-    all_test_files = ["/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents" + f.strip() + ".txt" for f in test_file_listing.readlines()]
-    test_file_listing.close()
-    first_test_files = all_test_files[:num]
-    
+    util = IntrinsicUtility()
+    first_training_files = util.get_n_training_files(num)
+
     features = ['averageSentenceLength', 'averageWordLength', 'get_avg_word_frequency_class','get_punctuation_percentage','get_stopword_percentage']
     
     count = 0
-    for doc in first_test_files:
+    for doc in first_training_files:
         count += 1
         if DEBUG:
             print "On document", count
@@ -89,12 +88,9 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n):
     documents parsed by atom_type, using the given features, cluster_type, and number of clusters k.
     '''
     # Get the first n training files
-    test_file_listing = file('corpus_partition/training_set_files.txt')
-    all_test_files = ["/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents" + f.strip() + ".txt" for f in test_file_listing.readlines()]
-    test_file_listing.close()
-    first_test_files = all_test_files[:n]
+    first_training_files = IntrinsicUtility().get_n_training_files(n)
     
-    roc_path, roc_auc = evaluate(features, cluster_type, k, atom_type, first_test_files)
+    roc_path, roc_auc = evaluate(features, cluster_type, k, atom_type, first_training_files)
     
     # Store the figures in the database
     session = Session()
@@ -140,12 +136,8 @@ def _stats_evaluate_n_documents(features, atom_type, n):
     Does _feature_stats_evaluate(features, atom_type, doc) on the first n docuemtns of the training
     set. Returns None.
     '''
-
-    test_file_listing = file('corpus_partition/training_set_files.txt')
-    all_test_files = ["/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents" + f.strip() + ".txt" for f in test_file_listing.readlines()]
-    test_file_listing.close()
-    first_test_files = all_test_files[:n]
-    return _feature_stats_evaluate(features, atom_type, first_test_files)
+    first_training_files = IntrinsicUtility().get_n_training_files(n)
+    return _feature_stats_evaluate(features, atom_type, first_training_files)
 
 def _feature_stats_evaluate(features, atom_type, docs):
     '''
@@ -198,21 +190,28 @@ def _feature_stats_evaluate(features, atom_type, docs):
     different_doc_outfile.close()
     session.close() 
 
-def _get_reduced_docs(atom_type, docs, session):
+def _get_reduced_docs(atom_type, docs, session, create_new=True):
     '''
     Return ReducedDoc objects for the given atom_type for each of the documents in docs. docs is a
     list of strings like "/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents/part2/suspicious-document02456.txt".
     They must be full paths. This function retrieves the corresponding ReducedDocs from
-    the database if they exist, otherwise it creates new ReducedDoc objects.
+    the database if they exist. 
+
+    Otherwise, if <create_new> is True (which it is by default), it creates new ReducedDoc objects.
+    Set <create_new> to False if you don't want to wait for new ReducedDoc objects to be created.
+    Useful if just messing around from the command line/doing sanity checks 
     '''
     reduced_docs = []
     for doc in docs:
         try:
             r = session.query(ReducedDoc).filter(and_(ReducedDoc.full_path == doc, ReducedDoc.atom_type == atom_type)).one()
         except sqlalchemy.orm.exc.NoResultFound, e:
-            r = ReducedDoc(doc, atom_type)
-            session.add(r)
-            session.commit()
+            if create_new:
+                r = ReducedDoc(doc, atom_type)
+                session.add(r)
+                session.commit()
+            else:
+                continue
         reduced_docs.append(r)
         
     return reduced_docs
@@ -493,8 +492,6 @@ class _Figure(Base):
         self.n = n
     
 
-    
-
 # an Engine, which the Session will use for connection resources
 url = "postgresql://%s:%s@%s" % (dbconstants.username, dbconstants.password, dbconstants.dbname)
 engine = sqlalchemy.create_engine(url)
@@ -507,12 +504,9 @@ def _test():
     
     session = Session()
     
-    test_file_listing = file('corpus_partition/training_set_files.txt')
-    all_test_files = ["/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents" + f.strip() + ".txt" for f in test_file_listing.readlines()]
-    test_file_listing.close()
-    first_test_files = all_test_files[:3]
+    first_training_files = IntrinsicUtility().get_n_training_files(3)
     
-    rs =  _get_reduced_docs("paragraph", first_test_files, session)
+    rs =  _get_reduced_docs("paragraph", first_training_files, session)
     for r in rs:
         print r.get_feature_vectors(['averageSentenceLength', 'averageWordLength', 'get_avg_word_frequency_class','get_punctuation_percentage','get_stopword_percentage'], session)
     
@@ -524,9 +518,7 @@ def _populate_EVERYTHING():
     This takes days.
     '''
 
-    test_file_listing = file('corpus_partition/training_set_files.txt')
-    all_test_files = ["/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents" + f.strip() + ".txt" for f in test_file_listing.readlines()]
-    test_file_listing.close()
+    all_test_files = IntrinsicUtility().get_n_training_files()
 
     session = Session()
 
@@ -542,12 +534,6 @@ if __name__ == "__main__":
     #_populate_EVERYTHING()
 
     #populate_database("sentence", 100)
-    
-    #test_file_listing = file('corpus_partition/training_set_files.txt')
-    #all_test_files = ["/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents" + f.strip() + ".txt" for f in test_file_listing.readlines()]
-    #test_file_listing.close()
-    #first_test_files = all_test_files[:26]
-    #print evaluate(['averageSentenceLength', 'averageWordLength', 'get_avg_word_frequency_class'], "kmeans", 2, "word", first_test_files)
-    
+
     for i in ['averageSentenceLength', 'averageWordLength', 'get_avg_word_frequency_class','get_punctuation_percentage','get_stopword_percentage']:
         print evaluate_n_documents([i], "kmeans", 2, "sentence", 1500)
