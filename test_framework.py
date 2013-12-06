@@ -492,8 +492,6 @@ class _Figure(Base):
         self.n = n
     
 
-    
-
 # an Engine, which the Session will use for connection resources
 url = "postgresql://%s:%s@%s" % (dbconstants.username, dbconstants.password, dbconstants.dbname)
 engine = sqlalchemy.create_engine(url)

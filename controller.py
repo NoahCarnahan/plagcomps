@@ -66,19 +66,26 @@ class Controller:
 		self.printer.pprint(cluster_to_atoms)
 
 
-	def test(self, atom_type, feature_list, cluster_method, k):
+	def test(self, atom_type, feature_list, cluster_method, k, display_output=True):
 		'''
 		Clusters the sentence features and prints the resulting clusters
 		'''
 		print 'Using %s and %s with %i clusters\n\n' % (atom_type, cluster_method, k)
 		passages = self.get_passages(atom_type, feature_list, cluster_method, k)
-		for p in passages:
-			print p
-		self.print_cluster_assignments(passages)
+
+		if display_output:
+			for p in passages:
+				print p
+			self.print_cluster_assignments(passages)
+
+		return passages
+
 		
 
 if __name__ == '__main__':
-	c = Controller('/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents/part1/suspicious-document00969.txt')
+	# The first file in training set
+	file_name = '/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents/part1/suspicious-document00536.txt'
+	c = Controller(file_name)
 	features = [
 		'averageWordLength',
 		'averageSentenceLength',
@@ -86,5 +93,5 @@ if __name__ == '__main__':
 		'get_punctuation_percentage',
 		'get_stopword_percentage'
 	]
-	c.test('sentence', features, 'kmeans', 2)
+	c.test('paragraph', features, 'kmeans', 2)
 
