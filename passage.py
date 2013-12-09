@@ -24,6 +24,20 @@ class Passage:
 		'\nCluster num: ' + str(self.cluster_num) + \
 		'\n------------'
 
+	def to_json(self):
+		'''
+		Returns a dictionary representation of the passage
+		'''
+		json_rep = {
+			'atom_type' : self.atom_type,
+			'start_word_index' : self.start_word_index,
+			'end_word_index' : self.end_char_index,
+			'text' : self.text,
+			'features' : self.features
+		}
+		
+		return json_rep
+
 	def assign_cluster(self, cluster_num):
 		'''
 		Sets self.cluster_num to cluster_num. Returns None.
