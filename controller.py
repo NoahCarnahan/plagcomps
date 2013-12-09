@@ -84,7 +84,8 @@ class Controller:
 
 if __name__ == '__main__':
 	# The first file in training set
-	file_name = '/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents/part1/suspicious-document00536.txt'
+	#file_name = '/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents/part1/suspicious-document00536.txt'
+	file_name = 'debug_files/head_of_suspicious-document00536.txt'
 	c = Controller(file_name)
 	features = [
 		'averageWordLength',
@@ -93,5 +94,4 @@ if __name__ == '__main__':
 		'get_punctuation_percentage',
 		'get_stopword_percentage'
 	]
-	c.test('paragraph', features, 'kmeans', 2)
-
+	passages = c.test('paragraph', features, 'kmeans', 2, display_output=True)
