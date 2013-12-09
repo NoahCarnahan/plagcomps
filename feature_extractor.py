@@ -6,6 +6,8 @@
 import nltk, re, math, os, inspect, random, scipy
 from passage import *
 
+# Define a paragraph to be bounded by multiple (2 or more) newline characters
+PARAGRAPH_RE = r'\n{2,}'
 
 class CopyCatPunktWordTokenizer(nltk.tokenize.punkt.PunktBaseClass,nltk.tokenize.punkt.TokenizerI):
     '''
@@ -36,7 +38,7 @@ class CopyCatPunktWordTokenizer(nltk.tokenize.punkt.PunktBaseClass,nltk.tokenize
 
 def get_spans(text, atom_type):
     '''
-    Returna list of passage spans from the given text atomized by atom_type.
+    Returns list of passage spans from the given text atomized by atom_type.
     '''
     if atom_type == "word":
         tokenizer = CopyCatPunktWordTokenizer()
@@ -45,23 +47,23 @@ def get_spans(text, atom_type):
         tokenizer = nltk.PunktSentenceTokenizer()
         spans = tokenizer.span_tokenize(text)
     elif atom_type == "paragraph":
-        # It's unclear how a paragraph is defined. For now, just treat newlines as paragraph separators
-        paragraph_texts = text.splitlines()
-        s = []
-        start_index = 0
-        for paragraph in paragraph_texts:
-            start = text.find(paragraph, start_index)
-            s.append((start, start+len(paragraph)))
-            start_index = start + len(paragraph)
-        spans = s
+        # Idea from this gem: http://stackoverflow.com/a/4664889/3083983
+        # boundaries[i][0] == start of <ith> newline sequence (i.e. 2+ newlines)
+        # boundaries[i][1] == end of <ith> newline sequence (i.e. 2+ newlines)
+        boundaries = [(m.start(), m.end()) for m in re.finditer(PARAGRAPH_RE, text)]
+
+        spans = [(0, boundaries[0][0])]
+        for i in range(len(boundaries) - 1):
+            cur_span = (boundaries[i][1], boundaries[i + 1][0])
+            spans.append(cur_span)
+
+        # NOTE could be an edge-case if there's no new-line at the end of the text
+        if boundaries[-1][1] != len(text):
+            spans.append((boundaries[-1][1], len(text)))
+        
     else:
         raise ValueError("Unacceptable atom type.")
     
-    #sanitized_spans = []
-    #for s in spans:
-    #    if not s[0] == s[1]:
-    #        sanitized_spans.append(s)
-    #return sanitized_spans
     return spans
    
 class StylometricFeatureEvaluator:
@@ -117,13 +119,23 @@ class StylometricFeatureEvaluator:
         self.paragraph_spans = self.initParagrpahList(self.input_file)
         self.posTags = self.initTagList(self.input_file)
 
+        # <number of WORDS in doc> entries
         self.word_length_sum_table = self.initWordLengthSumTable()
-        self.sentence_length_sum_table = self.initSentenceLengthSumTable()
-        self.pos_frequency_count_table = self.initPosFrequencyTable()
-        self.word_frequency_class_table = self.init_word_frequency_class_table(self.input_file)
-        self.punctuation_table = self.init_punctuation_table()
-        self.stopWords_table = self.init_stopWord_table(self.input_file)
 
+        # <number of SENTENCES in doc> entries
+        self.sentence_length_sum_table = self.initSentenceLengthSumTable()
+
+        # <number of WORDS in doc> entries
+        self.pos_frequency_count_table = self.initPosFrequencyTable()
+
+        # <number of WORDS in doc> entries
+        self.word_frequency_class_table = self.init_word_frequency_class_table(self.input_file)
+
+        # <number of CHARACTERS in doc> entries
+        self.punctuation_table = self.init_punctuation_table()
+
+        # <number of WORDS in doc> entries
+        self.stopWords_table = self.init_stopWord_table(self.input_file)
     
     def initWordList(self, text):
         '''
@@ -319,10 +331,10 @@ class StylometricFeatureEvaluator:
         return sum_table
 
     def initPosFrequencyTable(self):
-	'''
-	instatiates a table of part-of-speech counts 
-	this is currently not being used for a feature
-	'''
+    	'''
+    	instatiates a table of part-of-speech counts 
+    	this is currently not being used for a feature
+    	'''
         sum_table = []
         myCount = [0,0,0,0,0]
         for words in self.posTags:
@@ -342,10 +354,10 @@ class StylometricFeatureEvaluator:
         return sum_table
 
     def init_punctuation_table(self):
-	'''
-	instatiates the table for the punctuation counts which allows for constant-time
-	querying of punctuation percentages within a particular passage
-	'''
+    	'''
+    	instatiates the table for the punctuation counts which allows for constant-time
+    	querying of punctuation percentages within a particular passage
+    	'''
         sum_table = []
         myCount = 0
         for char in self.input_file:
@@ -355,10 +367,10 @@ class StylometricFeatureEvaluator:
         return sum_table
 
     def init_stopWord_table(self, text):
-	'''
-	instatiates the table for stopword counts which allows for constant-time
-	querying of stopword percentages within a particular passage
-	'''
+    	'''
+    	instatiates the table for stopword counts which allows for constant-time
+    	querying of stopword percentages within a particular passage
+    	'''
 
         sum_table = []
         myCount = 0
@@ -372,23 +384,23 @@ class StylometricFeatureEvaluator:
 
     #TODO: Refactor this method
     def init_word_frequency_class_table(self, text):
-	'''
-        This feature is defined here:
-        http://www.uni-weimar.de/medien/webis/publications/papers/stein_2006d.pdf
+    	'''
+            This feature is defined here:
+            http://www.uni-weimar.de/medien/webis/publications/papers/stein_2006d.pdf
+            
+            What should we do if the frequency of a given word is 0? (causes div by 0 problem)
+            Unfortunately the reference in the Meyer Zu Eissen and Stein article is to a
+            German website and seems unrelated: http://wortschatz.uni-leipzig.de/
+            
+            One option is to use some sort of smoothing. Plus-one would be the simpleset, but
+            we might want to do a bit of thinking about how much effect this will have on word
+            class
+            
+            Additionally, perhaps we should create a corpus class that supports functions such
+            as corpus.getFrequency(word) and a corpus could be passed into averageWordFrequency
+            as an argument. Lets do this.
+    	'''
         
-        What should we do if the frequency of a given word is 0? (causes div by 0 problem)
-        Unfortunately the reference in the Meyer Zu Eissen and Stein article is to a
-        German website and seems unrelated: http://wortschatz.uni-leipzig.de/
-        
-        One option is to use some sort of smoothing. Plus-one would be the simpleset, but
-        we might want to do a bit of thinking about how much effect this will have on word
-        class
-        
-        Additionally, perhaps we should create a corpus class that supports functions such
-        as corpus.getFrequency(word) and a corpus could be passed into averageWordFrequency
-        as an argument. Lets do this.
-	'''
-    
     
         # This dictionary could perhaps be replaced by a nltk.probability.FreqDist
         # http://nltk.org/api/nltk.html#nltk.probability.FreqDist
@@ -417,86 +429,22 @@ class StylometricFeatureEvaluator:
 
         return word_frequency_class_table
     
-    def getFeatures(self, start_index, end_index, atom_type):
-        ''' Returns a list of extracted stylometric features from the specified chunk of the document.
-            The start and end indices use the same logic as indexing a string or list in Python.
-            The atom_type parameter specifies what your start_index and end_index parameters refer to.
-            For example, if you wanted to query the stylometric features for sentences 0 through 4, you 
-            would call this function as getFeatures(0, 4, "sentence"). '''
-        # TODO: clamp the start_index and end_index parameters to lowest and highest possible values
-        start_index = max(start_index, 0)
-
-        if atom_type == 'char':
-            end_index = min(end_index, len(self.input_file)-1) # clamp to end
-
-            # fetch word spans specified by character indices
-            word_spans, word_spans_indices = self.getWordSpans(start_index, end_index)
-            first_word_index = word_spans_indices[0]
-            last_word_index = word_spans_indices[1]
-
-            #fetch sentence spans specified by character indices
-            sentence_spans, sentence_spans_indices = self.getSentenceSpans(start_index, end_index)
-            first_sentence_index = sentence_spans_indices[0]
-            last_sentence_index = sentence_spans_indices[1]
-        elif atom_type == 'word':
-            end_index = min(end_index, len(self.word_spans)-1)
-
-            first_word_index = start_index
-            last_word_index = end_index
-
-            # fetch sentence spans specified by word indices
-            sentence_spans, sentence_spans_indices = self.getSentenceSpans(self.word_spans[start_index][0], self.word_spans[end_index][1])
-            first_sentence_index = sentence_spans_indices[0]
-            last_sentence_index = sentence_spans_indices[1]
-        elif atom_type == 'sentence':
-            end_index = min(end_index, len(self.sentence_spans)-1)
-
-            # fetch word spans specified by sentence indices
-            word_spans, word_spans_indices = self.getWordSpans(self.sentence_spans[start_index][0], self.sentence_spans[end_index][1])
-            first_word_index = word_spans_indices[0]
-            last_word_index = word_spans_indices[1]
-
-            first_sentence_index = start_index
-            last_sentence_index = end_index
-        elif atom_type == 'paragraph':
-            end_index = min(end_index, len(self.paragraph_spans)-1)
-
-            # fetch word spans specified by paragraph indices
-            word_spans, word_spans_indices = self.getWordSpans(self.paragraph_spans[start_index][0], self.paragraph_spans[end_index][1])
-            first_word_index = word_spans_indices[0]
-            last_word_index = word_spans_indices[1]
-
-            # fetch sentence spans specified by paragraph indices
-            sentence_spans, sentence_spans_indices = self.getSentenceSpans(self.paragraph_spans[start_index][0], self.paragraph_spans[end_index][1])
-            first_sentence_index = sentence_spans_indices[0]
-            last_sentence_index = sentence_spans_indices[1]
-        else:
-            raise ValueError("atom_type string must be 'char', 'word', 'sentence' or 'paragraph', not '" + str(atom_type) + "'.")
-
-        avg_word_length = self.averageWordLength(first_word_index, last_word_index)
-        avg_sentence_length = self.averageSentenceLength(first_sentence_index, last_sentence_index)
-        posPercentageVector = self.getPosPercentageVector(first_word_index, last_word_index)
-        avg_word_frequency_class = self.get_avg_word_frequency_class(first_word_index, last_word_index)
-        punctuation_percentage = self.get_punctuation_percentage(first_word_index, last_word_index)
-        stopword_percentage = self.get_stopword_percentage(first_word_index, last_word_index)
-
-        
-        return [avg_word_length, avg_sentence_length, posPercentageVector, avg_word_frequency_class, punctuation_percentage, stopword_percentage]
-    
     def get_specific_features(self, feature_list, start_index, end_index, atom_type):
         ''' 
         Extracts the features passed in <feature_list> of <atom_type> between
         <start_index> and <end_index>, using "snap-out" indexing (see _fetch_boundary_indices)
 
         Every feature in <feature_list> should be a string corresponding to a method name
-        in this class, and should accept as arguments either 'first_sentence_index' and 'last_sentence_index'
-        or 'first_word_index' and 'last_word_index'
+        in this class, and should accept as arguments one of:
+        (1)'first_sentence_index' and 'last_sentence_index'
+        (2) 'first_word_index' and 'last_word_index'
+        (3) 'first_char_index' and 'last_char_index'
 
         Returns a Passage object, which stores information about the document, location of excerpt,
         and more. See the <Package> class for more documentation 
         '''
         boundaries = self._fetch_boundary_indices(atom_type, start_index, end_index)
-
+        
         # If the passage is one word long, we hit issues in trying to parse grammatical features
         if boundaries['first_word_index'] == boundaries['last_word_index']:
             return None
@@ -509,20 +457,23 @@ class StylometricFeatureEvaluator:
             # to receive
             func = getattr(self, func_name)
             accepted_params = inspect.getargspec(func).args
-            params_to_pass = dict((p, boundaries[p]) for p in boundaries if p in accepted_params)
+            params_to_pass = {p : boundaries[p] for p in boundaries if p in accepted_params}
             passage_features[func_name] = func(**params_to_pass)
 
         
         # Store the character start/end of the given passage in Passage objects
-        global_start, global_end = self.get_character_boundaries(atom_type, start_index, end_index)
+        
+        global_start, global_end = boundaries['first_char_index'], boundaries['last_char_index']
         text = self.input_file[global_start : global_end]
-
+        
         passage = Passage(self.document_name, atom_type, global_start, global_end, text, passage_features)
         return passage
 
     def _fetch_boundary_indices(self, atom_type, start_index, end_index):
         '''
-        Returns a dictionary with keys 'first_word_index', 'last_word_index',
+        Returns a dictionary with keys 
+        'first_char_index', 'last_char_index',
+        'first_word_index', 'last_word_index',
         'first_sentence_index', 'last_sentence_index'
         of <atom_type> starting at <start_index> and expanding to <end_index>
         Uses "snap-out" indexing, i.e. includes entire words/sentences even if the indices
@@ -534,6 +485,7 @@ class StylometricFeatureEvaluator:
         would be 0 and the <last_sentence_index> would be the index of the "."
         '''
         start_index = max(start_index, 0)
+        first_char_index, last_char_index = self.get_character_boundaries(atom_type, start_index, end_index)
 
         if atom_type == 'char':
             end_index = min(end_index, len(self.input_file)-1) # clamp to end
@@ -583,6 +535,8 @@ class StylometricFeatureEvaluator:
             raise ValueError("atom_type string must be 'char', 'word', 'sentence' or 'paragraph', not '" + str(atom_type) + "'.")
 
         return {
+            'first_char_index' : first_char_index,
+            'last_char_index' : last_char_index,
             'first_word_index' : first_word_index,
             'last_word_index' : last_word_index,
             'first_sentence_index' : first_sentence_index,
@@ -633,12 +587,16 @@ class StylometricFeatureEvaluator:
         total = self.word_frequency_class_table[last_word_index] - self.word_frequency_class_table[first_word_index]
         return total / float(last_word_index - first_word_index)
 
-    def get_punctuation_percentage(self, first_word_index, last_word_index):
+    def get_punctuation_percentage(self, first_char_index, last_char_index):
         '''
         Gets the punctuation count in the text between two indices 
+        Note that <self.get_character_boundaries> indexes like a Python list, 
+        i.e. the end index is NOT inclusive. If we are passed 
+        first_char_index=0, last_char_index=5, the positions we should look at in the
+        punctuation table are table[4] - table[0] (which is still 5 - 0 == 5 characters long)
         '''
-        total = self.punctuation_table[last_word_index] - self.punctuation_table[first_word_index]
-        return total / float(last_word_index - first_word_index)
+        total = self.punctuation_table[last_char_index - 1] - self.punctuation_table[first_char_index]
+        return total / float(last_char_index - first_char_index)
 
     def get_stopword_percentage(self, first_word_index, last_word_index):
         '''
@@ -651,23 +609,6 @@ class StylometricFeatureEvaluator:
         ''' Returns true if the given word is just punctuation. '''
         match_obj = re.match(self.punctuation_re, word)
         return match_obj and len(match_obj.group()) == len(word)
-    
-    def test(self):
-        print 'words: ', self.word_spans
-        print 'sentences: ', self.sentence_spans
-        print 'paragraphs: ', self.paragraph_spans
-        print
-        print 'word spans: ', self.getWordSpans(0, 17)
-        print 'sentence spans: ', self.getSentenceSpans(40, 300)
-        print 'paragraph spans: ', self.getParagraphSpans(17, 200)
-        print
-        print 'Extracted Stylometric Feature Vector: <avg_word_length, avg_words_in_sentence>'    
-        print self.getFeatures(0, len(self.input_file), "char")
-        print
-        print "--"*20
-        #print self.getFeatures(0, len(self.input_file), "pos")
-        # print "Average word frequency class of 'The small cat jumped'"
-        # print self.averageWordFrequencyClass(["The", "small", "cat", "jumped"])
         
     def test_general_extraction(self):
         feature_list = ['averageWordLength', 'averageSentenceLength']
