@@ -1,4 +1,4 @@
-# feature_extractor.py
+ #feature_extractor.py
 # An early-stage prototype for extracting stylometric features used for intrinsic plagiarism detection
 # plagcomps rules
 # by Marcus, Noah, and Cole
@@ -152,15 +152,18 @@ class StylometricFeatureEvaluator:
 
     def initTagList(self, text):
         '''
-        Return a list of parts of speech where the ith item in the list is the part of speech of the
-        ith word in the given text.
+        Return a list of tuples of (word, part of speech) where the ith item in the list is the 
+        (ith word, ith part of speech) from the text.
         '''
-        taggedWords = []
-        wordSpans = self.getWordSpans(0, len(text))
-        for word in wordSpans[0]:
-            word = [self.input_file[word[0]:word[1]]]
-            taggedWords.append(nltk.tag.pos_tag(word)[0])
-        return taggedWords
+
+        taggedWordTuples = []
+        sentenceSpans = self.getSentenceSpans(0, len(text))[0]
+        for sentence in sentenceSpans:
+            sentence = self.input_file[sentence[0]:sentence[1]]
+            # run part-of-speech tagging on the sentence following the word_tokenize-ation of it
+            taggedWordTuples += nltk.tag.pos_tag(nltk.word_tokenize(sentence))
+
+        return taggedWordTuples
 
     def _binarySearchForSpanIndex(self, spans, index, first):
         ''' Perform a binary search across the list of spans to find the index in the spans that
@@ -320,25 +323,34 @@ class StylometricFeatureEvaluator:
 
     def initPosFrequencyTable(self):
 	'''
-	instatiates a table of part-of-speech counts 
-	this is currently not being used for a feature
+	instantiates a table of part-of-speech counts 
+    currently tracks the following categories:
+    0) conjunctions -- tags CC, IN (though we will try to ignore common prepositions that are not conjunctions)
+    1) WH-pronouns -- tags WP, WP$
+    2) Verbs -- tags VB, VBD, VBG, VBN, VBP, VBZ
+    3) None of the above
 	'''
         sum_table = []
-        myCount = [0,0,0,0,0]
-        for words in self.posTags:
-            count = myCount[:]  #("JJ", "NN", "VB", "RB", "OTHER")
-            if "JJ" in words[1]:
-                count[0] += 1
-            elif "NN" in words[1]:
-                count[1] += 1
-            elif "VB" in words[1]:
-                count[2] += 1
-            elif "RB" in words[1]:
-                count[3] += 1
+        total_count = [0,0,0,0]
+        for posTuple in self.posTags:
+            word = posTuple[0].lower()
+            tag = posTuple[1]
+            # get the current count
+            current_count = total_count[:] 
+            # we want conjunctions -- IN contains coordinating conjunctions and prepositions, 
+            # so we will explicitly filter out some common prepositions
+            if tag in ["CC", "IN"] and word not in ["to", "of", "in", "from", "on"]:
+                current_count[0] += 1
+            elif tag in ["WP", "WP$"]:
+                current_count[1] += 1
+            elif tag.startswith("VB"):
+                current_count[2] += 1
             else:
-                count[4] += 1
-            myCount = count[:]
-            sum_table.append(count)
+                current_count[3] += 1
+            # maintain the count outside this iteration
+            total_count = current_count[:]
+            sum_table.append(current_count)
+
         return sum_table
 
     def init_punctuation_table(self):
@@ -646,6 +658,20 @@ class StylometricFeatureEvaluator:
         '''
         total = self.stopWords_table[last_word_index] - self.stopWords_table[first_word_index]
         return total / float(last_word_index - first_word_index)
+
+    def get_syntactic_complexity(self, first_word_index, last_word_index):
+        '''
+        This feature is a modified version of the "Index of Syntactic Complexity" taken from
+        Szmrecsanyi, Benedikt. "On operationalizing syntactic complexity." Jadt-04 2 (2004): 1032-1039. 
+        found at http://www.benszm.net/omnibuslit/Szmrecsanyi2004.pdf
+        it tallies various part-of-speech counts which are approximated by NLTK's POS tags.
+        the original version accounts for Noun Phrases, which are not counted in the NLTK tagger, and so are ignored.
+        '''
+        num_conjunctions = self.pos_frequency_count_table[last_word_index][0] - self.pos_frequency_count_table[first_word_index][0]
+        num_wh_pronouns = self.pos_frequency_count_table[last_word_index][1] - self.pos_frequency_count_table[first_word_index][1]
+        num_verb_forms = self.pos_frequency_count_table[last_word_index][2] - self.pos_frequency_count_table[first_word_index][2]
+
+        return 2 * num_conjunctions + 2 * num_wh_pronouns + num_verb_forms
     
     def _is_punctuation(self, word):
         ''' Returns true if the given word is just punctuation. '''
@@ -670,7 +696,7 @@ class StylometricFeatureEvaluator:
         # print self.averageWordFrequencyClass(["The", "small", "cat", "jumped"])
         
     def test_general_extraction(self):
-        feature_list = ['averageWordLength', 'averageSentenceLength']
+        feature_list = ['averageWordLength', 'averageSentenceLength', 'get_syntactic_complexity']
         extracted = self.get_specific_features(feature_list, 0, len(self.word_spans), 'word')
         print extracted.features
 
@@ -722,8 +748,8 @@ def independent_feature_test():
                     outfile.write(feature + "\t" + fileid + "+" + other_file + "\t" + str(stats[1]) + "\r\n")
     
 if __name__ == "__main__":
-    #evaluator = StylometricFeatureEvaluator("foo.txt")
-    #evaluator.test()
-    #evaluator.test_general_extraction()
+    evaluator = StylometricFeatureEvaluator("foo.txt")
+    evaluator.test()
+    evaluator.test_general_extraction()
 
-    independent_feature_test()
+    #independent_feature_test()
