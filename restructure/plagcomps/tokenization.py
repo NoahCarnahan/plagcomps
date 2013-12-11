@@ -2,6 +2,11 @@ import nltk
 import re
 
 def tokenize(text, atom_type):
+    '''
+    Return a list of spans designating the location of each passage in the given
+    text. atom_type determines the type of passages.
+    (output is of the form [(0, 20), (22, 50), ...])
+    '''
     if atom_type == "word":
         return _tokenize_by_word(text)
     elif atom_type == "sentence":

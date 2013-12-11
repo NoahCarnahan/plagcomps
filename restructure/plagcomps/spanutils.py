@@ -12,6 +12,15 @@ def snapout(spans, start_index, end_index):
     second_index = _binarySearchForSpanIndex(spans, end_index, False)
     return (first_index, second_index)
 
+def snapout_spans(spans, start_index, end_index):
+    '''
+    Like snapout, but returns spans...
+    '''
+    #TODO: THIS IS THE WORST FUNCTION NAME ON THE FACE OF THE EARTH!
+    first_index = _binarySearchForSpanIndex(spans, start_index, True)
+    second_index = _binarySearchForSpanIndex(spans, end_index, False)
+    return spans[first_index:second_index+1]
+
 def _binarySearchForSpanIndex(spans, index, first):
     '''
     Perform a binary search across the list of spans to find the index in the spans that
