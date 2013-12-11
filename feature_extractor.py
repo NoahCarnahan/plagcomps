@@ -589,6 +589,7 @@ class StylometricFeatureEvaluator:
         PoS occurrences between those entries.
         '''
         endWord = self.pos_frequency_count_table[last_word_index]
+        print "endWord", endWord
         startWord = self.pos_frequency_count_table[first_word_index]
         newList = []
         for i in range(len(endWord)):
@@ -707,9 +708,30 @@ def independent_feature_test():
                     else:
                         outfile = different_doc_outfile
                     outfile.write(feature + "\t" + fileid + "+" + other_file + "\t" + str(stats[1]) + "\r\n")
+
+def _pos_percent_test():
+    evaluator = StylometricFeatureEvaluator("foo.txt")
+    
+    print "-------------------------------------------------------"
+    print "posTags (length is "+str(len(evaluator.posTags))+"):"
+    print evaluator.posTags
+    print "-------------------------------------------------------"
+    print "pos_frequency_count_table (length is "+str(len(evaluator.pos_frequency_count_table))+"):"
+    print evaluator.pos_frequency_count_table
+    print "-------------------------------------------------------"
+    print "text:"
+    print evaluator.input_file
+    print "-------------------------------------------------------"
+    print "word_spans length:", len(evaluator.word_spans)
+    print "-------------------------------------------------------"
+    
+    for i in xrange(len(evaluator.getAllByAtom("sentence"))):
+        evaluator.get_specific_features(["getPosPercentageVector"], i, i+1, "sentence")
     
 if __name__ == "__main__":
-    evaluator = StylometricFeatureEvaluator("foo.txt")
-    evaluator.test_general_extraction()
+    #evaluator = StylometricFeatureEvaluator("foo.txt")
+    #evaluator.test_general_extraction()
+    
+    _pos_percent_test()
 
     #independent_feature_test()
