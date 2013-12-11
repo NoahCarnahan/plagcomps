@@ -3,7 +3,20 @@ import spanutils
 
 import inspect
 
-# TODO: Explain how to add new features...
+# To add a new feature, write a new method for FeatureExtractor.
+# The method must take two arguments. They may be named (word_span_index_start,
+# word_span_index_end), (sent_span_index_start, sent_span_index_end), or
+# (para_span_index_start, para_span_index_end).
+#
+# These arguments are indicies into self.word_spans, self.sentence_spans, or
+# self.paragraph_spans. These indicies represent the first and last (inclusive) word,
+# sentence, or paragraph that the feature is being extracted from.
+#
+# For example, average_word_length(4, 10) returns the average length of words 4 through 10
+# (inclusive).
+#
+# A certain amount of preprocessing may be desirable. Add a method called
+# _init_my_new_feature_name and call it in the __init__ method.
 
 class FeatureExtractor:
     
@@ -12,6 +25,8 @@ class FeatureExtractor:
         self.word_spans = tokenization.tokenize(text, "word")
         self.sentence_spans = tokenization.tokenize(text, "sentence")
         self.paragraph_spans = tokenization.tokenize(text, "paragraph")
+    
+        ### ADD FEATURE INITIALIZATION METHODS HERE:
         
     def get_feature_vectors(self, features, atom_type):
         '''
