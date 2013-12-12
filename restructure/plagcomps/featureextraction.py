@@ -120,19 +120,6 @@ class FeatureExtractor:
             raise ValueError
 
 
-    
-    # an example of an actual feature function:
-    def _my_word_level_feature(self, word_span_index_start, word_span_index_end):
-        '''
-        Return a value for this feature for the words from word_span_index_start to
-        word_span_index_end.
-        
-        For example: If self.text = "The brown fox jumped" then self.word_spans = [(0, 3),
-        (4, 9), (10, 13), (14, 20)]. So, _my_word_level_feature(1, 3) returns what ever
-        the value of this feature is on the words designated by the spans (4, 9) and
-        (10, 13), that is, "brown" and "fox".
-        '''
-
 
     
     def _init_average_word_length(self):
@@ -268,13 +255,40 @@ class FeatureExtractor:
         return float(total_punctuation) / max(num_chars, 1)
 
 def _test():
+
     text = "The brown fox ate. Believe it. I go to the school." # length = 50. Last valid index is 49
     f = FeatureExtractor(text)
     
-    print f.get_feature_vectors(["punctuation_percentage"], "sentence")
-    for start, end in f.sentence_spans:
-        print f.text[start:end]
+    #print f.get_feature_vectors(["punctuation_percentage"], "sentence")
+    if f.get_feature_vectors(["punctuation_percentage"], "sentence") == [(0.05555555555555555,), (0.09090909090909091,), (0.05263157894736842,)]:
+        print "punctuation_percentage test passed"
+    else:
+        print "punctuation_percentage test FAILED"
+    
+    #print f.get_feature_vectors(["stopword_percentage"], "sentence")
+    if f.get_feature_vectors(["stopword_percentage"], "sentence") == [(0.25,), (0.5,), (0.6,)]:
+        print "stopword_percentage test passed"
+    else:
+        print "stopword_percentage test FAILED"
+    
+    #print f.get_feature_vectors(["average_sentence_length"], "paragraph")
+    if f.get_feature_vectors(["average_sentence_length"], "paragraph") == [(3.6666666666666665,)]:
+        print "average_sentence_legth test passed"
+    else:
+        print "average_sentence_legth test FAILED"
+    
+    #print f.get_feature_vectors(["average_word_length"], "sentence")
+    if f.get_feature_vectors(["average_word_length"], "sentence") == [(3.75,), (5.0,), (3.0,)]:
+        print "average_word_length test passed"
+    else:
+        print "average_word_length test FAILED"
 
+    f = FeatureExtractor("The brown fox ate. I go to the school. Believe it.")
+    #print f.get_feature_vectors(["pos_percentage_vector"], "sentence")
+    if f.get_feature_vectors(["pos_percentage_vector"], "sentence") == [(0,0,0,1.0), (0,0,.2,.8), (0,0,0,1.0)]:
+        print "pos_percentage_vector test passed"
+    else:
+        print "pos_percentage_vector test FAILED"
 
 if __name__ == "__main__":
     _test()

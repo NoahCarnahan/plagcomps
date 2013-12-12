@@ -14,8 +14,8 @@
 
 def slice(spans, start_char, end_char, return_indicies = False):
     '''
-    Returns a sublist of *spans*...
     '''
+    #TODO: write this doc string...
     first_index = _binarySearchForSpanIndex(spans, start_char, True)
     second_index = _binarySearchForSpanIndex(spans, end_char, False)
     if return_indicies:
