@@ -1,24 +1,25 @@
-def snapout(spans, start_index, end_index):
-    '''
-    <spans> is a list of spans. start_index and end_index are character indicies.
-    This function finds the following list: [s : (s in spans) AND (start_index <= s[0]
-    <= end_index OR start_index <= s[1] <= end_index)]. It then returns two indicies which
-    are references into <spans> that designate the first and last items in this list.
-    '''
-    # TODO: Think of a better name for this function and a better doc string
-    # NOTE NOTE NOTE: I think it should return the last index +1 maybe for consistency?
-    
-    first_index = _binarySearchForSpanIndex(spans, start_index, True)
-    second_index = _binarySearchForSpanIndex(spans, end_index, False)
-    return (first_index, second_index)
+#def snapout(spans, start_index, end_index):
+#    '''
+#    <spans> is a list of spans. start_index and end_index are character indicies.
+#    This function finds the following list: [s : (s in spans) AND (start_index <= s[0]
+#    <= end_index OR start_index <= s[1] <= end_index)]. It then returns two indicies which
+#    are references into <spans> that designate the first and last items in this list.
+#    '''
+#    # TODO: Think of a better name for this function and a better doc string
+#    # NOTE NOTE NOTE: I think it should return the last index +1 maybe for consistency?
+#    
+#    first_index = _binarySearchForSpanIndex(spans, start_index, True)
+#    second_index = _binarySearchForSpanIndex(spans, end_index, False)
+#    return (first_index, second_index)
 
-def snapout_spans(spans, start_index, end_index):
+def slice(spans, start_char, end_char, return_indicies = False):
     '''
-    Like snapout, but returns spans...
+    Returns a sublist of *spans*...
     '''
-    #TODO: THIS IS THE WORST FUNCTION NAME ON THE FACE OF THE EARTH!
-    first_index = _binarySearchForSpanIndex(spans, start_index, True)
-    second_index = _binarySearchForSpanIndex(spans, end_index, False)
+    first_index = _binarySearchForSpanIndex(spans, start_char, True)
+    second_index = _binarySearchForSpanIndex(spans, end_char, False)
+    if return_indicies:
+        return first_index, second_index + 1
     return spans[first_index:second_index+1]
 
 def _binarySearchForSpanIndex(spans, index, first):
