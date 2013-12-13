@@ -4,12 +4,13 @@ import spanutils
 import nltk
 import inspect
 import string
+import math
 
 # To add a new feature, write a new method for FeatureExtractor.
 # The method must take two arguments. They may be named (char_index_start,
-# char_index_end), (word_span_index_start, word_span_index_end),
-# (sent_span_index_start, sent_span_index_end), or (para_span_index_start,
-# para_span_index_end).
+# char_index_end), (word_spans_index_start, word_spans_index_end),
+# (sent_spans_index_start, sent_spans_index_end), or (para_spans_index_start,
+# para_spans_index_end).
 #
 # These arguments are indicies into self.word_spans, self.sentence_spans, or
 # self.paragraph_spans. These indicies represent the first (inclusive) and last (exclusive)
@@ -35,6 +36,8 @@ class FeatureExtractor:
         self._init_pos_frequency_table()
         self._init_stopword_percentage()
         self._init_punctuation_percentage()
+        self._init_internal_word_freq_class()
+        self._init_external_word_freq_class()
     
     def _init_tag_list(self, text):
         '''
@@ -106,15 +109,19 @@ class FeatureExtractor:
         Return at what atom level the feature with the given name operates.
         For example _feature_type("average_word_length") returns "word".
         '''
-        func = getattr(self, func_name)
+        try:
+            func = getattr(self, func_name)
+        except AttributeError:
+            raise ValueError("Invalid feature name.")
+            
         accepted_params = inspect.getargspec(func).args
         if "char_index_start" in accepted_params:
             return "char"
-        elif "word_span_index_start" in accepted_params:
+        elif "word_spans_index_start" in accepted_params:
             return "word"
-        elif "sent_span_index_start" in accepted_params:
+        elif "sent_spans_index_start" in accepted_params:
             return "sentence"
-        elif "para_span_index_start" in accepted_params:
+        elif "para_spans_index_start" in accepted_params:
             return "paragraph"
         else:
             raise ValueError
@@ -134,9 +141,9 @@ class FeatureExtractor:
             sum_table.append((end - start) + sum_table[-1])
         self.word_length_sum_table = sum_table
     
-    def average_word_length(self, word_span_index_start, word_span_index_end):
+    def average_word_length(self, word_spans_index_start, word_spans_index_end):
         '''
-        Return the average word length for words [word_span_index_start : word_span_index_end].
+        Return the average word length for words [word_spans_index_start : word_spans_index_end].
         
         For example: If self.text = "The brown fox jumped" then self.word_spans = [(0, 3),
         (4, 9), (10, 13), (14, 20)]. So, average_word_length(1, 3) returns 4, the average
@@ -144,8 +151,8 @@ class FeatureExtractor:
         (10, 13)).
         '''
         
-        total_word_length = self.word_length_sum_table[word_span_index_end] - self.word_length_sum_table[word_span_index_start]
-        num_words = word_span_index_end - word_span_index_start
+        total_word_length = self.word_length_sum_table[word_spans_index_end] - self.word_length_sum_table[word_spans_index_start]
+        num_words = word_spans_index_end - word_spans_index_start
         return float(total_word_length) / max(num_words, 1)
     
     def _init_average_sentence_length(self):
@@ -162,12 +169,12 @@ class FeatureExtractor:
             sum_table.append(word_sum + sum_table[-1])
         self.sent_length_sum_table = sum_table
     
-    def average_sentence_length(self, sent_span_index_start, sent_span_index_end):
+    def average_sentence_length(self, sent_spans_index_start, sent_spans_index_end):
         '''
-        Return the average number of words in sentences [sent_span_index_start : sent_span_index_end]
+        Return the average number of words in sentences [sent_spans_index_start : sent_spans_index_end]
         '''
-        total_sentence_length = self.sent_length_sum_table[sent_span_index_end] - self.sent_length_sum_table[sent_span_index_start]
-        num_words = sent_span_index_end - sent_span_index_start
+        total_sentence_length = self.sent_length_sum_table[sent_spans_index_end] - self.sent_length_sum_table[sent_spans_index_start]
+        num_words = sent_spans_index_end - sent_spans_index_start
         return float(total_sentence_length) / max(num_words, 1)
     
     def _init_pos_frequency_table(self):
@@ -202,12 +209,12 @@ class FeatureExtractor:
 
         self.pos_frequency_count_table = sum_table
     
-    def pos_percentage_vector(self, word_span_index_start, word_span_index_end):
+    def pos_percentage_vector(self, word_spans_index_start, word_spans_index_end):
         # TODO: What the hell is this feature?
         # Oh... This feature is a vector itself? not a single value...
         
-        total_vect = [a - b for a, b in zip(self.pos_frequency_count_table[word_span_index_end], self.pos_frequency_count_table[word_span_index_start])]
-        num_words = word_span_index_end - word_span_index_start
+        total_vect = [a - b for a, b in zip(self.pos_frequency_count_table[word_spans_index_end], self.pos_frequency_count_table[word_spans_index_start])]
+        num_words = word_spans_index_end - word_spans_index_start
         return tuple([a / float(num_words) for a in total_vect])
     
     def _init_stopword_percentage(self):
@@ -227,12 +234,12 @@ class FeatureExtractor:
             sum_table.append(count)
         self.stopword_sum_table = sum_table
         
-    def stopword_percentage(self, word_span_index_start, word_span_index_end):
+    def stopword_percentage(self, word_spans_index_start, word_spans_index_end):
         '''
         Return the percentage of words that are stop words in the text between the two given indicies.
         '''
-        total_stopwords = self.stopword_sum_table[word_span_index_end] - self.stopword_sum_table[word_span_index_start]
-        num_sents = word_span_index_end - word_span_index_start
+        total_stopwords = self.stopword_sum_table[word_spans_index_end] - self.stopword_sum_table[word_spans_index_start]
+        num_sents = word_spans_index_end - word_spans_index_start
         return float(total_stopwords) / max(num_sents, 1)
         
     def _init_punctuation_percentage(self):
@@ -253,6 +260,86 @@ class FeatureExtractor:
         total_punctuation = self.punctuation_sum_table[char_index_end] - self.punctuation_sum_table[char_index_start]
         num_chars = char_index_end - char_index_start
         return float(total_punctuation) / max(num_chars, 1)
+
+    def syntactic_complexity(self, word_spans_index_start, word_spans_index_end):
+        '''
+        This feature is a modified version of the "Index of Syntactic Complexity" taken from
+        Szmrecsanyi, Benedikt. "On operationalizing syntactic complexity." Jadt-04 2 (2004): 1032-1039. 
+        found at http://www.benszm.net/omnibuslit/Szmrecsanyi2004.pdf
+        it tallies various part-of-speech counts which are approximated by NLTK's POS tags.
+        the original version accounts for Noun Phrases, which are not counted in the NLTK tagger, and so are ignored.
+        '''
+        num_conjunctions = self.pos_frequency_count_table[word_spans_index_end][0] - self.pos_frequency_count_table[word_spans_index_start][0]
+        num_wh_pronouns = self.pos_frequency_count_table[word_spans_index_end][1] - self.pos_frequency_count_table[word_spans_index_start][1]
+        num_verb_forms = self.pos_frequency_count_table[word_spans_index_end][2] - self.pos_frequency_count_table[word_spans_index_start][2]
+
+        return 2 * num_conjunctions + 2 * num_wh_pronouns + num_verb_forms
+    
+    def _init_internal_word_freq_class(self):
+        '''
+        Initializes the internal_freq_class_table. internal_freq_class_table[i]
+        is the sum of the classes of words 0 to i-1.
+        '''
+        word_freq_dict = {}
+        for span in self.word_spans:
+            word = self.text[span[0]:span[1]].lower().translate(string.maketrans("",""), string.punctuation)
+            word_freq_dict[word] = word_freq_dict.get(word, 0) + 1
+        
+        corpus_word_freq_by_rank = sorted(word_freq_dict.items(), key=lambda x: x[1], reverse=True)
+        occurences_of_most_freq_word = corpus_word_freq_by_rank[0][1]
+    
+        # this creates a table where each entry holds the summation of the WFC of all previous words
+        table = [0]
+        total = 0
+        for i in range(len(self.word_spans)):
+            span = self.word_spans[i]
+            word = self.text[span[0]:span[1]].lower().translate(string.maketrans("",""), string.punctuation)         
+            freq_class = math.floor(math.log((float(occurences_of_most_freq_word)/word_freq_dict.get(word, 0)),2))
+            total += freq_class
+            table.append(total)
+        self.internal_freq_class_table = table
+    
+    def avg_internal_word_freq_class(self, word_spans_index_start, word_spans_index_end):
+        '''
+        Returns a feature like avg_external_word_freq_class except that the frequenecy
+        classes of words are calculated based on the occurrences of words within this
+        text, not the brown corpus.
+        '''
+        
+        total = self.internal_freq_class_table[word_spans_index_end] - self.internal_freq_class_table[word_spans_index_start]
+        return total / float(max(1, word_spans_index_end - word_spans_index_start))
+        
+    def _init_external_word_freq_class(self):
+
+        word_freq_dict = {}
+        for word in nltk.corpus.brown.words():
+            word = word.lower()
+            word_freq_dict[word] = word_freq_dict.get(word, 0) + 1
+        
+        corpus_word_freq_by_rank = sorted(word_freq_dict.items(), key=lambda x: x[1], reverse=True)
+        occurences_of_most_freq_word = corpus_word_freq_by_rank[0][1]
+    
+        class_sum_table = [0]
+    
+        for span in self.word_spans:
+            word = self.text[span[0]:span[1]].lower().translate(string.maketrans("",""), string.punctuation)
+            # plus one smoothing is used here!
+            freq_class = math.floor(math.log(float(occurences_of_most_freq_word + 1) / (word_freq_dict.get(word.lower(), 0) + 1),2))
+            class_sum_table.append(class_sum_table[-1] + freq_class)
+        
+        self.external_freq_class_table = class_sum_table
+        
+    def avg_external_word_freq_class(self,  word_spans_index_start, word_spans_index_end):
+        '''
+        This feature is defined here:
+        http://www.uni-weimar.de/medien/webis/publications/papers/stein_2006d.pdf
+        
+        Plus one smoothing is used.
+        '''
+        total = self.external_freq_class_table[word_spans_index_end] - self.external_freq_class_table[word_spans_index_start]
+        num_words = word_spans_index_end - word_spans_index_start
+        return float(total) / max(num_words, 1)
+        
 
 def _test():
 
@@ -283,13 +370,30 @@ def _test():
     else:
         print "average_word_length test FAILED"
 
+    # TODO: ADD TEST FOR INTERNAL WORD FREQ CLASS
+    #print f.get_feature_vectors(["avg_internal_word_freq_class"], "sentence")
+    print "avg_internal_word_freq_class test DOES NOT EXIST" 
+   
+    
+    # TODO: ADD TEST FOR EXTERNAL WORD FREQ CLASS
+    #print f.get_feature_vectors(["avg_external_word_freq_class"], "sentence")
+    print "avg_external_word_freq_class DOES NOT EXIST"
+    
+
     f = FeatureExtractor("The brown fox ate. I go to the school. Believe it.")
     #print f.get_feature_vectors(["pos_percentage_vector"], "sentence")
     if f.get_feature_vectors(["pos_percentage_vector"], "sentence") == [(0,0,0,1.0), (0,0,.2,.8), (0,0,0,1.0)]:
         print "pos_percentage_vector test passed"
     else:
         print "pos_percentage_vector test FAILED"
-
+    
+    f = FeatureExtractor("The brown fox ate. I go to the school. Believe it. I go.")
+    #print f.get_feature_vectors(["syntactic_complexity"], "sentence")
+    if f.get_feature_vectors(["syntactic_complexity"], "sentence") == [(0,), (1,), (0,), (1,)]:
+        print "syntactic_complexity test passed"
+    else:
+        print "syntactic_complexity test FAILED"
+    
 if __name__ == "__main__":
     _test()
     
