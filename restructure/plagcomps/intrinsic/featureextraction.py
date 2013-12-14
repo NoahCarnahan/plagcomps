@@ -1,5 +1,5 @@
-import tokenization
-import spanutils
+from .. import tokenization
+from .. import spanutils
 
 import nltk
 import inspect
@@ -12,8 +12,8 @@ import math
 # (sent_spans_index_start, sent_spans_index_end), or (para_spans_index_start,
 # para_spans_index_end).
 #
-# These arguments are indicies into self.word_spans, self.sentence_spans, or
-# self.paragraph_spans. These indicies represent the first (inclusive) and last (exclusive)
+# These arguments are indices into self.word_spans, self.sentence_spans, or
+# self.paragraph_spans. These indices represent the first (inclusive) and last (exclusive)
 # character, word, sentence, or paragraph that the feature is being extracted from.
 #
 # For example, average_word_length(4, 10) returns the average length of words 4 through 9.
@@ -46,7 +46,7 @@ class FeatureExtractor:
         '''
 
         taggedWordTuples = []
-        sentenceSpans = spanutils.slice(self.sentence_spans, 0, len(text), return_indicies = False)
+        sentenceSpans = spanutils.slice(self.sentence_spans, 0, len(text), return_indices = False)
         assert(self.sentence_spans == sentenceSpans)
         for sentence in sentenceSpans:
             sentence = self.text[sentence[0]:sentence[1]]
@@ -81,7 +81,7 @@ class FeatureExtractor:
     def _get_feature_vector(self, features, start_index, end_index):
         '''
         Return a feature vector (e.g. (4.3, 12, 0.05)) with a component for each string in
-        *features* for the text between the two given indicies.
+        *features* for the text between the two given indices.
         This method "snaps-out".
         '''
         #TODO: Explain the snapping
@@ -97,7 +97,7 @@ class FeatureExtractor:
                     spans = self.sentence_spans
                 elif self._feature_type(feat_name) == "paragraph":
                     spans = self.paragraph_spans
-                start, end = spanutils.slice(spans, start_index, end_index, return_indicies = True)
+                start, end = spanutils.slice(spans, start_index, end_index, return_indices = True)
                 
             actual_feature_function = getattr(self, feat_name)
             vect.append(actual_feature_function(start, end))
@@ -164,7 +164,7 @@ class FeatureExtractor:
         sum_table = [0]
         for start, end in self.sentence_spans:
             word_sum = 0
-            word_spans = spanutils.slice(self.word_spans, start, end, return_indicies = False)
+            word_spans = spanutils.slice(self.word_spans, start, end, return_indices = False)
             word_sum += len(word_spans)
             sum_table.append(word_sum + sum_table[-1])
         self.sent_length_sum_table = sum_table
@@ -236,7 +236,7 @@ class FeatureExtractor:
         
     def stopword_percentage(self, word_spans_index_start, word_spans_index_end):
         '''
-        Return the percentage of words that are stop words in the text between the two given indicies.
+        Return the percentage of words that are stop words in the text between the two given indices.
         '''
         total_stopwords = self.stopword_sum_table[word_spans_index_end] - self.stopword_sum_table[word_spans_index_start]
         num_sents = word_spans_index_end - word_spans_index_start
