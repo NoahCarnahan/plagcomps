@@ -1,3 +1,5 @@
+import os
+
 class BaseUtility:
     '''
     Utility functions common to both extrinsic and intrinsic
@@ -16,7 +18,9 @@ class BaseUtility:
 
 class IntrinsicUtility(BaseUtility):
 
-    TRAINING_LOC = 'corpus_partition/training_set_files.txt'
+    #TRAINING_LOC = '../corpus_partition/training_set_files.txt'
+    TRAINING_LOC = os.path.join(os.path.dirname(__file__), '../corpus_partition/training_set_files.txt')
+    
     CORPUS_LOC = '/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents'
 
     def get_n_training_files(self, n=None):
@@ -33,8 +37,10 @@ class IntrinsicUtility(BaseUtility):
 
 class ExtrinsicUtility(BaseUtility):
 
-    TRAINING_SRC_LOC = 'extrinsic_corpus_partition/extrinsic_training_source_files.txt'
-    TRAINING_SUSPECT_LOC = 'extrinsic_corpus_partition/extrinsic_training_suspect_files.txt'
+    #TRAINING_SRC_LOC = '../extrinsic_corpus_partition/extrinsic_training_source_files.txt'
+    TRAINING_SRC_LOC = os.path.join(os.path.dirname(__file__), '../extrinsic_corpus_partition/extrinsic_training_source_files.txt')
+    #TRAINING_SUSPECT_LOC = '../extrinsic_corpus_partition/extrinsic_training_suspect_files.txt'
+    TRAINING_SUSPECT_LOC = os.path.join(os.path.dirname(__file__), '../extrinsic_corpus_partition/extrinsic_training_suspect_files.txt')
 
     CORPUS_SRC_LOC = '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/source-documents'
     CORPUS_SUSPECT_LOC = '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents'
