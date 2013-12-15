@@ -38,6 +38,16 @@ class FeatureExtractor:
         self._init_punctuation_percentage()
         self._init_internal_word_freq_class()
         self._init_external_word_freq_class()
+ 
+    def get_spans(self, atom_type):
+        if atom_type == "word":
+            return self.word_spans
+        elif atom_type == "sentence":
+            return self.sentence_spans
+        elif atom_type == "paragraph":
+            return self.paragraph_spans
+        else:
+            raise ValueError("Invalid atom_type")
     
     def _init_tag_list(self, text):
         '''
@@ -125,7 +135,6 @@ class FeatureExtractor:
             return "paragraph"
         else:
             raise ValueError
-
 
 
     
