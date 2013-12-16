@@ -30,14 +30,13 @@ class FeatureExtractor:
         self.paragraph_spans = tokenization.tokenize(text, "paragraph")
         self.pos_tags = self._init_tag_list(text)
     
-        ### ADD FEATURE INITIALIZATION METHODS HERE:
-        self._init_average_word_length()
-        self._init_average_sentence_length()
-        self._init_pos_frequency_table()
-        self._init_stopword_percentage()
-        self._init_punctuation_percentage()
-        self._init_internal_word_freq_class()
-        self._init_external_word_freq_class()
+        self.average_word_length_initialized = False
+        self.average_sentence_length_initialized = False
+        self.pos_percentage_vector_initialized = False
+        self.stopword_percentage_initialized = False
+        self.punctuation_percentage_initiliazed = False
+        self.avg_internal_word_freq_class_initialized = False
+        self.avg_external_word_freq_class_initialized = False
  
     def get_spans(self, atom_type):
         if atom_type == "word":
@@ -149,6 +148,8 @@ class FeatureExtractor:
         for start, end in self.word_spans:
             sum_table.append((end - start) + sum_table[-1])
         self.word_length_sum_table = sum_table
+        
+        self.average_word_length_initialized = True
     
     def average_word_length(self, word_spans_index_start, word_spans_index_end):
         '''
@@ -159,7 +160,9 @@ class FeatureExtractor:
         length of "brown" and "fox" (which are designated by the spans (4, 9) and
         (10, 13)).
         '''
-        
+        if not self.average_word_length_initialized:
+            self._init_average_word_length()
+            
         total_word_length = self.word_length_sum_table[word_spans_index_end] - self.word_length_sum_table[word_spans_index_start]
         num_words = word_spans_index_end - word_spans_index_start
         return float(total_word_length) / max(num_words, 1)
@@ -177,11 +180,16 @@ class FeatureExtractor:
             word_sum += len(word_spans)
             sum_table.append(word_sum + sum_table[-1])
         self.sent_length_sum_table = sum_table
+        
+        self.average_sentence_length_initialized = True
     
     def average_sentence_length(self, sent_spans_index_start, sent_spans_index_end):
         '''
         Return the average number of words in sentences [sent_spans_index_start : sent_spans_index_end]
         '''
+        if not self.average_sentence_length_initialized:
+            self._init_average_sentence_length()
+        
         total_sentence_length = self.sent_length_sum_table[sent_spans_index_end] - self.sent_length_sum_table[sent_spans_index_start]
         num_words = sent_spans_index_end - sent_spans_index_start
         return float(total_sentence_length) / max(num_words, 1)
@@ -217,10 +225,14 @@ class FeatureExtractor:
             sum_table.append(current_count)
 
         self.pos_frequency_count_table = sum_table
+        
+        self.pos_percentage_vector_initialized = True
     
     def pos_percentage_vector(self, word_spans_index_start, word_spans_index_end):
         # TODO: What the hell is this feature?
         # Oh... This feature is a vector itself? not a single value...
+        if not self.pos_percentage_vector_initialized:
+            self._init_pos_frequency_table()
         
         total_vect = [a - b for a, b in zip(self.pos_frequency_count_table[word_spans_index_end], self.pos_frequency_count_table[word_spans_index_start])]
         num_words = word_spans_index_end - word_spans_index_start
@@ -243,10 +255,15 @@ class FeatureExtractor:
             sum_table.append(count)
         self.stopword_sum_table = sum_table
         
+        self.stopword_percentage_initialized = True
+        
     def stopword_percentage(self, word_spans_index_start, word_spans_index_end):
         '''
         Return the percentage of words that are stop words in the text between the two given indices.
         '''
+        if not self.stopword_percentage_initialized:
+            self._init_stopword_percentage()
+        
         total_stopwords = self.stopword_sum_table[word_spans_index_end] - self.stopword_sum_table[word_spans_index_start]
         num_sents = word_spans_index_end - word_spans_index_start
         return float(total_stopwords) / max(num_sents, 1)
@@ -263,8 +280,12 @@ class FeatureExtractor:
                 count += 1
             sum_table.append(count)
         self.punctuation_sum_table = sum_table
+        
+        self.punctuation_percentage_initiliazed = True
     
     def punctuation_percentage(self, char_index_start, char_index_end):
+        if not self.punctuation_percentage_initiliazed:
+            self._init_punctuation_percentage()
         
         total_punctuation = self.punctuation_sum_table[char_index_end] - self.punctuation_sum_table[char_index_start]
         num_chars = char_index_end - char_index_start
@@ -278,6 +299,10 @@ class FeatureExtractor:
         it tallies various part-of-speech counts which are approximated by NLTK's POS tags.
         the original version accounts for Noun Phrases, which are not counted in the NLTK tagger, and so are ignored.
         '''
+        # Note that this feature uses the same initialization that pos_percentage_vector does.
+        if not self.pos_percentage_vector_initialized:
+            self._init_pos_frequency_table()
+            
         num_conjunctions = self.pos_frequency_count_table[word_spans_index_end][0] - self.pos_frequency_count_table[word_spans_index_start][0]
         num_wh_pronouns = self.pos_frequency_count_table[word_spans_index_end][1] - self.pos_frequency_count_table[word_spans_index_start][1]
         num_verb_forms = self.pos_frequency_count_table[word_spans_index_end][2] - self.pos_frequency_count_table[word_spans_index_start][2]
@@ -307,6 +332,7 @@ class FeatureExtractor:
             total += freq_class
             table.append(total)
         self.internal_freq_class_table = table
+        self.avg_internal_word_freq_class_initialized = True
     
     def avg_internal_word_freq_class(self, word_spans_index_start, word_spans_index_end):
         '''
@@ -314,7 +340,8 @@ class FeatureExtractor:
         classes of words are calculated based on the occurrences of words within this
         text, not the brown corpus.
         '''
-        
+        if not self.avg_internal_word_freq_class_initialized:
+            self._init_internal_word_freq_class()
         total = self.internal_freq_class_table[word_spans_index_end] - self.internal_freq_class_table[word_spans_index_start]
         return total / float(max(1, word_spans_index_end - word_spans_index_start))
         
@@ -337,14 +364,17 @@ class FeatureExtractor:
             class_sum_table.append(class_sum_table[-1] + freq_class)
         
         self.external_freq_class_table = class_sum_table
+        self.avg_external_word_freq_class_initialized = True
         
-    def avg_external_word_freq_class(self,  word_spans_index_start, word_spans_index_end):
+    def avg_external_word_freq_class(self, word_spans_index_start, word_spans_index_end):
         '''
         This feature is defined here:
         http://www.uni-weimar.de/medien/webis/publications/papers/stein_2006d.pdf
         
         Plus one smoothing is used.
         '''
+        if not self.avg_external_word_freq_class_initialized:
+            self._init_external_word_freq_class()
         total = self.external_freq_class_table[word_spans_index_end] - self.external_freq_class_table[word_spans_index_start]
         num_words = word_spans_index_end - word_spans_index_start
         return float(total) / max(num_words, 1)
@@ -380,12 +410,12 @@ def _test():
         print "average_word_length test FAILED"
 
     # TODO: ADD TEST FOR INTERNAL WORD FREQ CLASS
-    #print f.get_feature_vectors(["avg_internal_word_freq_class"], "sentence")
+    f.get_feature_vectors(["avg_internal_word_freq_class"], "sentence")
     print "avg_internal_word_freq_class test DOES NOT EXIST" 
    
     
     # TODO: ADD TEST FOR EXTERNAL WORD FREQ CLASS
-    #print f.get_feature_vectors(["avg_external_word_freq_class"], "sentence")
+    f.get_feature_vectors(["avg_external_word_freq_class"], "sentence")
     print "avg_external_word_freq_class DOES NOT EXIST"
     
 

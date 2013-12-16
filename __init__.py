@@ -11,12 +11,12 @@ import operator
 
 INTRINSIC_SUSPICION_THRESHOLD = .85
 
-def analyze(text, atom_type, features, cluster_method, k, fingerprint_type):
+def analyze(text, atom_type, features, cluster_type, k, fingerprint_type):
     '''Run intrinsic and extrinsic detection on the given text'''
     
     intrinsic_results = intrinsic.get_plagiarism(text, atom_type, features, cluster_type, k)
-    intrinsic_results = sorted(intrinsic_results, key=operator.itemgetter(2), reverse=True)
-    intrinsic_results = [x for x in intrinsic_results if x[2] > INTRINSIC_SUSPICION_THRESHOLD]
+    intrinsic_results = sorted(intrinsic_results, key=operator.itemgetter(1), reverse=True)
+    intrinsic_results = [x for x in intrinsic_results if x[1] > INTRINSIC_SUSPICION_THRESHOLD]
     
     # intrinsic_results now holds a list of tuples in which the tuple holds start and stop indices
     #   of a span within the text.
