@@ -1,7 +1,7 @@
 import datetime
 
 import fingerprint_extraction
-import feature_extractor
+import tokenization
 import dbconstants
 
 import sqlalchemy
@@ -69,7 +69,7 @@ class FingerPrint(Base):
 		self.k = k
 		self.atom_type = atom_type
 		self.timestamp = datetime.datetime.now()
-		self.version_numer = 1
+		self.version_numer = 2
 		
 		
 		
@@ -127,7 +127,7 @@ class FingerPrint(Base):
 			text = f.read()
 			f.close()
 
-			paragraph_spans = feature_extractor.get_spans(text, self.atom_type)
+			paragraph_spans = tokenization.tokenize(text, self.atom_type)
 
 			index = 0
 
