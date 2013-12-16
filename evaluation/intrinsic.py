@@ -61,7 +61,7 @@ def populate_database(atom_type, num):
 
     features = ['punctuation_percentage',
                 'stopword_percentage',
-                'average_sentence_legth',
+                'average_sentence_length',
                 'average_word_length',
             # Tests haven't been written for these:
                 #'avg_internal_word_freq_class',
@@ -207,7 +207,7 @@ def _get_reduced_docs(atom_type, docs, session, create_new=True):
     reduced_docs = []
     for doc in docs:
         try:
-            r = session.query(ReducedDoc).filter(and_(ReducedDoc.full_path == doc, ReducedDoc.atom_type == atom_type, ReducedDoc.version == 2)).one()
+            r = session.query(ReducedDoc).filter(and_(ReducedDoc.full_path == doc, ReducedDoc.atom_type == atom_type, ReducedDoc.version_number == 2)).one()
         except sqlalchemy.orm.exc.NoResultFound, e:
             if create_new:
                 r = ReducedDoc(doc, atom_type)
@@ -399,7 +399,7 @@ class ReducedDoc(Base):
             
             # Save self._spans
             if self._spans:
-                assert(self._spans == extractor.get_spans(self.atom_type))
+                assert(self._spans == [list(x) for x in extractor.get_spans(self.atom_type)])
             self._spans = extractor.get_spans(self.atom_type)
             
             # Save self._features
@@ -490,7 +490,7 @@ def _test():
     for r in rs:
         print r.get_feature_vectors(['punctuation_percentage',
                                      'stopword_percentage',
-                                     'average_sentence_legth',
+                                     'average_sentence_length',
                                      'average_word_length',], session)
     session.close()
     
