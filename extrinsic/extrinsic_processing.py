@@ -1,8 +1,8 @@
 import datetime
 
 import fingerprint_extraction
-import tokenization
-import dbconstants
+from ..tokenization import tokenize
+from ..dbconstants import username, password, dbname
 
 import sqlalchemy
 from sqlalchemy import Table, Column, Sequence, Integer, String, Float, DateTime, ForeignKey, and_
@@ -127,7 +127,7 @@ class FingerPrint(Base):
 			text = f.read()
 			f.close()
 
-			paragraph_spans = tokenization.tokenize(text, self.atom_type)
+			paragraph_spans = tokenize(text, self.atom_type)
 
 			index = 0
 
@@ -213,7 +213,7 @@ def populate_database():
 
 	session.close()
 
-url = "postgresql://%s:%s@%s" % (dbconstants.username, dbconstants.password, dbconstants.dbname)
+url = "postgresql://%s:%s@%s" % (username, password, dbname)
 engine = sqlalchemy.create_engine(url)
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
