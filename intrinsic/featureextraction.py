@@ -5,6 +5,8 @@ import nltk
 import inspect
 import string
 import math
+import cPickle
+import os.path
 
 # To add a new feature, write a new method for FeatureExtractor.
 # The method must take two arguments. They may be named (char_index_start,
@@ -347,16 +349,17 @@ class FeatureExtractor:
         
     def _init_external_word_freq_class(self):
 
-        word_freq_dict = {}
-        for word in nltk.corpus.brown.words():
-            word = word.lower()
-            word_freq_dict[word] = word_freq_dict.get(word, 0) + 1
+        #word_freq_dict = {}
+        #for word in nltk.corpus.brown.words():
+        #    word = word.lower()
+        #    word_freq_dict[word] = word_freq_dict.get(word, 0) + 1
+        word_freq_dict = cPickle.load(open(os.path.join(os.path.dirname(__file__), "word_freq.pkl",), "rb"))
         
         corpus_word_freq_by_rank = sorted(word_freq_dict.items(), key=lambda x: x[1], reverse=True)
         occurences_of_most_freq_word = corpus_word_freq_by_rank[0][1]
     
         class_sum_table = [0]
-    
+        
         for span in self.word_spans:
             word = self.text[span[0]:span[1]].lower().translate(string.maketrans("",""), string.punctuation)
             # plus one smoothing is used here!

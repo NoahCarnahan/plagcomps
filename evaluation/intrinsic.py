@@ -3,10 +3,12 @@ from ..shared.util import IntrinsicUtility
 from ..dbconstants import username
 from ..dbconstants import password
 from ..dbconstants import dbname
+from ..intrinsic.cluster import cluster
 
 import datetime
 import xml.etree.ElementTree as ET
 import time
+from os import path as ospath
 
 import sklearn.metrics
 import matplotlib
@@ -41,16 +43,17 @@ def _populate_EVERYTHING():
 
     for doc in all_test_files:
         for atom_type in ["word","sentence", "paragraph"]:
-            for feature in ['averageSentenceLength', 'averageWordLength', 'get_avg_word_frequency_class','get_punctuation_percentage','get_stopword_percentage']:
+            for feature in ['punctuation_percentage', 'stopword_percentage', 'average_sentence_length', 'average_word_length',]:
                 d = _get_reduced_docs(atom_type, [doc], session)[0]
                 print "Calculating", feature, "for", str(d), str(datetime.datetime.now())
                 d.get_feature_vectors([feature], session)
     session.close()
 
-def populate_database(atom_type, num):
+def populate_database(atom_type, num, features=None):
     '''
     Populate the database with the first num training files parsed with the given atom_type.
-    Refer to the code to see which features it populates.
+    Uses the features passed as an optional parameter, or all of them.
+    Refer to the code to see which features it populates when no features passed.
     '''
     
     session = Session()
@@ -59,17 +62,18 @@ def populate_database(atom_type, num):
     util = IntrinsicUtility()
     first_training_files = util.get_n_training_files(num)
 
-    features = ['punctuation_percentage',
-                'stopword_percentage',
-                'average_sentence_length',
-                'average_word_length',
-            # Tests haven't been written for these:
-                #'avg_internal_word_freq_class',
-                #'avg_external_word_freq_class',
-            # These are broken:
-                #'pos_percentage_vector',
-                #'syntactic_complexity',
-                ]
+    if features == None:
+        features = ['punctuation_percentage',
+                    'stopword_percentage',
+                    'average_sentence_length',
+                    'average_word_length',
+                # Tests haven't been written for these:
+                    #'avg_internal_word_freq_class',
+                    #'avg_external_word_freq_class',
+                # These are broken:
+                    #'pos_percentage_vector',
+                    #'syntactic_complexity',
+                    ]
     
     count = 0
     for doc in first_training_files:
@@ -123,7 +127,7 @@ def evaluate(features, cluster_type, k, atom_type, docs):
         count += 1
         if DEBUG:
             print "On document", d, ". The", count, "th document."
-        likelihood = cluster.cluster(d.get_feature_vectors(features, session), cluster_type, k)
+        likelihood = cluster(cluster_type, k, d.get_feature_vectors(features, session))
         plag_likelihoods.append(likelihood)
     
     roc_path, roc_auc = _roc(reduced_docs, plag_likelihoods, features, cluster_type, k, atom_type)
@@ -268,7 +272,8 @@ def _roc(reduced_docs, plag_likelihoods, features = None, cluster_type = None, k
         pyplot.title('Receiver operating characteristic')
     pyplot.legend(loc="lower right")
     
-    path = "figures/roc"+str(time.time())+".pdf"
+    #path = "figures/roc"+str(time.time())+".pdf"
+    path = ospath.join(ospath.dirname(__file__), "../figures/roc"+str(time.time())+".pdf")
     pyplot.savefig(path)
     return path, roc_auc
 
@@ -318,7 +323,7 @@ class ReducedDoc(Base):
         
         self.atom_type = atom_type
         self.timestamp = datetime.datetime.now()
-        self.version_numer = 2
+        self.version_number = 2
         
         # NOTE: I think the note below is outdated/different now.
         #       Now FeatureExtractor.get_feature_vectors() does return a feature for each
@@ -495,4 +500,8 @@ def _test():
     session.close()
     
 if __name__ == "__main__":
-    _test()
+    features = ['punctuation_percentage',
+                'stopword_percentage',
+                'average_sentence_length',
+                'average_word_length',]
+    print evaluate_n_documents(features, "kmeans", 2, "paragraph", 100)
