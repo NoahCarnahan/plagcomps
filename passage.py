@@ -38,6 +38,14 @@ class Passage:
 		
 		return json_rep
 
+	def to_html(self):
+		html = ''
+		for feat, value in self.features.iteritems():
+			html += '<p>%s</p><p>%.4f</p>' % (feat, value)
+			html += '<hr size="10">'
+
+		return html
+
 	def assign_cluster(self, cluster_num):
 		'''
 		Sets self.cluster_num to cluster_num. Returns None.
