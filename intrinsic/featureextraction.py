@@ -1,5 +1,6 @@
 from .. import tokenization
 from .. import spanutils
+from ..shared.passage import IntrinsicPassage
 
 import nltk
 import inspect
@@ -66,6 +67,28 @@ class FeatureExtractor:
 
         return taggedWordTuples
     
+    def get_passages(self, features, atom_type):
+        '''
+        Return a list of IntrinsicPassage objects for each passage in the text
+        (as parsed by atom_type). Each passage object contains metadata about
+        the passage (starting/ending index, actual text etc. See IntrinsicPassage class
+        for more details) and a dictionary of its features.
+        '''
+        passage_spans = self.get_spans(atom_type)
+        feature_vecs = self.get_feature_vectors(features, atom_type)
+        all_passages = []
+
+        for span, feature_vals in zip(passage_spans, feature_vecs):
+            # Parse out relevant data to pass into the IntrinsicPassage object
+            start, end = span
+            text = self.text[start : end]
+            feat_dict = {f : fval for f, fval in zip(features, feature_vals)}
+
+            passage = IntrinsicPassage(start, end, text, atom_type, feat_dict)
+            all_passages.append(passage)
+
+        return all_passages
+
     def get_feature_vectors(self, features, atom_type):
         '''
         Return feature vectors (e.g. (4.3, 12, 0.05)) for each passage in the text
@@ -73,16 +96,8 @@ class FeatureExtractor:
         feature in features. The components of the returned feature vectors are in an
         order corresponding to the order of the features argument.
         '''
-        passage_spans = None
-        if atom_type == "word":
-            passage_spans = self.word_spans
-        elif atom_type == "sentence":
-            passage_spans = self.sentence_spans
-        elif atom_type == "paragraph":
-            passage_spans = self.paragraph_spans
-        else:
-            raise ValueError("Unacceptable atom_type value")
-        
+        passage_spans = self.get_spans(atom_type)
+
         vectors = []
         for passage_span in passage_spans:
             vectors.append(self._get_feature_vector(features, passage_span[0], passage_span[1]))
