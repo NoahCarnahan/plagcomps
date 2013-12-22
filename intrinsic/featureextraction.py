@@ -138,7 +138,7 @@ class FeatureExtractor:
         try:
             func = getattr(self, func_name)
         except AttributeError:
-            raise ValueError("Invalid feature name.")
+            raise ValueError("Invalid feature name: %s" % func_name)
             
         accepted_params = inspect.getargspec(func).args
         if "char_index_start" in accepted_params:
@@ -212,14 +212,14 @@ class FeatureExtractor:
         return float(total_sentence_length) / max(num_words, 1)
     
     def _init_pos_frequency_table(self):
-    	'''
-    	instantiates a table of part-of-speech counts 
+        '''
+        instantiates a table of part-of-speech counts 
         currently tracks the following categories:
         0) conjunctions -- tags CC, IN (though we will try to ignore common prepositions that are not conjunctions)
         1) WH-pronouns -- tags WP, WP$
         2) Verbs -- tags VB, VBD, VBG, VBN, VBP, VBZ
         3) None of the above
-    	'''
+        '''
         sum_table = [[0,0,0,0]]
         total_count = [0,0,0,0]
         for posTuple in self.pos_tags:
@@ -256,10 +256,10 @@ class FeatureExtractor:
         return tuple([a / float(num_words) for a in total_vect])
     
     def _init_stopword_percentage(self):
-    	'''
-    	instatiates the table for stopword counts which allows for constant-time
-    	querying of stopword percentages within a particular passage
-    	'''
+        '''
+        instatiates the table for stopword counts which allows for constant-time
+        querying of stopword percentages within a particular passage
+        '''
         sum_table = [0]
         count = 0
         for span in self.word_spans:
@@ -286,10 +286,10 @@ class FeatureExtractor:
         return float(total_stopwords) / max(num_sents, 1)
         
     def _init_punctuation_percentage(self):
-    	'''
-    	instatiates the table for the punctuation counts which allows for constant-time
-    	querying of punctuation percentages within a particular passage
-    	'''
+        '''
+        instatiates the table for the punctuation counts which allows for constant-time
+        querying of punctuation percentages within a particular passage
+        '''
         sum_table = [0]
         count = 0
         for char in self.text:

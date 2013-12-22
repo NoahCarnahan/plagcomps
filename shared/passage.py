@@ -44,6 +44,20 @@ class IntrinsicPassage(Passage):
 		
 		return json_rep
 
+
+	def to_html(self):
+		'''
+		Returns an HTML representation of this passage's features, for use 
+		by the plagapp front-end
+		'''
+		html = ''
+		for feat, val in self.features.iteritems():
+			html += '<p>%s</p>' % feat
+			html += '<p>%.4f</p>' % val
+			html += '<hr size = "10"'
+
+		return html
+
 	def set_plag_confidence(self, confidence):
 		'''
 		Sets how confident we are this passage was plagiarized
