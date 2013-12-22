@@ -1,8 +1,8 @@
-import cluster, feature_extractor
-import math, random
+import math
+import random
 import scipy.stats
 
-class State :
+class _State :
 	def __init__(self, num, ft_list, trans_probs, means_list, variances):
 		self.feature_list = ft_list
 		self.num = num
@@ -53,7 +53,7 @@ def hmm_cluster(stylo_vectors, k):
 	for i in xrange(len(variances)):
 		variances[i] /= float(len(stylo_vectors))
 	
-	states = [State(i, stylo_vectors[0], trans_probs[i].copy(), stylo_vectors[len(stylo_vectors)/k*i], variances[:]) for i in range(k)]
+	states = [_State(i, stylo_vectors[0], trans_probs[i].copy(), stylo_vectors[len(stylo_vectors)/k*i], variances[:]) for i in range(k)]
 	# initial probabilitis are uniform
 	initial_state_probs = [math.log(1.0/k)]*k
 	

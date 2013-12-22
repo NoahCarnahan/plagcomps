@@ -1,16 +1,21 @@
+from ..intrinsic.featureextraction import FeatureExtractor
+from ..shared.util import IntrinsicUtility
+from ..dbconstants import username
+from ..dbconstants import password
+from ..dbconstants import dbname
+from ..intrinsic.cluster import cluster
+
 import datetime
 import xml.etree.ElementTree as ET
 import time
+from os import path as ospath
 
 import sklearn.metrics
 import matplotlib
 matplotlib.use('pdf')
 import matplotlib.pyplot as pyplot
 
-from cluster import StylometricCluster
-from shared.util import IntrinsicUtility
-import feature_extractor
-import dbconstants
+
 
 import sqlalchemy
 from sqlalchemy import Table, Column, Sequence, Integer, String, Float, DateTime, ForeignKey, and_
@@ -26,42 +31,29 @@ Base = declarative_base()
 
 DEBUG = True
 
-def run_intrinsic(features, cluster_type, k, atom_type, doc):
-	'''
-	Perform intrinsic plagiarism detection with the given parameters.
-	
-	doc should be an absolute path for a document, like "/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents/part7/suspicious-document12675.txt"
-	features is a list of strings where each string is the name of a StylometricFeatureEvaluator method.
-    cluster_type is "kmeans", "hmm", or "agglom".
-    k is an integer.
-    atom_type is "word", "sentence", or "paragraph".
-	
-	Returns a list in the form [(0, 50, .231),(51, 78, .955), ...]
-  	list[0][0] is the start index of the first passage.
-  	list[0][1] is the end index os the first passage.
-  	list[0][2] is the likelihood that that passage was plagiarized.
-  	list[1][0] is the start index of the second passage.
-  	etc...
-	'''
-	session = Session()
-	
-	d = _get_reduced_docs(atom_type, [doc], session)[0]
-	c = _cluster(d.get_feature_vectors(features, session), cluster_type, k)
-	ret = []
-	spans = d.get_spans()
-	for span_index in xrange(len(spans)):
-		span = spans[span_index]
-		ret.append((span[0], span[1], c[span_index]))
-	
-	session.close()
-	
-	return ret
+def _populate_EVERYTHING():
+    '''
+    Populate the database with ReducedDocs for all documents, atom types, and features.
+    This takes days.
+    '''
 
-def populate_database(atom_type, num):
+    all_test_files = IntrinsicUtility().get_n_training_files()
+
+    session = Session()
+
+    for doc in all_test_files:
+        for atom_type in ["word","sentence", "paragraph"]:
+            for feature in ['punctuation_percentage', 'stopword_percentage', 'average_sentence_length', 'average_word_length',]:
+                d = _get_reduced_docs(atom_type, [doc], session)[0]
+                print "Calculating", feature, "for", str(d), str(datetime.datetime.now())
+                d.get_feature_vectors([feature], session)
+    session.close()
+
+def populate_database(atom_type, num, features=None):
     '''
     Populate the database with the first num training files parsed with the given atom_type.
-    This method populates all files with averageSentenceLength, averageWordLength,
-    get_avg_word_frequency_class, get_punctuation_percentage, and get_stopword_percentage.
+    Uses the features passed as an optional parameter, or all of them.
+    Refer to the code to see which features it populates when no features passed.
     '''
     
     session = Session()
@@ -70,7 +62,18 @@ def populate_database(atom_type, num):
     util = IntrinsicUtility()
     first_training_files = util.get_n_training_files(num)
 
-    features = ['averageSentenceLength', 'averageWordLength', 'get_avg_word_frequency_class','get_punctuation_percentage','get_stopword_percentage']
+    if features == None:
+        features = ['punctuation_percentage',
+                    'stopword_percentage',
+                    'average_sentence_length',
+                    'average_word_length',
+                # Tests haven't been written for these:
+                    #'avg_internal_word_freq_class',
+                    #'avg_external_word_freq_class',
+                # These are broken:
+                    #'pos_percentage_vector',
+                    #'syntactic_complexity',
+                    ]
     
     count = 0
     for doc in first_training_files:
@@ -124,12 +127,14 @@ def evaluate(features, cluster_type, k, atom_type, docs):
         count += 1
         if DEBUG:
             print "On document", d, ". The", count, "th document."
-        c = _cluster(d.get_feature_vectors(features, session), cluster_type, k)
-        plag_likelihoods.append(c)
+        likelihood = cluster(cluster_type, k, d.get_feature_vectors(features, session))
+        plag_likelihoods.append(likelihood)
     
     roc_path, roc_auc = _roc(reduced_docs, plag_likelihoods, features, cluster_type, k, atom_type)
     session.close()
     return roc_path, roc_auc
+
+
 
 def _stats_evaluate_n_documents(features, atom_type, n):
     '''
@@ -190,6 +195,8 @@ def _feature_stats_evaluate(features, atom_type, docs):
     different_doc_outfile.close()
     session.close() 
 
+
+
 def _get_reduced_docs(atom_type, docs, session, create_new=True):
     '''
     Return ReducedDoc objects for the given atom_type for each of the documents in docs. docs is a
@@ -204,7 +211,7 @@ def _get_reduced_docs(atom_type, docs, session, create_new=True):
     reduced_docs = []
     for doc in docs:
         try:
-            r = session.query(ReducedDoc).filter(and_(ReducedDoc.full_path == doc, ReducedDoc.atom_type == atom_type)).one()
+            r = session.query(ReducedDoc).filter(and_(ReducedDoc.full_path == doc, ReducedDoc.atom_type == atom_type, ReducedDoc.version_number == 2)).one()
         except sqlalchemy.orm.exc.NoResultFound, e:
             if create_new:
                 r = ReducedDoc(doc, atom_type)
@@ -215,22 +222,6 @@ def _get_reduced_docs(atom_type, docs, session, create_new=True):
         reduced_docs.append(r)
         
     return reduced_docs
-
-def _cluster(feature_vectors, cluster_type, k):
-    '''
-    Return a list of confidence values between 0 and 1. The ith element of the list is our
-    confidence that the ith feature vector in feature_vectors is plagiarised based on a clustering
-    of type cluster_type (into k clusters).
-    '''
-    s = StylometricCluster()
-    if cluster_type == "kmeans":
-        return s.kmeans(feature_vectors, k)
-    elif cluster_type == "agglom":
-        return s.agglom(feature_vectors, k)
-    elif cluster_type == "hmm":
-        return s.hmm(feature_vectors, k)
-    else:
-        raise ValueError("Unacceptable cluster_type. Use 'kmeans', 'agglom', or 'hmm'.")
 
 def _roc(reduced_docs, plag_likelihoods, features = None, cluster_type = None, k = None, atom_type = None):
     '''
@@ -281,7 +272,8 @@ def _roc(reduced_docs, plag_likelihoods, features = None, cluster_type = None, k
         pyplot.title('Receiver operating characteristic')
     pyplot.legend(loc="lower right")
     
-    path = "figures/roc"+str(time.time())+".pdf"
+    #path = "figures/roc"+str(time.time())+".pdf"
+    path = ospath.join(ospath.dirname(__file__), "../figures/roc"+str(time.time())+".pdf")
     pyplot.savefig(path)
     return path, roc_auc
 
@@ -331,8 +323,13 @@ class ReducedDoc(Base):
         
         self.atom_type = atom_type
         self.timestamp = datetime.datetime.now()
-        self.version_numer = 1
+        self.version_number = 2
         
+        # NOTE: I think the note below is outdated/different now.
+        #       Now FeatureExtractor.get_feature_vectors() does return a feature for each
+        #       span. So, we could set self._spans now. But, the initialization of that
+        #       object does take same time, so we would want to save it probably rather
+        #       than do it twice.
         # NOTE: because feature_evaluator.get_specific_features doesn't actually return a
         # passage object for each span, we can't set self._spans until that has been run.
         # I don't like it though, because we have to raise an error now if self.get_spans()
@@ -342,7 +339,7 @@ class ReducedDoc(Base):
         #f = open(self.full_path, 'r')
         #text = f.read()
         #f.close()
-        #self._spans = feature_extractor.get_spans(text, self.atom_type)
+        #self._spans = FeatureExtractor(text).get_spans(self.atom_type)
         self._spans = None
         
         # set self._plagiarized_spans
@@ -395,39 +392,25 @@ class ReducedDoc(Base):
         '''
         try:
             return self._features[feature]
+            
         except KeyError:
-        
-            # TODO: The code here is more or less copy-pasted from controller. We should
-            #       probably modify controller instead.
-        
-            # Run our tool to get the feature values and spans
-            feature_evaluator = feature_extractor.StylometricFeatureEvaluator(self.full_path)
-            all_passages = []
-            for i in xrange(len(feature_evaluator.getAllByAtom(self.atom_type))):
-                passage = feature_evaluator.get_specific_features([feature], i, i + 1, self.atom_type)
-                if passage != None:
-                    all_passages.append(passage)
-                #else:
-                #    raise Exception("This should never happen.")
-            feature_values = []
-            for p in all_passages:
-                feature_values.append(p.features.values()[0])            
+            # Read the file
+            f = open(self.full_path, 'r')
+            text = f.read()
+            f.close()
             
-            # Build self.spans
-            spans = []
-            for p in all_passages:
-                spans.append([p.start_word_index, p.end_char_index])
-                #TODO: Do we really want these "snapped out" spans to be the spans that are saved? I think not...
+            # Create a FeatureExtractor
+            extractor = FeatureExtractor(text)
+            
+            # Save self._spans
             if self._spans:
-                assert(self._spans == spans)
-                #for i in range(len(self._spans)):
-                #    if self._spans[i] != spans[i]:
-                #        print i, self._spans[i], spans[i]
-                #        assert(False)
-            self._spans = spans
-                
+                assert(self._spans == [list(x) for x in extractor.get_spans(self.atom_type)])
+            self._spans = extractor.get_spans(self.atom_type)
             
+            # Save self._features
+            feature_values = [tup[0] for tup in extractor.get_feature_vectors([feature], self.atom_type)]
             self._features[feature] = feature_values
+            
             session.commit()
             return self._features[feature]
 
@@ -468,6 +451,7 @@ class _Figure(Base):
     __tablename__ = "figure"
     id = Column(Integer, Sequence("figure_id_seq"), primary_key=True)
     timestamp = Column(DateTime)
+    version_number = Column(Integer)
     
     figure_path = Column(String)
     figure_type = Column(String)
@@ -483,6 +467,7 @@ class _Figure(Base):
         
         self.figure_path = figure_path
         self.timestamp = datetime.datetime.now()
+        self.version_number = 2
         self.figure_type = figure_type
         self.auc = auc
         self.features = features
@@ -490,10 +475,10 @@ class _Figure(Base):
         self.k = k
         self.atom_type = atom_type
         self.n = n
-    
 
+    
 # an Engine, which the Session will use for connection resources
-url = "postgresql://%s:%s@%s" % (dbconstants.username, dbconstants.password, dbconstants.dbname)
+url = "postgresql://%s:%s@%s" % (username, password, dbname)
 engine = sqlalchemy.create_engine(url)
 # create tables if they don't already exist
 Base.metadata.create_all(engine)
@@ -508,32 +493,15 @@ def _test():
     
     rs =  _get_reduced_docs("paragraph", first_training_files, session)
     for r in rs:
-        print r.get_feature_vectors(['averageSentenceLength', 'averageWordLength', 'get_avg_word_frequency_class','get_punctuation_percentage','get_stopword_percentage'], session)
+        print r.get_feature_vectors(['punctuation_percentage',
+                                     'stopword_percentage',
+                                     'average_sentence_length',
+                                     'average_word_length',], session)
+    session.close()
     
-    session.close()
-
-def _populate_EVERYTHING():
-    '''
-    Populate the database with ReducedDocs for all documents, atom types, and features.
-    This takes days.
-    '''
-
-    all_test_files = IntrinsicUtility().get_n_training_files()
-
-    session = Session()
-
-    for doc in all_test_files:
-        for atom_type in ["word","sentence", "paragraph"]:
-            for feature in ['averageSentenceLength', 'averageWordLength', 'get_avg_word_frequency_class','get_punctuation_percentage','get_stopword_percentage']:
-                d = _get_reduced_docs(atom_type, [doc], session)[0]
-                print "Calculating", feature, "for", str(d), str(datetime.datetime.now())
-                d.get_feature_vectors([feature], session)
-    session.close()
-
 if __name__ == "__main__":
-    #_populate_EVERYTHING()
-
-    #populate_database("sentence", 100)
-
-    for i in ['averageSentenceLength', 'averageWordLength', 'get_avg_word_frequency_class','get_punctuation_percentage','get_stopword_percentage']:
-        print evaluate_n_documents([i], "kmeans", 2, "sentence", 1500)
+    features = ['punctuation_percentage',
+                'stopword_percentage',
+                'average_sentence_length',
+                'average_word_length',]
+    print evaluate_n_documents(features, "kmeans", 2, "paragraph", 100)
