@@ -18,7 +18,7 @@ def get_plagiarism(text, atom_type, features, cluster_method, k):
     # Return it
     return zip(tokenize(text, atom_type), confidences) # should feature extractor have a method that returns the spans it used instead?
 
-def get_plagiarism_passages(text, atom_type, features, cluster_method, k):
+def get_plagiarism_passages(text, atom_type, features, cluster_method='none', k=2):
     '''
     Return a list of passages, each of which contains
     a starting/ending index, its text, its atom_type, and a dictionary of
@@ -29,10 +29,12 @@ def get_plagiarism_passages(text, atom_type, features, cluster_method, k):
     passages = feature_extractor.get_passages(features, atom_type)
     feature_vecs = [p.features.values() for p in passages]
 
-    # Cluster the passages and set their confidences
-    confidences = cluster(cluster_method, k, feature_vecs)
-    for psg, conf in zip(passages, confidences):
-        psg.set_plag_confidence(conf)
+    # If just testing feature extraction, don't cluster passages
+    if cluster_method != 'none':
+        # Cluster the passages and set their confidences
+        confidences = cluster(cluster_method, k, feature_vecs)
+        for psg, conf in zip(passages, confidences):
+            psg.set_plag_confidence(conf)
     
     # List of passages with plag. conf. set
     return passages

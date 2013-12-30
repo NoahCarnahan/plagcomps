@@ -50,7 +50,10 @@ class IntrinsicPassage(Passage):
 		Returns an HTML representation of this passage's features, for use 
 		by the plagapp front-end
 		'''
-		html = ''
+		html = '<p>Plag. conf.</p>'
+		html += '<p>%s</p>' % str(self.plag_confidence) 
+		html += '<hr size = "10"'
+
 		for feat, val in self.features.iteritems():
 			html += '<p>%s</p>' % feat
 			html += '<p>%.4f</p>' % val
