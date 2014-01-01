@@ -35,6 +35,7 @@ class FeatureExtractor:
     
         self.average_word_length_initialized = False
         self.average_sentence_length_initialized = False
+        self.syntactic_complexity_average_initalized = False
         self.pos_percentage_vector_initialized = False
         self.stopword_percentage_initialized = False
         self.punctuation_percentage_initiliazed = False
@@ -65,7 +66,13 @@ class FeatureExtractor:
             # run part-of-speech tagging on the sentence following the word_tokenize-ation of it
             taggedWordTuples += nltk.tag.pos_tag(nltk.word_tokenize(sentence))
 
-        return taggedWordTuples
+        # we want to remove the tagged punctuation, since that will mess up our word indexing
+        no_punctuation_tuples = []
+        for tup in taggedWordTuples:
+            if tup[1] != ".":
+                no_punctuation_tuples.append(tup)
+
+        return no_punctuation_tuples 
     
     def get_passages(self, features, atom_type):
         '''
@@ -213,48 +220,65 @@ class FeatureExtractor:
     
     def _init_pos_frequency_table(self):
         '''
-        instantiates a table of part-of-speech counts 
-        currently tracks the following categories:
-        0) conjunctions -- tags CC, IN (though we will try to ignore common prepositions that are not conjunctions)
-        1) WH-pronouns -- tags WP, WP$
-        2) Verbs -- tags VB, VBD, VBG, VBN, VBP, VBZ
-        3) None of the above
+        instantiates a dictionary of part-of-speech counts over word indices 
+        tracks all tags from the penn treebank tagger as well as some additional features
+        keys to the dictionary are parts of speech like "VERBS" or specific tags like "VBZ"
         '''
-        sum_table = [[0,0,0,0]]
-        total_count = [0,0,0,0]
-        for posTuple in self.pos_tags:
-            word = posTuple[0].lower()
-            tag = posTuple[1]
-            # get the current count
-            current_count = total_count[:] 
-            # we want conjunctions -- IN contains coordinating conjunctions and prepositions, 
-            # so we will explicitly filter out some common prepositions
-            if tag in ["CC", "IN"] and word not in ["to", "of", "in", "from", "on"]:
-                current_count[0] += 1
-            elif tag in ["WP", "WP$"]:
-                current_count[1] += 1
-            elif tag.startswith("VB"):
-                current_count[2] += 1
-            else:
-                current_count[3] += 1
-            # maintain the count outside this iteration
-            total_count = current_count[:]
-            sum_table.append(current_count)
+        sum_dict = {}
+        # temp_dict will hold temporary values that we'll later use to construct the sum table for each key
+        temp_dict = {}
+        for index in range(len(self.pos_tags)):
+            word = self.pos_tags[index][0].lower()
+            tag = self.pos_tags[index][1]
+            temp_dict[tag] = temp_dict.get(tag, []) + [index]
 
-        self.pos_frequency_count_table = sum_table
+            # Now we want to populate special keys that we care about
+            # verbs
+            if tag.startswith("VB"):
+                temp_dict["VERBS"] = temp_dict.get("VERBS", []) + [index]
+            # wh-words (why, who, what, where...)
+            if tag in ["WP", "WP$", "WDT", "WRB"]:
+                temp_dict["WH"] = temp_dict.get("WH", []) + [index]
+            # subordinating conjunctions
+            if word in ["since", "because", "as", "that", "while", "unless", "until", "than", "though", "although"]:
+                temp_dict["SUB"] = temp_dict.get("SUB", []) + [index]
+
+        # now go through the stored indices to create the actual sum table
+        for key in temp_dict:
+            sum_dict[key] = [0]
+            prev_index = 0
+            prev_value = 0
+            for index in temp_dict[key]:
+                sum_dict[key] += [prev_value] * (index - prev_index)
+                prev_index = index
+                prev_value += 1
+            sum_dict[key] += [prev_value] * (len(self.pos_tags) - prev_index)
+
+        # so each tag and special key holds a list that looks like [0,0,0,1,1,1,2,2,3,4, ... ]
+        # where list[i] is the number of tags for that key that have happened _before_ the ith word 
+        # note that this is exclusive of the final index, so sum_dict[tag][0] = 0 for all tags
+        # so sum_dict["VERBS"][10] is the number of verbs that have shown up in words 0 through 9.
+
+        self.pos_frequency_count_table = sum_dict
         
         self.pos_percentage_vector_initialized = True
     
     def pos_percentage_vector(self, word_spans_index_start, word_spans_index_end):
         # TODO: What the hell is this feature?
         # Oh... This feature is a vector itself? not a single value...
+        # -----------
+        # this feature is deprecated 12 / 26 / 2013
+        # -----------
+        '''
         if not self.pos_percentage_vector_initialized:
             self._init_pos_frequency_table()
         
         total_vect = [a - b for a, b in zip(self.pos_frequency_count_table[word_spans_index_end], self.pos_frequency_count_table[word_spans_index_start])]
         num_words = word_spans_index_end - word_spans_index_start
         return tuple([a / float(num_words) for a in total_vect])
-    
+        '''
+        return None
+
     def _init_stopword_percentage(self):
         '''
         instatiates the table for stopword counts which allows for constant-time
@@ -320,11 +344,58 @@ class FeatureExtractor:
         if not self.pos_percentage_vector_initialized:
             self._init_pos_frequency_table()
             
-        num_conjunctions = self.pos_frequency_count_table[word_spans_index_end][0] - self.pos_frequency_count_table[word_spans_index_start][0]
-        num_wh_pronouns = self.pos_frequency_count_table[word_spans_index_end][1] - self.pos_frequency_count_table[word_spans_index_start][1]
-        num_verb_forms = self.pos_frequency_count_table[word_spans_index_end][2] - self.pos_frequency_count_table[word_spans_index_start][2]
+        conjunctions_table = self.pos_frequency_count_table.get("SUB", None)
+        if conjunctions_table != None:
+            #print "conjunctions", conjunctions_table[word_spans_index_start:word_spans_index_end+1]
+            num_conjunctions = conjunctions_table[word_spans_index_end] - conjunctions_table[word_spans_index_start]
+        else:
+            num_conjunctions = 0
 
+        wh_table = self.pos_frequency_count_table.get("WH", None)
+        if wh_table != None:
+            #print "wh", wh_table[word_spans_index_start:word_spans_index_end+1]
+            num_wh_pronouns = wh_table[word_spans_index_end] - wh_table[word_spans_index_start]
+        else:
+            num_wh_pronouns = 0
+
+        verb_table = self.pos_frequency_count_table.get("VERBS", None)
+        if verb_table != None:
+            #print "verbs", verb_table[word_spans_index_start:word_spans_index_end+1]
+            num_verb_forms = verb_table[word_spans_index_end] - verb_table[word_spans_index_start]
+        else:
+            num_verb_forms = 0
+        
         return 2 * num_conjunctions + 2 * num_wh_pronouns + num_verb_forms
+
+    def _init_syntactic_complexity_average(self):
+        '''
+        Initializes the syntactic_complexity_sum_table. syntactic_complexity_sum_table[i] is the sum of the sum
+        of syntactic complexities in sentences 0 to i-1.
+        '''
+        sum_table = [0]
+        for start, end in self.sentence_spans:
+            # word_spans holds the (start, end) tuple of indices for the words in the currently examined sentence
+            word_spans = spanutils.slice(self.word_spans, start, end, True)
+            complexity = self.syntactic_complexity(word_spans[0], word_spans[1])
+            sum_table.append(complexity + sum_table[-1])
+
+        self.syntactic_complexity_sum_table = sum_table
+
+        syntactic_complexity_average_initialized = True
+
+    def syntactic_complexity_average(self, sent_spans_index_start, sent_spans_index_end):
+        '''
+        Computes the average syntactic complexity for each sentence in the given paragraphs and averages them
+        '''
+
+        if not self.syntactic_complexity_average_initalized:
+            self._init_syntactic_complexity_average() 
+        
+        end_sum = self.syntactic_complexity_sum_table[sent_spans_index_end]
+        start_sum = self.syntactic_complexity_sum_table[sent_spans_index_start]
+        total_syntactic_complexity = end_sum - start_sum
+        num_sents = sent_spans_index_end - sent_spans_index_start
+        return float(total_syntactic_complexity) / max(num_sents, 1)
     
     def _init_internal_word_freq_class(self):
         '''
@@ -430,35 +501,35 @@ def _test():
     # TODO: ADD TEST FOR INTERNAL WORD FREQ CLASS
     f.get_feature_vectors(["avg_internal_word_freq_class"], "sentence")
     print "avg_internal_word_freq_class test DOES NOT EXIST" 
-   
+  
     
     # TODO: ADD TEST FOR EXTERNAL WORD FREQ CLASS
     f.get_feature_vectors(["avg_external_word_freq_class"], "sentence")
     print "avg_external_word_freq_class DOES NOT EXIST"
     
-
+    # We no longer use pos_percentage_vector
+    '''
     f = FeatureExtractor("The brown fox ate. I go to the school. Believe it.")
     #print f.get_feature_vectors(["pos_percentage_vector"], "sentence")
     if f.get_feature_vectors(["pos_percentage_vector"], "sentence") == [(0,0,0,1.0), (0,0,.2,.8), (0,0,0,1.0)]:
         print "pos_percentage_vector test passed"
     else:
         print "pos_percentage_vector test FAILED"
-    
+    '''
+
     f = FeatureExtractor("The brown fox ate. I go to the school. Believe it. I go.")
     #print f.get_feature_vectors(["syntactic_complexity"], "sentence")
     if f.get_feature_vectors(["syntactic_complexity"], "sentence") == [(0,), (1,), (0,), (1,)]:
         print "syntactic_complexity test passed"
     else:
         print "syntactic_complexity test FAILED"
+
+    f = FeatureExtractor("The brown fox ate. I go to the school. Believe it. I go.")
+    #print f.get_feature_vectors(["syntactic_complexity_average"], "paragraph")
+    if f.get_feature_vectors(["syntactic_complexity_average"], "paragraph") == [(0.5,)]:
+        print "syntactic_complexity_average test passed"
+    else:
+        print "syntactic_complexity_average test FAILED"
     
 if __name__ == "__main__":
     _test()
-    
-    
-    
-    
-    
-    
-    
-    
-
