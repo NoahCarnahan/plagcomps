@@ -16,11 +16,7 @@ from ..shared.util import ExtrinsicUtility
 class ExtrinsicTester:
 
     def __init__(self, atom_type, fingerprint_method, suspect_file_list, source_file_list):
-        self.suspicious_path_start = "/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents"
-        self.corpus_path_start = "/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/source-documents"
-        source_dirs = os.listdir(self.corpus_path_start)
-        self.source_file_paths = [self.corpus_path_start + f for f in source_file_list]
-        self.suspect_file_paths = [self.suspicious_path_start + f for f in suspect_file_list]
+        self.source_file_paths, self.suspect_file_paths = ExtrinsicUtility().get_n_training_files()
 
         # uncomment these two lines to test on reasonable sized corpus
         # self.source_file_paths = ["sample_corpus/source1", "sample_corpus/source2", "sample_corpus/source3"]
@@ -127,23 +123,6 @@ class ExtrinsicTester:
 if __name__ == "__main__":
     util = ExtrinsicUtility()
     num_files = 5
-
-    # suspect_file_listing = open('extrinsic_corpus_partition/extrinsic_training_suspect_files.txt', 'r')
-    # suspect_file_list = []
-    # i = 0
-    # for line in suspect_file_listing:
-    #     suspect_file_list.append(line.strip())
-    #     i += 1
-    #     if i >= num_files:
-    #         break
-    # suspect_file_listing.close()
-
-    # source_file_listing = open('extrinsic_corpus_partition/extrinsic_training_source_files.txt', 'r')
-    # source_file_list = []
-    # for line in source_file_listing:
-    #     source_file_list.append(line.strip())
-    # source_file_listing.close()
-    
 
     source_file_list, suspect_file_list = util.get_n_training_files(n=num_files)
 
