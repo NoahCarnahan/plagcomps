@@ -11,6 +11,7 @@ import os
 import time
 import nltk
 import fingerprint_extraction
+from ..shared.util import ExtrinsicUtility
 
 class ExtrinsicTester:
 
@@ -124,24 +125,28 @@ class ExtrinsicTester:
 
 
 if __name__ == "__main__":
+    util = ExtrinsicUtility()
     num_files = 5
 
-    suspect_file_listing = open('extrinsic_corpus_partition/extrinsic_training_suspect_files.txt', 'r')
-    suspect_file_list = []
-    i = 0
-    for line in suspect_file_listing:
-        suspect_file_list.append(line.strip())
-        i += 1
-        if i >= num_files:
-            break
-    suspect_file_listing.close()
+    # suspect_file_listing = open('extrinsic_corpus_partition/extrinsic_training_suspect_files.txt', 'r')
+    # suspect_file_list = []
+    # i = 0
+    # for line in suspect_file_listing:
+    #     suspect_file_list.append(line.strip())
+    #     i += 1
+    #     if i >= num_files:
+    #         break
+    # suspect_file_listing.close()
 
-    source_file_listing = open('extrinsic_corpus_partition/extrinsic_training_source_files.txt', 'r')
-    source_file_list = []
-    for line in source_file_listing:
-        source_file_list.append(line.strip())
-    source_file_listing.close()
+    # source_file_listing = open('extrinsic_corpus_partition/extrinsic_training_source_files.txt', 'r')
+    # source_file_list = []
+    # for line in source_file_listing:
+    #     source_file_list.append(line.strip())
+    # source_file_listing.close()
     
+
+    source_file_list, suspect_file_list = util.get_n_training_files(n=num_files)
+
     print 'Testing first', num_files, ' suspect files using a corpus of ', len(source_file_list),' source documents:'
     print 'Suspect filenames:', suspect_file_list
 
