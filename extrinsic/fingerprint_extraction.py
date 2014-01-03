@@ -3,7 +3,10 @@
 
 import nltk
 import itertools
+import os
 import string, random, re, operator
+from .. import tokenization
+from ..shared.util import ExtrinsicUtility
 
 # TODO: omit words tokenized by nltk that are just puncuation
 
@@ -25,6 +28,7 @@ class FingerprintExtractor:
 			return 0
 		elif len(in_string) == 1:
 			return ord(in_string)
+
 		hash_list = [ord(in_string[0])] # TODO: what should the 0th element be?
 		for i in xrange(1, len(in_string)):
 			cur_char = in_string[i]
@@ -44,12 +48,19 @@ class FingerprintExtractor:
 		'''
 		if method == "full":
 			words = nltk.tokenize.punkt.PunktWordTokenizer().tokenize(document)
-			fingerprint = self._get_full_fingerprint(words, n)
+			# Strips all punctuation from <words>
+			words_stripped = tokenization.strip_punctuation(words)
+			fingerprint = self._get_full_fingerprint(words_stripped, n)
+
 		elif method == "kth_in_sent":
 			sentences = nltk.tokenize.punkt.PunktSentenceTokenizer().tokenize(document)
 			fingerprint = self._get_kth_in_sent_fingerprint(sentences, n, k)
+
 		elif method == "anchor":
-			fingerprint = self._get_anchor_fingerprint(document, n)
+			words = nltk.tokenize.punkt.PunktWordTokenizer().tokenize(document)
+			# Strips all punctuation from <words>
+			words_stripped = tokenization.strip_punctuation(words)
+			fingerprint = self._get_anchor_fingerprint_by_word(words_stripped, n)
 
 		return fingerprint
 	
@@ -62,7 +73,11 @@ class FingerprintExtractor:
 	def _get_kth_in_sent_fingerprint(self, sentences, n, k):
 		fingerprint = []
 		for sent in sentences:
-			split_sent = sent.split()
+			# Split the sentence the same way we tokenize based on words
+			# and strip punctuation
+			split_sent = nltk.tokenize.punkt.PunktWordTokenizer().tokenize(sent)
+			split_sent = tokenization.strip_punctuation(split_sent)
+			
 			L = len(split_sent)
 			# We want the n-gram beginning at word k, but if k > len(sentence) or n > len(sentence)
 			# then we want the longest n-gram we can find (perhaps the whole sentence).
@@ -110,6 +125,29 @@ class FingerprintExtractor:
 				fingerprint.append(self._gen_string_hash(match.group(0)))
 		return fingerprint
 
+	def _get_anchor_fingerprint_by_word(self, words, n):
+		'''
+		Finds all w in <words> such that w contains one of <self.anchors>,
+		hashes the <n>gram surrounding each w, and returns the hashes
+		of these surrounding <n>grams as the fingerprint of the document
+		'''
+		fingerprint = []
+
+		for i in range(len(words)):
+			cur_word = words[i]
+			for anchor in self.anchors:
+				if anchor in cur_word:
+					# Place anchor in middle of n-gram
+					start_index = max(0, i - (n - 1) / 2)
+					end_index = min(i + n / 2, len(words)) + 1
+
+					# Avoid too-short cases at start/end of text
+					if end_index - start_index == n:
+						ngram = ' '.join(words[start_index : end_index])
+						fingerprint.append(self._gen_string_hash(ngram))
+
+		return fingerprint
+
 class FingerprintEvaluator:
 
 	def __init__(self, source_filepaths, fingerprint_method="full", n=3):
@@ -120,7 +158,7 @@ class FingerprintEvaluator:
 		# we'll just be querying the database eventually...
 		print "beginning source fingerprinting of", len(source_filepaths), "sources..."
 		for filename in source_filepaths:
-			with open(filename+'.txt') as f:
+			with open(filename) as f:
 				text = ""
 				for line in f:
 					text += line + "\n"
@@ -138,6 +176,16 @@ class FingerprintEvaluator:
 			source_documents[source] = jaccard_similarity(fingerprint, self.source_fingerprints[source])
 		return sorted(source_documents.items() , key = operator.itemgetter(1), reverse=True)
 
+	def classify_and_display(self, doc):
+		'''
+		'''
+		result = self.classify_document(doc)
+		print 'Using', self.fingerprint_method
+
+		for src, sim in result:
+			print os.path.basename(src), sim
+		print 
+
 def jaccard_similarity(a, b):
 	'''a and b are lists (multisets) of fingerprints of which we want to find the similarity'''
 	intersection_size = len(set(a).intersection(set(b)))
@@ -148,11 +196,18 @@ def jaccard_similarity(a, b):
 	else:
 		return 0
 
+def anchor_test():
+	text = 'good, should be caught. also am should be, as well as cat. end of doc is here.'
+	ex = FingerprintExtractor()
+	print ex.get_fingerprint(text, 4, method='anchor')
+
 if __name__ == '__main__':
 	ex = FingerprintExtractor()
 	corp = nltk.corpus.gutenberg
 
-	sources = ["sample_corpus/source1", "sample_corpus/source2", "sample_corpus/source3"]
+	util = ExtrinsicUtility()
+	sources = util.get_sample_source_paths()
+	
 	full = FingerprintEvaluator(sources, "full")
 	kth = FingerprintEvaluator(sources, "kth_in_sent")
 	anchor = FingerprintEvaluator(sources, "anchor")
@@ -160,17 +215,18 @@ if __name__ == '__main__':
 #	ev = FingerprintEvaluator(["sample_corpus/easy_source.txt"])
 #	ev.classify_document("sample_corpus/easy_test.txt")
 
-	for test in range(1,5):
-		print "test" + str(test) 
-		full_doc = open("sample_corpus/test"+str(test)+".txt", 'r')
-		print full.classify_document(full_doc.read())
+	test_files = util.get_sample_test_paths()
+
+	for test_doc in test_files:
+		print "testing", os.path.basename(test_doc)
+		full_doc = open(test_doc, 'r')
+		text = full_doc.read()
 		full_doc.close()
-		kth_doc = open("sample_corpus/test"+str(test)+".txt", 'r')
-		print kth.classify_document(kth_doc.read())
-		kth_doc.close()
-		anch_doc = open("sample_corpus/test"+str(test)+".txt", 'r')
-		print anchor.classify_document(anch_doc.read())
-		anch_doc.close()
+
+		full.classify_and_display(text)
+		kth.classify_and_display(text)
+		anchor.classify_and_display(text)
+		print '-'*20
 
 	#print ex.get_fingerprint(corp.raw("austen-sense.txt"), 3, "anchor")
 	#print ex.get_fingerprint(corp.raw("austen-emma.txt"), 3, "anchor")
