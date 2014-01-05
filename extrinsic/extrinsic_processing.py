@@ -182,34 +182,32 @@ def populate_database():
 	source_file_listing.close()
 	
 	counter = 0
-	
 	for filename in all_test_files:
 		for atom_type in ["full", "paragraph"]:
 			for method in ["full"]: # add other fingerprint methods
-				for n in range(3,6):
-					for k in [5,8]:
-						# print "Calculating fingerprint for ", filename, " with atom_type=", atom_type, "using ", method , "and ", n, "-gram"
+				for n in xrange(3,6):
+					for k in [0]:
 						fp = _query_fingerprint(filename, method, n, k, atom_type, session, '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents')
+						fp.get_fingerprints(session)
 		counter += 1
-		if counter%10 == 0:
+		if counter%1 == 0:
 			print str(counter) + '/' + str(len(all_test_files))
-			print "Progress: ", counter/float(len(all_test_files))
+			print "Progress on suspects: ", counter/float(len(all_test_files))
 	
 	counter = 0
-	
 	for filename in all_source_files:
 		for atom_type in ["full", "paragraph"]:
 			for method in ["full"]: # add other fingerprint methods
-				for n in range(3,6):
-					for k in [5,8]:
+				for n in xrange(3,6):
+					for k in [0]: # used with k-th in sent only
 						# print "Calculating fingerprint for ", filename, " with atom_type=", atom_type, "using ", method , "and ", n, "-gram"
 						fp = _query_fingerprint(filename, method, n, k, atom_type, session, '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/source-documents')
+						fp.get_fingerprints(session)
 		counter += 1
-		if counter%10 == 0:
+		if counter%1 == 0:
 			print str(counter) + '/' + str(len(all_source_files))
-			print "Progress: ", counter/float(len(all_source_files))
+			print "Progress on sources: ", counter/float(len(all_source_files))
 	
-
 	session.close()
 
 url = "postgresql://%s:%s@%s" % (username, password, dbname)

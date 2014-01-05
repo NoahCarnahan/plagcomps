@@ -2,6 +2,9 @@
 
 import pickle
 import tokenization
+from dbconstants import username, password, dbname
+
+import xml
 
 import sqlalchemy
 from sqlalchemy import Table, Column, Sequence, Integer, String, Text, Float, DateTime, ForeignKey, and_
@@ -34,6 +37,7 @@ class GroundTruth(Base):
 	'''
 	__tablename__ = "ground_truths"
 	
+	id = Column(Integer, Sequence("ground_truth_id_seq"), primary_key=True)
 	document_name = Column(String)
 	_doc_path = Column(String)
 	_doc_xml_path = Column(String)
@@ -51,7 +55,7 @@ class GroundTruth(Base):
 		
 	def get_ground_truth(self, session):
 		# might want to split on atom types here?
-		return _get_ground_truth(session)
+		return self._get_ground_truth(session)
 	
 	def _get_ground_truth(self, session):
 		''' 
@@ -60,7 +64,7 @@ class GroundTruth(Base):
 		'''
 		if self.ground_truth == None:
 			doc_text = open(self._doc_path, 'r')
-			spans = tokenize(doc_text.read(), self.atom_type)
+			spans = tokenization.tokenize(doc_text.read(), self.atom_type)
 			doc_text.close()
 			
 			plag_spans = self._get_plagiarized_spans()
@@ -77,7 +81,7 @@ class GroundTruth(Base):
 			session.commit()
 			return _ground_truth
 		else:
-			return pickle.loads(self.ground_truth)
+			return pickle.loads(str(self.ground_truth))
 
 	def _get_plagiarized_spans(self):
 		'''
@@ -109,6 +113,7 @@ def populate_database():
 	for filename in all_suspect_files:
 		for atom_type in ["full", "paragraph"]:
 			fp = _query_ground_truth(filename, atom_type, session, '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents')
+			fp.get_ground_truth(session)
 		counter += 1
 		if counter%10 == 0:
 			print str(counter) + '/' + str(len(all_suspect_files))
@@ -118,11 +123,16 @@ def populate_database():
 	for filename in all_source_files:
 		for atom_type in ["full", "paragraph"]:
 			fp = _query_ground_truth(filename, atom_type, session, '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/source-documents')
+			fp.get_ground_truth(session)
 		counter += 1
 		if counter%10 == 0:
 			print str(counter) + '/' + str(len(all_source_files))
 			print "Progress on suspect files: ", counter/float(len(all_source_files))
-	
+
+url = "postgresql://%s:%s@%s" % (username, password, dbname)
+engine = sqlalchemy.create_engine(url)
+Base.metadata.create_all(engine)
+Session = sessionmaker(bind=engine)	
 	
 if __name__ == "__main__":
 	populate_database()

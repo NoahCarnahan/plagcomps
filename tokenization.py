@@ -13,6 +13,8 @@ def tokenize(text, atom_type):
         return _tokenize_by_sentence(text)
     elif atom_type == "paragraph":
         return _tokenize_by_paragraph(text)
+    elif atom_type == "full":
+    	return _tokenize_by_full(text)
     else:
         raise ValueError("Unacceptable atom_type")
     
@@ -46,6 +48,9 @@ def _tokenize_by_paragraph(text):
             spans.append((boundaries[-1][1], len(text)))
     
     return spans
+
+def _tokenize_by_full(text):
+	return [(0, len(text))]
 
 
 class _CopyCatPunktWordTokenizer(nltk.tokenize.punkt.PunktBaseClass,nltk.tokenize.punkt.TokenizerI):
