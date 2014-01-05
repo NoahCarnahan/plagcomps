@@ -195,6 +195,8 @@ def populate_database():
 			print str(counter) + '/' + str(len(all_test_files))
 			print "Progress: ", counter/float(len(all_test_files))
 	
+	counter = 0
+	
 	for filename in all_source_files:
 		for atom_type in ["full", "paragraph"]:
 			for method in ["full"]: # add other fingerprint methods

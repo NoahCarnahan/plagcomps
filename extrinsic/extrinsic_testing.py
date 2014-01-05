@@ -13,6 +13,7 @@ import time
 import nltk
 import fingerprint_extraction
 import extrinsic_processing
+import ground_truth
 
 import sqlalchemy
 from sqlalchemy import Table, Column, Sequence, Integer, String, Float, DateTime, ForeignKey, and_
@@ -61,54 +62,10 @@ class ExtrinsicTester:
 			# just take the most similar source document's similarity as the confidence of plagiarism for now.
 			similarity = atom_classifications[0][1]
 
-			acts = self._get_actuals(doc, suspect_file_path + '.xml')
+			acts = ground_truth._query_ground_truth(f, self.atom_type, session, self.suspicious_path_start)
 			actuals += acts
 			classifications += [similarity for i in xrange(len(acts))] # just classify each paragraph in a document as the same similarity
 		return classifications, actuals
-
-	def _get_actuals(self, document_text, xml_filepath):
-		'''
-		Returns a list of the true plagiarism status for each atom of
-		the given document.
-		'''
-		if self.atom_type == "sentence":
-			tokenizer = nltk.PunktSentenceTokenizer()
-			spans = tokenizer.span_tokenize(document_text)
-		elif self.atom_type == "paragraph":
-			paragraph_texts = document_text.splitlines()
-			s = []
-			start_index = 0
-			for paragraph in paragraph_texts:
-				start = document_text.find(paragraph, start_index)
-				s.append((start, start + len(paragraph)))
-				start_index = start + len(paragraph)
-			spans = s
-
-		plag_spans = self._get_plagiarized_spans(xml_filepath)
-		actuals = []
-		for s in spans:
-			act = 0
-			for ps in plag_spans:
-				if s[0] >= ps[0] and s[0] < ps[1]:
-					act = 1
-					break
-			actuals.append(act)
-		return actuals
-
-	def _get_plagiarized_spans(self, xml_file_path):
-		'''
-		Using the ground truth, return a list of spans representing the passages of the
-		text that are plagiarized. Note, this method was plagiarized from Noah's intrinsic
-		testing code.
-		'''
-		spans = []
-		tree = xml.etree.ElementTree.parse(xml_file_path)
-		for feature in tree.iter("feature"):
-			if feature.get("name") == "artificial-plagiarism":
-				start = int(feature.get("this_offset"))
-				end = start + int(feature.get("this_length"))
-				spans.append((start, end))
-		return spans
 
 	def plot_ROC_curve(self):
 		'''
