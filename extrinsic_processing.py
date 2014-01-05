@@ -5,17 +5,18 @@ import feature_extractor
 import dbconstants
 
 import sqlalchemy
-from sqlalchemy import Table, Column, Sequence, Integer, String, Float, DateTime, ForeignKey, and_
+from sqlalchemy import Table, Column, Sequence, Integer, String, Text, Float, DateTime, ForeignKey, and_
 from sqlalchemy.orm import relationship, backref, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm.collections import attribute_mapped_collection
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.ext.associationproxy import association_proxy
 
-#what does this do?
+import pickle # used for storing multidimensional python lists as fingerprints in the db
+
 Base = declarative_base()
 
-def _query_fingerprint(docs, method, n, k, atom_type, session):
+def _query_fingerprint(docs, method, n, k, atom_type, session, base_path):
 	'''
 	queries the database to see if the fingerprint in question exists in the database.
 	If it does, it will be returned, otherwise it is created and added to the database.
@@ -23,13 +24,12 @@ def _query_fingerprint(docs, method, n, k, atom_type, session):
 	if method != "kth_in_sent":
 		k = 0
 	try:
-		fp = session.query(FingerPrint).filter(and_(FingerPrint.document_name == docs, FingerPrint.atom_type == atom_type), FingerPrint.method == method, FingerPrint.n == n, FingerPrint.k == k).one()
+		fp = session.query(FingerPrint).filter(and_(FingerPrint.document_name == docs, FingerPrint.atom_type == atom_type, FingerPrint.method == method, FingerPrint.n == n, FingerPrint.k == k)).one()
 	except sqlalchemy.orm.exc.NoResultFound, e:
-		fp = FingerPrint(docs, method, n, k, atom_type)
+		fp = FingerPrint(docs, method, n, k, atom_type, base_path)
 		session.add(fp)
 		session.commit()
-
-	return fp		
+	return fp	
 
 class FingerPrint(Base):
 	'''
@@ -46,17 +46,15 @@ class FingerPrint(Base):
 	n = Column(Integer)
 	k = Column(Integer)
 	atom_type = Column(String)
-	fingerprint = Column(ARRAY(Integer))
-
+	fingerprint = Column(Text)
 	timestamp = Column(DateTime)
 	version_number = Column(Integer)
 	
-	def __init__(self, doc, select_method, n, k, atom_type):
+	def __init__(self, doc, select_method, n, k, atom_type, base_path):
 		'''
 		initializes FingerPrint
 		'''
 		self.document_name = doc
-		base_path = "/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents"
 		self._doc_path = base_path + self.document_name + ".txt"
 		self._doc_xml_path = base_path + self.document_name + ".xml"
 		self.method = select_method
@@ -66,8 +64,7 @@ class FingerPrint(Base):
 		self.timestamp = datetime.datetime.now()
 		self.version_numer = 1
 		
-		
-		
+
 	def __repr__(self):
 		'''
 		changes print representation for class FingerPrint
@@ -79,7 +76,7 @@ class FingerPrint(Base):
 		helper function to return fingerprints by granularity of full text vs paragraph
 		'''
 		if self.atom_type == "paragraph":
-			return self._get_paragraph_fingerprint(session)
+			return self._get_paragraph_fingerprints(session)
 		else:
 			return self._get_fingerprint(session)
 		
@@ -89,39 +86,36 @@ class FingerPrint(Base):
 		Otherwise, it calculates the fingerprint and returns.  Uses the full text for fingerprint calculations.
 		'''
 		if self.fingerprint == None:
-
 			f = open(self._doc_path, 'r')
 			text = f.read()
 			f.close()
 
-
 			fe = fingerprint_extraction.FingerprintExtractor()
 			if self.method == "full":
-				self.fingerprint = fe._get_full_fingerprint(text, self.n)
+				fingerprint = fe._get_full_fingerprint(text, self.n)
 			elif self.method == "kth_in_sent":
-				self.fingerprint = fe._get_kth_in_sent_fingerprint(text, self.n, self.k)
+				fingerprint = fe._get_kth_in_sent_fingerprint(text, self.n, self.k)
 			elif self.method == "anchor":
-				self.fingerprint = fe._get_anchor_fingerprints(text, self.n)
-
+				fingerprint = fe._get_anchor_fingerprints(text, self.n)
+			
+			self.fingerprint = pickle.dumps(fingerprint)
 			session.commit()
-			return self.fingerprint
+			return pickle.loads(str(self.fingerprint))
 		else:
-			return self.fingerprint
+			return pickle.loads(str(self.fingerprint))
 		
 		
-	def _get_paragraph_fingerprint(self, session):
+	def _get_paragraph_fingerprints(self, session):
 		'''
 		pseudo-private function to return fingerprint, returns previously calculated fingerprint if it exists.
 		Otherwise, it calculates the fingerprint and returns.  Uses paragraphs for fingerprint calculations.
 		'''
 		if self.fingerprint == None:
-
 			f = open(self._doc_path, 'r')
 			text = f.read()
 			f.close()
 
 			paragraph_spans = feature_extractor.get_spans(text, self.atom_type)
-
 
 			fe = fingerprint_extraction.FingerprintExtractor()
 			paragraph_fingerprints = []
@@ -134,14 +128,11 @@ class FingerPrint(Base):
 				elif self.method == "anchor":
 					fingerprint = fe._get_anchor_fingerprints(paragraph, self.n)
 				paragraph_fingerprints.append(fingerprint)
-
-			self.fingerprint = paragraph_fingerprints
-
+			self.fingerprint = pickle.dumps(paragraph_fingerprints)
 			session.commit()
-			return self.paragraph_fingerprints(self.paragraph_index)
-
+			return pickle.loads(str(self.fingerprint))
 		else:
-			return self.fingerprint
+			return pickle.loads(str(self.fingerprint))
 				
 
 def testRun():
@@ -151,13 +142,14 @@ def testRun():
 	session = Session()
 	documents = ["/part7/suspicious-document12675", "/part1/suspicious-document01932", "/part5/suspicious-document09634", "/part2/suspicious-document02851"]
 	for docs in documents:
-		fp = _query_fingerprint(docs, "full", 3, 5, "paragraph", session)
+		fp = _query_fingerprint(docs, "full", 3, 5, "paragraph", session, '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents')
 		print fp.get_fingerprints(session)[0:4]
 	session.close()
 
 def populate_database():
 	'''
 	Opens a session and then populates the database using filename, method, n, k.
+	THIS ONLY POPULATES THE SUSPECT FILES' FINGERPRINTS RIGHT NOW
 	'''
 	session = Session()
 
@@ -168,28 +160,16 @@ def populate_database():
 	counter = 0
 
 	for filename in all_test_files:
-		for method in ["full"]:
-			for n in range(3,6):
-				for k in [5,10]:
-					print "Calculating fingerprint for ", filename, " using ", method , "and ", n, "-gram"
-					fp = _query_fingerprint(filename, method, n, k, "full", session)
-					print fp.get_fingerprints(session)[0:4]
-					counter += 1
-					if counter%1000 == 0:
-						print counter
-						print "Progress: ", counter/float(len(all_test_files)*2*3*2)
-
-	for filename in all_test_files:
-		for method in ["full"]:
-			for n in range(3,6):
-				for k in [5,10]:
-					print "Calculating fingerprint for ", filename, " using ", method , "and ", n, "-gram"
-					fp = _query_fingerprint(filename, method, n, k, "paragraph", session)
-					print fp.get_fingerprints(session)[0][0:4]
-					counter += 1
-					if counter%1000 == 0:
-						print counter
-						print "Progress: ", counter/float(len(all_test_files)*2*3*2)
+		for atom_type in ["full", "paragraph"]:
+			for method in ["full"]: # add other fingerprint methods
+				for n in range(3,6):
+					for k in [5,8]:
+						# print "Calculating fingerprint for ", filename, " with atom_type=", atom_type, "using ", method , "and ", n, "-gram"
+						fp = _query_fingerprint(filename, method, n, k, atom_type, session, '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents')
+						counter += 1
+						if counter%100 == 0:
+							print counter
+							print "Progress: ", counter/float(len(all_test_files)*2*1*3*2*4)
 
 	session.close()
 

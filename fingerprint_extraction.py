@@ -4,6 +4,7 @@
 import nltk
 import itertools
 import string, random, re, operator
+import extrinsic_processing
 
 # TODO: omit words tokenized by nltk that are just puncuation
 
@@ -112,30 +113,43 @@ class FingerprintExtractor:
 
 class FingerprintEvaluator:
 
-	def __init__(self, source_filepaths, fingerprint_method="full", n=3):
+	def __init__(self, source_filenames, fingerprint_method="full", n=3):
 		self.extractor = FingerprintExtractor()
 		self.n = n
 		self.fingerprint_method = fingerprint_method
-		self.source_fingerprints = {}
-		# we'll just be querying the database eventually...
-		print "beginning source fingerprinting of", len(source_filepaths), "sources..."
-		for filename in source_filepaths:
-			with open(filename+'.txt') as f:
-				text = ""
-				for line in f:
-					text += line + "\n"
-				self.source_fingerprints[filename] = self.extractor.get_fingerprint(text, n, fingerprint_method)
-				print "finished fingerprinting", filename
+		self.source_filenames = source_filenames
 
-	def classify_document(self, doc):
+	def _get_fingerprint(self, filename, atom_type, session, base_path):
+		fp = extrinsic_processing._query_fingerprint(filename, self.fingerprint_method, self.n, 5, atom_type, session, base_path)
+		return fp
+
+	def classify_document(self, filename, atom_type, atom_index, session):
 		'''
-		Returns a list of (source_filename, similarity) tuples sorted in descreasing similarity to the 
+		Returns a list of (source_filename, similarity) tuples sorted in decreasing similarity to the 
 		input document.
 		'''
-		fingerprint = self.extractor.get_fingerprint(doc, self.n, self.fingerprint_method)
+		fp = self._get_fingerprint(filename, atom_type, session, '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents')
+		if atom_type == "full":
+			fingerprint = fp.get_fingerprints(session)
+		else:
+			fingerprint = fp.get_fingerprints(session)[atom_index]
+
 		source_documents = {}
-		for source in self.source_fingerprints:
-			source_documents[source] = jaccard_similarity(fingerprint, self.source_fingerprints[source])
+		for source in self.source_filenames:
+			print 'source:', source
+			source_fp = self._get_fingerprint(source, atom_type, session, '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/source-documents')
+			source_fingerprints = source_fp.get_fingerprints(session)
+			if atom_type == "full":
+				if len(source_fingerprints): # make sure it's not an empty fingerprint
+					source_documents[(source, 0)] = jaccard_similarity(fingerprint, source_fingerprints)
+				else:
+					source_documents[(source, 0)] = 0
+			else:
+				for i in xrange(len(source_fingerprints)):
+					if len(source_fingerprints[i]): # make sure it's not an empty fingerprint
+						source_documents[(source, i)] = jaccard_similarity(fingerprint, source_fingerprints[i])
+					else:
+						source_documents[(source, i)] = 0
 		return sorted(source_documents.items() , key = operator.itemgetter(1), reverse=True)
 
 def jaccard_similarity(a, b):
