@@ -1,8 +1,8 @@
 import datetime
 
 import fingerprint_extraction
-import feature_extractor
-import dbconstants
+from tokenization import *
+from dbconstants import username, password, dbname
 
 import sqlalchemy
 from sqlalchemy import Table, Column, Sequence, Integer, String, Text, Float, DateTime, ForeignKey, and_
@@ -62,7 +62,7 @@ class FingerPrint(Base):
 		self.k = k
 		self.atom_type = atom_type
 		self.timestamp = datetime.datetime.now()
-		self.version_numer = 1
+		self.version_numer = 2
 		
 
 	def __repr__(self):
@@ -115,10 +115,10 @@ class FingerPrint(Base):
 			text = f.read()
 			f.close()
 
-			paragraph_spans = feature_extractor.get_spans(text, self.atom_type)
+			paragraph_spans = tokenize(text, self.atom_type)
 
-			fe = fingerprint_extraction.FingerprintExtractor()
 			paragraph_fingerprints = []
+			fe = fingerprint_extraction.FingerprintExtractor()
 			for span in paragraph_spans:
 				paragraph = text[span[0]:span[1]]
 				if self.method == "full":
@@ -134,13 +134,34 @@ class FingerPrint(Base):
 		else:
 			return pickle.loads(str(self.fingerprint))
 				
+class _ParagraphIndex(Base):
+	__tablename__ = "paragraph_indices"
+	fingerprint_id = Column(Integer, ForeignKey('fingerprints.id'), primary_key=True)
+	paragraph_fingerprints_id = Column(Integer, ForeignKey('paragraph_fingerprints.id'), primary_key=True)
+	special_key = Column(Integer)
+	fingerprint = relationship(FingerPrint, backref=backref(
+			"paragraph_fingerprints",
+			collection_class=attribute_mapped_collection("special_key"),
+			cascade="all, delete-orphan"
+			)
+		)
+	kw = relationship("_ParagraphFingerprint")
+	pf = association_proxy('kw', 'pf')
+
+class _ParagraphFingerprint(Base):
+	__tablename__ = "paragraph_fingerprints"
+	id = Column(Integer, primary_key=True)
+	pf = Column(ARRAY(Integer))
+	def __init__(self, pf):
+		self.pf=pf
+
 
 def testRun():
 	'''
 	this is a testRun
 	'''
 	session = Session()
-	documents = ["/part7/suspicious-document12675", "/part1/suspicious-document01932", "/part5/suspicious-document09634", "/part2/suspicious-document02851"]
+	documents = ["/part4/suspicious-document06242", "/part5/suspicious-document08911", "/part3/suspicious-document04127", "/part6/suspicious-document11686"]
 	for docs in documents:
 		fp = _query_fingerprint(docs, "full", 3, 5, "paragraph", session, '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents')
 		print fp.get_fingerprints(session)[0:4]
@@ -149,7 +170,6 @@ def testRun():
 def populate_database():
 	'''
 	Opens a session and then populates the database using filename, method, n, k.
-	THIS ONLY POPULATES THE SUSPECT FILES' FINGERPRINTS RIGHT NOW
 	'''
 	session = Session()
 
@@ -157,8 +177,12 @@ def populate_database():
 	all_test_files = [f.strip() for f in test_file_listing.readlines()]
 	test_file_listing.close()
 	
+	source_file_listing = file('extrinsic_corpus_partition/extrinsic_training_source_files.txt')
+	all_source_files = [f.strip() for f in source_file_listing.readlines()]
+	source_file_listing.close()
+	
 	counter = 0
-
+	
 	for filename in all_test_files:
 		for atom_type in ["full", "paragraph"]:
 			for method in ["full"]: # add other fingerprint methods
@@ -166,14 +190,27 @@ def populate_database():
 					for k in [5,8]:
 						# print "Calculating fingerprint for ", filename, " with atom_type=", atom_type, "using ", method , "and ", n, "-gram"
 						fp = _query_fingerprint(filename, method, n, k, atom_type, session, '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents')
-						counter += 1
-						if counter%100 == 0:
-							print counter
-							print "Progress: ", counter/float(len(all_test_files)*2*1*3*2*4)
+		counter += 1
+		if counter%10 == 0:
+			print str(counter) + '/' + str(len(all_test_files))
+			print "Progress: ", counter/float(len(all_test_files))
+	
+	for filename in all_source_files:
+		for atom_type in ["full", "paragraph"]:
+			for method in ["full"]: # add other fingerprint methods
+				for n in range(3,6):
+					for k in [5,8]:
+						# print "Calculating fingerprint for ", filename, " with atom_type=", atom_type, "using ", method , "and ", n, "-gram"
+						fp = _query_fingerprint(filename, method, n, k, atom_type, session, '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/source-documents')
+		counter += 1
+		if counter%10 == 0:
+			print str(counter) + '/' + str(len(all_source_files))
+			print "Progress: ", counter/float(len(all_source_files))
+	
 
 	session.close()
 
-url = "postgresql://%s:%s@%s" % (dbconstants.username, dbconstants.password, dbconstants.dbname)
+url = "postgresql://%s:%s@%s" % (username, password, dbname)
 engine = sqlalchemy.create_engine(url)
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
@@ -181,5 +218,4 @@ Session = sessionmaker(bind=engine)
 if __name__ == "__main__":
 	#testRun()
 	#unitTest()
-	#grabTest()
 	populate_database()
