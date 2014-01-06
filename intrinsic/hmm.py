@@ -16,6 +16,16 @@ class _State :
 		''' Returns the probability of this state outputting the given feature_vector. 
 		    This is done by quantizing the continous values described by the gaussian
 		    distribution for this state. '''
+		probability = 0.5
+		if feature_vector == self.ft_list_means:
+			return probability
+		for i in xrange(len(feature_vector)):
+			z_score = (feature_vector[i] - self.ft_list_means[i]) / self.ft_list_variances[i]
+			if z_score < -2.4:
+				probability = 0.008
+			# this if else line will have as many as 70 conditionals to check.
+		'''
+		this is the older version of using zscores to change continuous probabilities into discrete probabilities
 		probability = 1.0
 		if feature_vector == self.ft_list_means:
 			return probability
@@ -26,6 +36,7 @@ class _State :
 			prob = scipy.stats.norm(self.ft_list_means[i], self.ft_list_variances[i]).cdf(upper) - scipy.stats.norm(self.ft_list_means[i], self.ft_list_variances[i]).cdf(lower)
 			probability *= prob
 		return math.log(probability + 0.00001)
+		'''
 		
 def hmm_cluster(stylo_vectors, k):
 	'''
