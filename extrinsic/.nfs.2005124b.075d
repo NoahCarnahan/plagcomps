@@ -51,8 +51,6 @@ class FingerprintExtractor:
 			fingerprint = self._get_kth_in_sent_fingerprint(sentences, n, k)
 		elif method == "anchor":
 			fingerprint = self._get_anchor_fingerprint(document, n)
-		elif method == "winnow-k":
-			fingerprint = self._get_winnow_k(document, noise_threshold, guarantee_threshold)
 
 		return fingerprint
 	
@@ -72,7 +70,7 @@ class FingerprintExtractor:
 			fingerprint.append(self._gen_string_hash(" ".join(split_sent[min(k, L - min(n, L)) : min(k + n, L)])))
 		return fingerprint
 
-	def gen_anchors(anchor_length = 2, num_anchors=10):€
+	def gen_anchors(anchor_length = 2, num_anchors=10):
 		"""
 		This function should be called whenever we want to generate a new list of
 		anchors. Just set self.anchors equal to the result of this function.
@@ -112,36 +110,6 @@ class FingerprintExtractor:
 			for match in re.finditer(regex, document):
 				fingerprint.append(self._gen_string_hash(match.group(0)))
 		return fingerprint
-
-	def _get_winnow_k(self, document, k, t):
-		document = "".join(self._strip_punctuation(document).lower().split())
-		print document
-		fingerprint = []
-		document_hash = []
-		w = t-k+1
-
-		for i in xrange(len(document)-k+1):
-			document_hash.append(self._gen_string_hash(document[i:i+k]))
-
-		first_min = document_hash[0]
-		print document_hash
-
-		for i in xrange(len(document_hash)-w+1):
-			window = document_hash[i:i+w]
-			second_min = min(window)
-			if first_min == second_min:
-				if window[w-1] == second_min:
-					fingerprint.append(first_min)
-				else:
-					continue
-			else:
-				first_min = second_min
-				fingerprint.append(first_min)
-
-		return fingerprint
-
-	def _strip_punctuation(self, document):
-		document = document.translate(string.maketrans("",""), string.punctuation)
 
 class FingerprintEvaluator:
 
