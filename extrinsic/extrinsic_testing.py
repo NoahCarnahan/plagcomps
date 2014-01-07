@@ -101,7 +101,7 @@ if __name__ == "__main__":
 	util = ExtrinsicUtility()
 	num_files = 5
 
-	source_file_list, suspect_file_list = util.get_n_training_files(n=num_files)
+	source_file_list, suspect_file_list = util.get_n_training_files(n=num_files, include_txt_extension=False)
 
 	print 'Testing first', num_files, ' suspect files using a corpus of', len(source_file_list), 'source documents:'
 	print 'Suspect filenames:', suspect_file_list
