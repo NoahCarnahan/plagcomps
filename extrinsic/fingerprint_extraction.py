@@ -87,7 +87,7 @@ class FingerprintExtractor:
 			fingerprint.append(self._gen_string_hash(" ".join(split_sent[min(k, L - min(n, L)) : min(k + n, L)])))
 		return fingerprint
 
-	def gen_anchors(anchor_length = 2, num_anchors=10):€
+	def gen_anchors(anchor_length = 2, num_anchors=10):
 		"""
 		This function should be called whenever we want to generate a new list of
 		anchors. Just set self.anchors equal to the result of this function.

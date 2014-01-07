@@ -9,13 +9,16 @@ class BaseUtility:
     '''
     SAMPLE_CORPUS_LOC = os.path.join(UTIL_LOC, '..', 'sample_corpus/')
 
-    def read_file_list(self, file_name, base_location_path):
+    def read_file_list(self, file_name, base_location_path, include_txt_extension=True):
         '''
         Return list of absolute paths to files in <file_name> whose
         location is relative to <base_location_path>
         '''
         f = file(file_name, 'r')
-        relative_paths = [l.strip() + '.txt' for l in f.readlines()]
+        if include_txt_extension:
+            relative_paths = [l.strip() + '.txt' for l in f.readlines()]
+        else:
+            relative_paths = [l.strip() for l in f.readlines()]
         training_list = [base_location_path + r for r in relative_paths]
 
         return training_list
@@ -26,12 +29,13 @@ class IntrinsicUtility(BaseUtility):
     
     CORPUS_LOC = '/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents'
 
-    def get_n_training_files(self, n=None):
+    def get_n_training_files(self, n=None, include_txt_extension=True):
         '''
         Returns first <n> training files, or all of them if <n> is not specified
         '''
         all_training_files = self.read_file_list(IntrinsicUtility.TRAINING_LOC, 
-                                                 IntrinsicUtility.CORPUS_LOC)
+                                                 IntrinsicUtility.CORPUS_LOC,
+                                                 include_txt_extension=include_txt_extension)
 
         # Default to using all training files if <n> isn't specified
         n = len(all_training_files) if n is None else n
@@ -46,7 +50,7 @@ class ExtrinsicUtility(BaseUtility):
     CORPUS_SRC_LOC = '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/source-documents'
     CORPUS_SUSPECT_LOC = '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents'
 
-    def get_n_training_files(self, n=None, file_type='both'):
+    def get_n_training_files(self, n=None, file_type='both', include_txt_extension=True):
         '''
         Returns first <n> training files, or all of them if <n> is not specified
         <file_type> should be 'source', 'suspect', or 'both'.
@@ -57,10 +61,12 @@ class ExtrinsicUtility(BaseUtility):
         to detect plagiarism in any of the suspicious ones!
         '''
         all_src_files = self.read_file_list(ExtrinsicUtility.TRAINING_SRC_LOC,
-                                            ExtrinsicUtility.CORPUS_SRC_LOC)
+                                            ExtrinsicUtility.CORPUS_SRC_LOC,
+                                            include_txt_extension=include_txt_extension)
 
         all_suspect_files = self.read_file_list(ExtrinsicUtility.TRAINING_SUSPECT_LOC,
-                                                ExtrinsicUtility.CORPUS_SUSPECT_LOC)
+                                                ExtrinsicUtility.CORPUS_SUSPECT_LOC,
+                                                include_txt_extension=include_txt_extension)
 
         
         n = len(all_suspect_files) if n is None else n

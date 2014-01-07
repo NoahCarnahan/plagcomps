@@ -31,7 +31,7 @@ class ExtrinsicTester:
 		self.corpus_path_start = ExtrinsicUtility.CORPUS_SRC_LOC
 		source_dirs = os.listdir(self.corpus_path_start)
 		
-        self.source_file_names, self.suspect_file_names = ExtrinsicUtility().get_n_training_files()
+		self.source_file_names, self.suspect_file_names = ExtrinsicUtility().get_n_training_files(include_txt_extension=False)
 	
 		# uncomment these two lines to test on reasonable sized corpus
 		# self.source_file_names = ["sample_corpus/source1", "sample_corpus/source2", "sample_corpus/source3"]
@@ -51,9 +51,7 @@ class ExtrinsicTester:
 		classifications = []
 		actuals = []
 		for f in self.suspect_file_names:
-			suspect_file_path = self.suspicious_path_start + f
-			print f
-			suspicious_document = open(suspect_file_path + '.txt')
+			suspicious_document = open(f + '.txt')
 			doc = suspicious_document.read()
 			# atom_spans = feature_extractor.get_spans(doc, self.atom_type)
 			# atoms = [doc[a[0]:a[1]] for a in atom_spans]
@@ -100,10 +98,10 @@ if __name__ == "__main__":
 	# fp = extrinsic_processing._query_fingerprint('/part7/suspicious-document12675', "full", 3, 5, "paragraph", session, '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents')
 	# print fp.get_fingerprints(session)
 	
-    util = ExtrinsicUtility()
-    num_files = 5
+	util = ExtrinsicUtility()
+	num_files = 5
 
-    source_file_list, suspect_file_list = util.get_n_training_files(n=num_files)
+	source_file_list, suspect_file_list = util.get_n_training_files(n=num_files)
 
 	print 'Testing first', num_files, ' suspect files using a corpus of', len(source_file_list), 'source documents:'
 	print 'Suspect filenames:', suspect_file_list
