@@ -258,22 +258,24 @@ if __name__ == '__main__':
 	kth = FingerprintEvaluator(sources, "kth_in_sent")
 	anchor = FingerprintEvaluator(sources, "anchor")
 
-#	ev = FingerprintEvaluator(["sample_corpus/easy_source.txt"])
-#	ev.classify_document("sample_corpus/easy_test.txt")
+	# TODO this won't work right now. 
+	# is there anything being tested here that isn't done in extrinsic_testing?
+# #	ev = FingerprintEvaluator(["sample_corpus/easy_source.txt"])
+# #	ev.classify_document("sample_corpus/easy_test.txt")
 
-	test_files = util.get_sample_test_paths()
+# 	test_files = util.get_sample_test_paths()
 
-	for test_doc in test_files:
-		print "testing", os.path.basename(test_doc)
-		full_doc = open(test_doc, 'r')
-		text = full_doc.read()
-		full_doc.close()
+# 	for test_doc in test_files:
+# 		print "testing", os.path.basename(test_doc)
+# 		full_doc = open(test_doc, 'r')
+# 		text = full_doc.read()
+# 		full_doc.close()
 
-		full.classify_and_display(text)
-		kth.classify_and_display(text)
-		anchor.classify_and_display(text)
-		print '-'*20
+# 		full.classify_and_display(text)
+# 		kth.classify_and_display(text)
+# 		anchor.classify_and_display(text)
+# 		print '-'*20
 
-	#print ex.get_fingerprint(corp.raw("austen-sense.txt"), 3, "anchor")
-	#print ex.get_fingerprint(corp.raw("austen-emma.txt"), 3, "anchor")
+# 	#print ex.get_fingerprint(corp.raw("austen-sense.txt"), 3, "anchor")
+# 	#print ex.get_fingerprint(corp.raw("austen-emma.txt"), 3, "anchor")
  
