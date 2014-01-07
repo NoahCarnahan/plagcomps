@@ -1,8 +1,8 @@
 # ground_truth.py
 
 import pickle
-import tokenization
-from dbconstants import username, password, dbname
+from .. import tokenization
+from ..dbconstants import username, password, dbname
 
 import xml
 
