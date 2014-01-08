@@ -159,8 +159,6 @@ class FeatureExtractor:
         else:
             raise ValueError
 
-
-    
     def _init_average_word_length(self):
         '''
         Initializes the word_length_sum_table. word_length_sum_table[i] is the sum of the
