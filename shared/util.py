@@ -1,5 +1,7 @@
 import os
 import glob
+import xml
+from plagcomps import tokenization
 
 UTIL_LOC = os.path.abspath(os.path.dirname(__file__))
 
@@ -22,6 +24,53 @@ class BaseUtility:
         training_list = [base_location_path + r for r in relative_paths]
 
         return training_list
+
+    def get_plagiarized_spans(self, xml_path):
+        '''
+        Using the ground truth, return a list of spans representing the passages of the
+        text that are plagiarized. Note, this method was plagiarized from Noah's intrinsic
+        testing code.
+        '''
+        spans = [] 
+        tree = xml.etree.ElementTree.parse(xml_path)
+
+        for feature in tree.iter("feature"):
+            if feature.get("name") == "artificial-plagiarism":
+                start = int(feature.get("this_offset"))
+                end = start + int(feature.get("this_length"))
+                spans.append((start, end))
+        return spans
+
+    def get_bare_passages_and_plagiarized_spans(self, doc_path, xml_path, atom_type):
+        '''
+        TODO finish this: the idea is to create passage objects that contain information
+        about whether or not each passage contains a plagiarized chunk of text
+        '''
+        f = file(doc_path, 'rb')
+        text = f.read()
+        f.close()
+
+        plag_spans = self.get_plagiarized_spans(xml_path)
+
+        spans = tokenization.tokenize(text, atom_type)
+        all_passages = []
+
+        for span in spans:
+            start, end = span
+            all_passages.append(Passage(start, end, text[start : end]))
+
+    def overlap(self, interval1, interval2):
+        '''
+        TODO finish this too: 
+        '''
+        start_overlap = max(interval1[0], interval2[0])
+        end_overlap = min(interval1[1], interval2[1])
+
+        return max(0, end_overlap - start_overlap)
+
+
+
+
 
 class IntrinsicUtility(BaseUtility):
 

@@ -68,7 +68,8 @@ class GroundTruth(Base):
             spans = tokenization.tokenize(doc_text.read(), self.atom_type)
             doc_text.close()
             
-            plag_spans = self._get_plagiarized_spans()
+            plag_spans = ExtrinsicUtility().get_plagiarized_spans(self._doc_xml_path)
+            
             _ground_truth = []
             for s in spans:
                 truth = 0
@@ -83,21 +84,6 @@ class GroundTruth(Base):
             return _ground_truth
         else:
             return pickle.loads(str(self.ground_truth))
-
-    def _get_plagiarized_spans(self):
-        '''
-        Using the ground truth, return a list of spans representing the passages of the
-        text that are plagiarized. Note, this method was plagiarized from Noah's intrinsic
-        testing code.
-        '''
-        spans = []
-        tree = xml.etree.ElementTree.parse(self._doc_xml_path)
-        for feature in tree.iter("feature"):
-            if feature.get("name") == "artificial-plagiarism":
-                start = int(feature.get("this_offset"))
-                end = start + int(feature.get("this_length"))
-                spans.append((start, end))
-        return spans
 
 def populate_database():
     session = Session()

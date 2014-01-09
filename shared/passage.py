@@ -12,6 +12,13 @@ class Passage:
 		self.char_index_end = char_index_end
 		self.text = text
 
+class PassageWithGroundTruth(Passage):
+	'''
+	'''
+	def __init__(self, char_index_start, char_index_end, text, plag_index):
+		Passage.__init__(self, char_index_start, char_index_end, text)
+		self.plag_index = plag_index
+
 class IntrinsicPassage(Passage):
 	'''
 	Stores additional fields for an intrinsic passage, namely 

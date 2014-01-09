@@ -343,13 +343,7 @@ class ReducedDoc(Base):
         self._spans = None
         
         # set self._plagiarized_spans
-        self._plagiarized_spans = []
-        tree = ET.parse(self._full_xml_path)
-        for feature in tree.iter("feature"):
-            if feature.get("name") == "artificial-plagiarism": # are there other types?
-                start = int(feature.get("this_offset"))
-                end = start + int(feature.get("this_length"))
-                self._plagiarized_spans.append((start, end))
+        self._plagiarized_spans = IntrinsicUtility().get_plagiarized_spans(self._full_xml_path)
     
     def __repr__(self):
         return "<ReducedDoc('%s','%s')>" % (self._short_name, self.atom_type)
