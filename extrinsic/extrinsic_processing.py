@@ -13,7 +13,7 @@ from sqlalchemy.orm.collections import attribute_mapped_collection
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.ext.associationproxy import association_proxy
 
-import pickle # used for storing multidimensional python lists as fingerprints in the db
+import cPickle # used for storing multidimensional python lists as fingerprints in the db
 
 Base = declarative_base()
 
@@ -107,11 +107,11 @@ class FingerPrint(Base):
             elif self.method == "anchor":
                 fingerprint = fe._get_anchor_fingerprints(text, self.n)
             
-            self.fingerprint = pickle.dumps(fingerprint)
+            self.fingerprint = cPickle.dumps(fingerprint)
             session.commit()
-            return pickle.loads(str(self.fingerprint))
+            return cPickle.loads(str(self.fingerprint))
         else:
-            return pickle.loads(str(self.fingerprint))
+            return cPickle.loads(str(self.fingerprint))
         
         
     def _get_paragraph_fingerprints(self, session):
@@ -137,11 +137,11 @@ class FingerPrint(Base):
                 elif self.method == "anchor":
                     fingerprint = fe._get_anchor_fingerprints(paragraph, self.n)
                 paragraph_fingerprints.append(fingerprint)
-            self.fingerprint = pickle.dumps(paragraph_fingerprints)
+            self.fingerprint = cPickle.dumps(paragraph_fingerprints)
             session.commit()
-            return pickle.loads(str(self.fingerprint))
+            return cPickle.loads(str(self.fingerprint))
         else:
-            return pickle.loads(str(self.fingerprint))
+            return cPickle.loads(str(self.fingerprint))
                 
 class _ParagraphIndex(Base):
     __tablename__ = "paragraph_indices"
