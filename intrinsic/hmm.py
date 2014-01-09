@@ -11,11 +11,18 @@ class _State :
 		self.ft_list_means = means_list
 		self.ft_list_variances = variances
 		self.trans_probs = trans_probs 
+		
+
+	def convert_zscore_to_probability(self, value):
+		''' Given a zscore, returns the probability that a value of that score was observed.'''
+		
 	
 	def get_emission_probability(self, feature_vector):
 		''' Returns the probability of this state outputting the given feature_vector. 
 		    This is done by quantizing the continous values described by the gaussian
 		    distribution for this state. '''
+		
+		'''
 		probability = 0.5
 		if feature_vector == self.ft_list_means:
 			return probability
@@ -25,17 +32,28 @@ class _State :
 				probability = 0.008
 			# this if else line will have as many as 70 conditionals to check.
 		'''
+		'''
 		this is the older version of using zscores to change continuous probabilities into discrete probabilities
+		'''
 		probability = 1.0
 		if feature_vector == self.ft_list_means:
 			return probability
 		for i in xrange(len(feature_vector)):
 			z_score = (feature_vector[i] - self.ft_list_means[i]) / self.ft_list_variances[i]
-			upper = math.floor(z_score+1) * self.ft_list_variances[i] + self.ft_list_means[i]
-			lower = math.floor(z_score) * self.ft_list_variances[i] + self.ft_list_means[i]
+			z_score *= 100
+			upper = math.floor(z_score+1)/100 * self.ft_list_variances[i] + self.ft_list_means[i]
+			lower = math.floor(z_score)/100 * self.ft_list_variances[i] + self.ft_list_means[i]
 			prob = scipy.stats.norm(self.ft_list_means[i], self.ft_list_variances[i]).cdf(upper) - scipy.stats.norm(self.ft_list_means[i], self.ft_list_variances[i]).cdf(lower)
+			'''
+			print 'z_score is : ', z_score
+			print upper
+			print lower
+			print 'prob is : ', prob
+			'''
 			probability *= prob
+		#print probability + 0.00001
 		return math.log(probability + 0.00001)
+		'''
 		'''
 		
 def hmm_cluster(stylo_vectors, k):

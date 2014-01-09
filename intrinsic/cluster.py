@@ -1,4 +1,5 @@
 import hmm
+import featureextraction
 
 from numpy import array, matrix
 from scipy.cluster.vq import kmeans2, whiten
@@ -80,26 +81,38 @@ def _agglom(stylo_vectors, k):
     
 def _hmm(stylo_vectors, k):
     '''
-    Given a list of stylo_vectors, where each element is itself a feature vector,
-    return our confidence that each vector is in the plagiarism cluster 
+    Given a list of stylo_vectors, where each element of the list is a feature vector,
+    use a hidden Markov model to assign one of k preposed state values to the vectors, 
+    Observed outputs assigned similar state values are of the same cluster.
+
+    To Do:
+    Return a list of confidence values for the vector assignments
     where the i_th element in the returned list represents the confidence assigned
-    to the i_th input vector
-    
-    Uses a hidden markov model to assign states to the observed feature vector outputs.
-    Observed outputs assigned to identical states are assigned to the same cluster.
+    to the i_th input vector.
     '''
-    centroids, assigned_clusters = hmm.hmm_cluster(stylo_vectors, k)
     
+    centroids, assigned_clusters = hmm.hmm_cluster(stylo_vectors, k)
+    #print centroids
+    #print assigned_clusters
+
     # Get confidences
     # TODO: Develop a real notion of confidence for hmm clustering
     plag_cluster = Counter(assigned_clusters).most_common()[-1][0]
     return [1 if x == plag_cluster else 0 for x in assigned_clusters]
 
 def _test():
-    fs = [[4.5,5.2,1.9],[1.1,2.03,2.45],[4.5,5.2,8.1]]
-    print cluster("kmeans", 2, fs)
-    print cluster("agglom", 2, fs)
+    doc = open('/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents/part1/suspicious-document00667.txt', 'r')
+    text = doc.read()
+    #print text
+    f = featureextraction.FeatureExtractor(text)
+    doc.close()
+    fs = f.get_feature_vectors(["average_sentence_length","average_word_length"],"sentence")
+    #fs = [[4.5,5.2,1.9],[1.1,2.03,2.45],[4.5,5.2,8.1],[1.1,2.03,2.45],[4.5,5.2,8.1],[1.1,2.03,2.45],[4.5,5.2,8.3],[1.1,2.13,2.45],[4.6,5.1,8.1],[1.1,2.02,2.45],[4.5,5.2,8.2]]
+    #print cluster("kmeans", 2, fs)
+    #print cluster("agglom", 2, fs)
     print cluster("hmm", 2, fs)
+    #print cluster("hmm", 2, fs)
+    #print cluster("hmm", 2, fs)
 
 if __name__ == "__main__":
     _test()
