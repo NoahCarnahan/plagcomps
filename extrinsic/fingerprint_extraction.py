@@ -207,7 +207,7 @@ class FingerprintEvaluator:
         source_documents = {}
         for source in self.source_filenames:
             print 'source:', source
-            source_fp = self._get_fingerprint(source, atom_type, session, ExtrinsicUtility.CORPUS_SUSPECT_LOC)
+            source_fp = self._get_fingerprint(source, atom_type, session, ExtrinsicUtility.CORPUS_SRC_LOC)
             source_fingerprints = source_fp.get_fingerprints(session)
             if atom_type == "full":
                 if len(source_fingerprints): # make sure it's not an empty fingerprint
