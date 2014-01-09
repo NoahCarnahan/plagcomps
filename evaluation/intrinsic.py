@@ -214,6 +214,7 @@ def _get_reduced_docs(atom_type, docs, session, create_new=True):
             r = session.query(ReducedDoc).filter(and_(ReducedDoc.full_path == doc, ReducedDoc.atom_type == atom_type, ReducedDoc.version_number == 2)).one()
         except sqlalchemy.orm.exc.NoResultFound, e:
             if create_new:
+                print "Creating new ReducedDoc..."
                 r = ReducedDoc(doc, atom_type)
                 session.add(r)
                 session.commit()
