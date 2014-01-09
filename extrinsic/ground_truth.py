@@ -2,6 +2,7 @@
 
 import pickle
 from .. import tokenization
+from ..shared.util import ExtrinsicUtility
 from ..dbconstants import username, password, dbname
 
 import xml
@@ -101,18 +102,18 @@ class GroundTruth(Base):
 def populate_database():
     session = Session()
 
-    test_file_listing = file('extrinsic_corpus_partition/extrinsic_training_suspect_files.txt')
+    test_file_listing = file(ExtrinsicUtility.TRAINING_SUSPECT_LOC)
     all_suspect_files = [f.strip() for f in test_file_listing.readlines()]
     test_file_listing.close()
     
-    source_file_listing = file('extrinsic_corpus_partition/extrinsic_training_source_files.txt')
+    source_file_listing = file(ExtrinsicUtility.TRAINING_SRC_LOC)
     all_source_files = [f.strip() for f in source_file_listing.readlines()]
     source_file_listing.close()
     
     counter = 0
     for filename in all_suspect_files:
         for atom_type in ["full", "paragraph"]:
-            fp = _query_ground_truth(filename, atom_type, session, '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents')
+            fp = _query_ground_truth(filename, atom_type, session, ExtrinsicUtility.CORPUS_SUSPECT_LOC)
             fp.get_ground_truth(session)
         counter += 1
         if counter%10 == 0:
@@ -122,7 +123,7 @@ def populate_database():
     counter = 0
     for filename in all_source_files:
         for atom_type in ["full", "paragraph"]:
-            fp = _query_ground_truth(filename, atom_type, session, '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/source-documents')
+            fp = _query_ground_truth(filename, atom_type, session, ExtrinsicUtility.CORPUS_SRC_LOC)
             fp.get_ground_truth(session)
         counter += 1
         if counter%10 == 0:
