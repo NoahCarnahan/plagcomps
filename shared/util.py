@@ -2,6 +2,7 @@ import os
 import glob
 import xml
 from plagcomps import tokenization
+from plagcomps.shared.passage import PassageWithGroundTruth
 
 UTIL_LOC = os.path.abspath(os.path.dirname(__file__))
 
@@ -56,8 +57,18 @@ class BaseUtility:
         all_passages = []
 
         for span in spans:
+            overlap_plag = None
+
             start, end = span
-            all_passages.append(Passage(start, end, text[start : end]))
+            for pspan in plag_spans:
+                # Note that a passage's <pspan> only holds the last 
+                # plagiarized span that overlaps
+                if self.overlap(pspan, span) > 0:
+                    overlap_plag = pspan
+
+            all_passages.append(PassageWithGroundTruth(start, end, text[start : end], overlap_plag))
+
+        return all_passages
 
     def overlap(self, interval1, interval2):
         '''

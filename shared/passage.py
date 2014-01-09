@@ -15,9 +15,21 @@ class Passage:
 class PassageWithGroundTruth(Passage):
 	'''
 	'''
-	def __init__(self, char_index_start, char_index_end, text, plag_index):
+	def __init__(self, char_index_start, char_index_end, text, plag_span):
 		Passage.__init__(self, char_index_start, char_index_end, text)
-		self.plag_index = plag_index
+		self.plag_span = plag_span
+
+	def to_html(self):
+		'''
+		Returns an HTML representation of this passage's features, for use 
+		by the plagapp front-end
+		'''
+		html = '<p>Plag. Span</p>'
+		html += '<p>%s</p>' % str(self.plag_span) 
+		html += '<hr size = "10"'
+
+		return html
+
 
 class IntrinsicPassage(Passage):
 	'''
