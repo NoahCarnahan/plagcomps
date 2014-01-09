@@ -64,7 +64,8 @@ class FeatureExtractor:
         for sentence in sentenceSpans:
             sentence = self.text[sentence[0]:sentence[1]]
             # run part-of-speech tagging on the sentence following the word_tokenize-ation of it
-            taggedWordTuples += nltk.tag.pos_tag(nltk.word_tokenize(sentence))
+            tokens = tokenization.tokenize(sentence, 'word', return_spans=False)
+            taggedWordTuples += nltk.tag.pos_tag(tokens)
 
         # we want to remove the tagged punctuation, since that will mess up our word indexing
         no_punctuation_tuples = []
@@ -73,7 +74,7 @@ class FeatureExtractor:
                 no_punctuation_tuples.append(tup)
 
         return no_punctuation_tuples 
-    
+
     def get_passages(self, features, atom_type):
         '''
         Return a list of IntrinsicPassage objects for each passage in the text
