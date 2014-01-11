@@ -25,9 +25,11 @@ def _query_fingerprint(docs, method, n, k, atom_type, session, base_path):
     if method != "kth_in_sent":
         k = 0
     try:
-        fp = session.query(FingerPrint).filter(and_(FingerPrint.document_name == docs, FingerPrint.atom_type == atom_type, FingerPrint.method == method, FingerPrint.n == n, FingerPrint.k == k)).one()
+        q = session.query(FingerPrint).filter(and_(FingerPrint.document_name == docs, FingerPrint.atom_type == atom_type, FingerPrint.method == method, FingerPrint.n == n, FingerPrint.k == k))
+        fp = q.one()
     except sqlalchemy.orm.exc.NoResultFound, e:
         fp = FingerPrint(docs, method, n, k, atom_type, base_path)
+        print 'Created a new fp!', fp
         session.add(fp)
         session.commit()
     return fp   

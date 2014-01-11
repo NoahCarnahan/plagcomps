@@ -23,7 +23,8 @@ def _query_ground_truth(doc_name, atom_type, session, base_path):
     If it does, it will be returned, otherwise it is created and added to the database.
     '''
     try:
-        gt = session.query(GroundTruth).filter(and_(GroundTruth.document_name == doc_name, GroundTruth.atom_type == atom_type)).one()
+        q = session.query(GroundTruth).filter(and_(GroundTruth.document_name == doc_name, GroundTruth.atom_type == atom_type))
+        gt = q.one()
     except sqlalchemy.orm.exc.NoResultFound, e:
         gt = GroundTruth(doc_name, atom_type, base_path)
         session.add(gt)

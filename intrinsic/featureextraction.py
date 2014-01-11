@@ -64,7 +64,8 @@ class FeatureExtractor:
         for sentence in sentenceSpans:
             sentence = self.text[sentence[0]:sentence[1]]
             # run part-of-speech tagging on the sentence following the word_tokenize-ation of it
-            taggedWordTuples += nltk.tag.pos_tag(nltk.word_tokenize(sentence))
+            tokens = tokenization.tokenize(sentence, 'word', return_spans=False)
+            taggedWordTuples += nltk.tag.pos_tag(tokens)
 
         # we want to remove the tagged punctuation, since that will mess up our word indexing
         no_punctuation_tuples = []
@@ -73,7 +74,7 @@ class FeatureExtractor:
                 no_punctuation_tuples.append(tup)
 
         return no_punctuation_tuples 
-    
+
     def get_passages(self, features, atom_type):
         '''
         Return a list of IntrinsicPassage objects for each passage in the text
@@ -263,22 +264,6 @@ class FeatureExtractor:
         
         self.pos_percentage_vector_initialized = True
     
-    def pos_percentage_vector(self, word_spans_index_start, word_spans_index_end):
-        # TODO: What the hell is this feature?
-        # Oh... This feature is a vector itself? not a single value...
-        # -----------
-        # this feature is deprecated 12 / 26 / 2013
-        # -----------
-        '''
-        if not self.pos_percentage_vector_initialized:
-            self._init_pos_frequency_table()
-        
-        total_vect = [a - b for a, b in zip(self.pos_frequency_count_table[word_spans_index_end], self.pos_frequency_count_table[word_spans_index_start])]
-        num_words = word_spans_index_end - word_spans_index_start
-        return tuple([a / float(num_words) for a in total_vect])
-        '''
-        return None
-
     def _init_stopword_percentage(self):
         '''
         instatiates the table for stopword counts which allows for constant-time
@@ -507,16 +492,6 @@ def _test():
     f.get_feature_vectors(["avg_external_word_freq_class"], "sentence")
     print "avg_external_word_freq_class DOES NOT EXIST"
     
-    # We no longer use pos_percentage_vector
-    '''
-    f = FeatureExtractor("The brown fox ate. I go to the school. Believe it.")
-    #print f.get_feature_vectors(["pos_percentage_vector"], "sentence")
-    if f.get_feature_vectors(["pos_percentage_vector"], "sentence") == [(0,0,0,1.0), (0,0,.2,.8), (0,0,0,1.0)]:
-        print "pos_percentage_vector test passed"
-    else:
-        print "pos_percentage_vector test FAILED"
-    '''
-
     f = FeatureExtractor("The brown fox ate. I go to the school. Believe it. I go.")
     #print f.get_feature_vectors(["syntactic_complexity"], "sentence")
     if f.get_feature_vectors(["syntactic_complexity"], "sentence") == [(0,), (1,), (0,), (1,)]:

@@ -17,14 +17,24 @@ class BaseUtility:
         Return list of absolute paths to files in <file_name> whose
         location is relative to <base_location_path>
         '''
+        relative_paths = self.get_relative_training_set(file_name, include_txt_extension)
+        training_list = [base_location_path + r for r in relative_paths]
+
+        return training_list
+
+    def get_relative_training_set(self, file_name, include_txt_extension=True):
+        '''
+        Return list of relative paths to files in <file_name>
+        '''
         f = file(file_name, 'r')
         if include_txt_extension:
             relative_paths = [l.strip() + '.txt' for l in f.readlines()]
         else:
             relative_paths = [l.strip() for l in f.readlines()]
-        training_list = [base_location_path + r for r in relative_paths]
 
-        return training_list
+        f.close()
+
+        return relative_paths
 
     def get_plagiarized_spans(self, xml_path):
         '''
@@ -78,9 +88,6 @@ class BaseUtility:
         end_overlap = min(interval1[1], interval2[1])
 
         return max(0, end_overlap - start_overlap)
-
-
-
 
 
 class IntrinsicUtility(BaseUtility):
