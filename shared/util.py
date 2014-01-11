@@ -87,7 +87,7 @@ class BaseUtility:
         start_overlap = max(interval1[0], interval2[0])
         end_overlap = min(interval1[1], interval2[1])
 
-        return max(0, end_overlap - start_overlap)
+        return max(0, end_overlap - start_overlap - 1)
 
 
 class IntrinsicUtility(BaseUtility):
