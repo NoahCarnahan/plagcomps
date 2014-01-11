@@ -1,6 +1,7 @@
 import os
 import glob
 import xml
+import xml.etree.ElementTree as ET
 from plagcomps import tokenization
 from plagcomps.shared.passage import PassageWithGroundTruth
 
@@ -87,7 +88,7 @@ class BaseUtility:
         start_overlap = max(interval1[0], interval2[0])
         end_overlap = min(interval1[1], interval2[1])
 
-        return max(0, end_overlap - start_overlap)
+        return max(0, end_overlap - start_overlap - 1)
 
 
 class IntrinsicUtility(BaseUtility):
@@ -156,6 +157,36 @@ class ExtrinsicUtility(BaseUtility):
         sample_tests = glob.glob(ExtrinsicUtility.SAMPLE_CORPUS_LOC + 'test*txt')
 
         return sample_tests
+
+    def get_source_plag(self, suspect_path):
+        '''
+        <suspect_path> is a full path to an .xml file
+
+        Returns the full paths of all source documents that are plagiarized in
+        <suspect_path>'s corresponding document
+        '''
+        tree = ET.parse(suspect_path)
+        sources = set()
+
+        for feature in tree.iter('feature'):
+            if feature.get('name') == 'artificial-plagiarism':
+                src = feature.get('source_reference')
+                full_path = self.get_src_abs_path(src)
+                sources.add(full_path)
+
+        return sources    
+
+    def get_src_abs_path(self, doc_name):
+        '''
+        <doc_name> is like "source-document10172.txt" -- find which part of 
+        the corpus the source document is in and return an absolute path 
+        (i.e.) /copyCats/......./part6/source-document10172.txt
+        '''
+        possible_dirs = os.listdir(ExtrinsicUtility.CORPUS_SRC_LOC)
+        for candidate in possible_dirs:
+            full_path = os.path.join(ExtrinsicUtility.CORPUS_SRC_LOC, candidate, doc_name)
+            if os.path.exists(full_path):
+                return full_path
 
 
 
