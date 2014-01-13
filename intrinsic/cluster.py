@@ -91,14 +91,19 @@ def _hmm(stylo_vectors, k):
     to the i_th input vector.
     '''
     
+    #get centroids and cluster assignments
     centroids, assigned_clusters = hmm.hmm_cluster(stylo_vectors, k)
-    #print centroids
+    print centroids
     #print assigned_clusters
+    
+    #
 
     # Get confidences
     # TODO: Develop a real notion of confidence for hmm clustering
     plag_cluster = Counter(assigned_clusters).most_common()[-1][0]
-    return [1 if x == plag_cluster else 0 for x in assigned_clusters]
+    cluster_assign = [1 if x == plag_cluster else 0 for x in assigned_clusters]
+    #confidences = hmm.get_confidences(stylo_vectors, centroids, cluster_assign)
+    return cluster_assign #, confidences
 
 def _test():
     doc = open('/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents/part1/suspicious-document00667.txt', 'r')

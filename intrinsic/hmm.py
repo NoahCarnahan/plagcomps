@@ -11,40 +11,22 @@ class _State :
 		self.ft_list_means = means_list
 		self.ft_list_variances = variances
 		self.trans_probs = trans_probs 
-		
-
-	def convert_zscore_to_probability(self, value):
-		''' Given a zscore, returns the probability that a value of that score was observed.'''
-		
 	
 	def get_emission_probability(self, feature_vector):
 		''' Returns the probability of this state outputting the given feature_vector. 
 		    This is done by quantizing the continous values described by the gaussian
 		    distribution for this state. '''
-		
-		'''
-		probability = 0.5
-		if feature_vector == self.ft_list_means:
-			return probability
-		for i in xrange(len(feature_vector)):
-			z_score = (feature_vector[i] - self.ft_list_means[i]) / self.ft_list_variances[i]
-			if z_score < -2.4:
-				probability = 0.008
-			# this if else line will have as many as 70 conditionals to check.
-		'''
-		'''
-		this is the older version of using zscores to change continuous probabilities into discrete probabilities
-		'''
+						
 		probability = 1.0
 		if feature_vector == self.ft_list_means:
 			return probability
 		for i in xrange(len(feature_vector)):
 			z_score = (feature_vector[i] - self.ft_list_means[i]) / self.ft_list_variances[i]
-			z_score *= 100
-			upper = math.floor(z_score+1)/100 * self.ft_list_variances[i] + self.ft_list_means[i]
-			lower = math.floor(z_score)/100 * self.ft_list_variances[i] + self.ft_list_means[i]
+			z_score *= 10
+			upper = math.floor(z_score+1)/10 * self.ft_list_variances[i] + self.ft_list_means[i]
+			lower = math.floor(z_score)/10 * self.ft_list_variances[i] + self.ft_list_means[i]
 			prob = scipy.stats.norm(self.ft_list_means[i], self.ft_list_variances[i]).cdf(upper) - scipy.stats.norm(self.ft_list_means[i], self.ft_list_variances[i]).cdf(lower)
-			'''
+			'''#print statements 
 			print 'z_score is : ', z_score
 			print upper
 			print lower
@@ -53,8 +35,19 @@ class _State :
 			probability *= prob
 		#print probability + 0.00001
 		return math.log(probability + 0.00001)
+		
+	def get_confidences(self, stylo_vectors, centroids, cluster_assignments):
 		'''
-		'''
+		Given the stylo vector list, centroid values and cluster assignments, returns a list of confidences
+		where confidences[i] pertains to stylo_vectors[i] -- only works for 2 clusters'''
+		for i in xrange(stylo_vectors):
+			#confidence distance
+			list_differences[i] = math.abs(stylo_vectors[i] - centroids[cluster_assignments[i]])
+			#do some math
+			#for each centroid, create a list of tuples where tuples are (list_differences[i],i)
+			#sort lists by ascending first elements of tuples
+			#normalize distance values so that the largest distance is 1
+			#return a list called confidences where confidences[i] = (normlized_distance of stylo_vectors[i])
 		
 def hmm_cluster(stylo_vectors, k):
 	'''
