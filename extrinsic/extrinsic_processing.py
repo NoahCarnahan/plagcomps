@@ -1,8 +1,8 @@
 import datetime
 
 import fingerprint_extraction
-from tokenization import *
-from dbconstants import username, password, dbname
+from ..tokenization import *
+from ..dbconstants import username, password, dbname
 
 import sqlalchemy
 from sqlalchemy import Table, Column, Sequence, Integer, String, Text, Float, DateTime, ForeignKey, and_
@@ -55,8 +55,16 @@ class FingerPrint(Base):
 		initializes FingerPrint
 		'''
 		self.document_name = doc
-		self._doc_path = base_path + self.document_name + ".txt"
-		self._doc_xml_path = base_path + self.document_name + ".xml"
+
+		# (nj) hacky work around since it looks like we're passing relative
+		# paths in some places and absolute paths in others
+		if base_path in self.document_name:
+			self._doc_path = self.document_name + ".txt"
+			self._doc_xml_path = self.document_name + ".xml"
+		else:
+			self._doc_path = base_path + self.document_name + ".txt"
+			self._doc_xml_path = base_path + self.document_name + ".xml"
+		
 		self.method = select_method
 		self.n = n
 		self.k = k

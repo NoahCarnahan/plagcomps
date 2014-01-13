@@ -1,5 +1,6 @@
 import nltk
 import re
+import string
 
 def tokenize(text, atom_type):
     '''
@@ -48,6 +49,18 @@ def _tokenize_by_paragraph(text):
             spans.append((boundaries[-1][1], len(text)))
     
     return spans
+
+def strip_punctuation(words):
+    '''
+    Returns all w in <words> such that w is not a punctuation character
+    If w starts or ends with punctuation, the leading/trailing punctuation
+    is stripped in the returned list
+    '''
+    # See http://stackoverflow.com/a/266162/3083983 -- translate is fast!
+    # TODO do we want to strip all punctuation? 
+    return [w.translate(None, string.punctuation) \
+            for w in words if w not in string.punctuation]
+
 
 def _tokenize_by_full(text):
 	return [(0, len(text))]

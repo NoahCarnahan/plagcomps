@@ -14,6 +14,7 @@ import nltk
 import fingerprint_extraction
 import extrinsic_processing
 import ground_truth
+from ..shared.util import ExtrinsicUtility
 
 import sqlalchemy
 from sqlalchemy import Table, Column, Sequence, Integer, String, Float, DateTime, ForeignKey, and_
@@ -26,11 +27,11 @@ from sqlalchemy.ext.associationproxy import association_proxy
 class ExtrinsicTester:
 
 	def __init__(self, atom_type, fingerprint_method, suspect_file_list, source_file_list):
-		self.suspicious_path_start = "/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents"
-		self.corpus_path_start = "/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/source-documents"
+		self.suspicious_path_start = ExtrinsicUtility.CORPUS_SUSPECT_LOC
+		self.corpus_path_start = ExtrinsicUtility.CORPUS_SRC_LOC
 		source_dirs = os.listdir(self.corpus_path_start)
-		self.source_file_names = source_file_list # [self.corpus_path_start + f for f in source_file_list]
-		self.suspect_file_names = suspect_file_list # [self.suspicious_path_start + f for f in suspect_file_list]
+		
+		self.source_file_names, self.suspect_file_names = ExtrinsicUtility().get_n_training_files(include_txt_extension=False)
 	
 		# uncomment these two lines to test on reasonable sized corpus
 		# self.source_file_names = ["sample_corpus/source1", "sample_corpus/source2", "sample_corpus/source3"]
@@ -50,9 +51,7 @@ class ExtrinsicTester:
 		classifications = []
 		actuals = []
 		for f in self.suspect_file_names:
-			suspect_file_path = self.suspicious_path_start + f
-			print f
-			suspicious_document = open(suspect_file_path + '.txt')
+			suspicious_document = open(f + '.txt')
 			doc = suspicious_document.read()
 			# atom_spans = feature_extractor.get_spans(doc, self.atom_type)
 			# atoms = [doc[a[0]:a[1]] for a in atom_spans]
@@ -99,26 +98,11 @@ if __name__ == "__main__":
 	# fp = extrinsic_processing._query_fingerprint('/part7/suspicious-document12675', "full", 3, 5, "paragraph", session, '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents')
 	# print fp.get_fingerprints(session)
 	
+	util = ExtrinsicUtility()
 	num_files = 5
 
-	suspect_file_listing = open('extrinsic_corpus_partition/extrinsic_training_suspect_files.txt', 'r')
-	suspect_file_list = []
-	i = 0
-	for line in suspect_file_listing:
-		suspect_file_list.append(line.strip())
-		i += 1
-		if i >= num_files:
-			break
-	suspect_file_listing.close()
-	print suspect_file_list
+	source_file_list, suspect_file_list = util.get_n_training_files(n=num_files, include_txt_extension=False)
 
-	source_file_listing = open('extrinsic_corpus_partition/extrinsic_training_source_files.txt', 'r')
-	source_file_list = []
-	for line in source_file_listing:
-		source_file_list.append(line.strip())
-	source_file_listing.close()
-	source_file_list = source_file_list
-	
 	print 'Testing first', num_files, ' suspect files using a corpus of', len(source_file_list), 'source documents:'
 	print 'Suspect filenames:', suspect_file_list
 
