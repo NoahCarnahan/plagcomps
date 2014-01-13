@@ -189,7 +189,7 @@ class FeatureExtractor:
             raise ValueError
 
     def _init_num_chars(self):
-        '''sample method for zachs new framework'''
+        '''count the number of characters within words'''
 
         sum_table = [0]
         for start, end in self.word_spans:
@@ -197,12 +197,16 @@ class FeatureExtractor:
         self.features["num_chars"] = sum_table
 
     def num_chars(self, word_spans_index_start, word_spans_index_end):
-        '''sample method for zachs new framework'''
+        '''return the number of characters used in these words'''
+        if "num_chars" not in self.features:
+            self._init_num_chars()
 
         return self.features["num_chars"][word_spans_index_end] - self.features["num_chars"][word_spans_index_start]
         
     def word_to_sentence_average(self, word_feature_name, sent_spans_index_start, sent_spans_index_end):
-        '''sample method for zachs new framework'''
+        '''takes in a word feature and sentence span range
+        applies the word feature to each word in the specified sentences, and then averages the results
+        over the number of words.'''
 
         # get the start and end character indices from our sentence indices
         start = self.sentence_spans[sent_spans_index_start][0]
@@ -243,7 +247,6 @@ class FeatureExtractor:
     
         x = square_sum - 2 * u * (sum_x[t] - sum_x[s]) + (t-s) * u * u
         return math.sqrt(x / float(t - s))
-    
     
     def _init_average_word_length(self):
         '''
@@ -561,8 +564,14 @@ def _test():
     else:
         print "average_sentence_legth test FAILED"
     
-    #print f.get_feature_vectors(["average_word_length"], "sentence")
-    if f.get_feature_vectors(["average_word_length"], "sentence") == [(3.75,), (5.0,), (3.0,)]:
+    #print f.get_feature_vectors(["num_chars"], "sentence")
+    if f.get_feature_vectors(["num_chars"], "sentence") == [(15,), (10,), (15,)]:
+        print "num_chars test passed"
+    else:
+        print "num_chars test FAILED"
+
+    #print f.get_feature_vectors(["avg(num_chars)"], "sentence")
+    if f.get_feature_vectors(["avg(num_chars)"], "sentence") == [(3.75,), (5.0,), (3.0,)]:
         print "average_word_length test passed"
     else:
         print "average_word_length test FAILED"
