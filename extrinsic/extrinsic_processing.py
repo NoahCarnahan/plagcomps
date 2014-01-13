@@ -34,7 +34,7 @@ def _query_fingerprint(docs, method, n, k, atom_type, session, base_path):
         # session.commit()
     return fp
 
-def _query_fingerprint_from_id(fingerprint_id):
+def _query_fingerprint_from_id(fingerprint_id, session):
     try:
         q = session.query(FingerPrint).filter(FingerPrint.id == fingerprint_id)
         fp = q.one()

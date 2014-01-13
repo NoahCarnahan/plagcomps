@@ -199,27 +199,34 @@ class FingerprintEvaluator:
         Returns a list of (source_filename, similarity) tuples sorted in decreasing similarity to the 
         input document.
         '''
+        print 'classfiying:', filename
         fp = self._get_fingerprint(filename, atom_type, session, ExtrinsicUtility.CORPUS_SUSPECT_LOC)
         if atom_type == "full":
             fingerprint = fp.get_fingerprints(session)
         else:
             fingerprint = fp.get_fingerprints(session)[atom_index]
 
+        checked_fingerprint_ids = {}
         source_documents = {}
         # get the list of fingerprint ids for each minutia in the fingerprint
         for minutia in fingerprint:
-            ri = reverse_index._query_reverse_index(minutia)
+            ri = reverse_index._query_reverse_index(minutia, session)
             for fingerprint_id in ri.fingerprint_ids:
-                fp = extrinsic_processing._query_fingerprint_from_id(fingerprint_id)
-                print fp.document_name
-                if len(fp) > 0 and type(fp[0]) == list: # is fp at a paragraph granularity?
-                    for i in xrange(len(fp.fingerprint)):
-                        if len(fp.fingerprint[i]): # make sure it's not an empty fingerprint
-                            source_documents[(fp.document_name, i)] = jaccard_similarity(fingerprint, fp.fingerprint[i])
-                        else:
-                            source_documents[(fp.document_name, i)] = 0
-                else: # full document granularity
-                    source_documents[(fp.document_name, 0)] = jaccard_similarity(fingerprint, fp.fingerprint)
+                # todo: make sure the fingerprinting technique/atom type/etc. is the same
+                fp = extrinsic_processing._query_fingerprint_from_id(fingerprint_id, session)
+                if fingerprint_id not in checked_fingerprint_ids:
+                    checked_fingerprint_ids[fingerprint_id] = True
+                    print fingerprint_id
+                    print fp.document_name
+                    if len(fp.fingerprint) > 0 and type(fp.fingerprint[0]) == list: # is fp at a paragraph granularity?
+                        for i in xrange(len(fp.fingerprint)):
+                            if len(fp.fingerprint[i]): # make sure it's not an empty fingerprint
+                                source_documents[(fp.document_name, i)] = jaccard_similarity(fingerprint, fp.fingerprint[i])
+                            else:
+                                source_documents[(fp.document_name, i)] = 0
+                    else: # full document granularity
+                        source_documents[(fp.document_name, 0)] = jaccard_similarity(fingerprint, fp.fingerprint)
+    
 
         return sorted(source_documents.items() , key = operator.itemgetter(1), reverse=True)
 

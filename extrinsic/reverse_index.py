@@ -38,11 +38,11 @@ class ReverseIndex(Base):
     timestamp = Column(DateTime)
     version_number = Column(Integer)
     
-    def __init__(self, minutia, fingerprint_ids_list=[]):
+    def __init__(self, minutia, fingerprint_ids_list=[], version_number=1):
         self.minutia = minutia
         self.fingerprint_ids = fingerprint_ids_list
         self.timestamp = datetime.datetime.now()
-        self.version_numer = 1
+        self.version_number = version_number
 
     def get_fingerprints_from_minutia(self, minutia):
         '''

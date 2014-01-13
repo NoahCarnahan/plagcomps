@@ -30,12 +30,11 @@ class ExtrinsicTester:
         self.suspicious_path_start = ExtrinsicUtility.CORPUS_SUSPECT_LOC
         self.corpus_path_start = ExtrinsicUtility.CORPUS_SRC_LOC
         source_dirs = os.listdir(self.corpus_path_start)
-        
-        self.source_file_names, self.suspect_file_names = ExtrinsicUtility().get_n_training_files(include_txt_extension=False)
-    
+            
         self.atom_type = atom_type
         self.fingerprint_method = fingerprint_method
         self.suspect_file_list = suspect_file_list
+        self.source_file_list = source_file_list
         self.evaluator = fingerprint_extraction.FingerprintEvaluator(source_file_list, fingerprint_method, 3)
 
     def _get_trials(self):
@@ -46,7 +45,7 @@ class ExtrinsicTester:
         '''
         classifications = []
         actuals = []
-        for f in self.suspect_file_names:
+        for f in self.suspect_file_list:
             suspicious_document = open(f + '.txt')
             doc = suspicious_document.read()
             # atom_spans = feature_extractor.get_spans(doc, self.atom_type)
@@ -57,7 +56,7 @@ class ExtrinsicTester:
             # just take the most similar source document's similarity as the confidence of plagiarism for now.
             similarity = atom_classifications[0][1]
 
-            acts = ground_truth._query_ground_truth(f, self.atom_type, session, self.suspicious_path_start)
+            acts = ground_truth._query_ground_truth(f, self.atom_type, session, self.suspicious_path_start).get_ground_truth(session)
             actuals += acts
             classifications += [similarity for i in xrange(len(acts))] # just classify each paragraph in a document as the same similarity
         return classifications, actuals
@@ -85,7 +84,7 @@ class ExtrinsicTester:
         pyplot.title('Receiver Operating Characteristic -- Extrinsic w/ '+self.fingerprint_method+' fingerprinting')
         pyplot.legend(loc="lower right")
         
-        path = "figures/roc_extrinsic_"+str(time.time())+"_"+self.fingerprint_method+".pdf"
+        path = os.path.join(os.path.dirname(__file__), "../figures/roc_extrinsic_"+str(time.time())+"_"+self.fingerprint_method+".pdf")
         pyplot.savefig(path)
 
 
