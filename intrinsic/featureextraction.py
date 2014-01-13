@@ -37,14 +37,8 @@ class FeatureExtractor:
         self.pos_tags = None
         self.pos_tagged = False
 
-        self.average_word_length_initialized = False
-        self.average_sentence_length_initialized = False
-        self.syntactic_complexity_average_initalized = False
-        self.pos_percentage_vector_initialized = False
-        self.stopword_percentage_initialized = False
-        self.punctuation_percentage_initiliazed = False
-        self.avg_internal_word_freq_class_initialized = False
-        self.avg_external_word_freq_class_initialized = False
+        #TODO evaluate whether we want to keep this?
+        self.pos_frequency_count_table_initialized = False
  
     def get_spans(self, atom_type):
         if atom_type == "word":
@@ -287,18 +281,18 @@ class FeatureExtractor:
             word_spans = spanutils.slice(self.word_spans, start, end, return_indices = False)
             word_sum += len(word_spans)
             sum_table.append(word_sum + sum_table[-1])
-        self.sent_length_sum_table = sum_table
-        
-        self.average_sentence_length_initialized = True
+
+        self.features["average_sentence_length"] = sum_table
     
     def average_sentence_length(self, sent_spans_index_start, sent_spans_index_end):
         '''
         Return the average number of words in sentences [sent_spans_index_start : sent_spans_index_end]
         '''
-        if not self.average_sentence_length_initialized:
+        if "average_sentecne_length" not in self.features:
             self._init_average_sentence_length()
         
-        total_sentence_length = self.sent_length_sum_table[sent_spans_index_end] - self.sent_length_sum_table[sent_spans_index_start]
+        sum_table = self.features["average_sentence_length"]
+        total_sentence_length = sum_table[sent_spans_index_end] - sum_table[sent_spans_index_start]
         num_words = sent_spans_index_end - sent_spans_index_start
         return float(total_sentence_length) / max(num_words, 1)
     
@@ -351,7 +345,7 @@ class FeatureExtractor:
 
         self.pos_frequency_count_table = sum_dict
         
-        self.pos_percentage_vector_initialized = True
+        self.pos_frequency_count_table_initialized = True
     
     def _init_stopword_percentage(self):
         '''
@@ -368,18 +362,17 @@ class FeatureExtractor:
             if word in nltk.corpus.stopwords.words('english'):
                 count += 1
             sum_table.append(count)
-        self.stopword_sum_table = sum_table
-        
-        self.stopword_percentage_initialized = True
+        self.features["stopword_percentage"] = sum_table
         
     def stopword_percentage(self, word_spans_index_start, word_spans_index_end):
         '''
         Return the percentage of words that are stop words in the text between the two given indices.
         '''
-        if not self.stopword_percentage_initialized:
+        if "stopword_percentage" not in self.features:
             self._init_stopword_percentage()
         
-        total_stopwords = self.stopword_sum_table[word_spans_index_end] - self.stopword_sum_table[word_spans_index_start]
+        sum_table = self.features["stopword_percentage"]
+        total_stopwords = sum_table[word_spans_index_end] - sum_table[word_spans_index_start]
         num_sents = word_spans_index_end - word_spans_index_start
         return float(total_stopwords) / max(num_sents, 1)
         
@@ -394,15 +387,15 @@ class FeatureExtractor:
             if char in ",./<>?;':[]{}\|!@#$%^&*()`~-_\"": # Use string.punctuation here instead? string.punctuation also includes "+" and "=".
                 count += 1
             sum_table.append(count)
-        self.punctuation_sum_table = sum_table
-        
-        self.punctuation_percentage_initiliazed = True
+
+        self.features["punctuation_percentage"] = sum_table
     
     def punctuation_percentage(self, char_index_start, char_index_end):
-        if not self.punctuation_percentage_initiliazed:
+        if "punctuation_percentage" not in self.features:
             self._init_punctuation_percentage()
         
-        total_punctuation = self.punctuation_sum_table[char_index_end] - self.punctuation_sum_table[char_index_start]
+        sum_table = self.features["punctuation_percentage"]
+        total_punctuation = sum_table[char_index_end] - sum_table[char_index_start]
         num_chars = char_index_end - char_index_start
         return float(total_punctuation) / max(num_chars, 1)
 
@@ -415,7 +408,7 @@ class FeatureExtractor:
         the original version accounts for Noun Phrases, which are not counted in the NLTK tagger, and so are ignored.
         '''
         # Note that this feature uses the same initialization that pos_percentage_vector does.
-        if not self.pos_percentage_vector_initialized:
+        if not self.pos_frequency_count_table_initialized:
             self._init_pos_frequency_table()
         #print "querying syntactic complexity of", word_spans_index_start, "to", word_spans_index_end    
         conjunctions_table = self.pos_frequency_count_table.get("SUB", None)
@@ -493,8 +486,8 @@ class FeatureExtractor:
             freq_class = math.floor(math.log((float(occurences_of_most_freq_word)/word_freq_dict.get(word, 0)),2))
             total += freq_class
             table.append(total)
-        self.internal_freq_class_table = table
-        self.avg_internal_word_freq_class_initialized = True
+
+        self.features["avg_internal_word_freq_class"] = table
     
     def avg_internal_word_freq_class(self, word_spans_index_start, word_spans_index_end):
         '''
@@ -502,9 +495,11 @@ class FeatureExtractor:
         classes of words are calculated based on the occurrences of words within this
         text, not the brown corpus.
         '''
-        if not self.avg_internal_word_freq_class_initialized:
+        if "avg_internal_word_freq_class" not in self.features:
             self._init_internal_word_freq_class()
-        total = self.internal_freq_class_table[word_spans_index_end] - self.internal_freq_class_table[word_spans_index_start]
+
+        sum_table = self.features["avg_internal_word_freq_class"]
+        total = sum_table[word_spans_index_end] - sum_table[word_spans_index_start]
         return total / float(max(1, word_spans_index_end - word_spans_index_start))
         
     def _init_external_word_freq_class(self):
@@ -526,8 +521,7 @@ class FeatureExtractor:
             freq_class = math.floor(math.log(float(occurences_of_most_freq_word + 1) / (word_freq_dict.get(word.lower(), 0) + 1),2))
             class_sum_table.append(class_sum_table[-1] + freq_class)
         
-        self.external_freq_class_table = class_sum_table
-        self.avg_external_word_freq_class_initialized = True
+        self.features["avg_external_word_freq_class"] = class_sum_table
         
     def avg_external_word_freq_class(self, word_spans_index_start, word_spans_index_end):
         '''
@@ -536,9 +530,10 @@ class FeatureExtractor:
         
         Plus one smoothing is used.
         '''
-        if not self.avg_external_word_freq_class_initialized:
+        if "avg_external_word_freq_class" not in self.features:
             self._init_external_word_freq_class()
-        total = self.external_freq_class_table[word_spans_index_end] - self.external_freq_class_table[word_spans_index_start]
+        sum_table = self.features["avg_external_word_freq_class"]
+        total = sum_table[word_spans_index_end] - sum_table[word_spans_index_start]
         num_words = word_spans_index_end - word_spans_index_start
         return float(total) / max(num_words, 1)
         
@@ -593,6 +588,7 @@ def _test():
         print "syntactic_complexity test passed"
     else:
         print "syntactic_complexity test FAILED"
+
     '''
     f = FeatureExtractor("The brown fox ate. I go to the school. Believe it. I go.")
     #print f.get_feature_vectors(["syntactic_complexity_average"], "paragraph")
