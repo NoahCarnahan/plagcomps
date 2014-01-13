@@ -1,5 +1,6 @@
 from ..intrinsic.featureextraction import FeatureExtractor
 from ..shared.util import IntrinsicUtility
+from ..shared.util import BaseUtility
 from ..dbconstants import username
 from ..dbconstants import password
 from ..dbconstants import dbname
@@ -343,13 +344,7 @@ class ReducedDoc(Base):
         self._spans = None
         
         # set self._plagiarized_spans
-        self._plagiarized_spans = []
-        tree = ET.parse(self._full_xml_path)
-        for feature in tree.iter("feature"):
-            if feature.get("name") == "artificial-plagiarism": # are there other types?
-                start = int(feature.get("this_offset"))
-                end = start + int(feature.get("this_length"))
-                self._plagiarized_spans.append((start, end))
+        self._plagiarized_spans = IntrinsicUtility().get_plagiarized_spans(self._full_xml_path)
     
     def __repr__(self):
         return "<ReducedDoc('%s','%s')>" % (self._short_name, self.atom_type)
@@ -374,14 +369,14 @@ class ReducedDoc(Base):
     def span_is_plagiarized(self, span):
         '''
         Returns True if the span was plagiarized (according to the ground truth). Returns
-        False otherwise. A span is considered plagiarized if the first character of the
-        span is in a plagiarized span.
+        False otherwise. A span is considered plagiarized if it overlaps a plagiarised span.
         
         '''
         # TODO: Consider other ways to judge if an atom is plagiarized or not. 
         #       For example, look to see if the WHOLE atom in a plagiarized segment (?)
+        
         for s in self._plagiarized_spans:
-            if s[0] <= span[0] < s[1]:
+            if BaseUtility().overlap(span, s) > 0:
                 return True
         return False
         
@@ -467,7 +462,7 @@ class _Figure(Base):
         
         self.figure_path = figure_path
         self.timestamp = datetime.datetime.now()
-        self.version_number = 2
+        self.version_number = 3
         self.figure_type = figure_type
         self.auc = auc
         self.features = features

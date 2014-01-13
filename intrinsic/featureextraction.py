@@ -66,7 +66,8 @@ class FeatureExtractor:
         for sentence in sentenceSpans:
             sentence = self.text[sentence[0]:sentence[1]]
             # run part-of-speech tagging on the sentence following the word_tokenize-ation of it
-            taggedWordTuples += nltk.tag.pos_tag(nltk.word_tokenize(sentence))
+            tokens = tokenization.tokenize(sentence, 'word', return_spans=False)
+            taggedWordTuples += nltk.tag.pos_tag(tokens)
 
         # we want to remove the tagged punctuation, since that will mess up our word indexing
         no_punctuation_tuples = []
@@ -75,7 +76,7 @@ class FeatureExtractor:
                 no_punctuation_tuples.append(tup)
 
         return no_punctuation_tuples 
-    
+
     def get_passages(self, features, atom_type):
         '''
         Return a list of IntrinsicPassage objects for each passage in the text
@@ -217,8 +218,8 @@ class FeatureExtractor:
         # return the average
         return float(word_sum) / max(1, word_index_range[1] - word_index_range[0]) 
 
-    def _init_feature_std(self, feature_name):
-        '''take in a feature and build sum tables for querying std of that feature''''
+    #def _init_feature_std(self, feature_name):
+    #    '''take in a feature and build sum tables for querying std of that feature'''
 
 
     def word_to_sentence_std(self, word_feature_name, sent_spans_index_start, sent_spans_index_end):
@@ -230,7 +231,7 @@ class FeatureExtractor:
         
         augmented_feature_name = "std(" + word_feature_name + ")"
 
-        if not self.features.contains(augmented_feature_name)
+        if not self.features.contains(augmented_feature_name):
             init_func = getattr(self, "_init_" + augmented_feature_name) 
             init_func()
         
@@ -313,10 +314,10 @@ class FeatureExtractor:
         for index in range(len(self.pos_tags)):
             word = self.pos_tags[index][0].lower()
             tag = self.pos_tags[index][1]
-            print "looking at", word, "which is a", tag
+            #print "looking at", word, "which is a", tag
             temp_dict[tag] = temp_dict.get(tag, []) + [index]
 
-            # Now we want to populate special keys that we care about
+            # Now we want to populate special keys that we care about:
             # verbs
             if tag.startswith("VB"):
                 temp_dict["VERBS"] = temp_dict.get("VERBS", []) + [index]
@@ -347,22 +348,6 @@ class FeatureExtractor:
         
         self.pos_percentage_vector_initialized = True
     
-    def pos_percentage_vector(self, word_spans_index_start, word_spans_index_end):
-        # TODO: What the hell is this feature?
-        # Oh... This feature is a vector itself? not a single value...
-        # -----------
-        # this feature is deprecated 12 / 26 / 2013
-        # -----------
-        '''
-        if not self.pos_percentage_vector_initialized:
-            self._init_pos_frequency_table()
-        
-        total_vect = [a - b for a, b in zip(self.pos_frequency_count_table[word_spans_index_end], self.pos_frequency_count_table[word_spans_index_start])]
-        num_words = word_spans_index_end - word_spans_index_start
-        return tuple([a / float(num_words) for a in total_vect])
-        '''
-        return None
-
     def _init_stopword_percentage(self):
         '''
         instatiates the table for stopword counts which allows for constant-time
@@ -427,7 +412,7 @@ class FeatureExtractor:
         # Note that this feature uses the same initialization that pos_percentage_vector does.
         if not self.pos_percentage_vector_initialized:
             self._init_pos_frequency_table()
-        print "querying syntactic complexity of", word_spans_index_start, "to", word_spans_index_end    
+        #print "querying syntactic complexity of", word_spans_index_start, "to", word_spans_index_end    
         conjunctions_table = self.pos_frequency_count_table.get("SUB", None)
         if conjunctions_table != None:
             #print "conjunctions", conjunctions_table[word_spans_index_start:word_spans_index_end+1]
@@ -443,7 +428,6 @@ class FeatureExtractor:
             num_wh_pronouns = 0
 
         verb_table = self.pos_frequency_count_table.get("VERBS", None)
-        print verb_table
         if verb_table != None:
             #print "verbs", verb_table[word_spans_index_start:word_spans_index_end+1]
             num_verb_forms = verb_table[word_spans_index_end] - verb_table[word_spans_index_start]
@@ -592,17 +576,7 @@ def _test():
     f.get_feature_vectors(["avg_external_word_freq_class"], "sentence")
     print "avg_external_word_freq_class DOES NOT EXIST"
     
-    # We no longer use pos_percentage_vector
-    '''
-    f = FeatureExtractor("The brown fox ate. I go to the school. Believe it.")
-    #print f.get_feature_vectors(["pos_percentage_vector"], "sentence")
-    if f.get_feature_vectors(["pos_percentage_vector"], "sentence") == [(0,0,0,1.0), (0,0,.2,.8), (0,0,0,1.0)]:
-        print "pos_percentage_vector test passed"
-    else:
-        print "pos_percentage_vector test FAILED"
-    '''
-    f = FeatureExtractor("The brown fox ate. I go to the school. \n\n Believe it. I go.")
-    print f.get_spans("word")
+    f = FeatureExtractor("The brown fox ate. I go to the school. Believe it. I go.")
     #print f.get_feature_vectors(["syntactic_complexity"], "sentence")
     if f.get_feature_vectors(["syntactic_complexity"], "sentence") == [(0,), (1,), (0,), (1,)]:
         print "syntactic_complexity test passed"
@@ -617,10 +591,11 @@ def _test():
         print "syntactic_complexity_average test FAILED"
     '''  
 if __name__ == "__main__":
-    #_test()
-    f = FeatureExtractor("I absolutely go incredibly far. Zach went fast over crab sand land.")
-    f._init_num_chars()
-    print f.get_feature_vectors(["average_sentence_length", "num_chars", "avg(num_chars)"], "sentence")
+    _test()
+
+    #f = FeatureExtractor("I absolutely go incredibly far. Zach went fast over crab sand land.")
+    #f._init_num_chars()
+    #print f.get_feature_vectors(["average_sentence_length", "num_chars", "avg(num_chars)"], "sentence")
     #print "chars",  f.num_chars(0, 5)
     #print "avg", f.word_to_sentence_average("num_chars", 0, 1)
     #print "word_spans", f.get_spans("word")

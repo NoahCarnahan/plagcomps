@@ -2,53 +2,71 @@ import nltk
 import re
 import string
 
-def tokenize(text, atom_type):
+def tokenize(text, atom_type, return_spans=True):
     '''
-    Return a list of spans designating the location of each passage in the given
-    text. atom_type determines the type of passages.
+    By default, return a list of spans designating the location of 
+    each passage in the given text. atom_type determines the type of passages.
     (output is of the form [(0, 20), (22, 50), ...])
+
+    If <return_spans> is False, return a list of the actual tokens
     '''
     if atom_type == "word":
-        return _tokenize_by_word(text)
+        return _tokenize_by_word(text, return_spans)
     elif atom_type == "sentence":
-        return _tokenize_by_sentence(text)
+        return _tokenize_by_sentence(text, return_spans)
     elif atom_type == "paragraph":
-        return _tokenize_by_paragraph(text)
+        return _tokenize_by_paragraph(text, return_spans)
     elif atom_type == "full":
-    	return _tokenize_by_full(text)
+    	return _tokenize_by_full(text, return_spans)
     else:
         raise ValueError("Unacceptable atom_type")
     
-def _tokenize_by_word(text):
+def _tokenize_by_word(text, return_spans):
     tokenizer = _CopyCatPunktWordTokenizer()
-    spans = tokenizer.span_tokenize(text)
-    return spans
-    
-def _tokenize_by_sentence(text):
-    tokenizer = nltk.PunktSentenceTokenizer()
-    spans = tokenizer.span_tokenize(text)
-    return spans
 
-def _tokenize_by_paragraph(text):
+    if return_spans:
+        return tokenizer.span_tokenize(text)
+    else:
+        return tokenizer.tokenize(text)
+    
+def _tokenize_by_sentence(text, return_spans):
+    tokenizer = nltk.PunktSentenceTokenizer()
+
+    if return_spans:
+        return tokenizer.span_tokenize(text)
+    else:
+        return tokenizer.tokenize(text)
+
+def _tokenize_by_paragraph(text, return_spans):
     # Idea from this gem: http://stackoverflow.com/a/4664889/3083983
     # boundaries[i][0] == start of <ith> newline sequence (i.e. 2+ newlines)
     # boundaries[i][1] == end of <ith> newline sequence (i.e. 2+ newlines)
-    PARAGRAPH_RE = r'\n{2,}'
+    PARAGRAPH_RE = r'\s*\n{2,}\s*'
     boundaries = [(m.start(), m.end()) for m in re.finditer(PARAGRAPH_RE, text)]
 
     if len(boundaries) == 0:
         spans = [(0, len(text))]
+        tokens = [text[spans[0][0] : spans[0][1]]]
     else:
         spans = [(0, boundaries[0][0])]
+        tokens = [text[spans[0][0] : spans[0][1]]]
         for i in range(len(boundaries) - 1):
             cur_span = (boundaries[i][1], boundaries[i + 1][0])
+            cur_token = text[cur_span[0] : cur_span[1]]
             spans.append(cur_span)
+            tokens.append(cur_token)
 
         # NOTE could be an edge-case if there's no new-line at the end of the text
         if boundaries[-1][1] != len(text):
-            spans.append((boundaries[-1][1], len(text)))
+            cur_span = (boundaries[-1][1], len(text))
+            cur_token = text[cur_span[0] : cur_span[1]]
+            spans.append(cur_span)
+            tokens.append(cur_token)
     
-    return spans
+    if return_spans:
+        return spans
+    else:
+        return tokens
 
 def strip_punctuation(words):
     '''
@@ -62,8 +80,11 @@ def strip_punctuation(words):
             for w in words if w not in string.punctuation]
 
 
-def _tokenize_by_full(text):
-	return [(0, len(text))]
+def _tokenize_by_full(text, return_spans):
+    if return_spans:
+	   return [(0, len(text))]
+    else:
+        return [text]
 
 
 class _CopyCatPunktWordTokenizer(nltk.tokenize.punkt.PunktBaseClass,nltk.tokenize.punkt.TokenizerI):

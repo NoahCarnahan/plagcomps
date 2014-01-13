@@ -33,7 +33,13 @@ def _kmeans(stylo_vectors, k):
     # Initialize <k> clusters to be points in input vectors
     centroids, assigned_clusters = kmeans2(normalized_features, k, minit = 'points')
     
+    
     # Get confidences
+    
+    # Special case when there is only one atom
+    if len(stylo_vectors) == 1:
+        return [0] # We are 0% confident that the atom is plagiarized.
+    
     if k == 2:
         confidences = []
         plag_cluster = Counter(assigned_clusters).most_common()[-1][0] #plag_cluster is the smallest cluster
