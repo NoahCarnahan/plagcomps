@@ -33,6 +33,8 @@ class FeatureExtractor:
         self.paragraph_spans = tokenization.tokenize(text, "paragraph")
         self.pos_tags = self._init_tag_list(text)
     
+        self.features = {}
+
         self.average_word_length_initialized = False
         self.average_sentence_length_initialized = False
         self.syntactic_complexity_average_initalized = False
@@ -121,6 +123,12 @@ class FeatureExtractor:
         
         vect = []
         for feat_name in features:
+            if '(' in feat_name:
+                nested_feature_call = self._get_nested_feature_call(feat_name)
+                feat_name = nested_feature_call[-1]
+            else:
+                nested_feature_call = None 
+            
             if self._feature_type(feat_name) == "char": 
                 start, end = start_index, end_index
             else:                
@@ -131,12 +139,32 @@ class FeatureExtractor:
                 elif self._feature_type(feat_name) == "paragraph":
                     spans = self.paragraph_spans
                 start, end = spanutils.slice(spans, start_index, end_index, return_indices = True)
-                
-            actual_feature_function = getattr(self, feat_name)
-            vect.append(actual_feature_function(start, end))
+            
+            if nested_feature_call != None:
+                if self._feature_type(feat_name) == "word":
+                    spans = self.sentence_spans
+                    start, end = spanutils.slice(spans, start_index, end_index, return_indices = True)
+                    vect.append(self.word_to_sentence_average(feat_name, start, end))
+            else:
+                actual_feature_function = getattr(self, feat_name)
+                vect.append(actual_feature_function(start, end))
             
         return tuple(vect)
-    
+
+    def _get_nested_feature_call(self, feat_name):    
+        '''
+        decompose a nested feature call such as "avg(std(char_length))" into [avg, std, char_length]
+        '''
+        return_list = []
+        while '(' in feat_name:
+            paren_index = feat_name.find('(')
+            func = feat_name[:paren_index]
+            return_list.append(func)
+            feat_name = feat_name[paren_index + 1:]
+        return_list.append(feat_name.replace(")", ""))
+
+        return return_list
+
     def _feature_type(self, func_name):
         '''
         Return at what atom level the feature with the given name operates.
@@ -159,7 +187,62 @@ class FeatureExtractor:
         else:
             raise ValueError
 
+    def _init_num_chars(self):
+        '''sample method for zachs new framework'''
 
+        sum_table = [0]
+        for start, end in self.word_spans:
+            sum_table.append((end - start) + sum_table[-1])
+        self.features["num_chars"] = sum_table
+
+    def num_chars(self, word_spans_index_start, word_spans_index_end):
+        '''sample method for zachs new framework'''
+
+        return self.features["num_chars"][word_spans_index_end] - self.features["num_chars"][word_spans_index_start]
+        
+    def word_to_sentence_average(self, word_feature_name, sent_spans_index_start, sent_spans_index_end):
+        '''sample method for zachs new framework'''
+
+        # get the start and end character indices from our sentence indices
+        start = self.sentence_spans[sent_spans_index_start][0]
+        end = self.sentence_spans[sent_spans_index_end - 1][1]
+
+        word_feature = getattr(self, word_feature_name)
+
+        # get the index range for the words we will consider
+        word_index_range = spanutils.slice(self.word_spans, start, end, return_indices = True)
+        # sum the values of our word_feature over each of our words    
+        word_sum = word_feature(word_index_range[0], word_index_range[1])
+
+        # return the average
+        return float(word_sum) / max(1, word_index_range[1] - word_index_range[0]) 
+
+    def _init_feature_std(self, feature_name):
+        '''take in a feature and build sum tables for querying std of that feature''''
+
+
+    def word_to_sentence_std(self, word_feature_name, sent_spans_index_start, sent_spans_index_end):
+        '''sample method for zachs framework'''
+
+        # get the start and end character indices from our sentence indices
+        start = self.sentence_spans[sent_spans_index_start][0]
+        end = self.sentence_spans[sent_spans_index_end - 1][1]
+        
+        augmented_feature_name = "std(" + word_feature_name + ")"
+
+        if not self.features.contains(augmented_feature_name)
+            init_func = getattr(self, "_init_" + augmented_feature_name) 
+            init_func()
+        
+        sum_x = self.features[augmented_feature_name][0]
+        sum_x2 = self.features[augmented_feature_name][1]
+
+        square_sum = sum_x2[t] - sum_x2[s]
+        u = float(sum_x[t] - sum_x[s]) / (t - s)
+    
+        x = square_sum - 2 * u * (sum_x[t] - sum_x[s]) + (t-s) * u * u
+        return math.sqrt(x / float(t - s))
+    
     
     def _init_average_word_length(self):
         '''
@@ -230,6 +313,7 @@ class FeatureExtractor:
         for index in range(len(self.pos_tags)):
             word = self.pos_tags[index][0].lower()
             tag = self.pos_tags[index][1]
+            print "looking at", word, "which is a", tag
             temp_dict[tag] = temp_dict.get(tag, []) + [index]
 
             # Now we want to populate special keys that we care about
@@ -343,7 +427,7 @@ class FeatureExtractor:
         # Note that this feature uses the same initialization that pos_percentage_vector does.
         if not self.pos_percentage_vector_initialized:
             self._init_pos_frequency_table()
-            
+        print "querying syntactic complexity of", word_spans_index_start, "to", word_spans_index_end    
         conjunctions_table = self.pos_frequency_count_table.get("SUB", None)
         if conjunctions_table != None:
             #print "conjunctions", conjunctions_table[word_spans_index_start:word_spans_index_end+1]
@@ -359,6 +443,7 @@ class FeatureExtractor:
             num_wh_pronouns = 0
 
         verb_table = self.pos_frequency_count_table.get("VERBS", None)
+        print verb_table
         if verb_table != None:
             #print "verbs", verb_table[word_spans_index_start:word_spans_index_end+1]
             num_verb_forms = verb_table[word_spans_index_end] - verb_table[word_spans_index_start]
@@ -516,20 +601,28 @@ def _test():
     else:
         print "pos_percentage_vector test FAILED"
     '''
-
-    f = FeatureExtractor("The brown fox ate. I go to the school. Believe it. I go.")
+    f = FeatureExtractor("The brown fox ate. I go to the school. \n\n Believe it. I go.")
+    print f.get_spans("word")
     #print f.get_feature_vectors(["syntactic_complexity"], "sentence")
     if f.get_feature_vectors(["syntactic_complexity"], "sentence") == [(0,), (1,), (0,), (1,)]:
         print "syntactic_complexity test passed"
     else:
         print "syntactic_complexity test FAILED"
-
+    '''
     f = FeatureExtractor("The brown fox ate. I go to the school. Believe it. I go.")
     #print f.get_feature_vectors(["syntactic_complexity_average"], "paragraph")
     if f.get_feature_vectors(["syntactic_complexity_average"], "paragraph") == [(0.5,)]:
         print "syntactic_complexity_average test passed"
     else:
         print "syntactic_complexity_average test FAILED"
-    
+    '''  
 if __name__ == "__main__":
-    _test()
+    #_test()
+    f = FeatureExtractor("I absolutely go incredibly far. Zach went fast over crab sand land.")
+    f._init_num_chars()
+    print f.get_feature_vectors(["average_sentence_length", "num_chars", "avg(num_chars)"], "sentence")
+    #print "chars",  f.num_chars(0, 5)
+    #print "avg", f.word_to_sentence_average("num_chars", 0, 1)
+    #print "word_spans", f.get_spans("word")
+    #print "sent_spans", f.get_spans("sentence")
+
