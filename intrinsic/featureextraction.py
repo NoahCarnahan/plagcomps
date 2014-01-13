@@ -78,6 +78,7 @@ class FeatureExtractor:
                 no_punctuation_tuples.append(tup)
 
         self.pos_tags = no_punctuation_tuples 
+        self.pos_tagged = True
 
     def get_passages(self, features, atom_type):
         '''
