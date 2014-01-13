@@ -31,9 +31,11 @@ class FeatureExtractor:
         self.word_spans = tokenization.tokenize(text, "word")
         self.sentence_spans = tokenization.tokenize(text, "sentence")
         self.paragraph_spans = tokenization.tokenize(text, "paragraph")
-        self.pos_tags = self._init_tag_list(text)
     
         self.features = {}
+
+        self.pos_tags = None
+        self.pos_tagged = False
 
         self.average_word_length_initialized = False
         self.average_sentence_length_initialized = False
@@ -56,8 +58,8 @@ class FeatureExtractor:
     
     def _init_tag_list(self, text):
         '''
-        Return a list of tuples of (word, part of speech) where the ith item in the list is the 
-        (ith word, ith part of speech) from the text. Used to give a value to self.pos_tags.
+        Sets self.pos_tags to be a list of tuples of (word, part of speech) where the ith tuple in the list is the 
+        (ith word, ith part of speech) from the text. 
         '''
 
         taggedWordTuples = []
@@ -75,7 +77,7 @@ class FeatureExtractor:
             if tup[1] != ".":
                 no_punctuation_tuples.append(tup)
 
-        return no_punctuation_tuples 
+        self.pos_tags = no_punctuation_tuples 
 
     def get_passages(self, features, atom_type):
         '''
@@ -311,6 +313,11 @@ class FeatureExtractor:
         tracks all tags from the penn treebank tagger as well as some additional features
         keys to the dictionary are parts of speech like "VERBS" or specific tags like "VBZ"
         '''
+
+        # make sure that we have done PoS tagging
+        if not self.pos_tagged:
+            self._init_tag_list(self.text)
+
         sum_dict = {}
         # temp_dict will hold temporary values that we'll later use to construct the sum table for each key
         temp_dict = {}
