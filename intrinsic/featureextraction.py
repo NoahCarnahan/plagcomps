@@ -71,13 +71,7 @@ class FeatureExtractor:
             tokens = tokenization.tokenize(sentence, 'word', return_spans=False)
             taggedWordTuples += nltk.tag.pos_tag(tokens)
 
-        # we want to remove the tagged punctuation, since that will mess up our word indexing
-        no_punctuation_tuples = []
-        for tup in taggedWordTuples:
-            if tup[1] != ".":
-                no_punctuation_tuples.append(tup)
-
-        self.pos_tags = no_punctuation_tuples 
+        self.pos_tags = taggedWordTuples
         self.pos_tagged = True
 
     def get_passages(self, features, atom_type):
@@ -593,7 +587,7 @@ def _test():
     f.get_feature_vectors(["avg_external_word_freq_class"], "sentence")
     print "avg_external_word_freq_class DOES NOT EXIST"
     
-    f = FeatureExtractor("The brown fox ate. I go to the school. Believe it. I go.")
+    f = FeatureExtractor("The brown fox ate. I go to the school? Believe it. I go.")
     #print f.get_feature_vectors(["syntactic_complexity"], "sentence")
     if f.get_feature_vectors(["syntactic_complexity"], "sentence") == [(0,), (1,), (0,), (1,)]:
         print "syntactic_complexity test passed"
