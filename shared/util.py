@@ -112,8 +112,10 @@ class IntrinsicUtility(BaseUtility):
 
 class ExtrinsicUtility(BaseUtility):
 
-    TRAINING_SRC_LOC = os.path.join(UTIL_LOC, '..', 'extrinsic_corpus_partition/extrinsic_training_source_files.txt')
-    TRAINING_SUSPECT_LOC = os.path.join(UTIL_LOC, '..', 'extrinsic_corpus_partition/extrinsic_training_suspect_files.txt')
+    # TRAINING_SRC_LOC = os.path.join(UTIL_LOC, '..', 'extrinsic_corpus_partition/extrinsic_training_source_files.txt')
+    # TRAINING_SUSPECT_LOC = os.path.join(UTIL_LOC, '..', 'extrinsic_corpus_partition/extrinsic_training_suspect_files.txt')
+    TRAINING_SRC_LOC = os.path.join(UTIL_LOC, '..', 'extrinsic_corpus_partition/small_sample_corpus/sample_source_listing.txt')
+    TRAINING_SUSPECT_LOC = os.path.join(UTIL_LOC, '..', 'extrinsic_corpus_partition/small_sample_corpus/sample_suspect_listing.txt')
 
     CORPUS_SRC_LOC = '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/source-documents'
     CORPUS_SUSPECT_LOC = '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents'
@@ -135,7 +137,6 @@ class ExtrinsicUtility(BaseUtility):
         all_suspect_files = self.read_file_list(ExtrinsicUtility.TRAINING_SUSPECT_LOC,
                                                 ExtrinsicUtility.CORPUS_SUSPECT_LOC,
                                                 include_txt_extension=include_txt_extension)
-
         
         n = len(all_suspect_files) if n is None else n
 

@@ -7,6 +7,7 @@ import os
 import string, random, re, operator
 from .. import tokenization
 from ..shared.util import ExtrinsicUtility
+import reverse_index
 import extrinsic_processing
 
 # TODO: omit words tokenized by nltk that are just puncuation
@@ -15,7 +16,7 @@ class FingerprintExtractor:
 
     def __init__(self):
         self.anchors = ['ul', 'ay', 'oo', 'yo', 'si', 'ca', 'am', 'ie', 'mo', 'rt']
-        self.hash_span = 100000
+        self.hash_span = 10000
 
     def _gen_string_hash(self, in_string):
         '''
@@ -205,21 +206,21 @@ class FingerprintEvaluator:
             fingerprint = fp.get_fingerprints(session)[atom_index]
 
         source_documents = {}
-        for source in self.source_filenames:
-            print 'source:', source
-            source_fp = self._get_fingerprint(source, atom_type, session, ExtrinsicUtility.CORPUS_SRC_LOC)
-            source_fingerprints = source_fp.get_fingerprints(session)
-            if atom_type == "full":
-                if len(source_fingerprints): # make sure it's not an empty fingerprint
-                    source_documents[(source, 0)] = jaccard_similarity(fingerprint, source_fingerprints)
-                else:
-                    source_documents[(source, 0)] = 0
-            else:
-                for i in xrange(len(source_fingerprints)):
-                    if len(source_fingerprints[i]): # make sure it's not an empty fingerprint
-                        source_documents[(source, i)] = jaccard_similarity(fingerprint, source_fingerprints[i])
-                    else:
-                        source_documents[(source, i)] = 0
+        # get the list of fingerprint ids for each minutia in the fingerprint
+        for minutia in fingerprint:
+            ri = reverse_index._query_reverse_index(minutia)
+            for fingerprint_id in ri.fingerprint_ids:
+                fp = extrinsic_processing._query_fingerprint_from_id(fingerprint_id)
+                print fp.document_name
+                if len(fp) > 0 and type(fp[0]) == list: # is fp at a paragraph granularity?
+                    for i in xrange(len(fp.fingerprint)):
+                        if len(fp.fingerprint[i]): # make sure it's not an empty fingerprint
+                            source_documents[(fp.document_name, i)] = jaccard_similarity(fingerprint, fp.fingerprint[i])
+                        else:
+                            source_documents[(fp.document_name, i)] = 0
+                else: # full document granularity
+                    source_documents[(fp.document_name, 0)] = jaccard_similarity(fingerprint, fp.fingerprint)
+
         return sorted(source_documents.items() , key = operator.itemgetter(1), reverse=True)
 
     def classify_and_display(self, doc):

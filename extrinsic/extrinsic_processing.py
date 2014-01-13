@@ -4,6 +4,7 @@ from ..shared.util import ExtrinsicUtility
 import fingerprint_extraction
 from ..tokenization import *
 from ..dbconstants import username, password, dbname
+from reverse_index import _query_reverse_index
 
 import sqlalchemy
 from sqlalchemy import Table, Column, Sequence, Integer, String, Text, Float, DateTime, ForeignKey, and_
@@ -29,10 +30,18 @@ def _query_fingerprint(docs, method, n, k, atom_type, session, base_path):
         fp = q.one()
     except sqlalchemy.orm.exc.NoResultFound, e:
         fp = FingerPrint(docs, method, n, k, atom_type, base_path)
-        print 'Created a new fp!', fp
         session.add(fp)
-        session.commit()
-    return fp   
+        # session.commit()
+    return fp
+
+def _query_fingerprint_from_id(fingerprint_id):
+    try:
+        q = session.query(FingerPrint).filter(FingerPrint.id == fingerprint_id)
+        fp = q.one()
+        return fp
+    except sqlalchemy.orm.exc.NoResultFound, e:
+        print 'ERROR: No fingerprint with id=' + str(fingerprint_id) + ' is in database!'
+
 
 class FingerPrint(Base):
     '''
@@ -110,7 +119,13 @@ class FingerPrint(Base):
                 fingerprint = fe._get_anchor_fingerprints(text, self.n)
             
             self.fingerprint = cPickle.dumps(fingerprint)
+
+            # add each minutia to the reverse index
+            for minutia in fingerprint:
+                ri = _query_reverse_index(minutia, session)
+                ri.add_fingerprint_id(self.id)
             session.commit()
+
             return cPickle.loads(str(self.fingerprint))
         else:
             return cPickle.loads(str(self.fingerprint))
@@ -140,7 +155,14 @@ class FingerPrint(Base):
                     fingerprint = fe._get_anchor_fingerprints(paragraph, self.n)
                 paragraph_fingerprints.append(fingerprint)
             self.fingerprint = cPickle.dumps(paragraph_fingerprints)
+
+            # add each minutia to the reverse index
+            for fingerprint in paragraph_fingerprints:
+                for minutia in fingerprint:
+                    ri = _query_reverse_index(minutia, session)
+                    ri.add_fingerprint_id(self.id)
             session.commit()
+
             return cPickle.loads(str(self.fingerprint))
         else:
             return cPickle.loads(str(self.fingerprint))
@@ -194,9 +216,9 @@ def populate_database():
 
     counter = 0
     for filename in all_test_files:
-        for atom_type in ["full", "paragraph"]:
+        for atom_type in ["paragraph"]:
             for method in ["full"]: # add other fingerprint methods
-                for n in xrange(3,6):
+                for n in xrange(3,4):
                     for k in [0]:
                         fp = _query_fingerprint(filename, method, n, k, atom_type, session, ExtrinsicUtility.CORPUS_SUSPECT_LOC)
                         fp.get_fingerprints(session)
@@ -207,9 +229,9 @@ def populate_database():
     
     counter = 0
     for filename in all_source_files:
-        for atom_type in ["full", "paragraph"]:
+        for atom_type in ["paragraph"]:
             for method in ["full"]: # add other fingerprint methods
-                for n in xrange(3,6):
+                for n in xrange(3,4):
                     for k in [0]: # used with k-th in sent only
                         # print "Calculating fingerprint for ", filename, " with atom_type=", atom_type, "using ", method , "and ", n, "-gram"
                         fp = _query_fingerprint(filename, method, n, k, atom_type, session, ExtrinsicUtility.CORPUS_SRC_LOC)
