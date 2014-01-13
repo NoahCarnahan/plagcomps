@@ -34,6 +34,7 @@ class FeatureExtractor:
     
         self.features = {}
 
+        self.average_word_length_initialized = False
         self.pos_tags = None
         self.pos_tagged = False
 
