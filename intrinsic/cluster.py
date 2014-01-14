@@ -33,7 +33,19 @@ def _kmeans(stylo_vectors, k):
     # Initialize <k> clusters to be points in input vectors
     centroids, assigned_clusters = kmeans2(normalized_features, k, minit = 'points')
     
+    not_norm_centroids, not_norm_assigned_clusters = kmeans2(feature_mat, k, minit = 'points')
     
+    if not_norm_assigned_clusters.tolist() == assigned_clusters.tolist():
+        print "NORMALIZED AND NOT NORMALIZED ASSIGNED CLUSTERS ARE SAME"
+    else:
+        print "NORMALIZED AND NOT NORMALIZED ASSIGNED CLUSTERS ARE DIFFERENT"
+    
+    print "CENTROIDS:"
+    print centroids
+    print "ASSIGNED:"
+    print assigned_clusters
+    print "NORMALIZED POINTS:"
+    print normalized_features.tolist()
     # Get confidences
     
     # Special case when there is only one atom
@@ -53,6 +65,13 @@ def _kmeans(stylo_vectors, k):
         # TODO: Develop a notion of confidence when k != 2
         plag_cluster = Counter(assigned_clusters).most_common()[-1][0]
         confidences = [1 if x == plag_cluster else 0 for x in assigned_clusters]
+    
+    l = []
+    for i in range(len(assigned_clusters)):
+        l.append( (normalized_features[i][0], assigned_clusters[i], confidences[i]) )
+    print "COMPOSITE:"
+    l.sort()
+    print l
         
     return confidences
 

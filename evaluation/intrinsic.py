@@ -128,7 +128,12 @@ def evaluate(features, cluster_type, k, atom_type, docs):
         count += 1
         if DEBUG:
             print "On document", d, ". The", count, "th document."
+        foo = d.get_feature_vectors(features, session)
+        print "THE FEATURE VECTORS TO BE CLUSTERED:"
+        print foo
         likelihood = cluster(cluster_type, k, d.get_feature_vectors(features, session))
+        print "LIKELIHOODS:"
+        print likelihood
         plag_likelihoods.append(likelihood)
     
     roc_path, roc_auc = _roc(reduced_docs, plag_likelihoods, features, cluster_type, k, atom_type)
@@ -252,11 +257,16 @@ def _roc(reduced_docs, plag_likelihoods, features = None, cluster_type = None, k
             actuals.append(1 if doc.span_is_plagiarized(span) else 0)
             confidences.append(plag_likelihoods[doc_index][span_index])
     
+    print "actuals[0], confidences[0]", actuals[0], confidences[0]
+    
     # actuals is a list of ground truth classifications for passages
     # confidences is a list of confidence scores for passages
     # So, if confidences[i] = .3 and actuals[i] = 1 then passage i is plagiarized and
     # we are .3 certain that it is plagiarism (So its in the non-plag cluster).
     fpr, tpr, thresholds = sklearn.metrics.roc_curve(actuals, confidences, pos_label=1)
+    print "FALSE POSITIVE RATE:", fpr
+    print "TRUE POSITIVE RATE:", tpr
+    print "THRESHOLDS:", thresholds
     roc_auc = sklearn.metrics.auc(fpr, tpr)
     
     # The following code is from http://scikit-learn.org/stable/auto_examples/plot_roc.html
@@ -406,6 +416,9 @@ class ReducedDoc(Base):
             feature_values = [tup[0] for tup in extractor.get_feature_vectors([feature], self.atom_type)]
             self._features[feature] = feature_values
             
+            print feature_values
+            print self._spans
+            
             session.commit()
             return self._features[feature]
 
@@ -480,6 +493,15 @@ Base.metadata.create_all(engine)
 # create a configured "Session" class
 Session = sessionmaker(bind=engine)
 
+def noah_func():
+    session = Session()
+    doc = "/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents/part1/suspicious-document01078.txt"
+    r = session.query(ReducedDoc).filter(and_(ReducedDoc.full_path == doc, ReducedDoc.atom_type == "paragraph", ReducedDoc.version_number == 2)).one()
+    session.delete(r)
+    session.commit()
+    
+    evaluate(["average_word_length"], "kmeans", 2, "paragraph", ["/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents/part1/suspicious-document01078.txt"])
+
 def _test():
     
     session = Session()
@@ -495,8 +517,10 @@ def _test():
     session.close()
     
 if __name__ == "__main__":
-    features = ['punctuation_percentage',
-                'stopword_percentage',
-                'average_sentence_length',
-                'average_word_length',]
-    print evaluate_n_documents(features, "kmeans", 2, "paragraph", 100)
+    noah_func()
+    
+    #features = ['punctuation_percentage',
+    #            'stopword_percentage',
+    #            'average_sentence_length',
+    #            'average_word_length',]
+    #print evaluate_n_documents(features, "kmeans", 2, "paragraph", 100)

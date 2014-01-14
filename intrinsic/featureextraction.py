@@ -132,6 +132,15 @@ class FeatureExtractor:
                 elif self._feature_type(feat_name) == "paragraph":
                     spans = self.paragraph_spans
                 start, end = spanutils.slice(spans, start_index, end_index, return_indices = True)
+                if start_index == 420:
+                    print "WORD SPANS FROM FEATURE EXTRACTION"
+                    print spans[start:end]
+                    print spans[0]
+                    print self.text[spans[0][0]: spans[0][1]]
+                    s = ""
+                    for span in spans[start:end]:
+                        s += "'"+self.text[span[0]:span[1]]+"' "
+                    print s
                 
             actual_feature_function = getattr(self, feat_name)
             vect.append(actual_feature_function(start, end))
