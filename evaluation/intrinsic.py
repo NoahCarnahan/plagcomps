@@ -9,6 +9,7 @@ from ..intrinsic.cluster import cluster
 import datetime
 import xml.etree.ElementTree as ET
 import time
+import codecs
 from os import path as ospath
 
 import sklearn.metrics
@@ -392,6 +393,11 @@ class ReducedDoc(Base):
             # Read the file
             f = open(self.full_path, 'r')
             text = f.read()
+            # Corpus docs have a BOM_UTF8 at the start -- let's strip those
+            # 3 characters. Suggestion comes from:
+            # http://stackoverflow.com/questions/12561063/python-extract-data-from-file/12561163#12561163
+            if text.startswith(codecs.BOM_UTF8):
+                text = text[3:]
             f.close()
             
             # Create a FeatureExtractor

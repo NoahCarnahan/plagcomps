@@ -16,6 +16,8 @@ class FingerprintExtractor:
 
     def __init__(self):
         self.anchors = ['ul', 'ay', 'oo', 'yo', 'si', 'ca', 'am', 'ie', 'mo', 'rt']
+        self.noise_threshold = 8
+        self.guarantee_threshold = 15
         self.hash_span = 10000
 
     def _gen_string_hash(self, in_string):
@@ -64,7 +66,7 @@ class FingerprintExtractor:
             words_stripped = tokenization.strip_punctuation(words)
             fingerprint = self._get_anchor_fingerprint_by_word(words_stripped, n)
         elif method == "winnow-k":
-            fingerprint = self._get_winnow_k(document, noise_threshold, guarantee_threshold)
+            fingerprint = self._get_winnow_k(document, self.noise_threshold, self.guarantee_threshold)
 
         return fingerprint
     
@@ -163,7 +165,6 @@ class FingerprintExtractor:
             document_hash.append(self._gen_string_hash(document[i:i+k]))
 
         first_min = document_hash[0]
-        print document_hash
 
         for i in xrange(len(document_hash)-w+1):
             window = document_hash[i:i+w]
@@ -176,11 +177,11 @@ class FingerprintExtractor:
             else:
                 first_min = second_min
                 fingerprint.append(first_min)
-
         return fingerprint
 
     def _strip_punctuation(self, document):
         document = document.translate(string.maketrans("",""), string.punctuation)
+        return document
 
 class FingerprintEvaluator:
 
@@ -249,7 +250,7 @@ def anchor_test():
     print ex.get_fingerprint(text, 4, method='anchor')
 
 if __name__ == '__main__':
-    ex = FingerprintExtractor()
+    '''ex = FingerprintExtractor()
     corp = nltk.corpus.gutenberg
 
     util = ExtrinsicUtility()
@@ -257,7 +258,15 @@ if __name__ == '__main__':
     
     full = FingerprintEvaluator(sources, "full")
     kth = FingerprintEvaluator(sources, "kth_in_sent")
-    anchor = FingerprintEvaluator(sources, "anchor")
+    anchor = FingerprintEvaluator(sources, "anchor")'''
+
+    fe = FingerprintExtractor()
+    f = open("hp.txt")
+    text = f.read()
+    f.close()
+    fe._get_winnow_k(text, 8, 15)
+
+
 
     # TODO this won't work right now. 
     # is there anything being tested here that isn't done in extrinsic_testing?
