@@ -1,6 +1,6 @@
 import hmm
 
-from numpy import array, matrix
+from numpy import array, matrix, random
 from scipy.cluster.vq import kmeans2, whiten
 from scipy.spatial.distance import pdist
 from scipy.cluster.hierarchy import linkage, fcluster
@@ -104,8 +104,15 @@ def _hmm(stylo_vectors, k):
     plag_cluster = Counter(assigned_clusters).most_common()[-1][0]
     return [1 if x == plag_cluster else 0 for x in assigned_clusters]
 
+def two_normal_test(n, spacing):
+    first = [[random.normal()] for x in range(n)]
+    second = [[random.normal(spacing)] for x in range(n)]
+
+    for c in ["kmeans", "agglom", "hmm"]:
+        print c, cluster(c, 2, first + second)
+
 def _test():
-    fs1 = [
+    fs = [
         [4.5, 5.2, 1.9],
         [1.1, 2.03, 2.45],
         [4.5, 5.2, 8.1]
@@ -136,5 +143,6 @@ def _test():
     print cluster("hmm", 2, fs)
 
 if __name__ == "__main__":
-    _test()
+    #_test()
+    _two_normal_test(10, 2)
         
