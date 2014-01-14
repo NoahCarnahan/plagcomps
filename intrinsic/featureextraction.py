@@ -288,7 +288,7 @@ class FeatureExtractor:
         '''
         Return the average number of words in sentences [sent_spans_index_start : sent_spans_index_end]
         '''
-        if "average_sentecne_length" not in self.features:
+        if "average_sentence_length" not in self.features:
             self._init_average_sentence_length()
         
         sum_table = self.features["average_sentence_length"]
