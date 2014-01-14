@@ -498,5 +498,5 @@ if __name__ == "__main__":
     features = ['punctuation_percentage',
                 'stopword_percentage',
                 'average_sentence_length',
-                'average_word_length',]
+                'avg(num_chars)',]
     print evaluate_n_documents(features, "kmeans", 2, "paragraph", 100)
