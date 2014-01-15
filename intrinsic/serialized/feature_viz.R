@@ -3,10 +3,16 @@ library(Hmisc)
 
 # Boxplot of <metric> broken down by whether the passage was plagiarized
 plot_one_metric <- function(df, metric, doc_name='foo') {
+  # t-test: null hypothesis that plag./non plag. passages have same dist of <metric>
+  # reject with small p-value suggests that <metric> is different between plag./non plag. passages
+  formula <- paste(metric, '~', 'contains_plag')
+  ttest <- t.test(as.formula(formula), data = df)
+  pval <- ttest$p.value
+  
   g <- ggplot(df) +
     geom_boxplot(aes_string(x = 'contains_plag', y = metric)) +
     scale_x_discrete('Contains Plag?', labels = c('No', 'Yes')) +
-    ggtitle(doc_name)
+    ggtitle(paste(doc_name, '(With pval =', pval, ')'))
   print(g)  
 }
 
