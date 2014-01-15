@@ -114,8 +114,8 @@ class ExtrinsicUtility(BaseUtility):
 
     # TRAINING_SRC_LOC = os.path.join(UTIL_LOC, '..', 'extrinsic_corpus_partition/extrinsic_training_source_files.txt')
     # TRAINING_SUSPECT_LOC = os.path.join(UTIL_LOC, '..', 'extrinsic_corpus_partition/extrinsic_training_suspect_files.txt')
-    TRAINING_SRC_LOC = os.path.join(UTIL_LOC, '..', 'extrinsic_corpus_partition/small_sample_corpus/sample_source_listing.txt')
-    TRAINING_SUSPECT_LOC = os.path.join(UTIL_LOC, '..', 'extrinsic_corpus_partition/small_sample_corpus/sample_suspect_listing.txt')
+    TRAINING_SRC_LOC = os.path.join(UTIL_LOC, '..', 'extrinsic_corpus_partition/small_sample_corpus/sample_source_listing2.txt')
+    TRAINING_SUSPECT_LOC = os.path.join(UTIL_LOC, '..', 'extrinsic_corpus_partition/small_sample_corpus/sample_suspect_listing2.txt')
 
     CORPUS_SRC_LOC = '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/source-documents'
     CORPUS_SUSPECT_LOC = '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents'

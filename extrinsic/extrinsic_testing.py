@@ -26,16 +26,18 @@ from sqlalchemy.ext.associationproxy import association_proxy
 
 class ExtrinsicTester:
 
-    def __init__(self, atom_type, fingerprint_method, suspect_file_list, source_file_list):
+    def __init__(self, atom_type, fingerprint_method, n, k, suspect_file_list, source_file_list):
         self.suspicious_path_start = ExtrinsicUtility.CORPUS_SUSPECT_LOC
         self.corpus_path_start = ExtrinsicUtility.CORPUS_SRC_LOC
         source_dirs = os.listdir(self.corpus_path_start)
             
         self.atom_type = atom_type
         self.fingerprint_method = fingerprint_method
+        self.n = n
+        self.k = k
         self.suspect_file_list = suspect_file_list
         self.source_file_list = source_file_list
-        self.evaluator = fingerprint_extraction.FingerprintEvaluator(source_file_list, fingerprint_method, 3)
+        self.evaluator = fingerprint_extraction.FingerprintEvaluator(source_file_list, fingerprint_method, self.n, self.k)
 
     def _get_trials(self):
         '''
@@ -48,17 +50,22 @@ class ExtrinsicTester:
         for f in self.suspect_file_list:
             suspicious_document = open(f + '.txt')
             doc = suspicious_document.read()
-            # atom_spans = feature_extractor.get_spans(doc, self.atom_type)
-            # atoms = [doc[a[0]:a[1]] for a in atom_spans]
-            # TODO: make this a for loop over atoms once paragraph fingerprints are supported in the database
+            
             suspicious_document.close()
-            atom_classifications = self.evaluator.classify_document(f, self.atom_type, 0, session)
-            # just take the most similar source document's similarity as the confidence of plagiarism for now.
-            similarity = atom_classifications[0][1]
+            doc_name = f.replace(self.suspicious_path_start, "")
 
             acts = ground_truth._query_ground_truth(f, self.atom_type, session, self.suspicious_path_start).get_ground_truth(session)
             actuals += acts
-            classifications += [similarity for i in xrange(len(acts))] # just classify each paragraph in a document as the same similarity
+
+            print f
+            for i in xrange(len(acts)):
+                print 'Classifying', doc_name
+                atom_classifications = self.evaluator.classify_document(doc_name, self.atom_type, i, self.fingerprint_method, self.n, self.k, session)
+                # just take the most similar source document's similarity as the confidence of plagiarism for now.
+                classifications.append(atom_classifications[0][1])
+                print 'atom index:', str(i+1) + '/' + str(len(acts))
+                print 'confidence (actual, guess):', acts[i], atom_classifications[0][1]
+
         return classifications, actuals
 
     def plot_ROC_curve(self):
@@ -101,7 +108,12 @@ if __name__ == "__main__":
     print 'Testing first', num_files, ' suspect files using a corpus of', len(source_file_list), 'source documents:'
     print 'Suspect filenames:', suspect_file_list
 
-    tester = ExtrinsicTester("paragraph", "full", suspect_file_list, source_file_list)
+    atom_type = "paragraph"
+    method = "kth_in_sent"
+    n = 3
+    k = 5
+
+    tester = ExtrinsicTester(atom_type, method, n, k, suspect_file_list, source_file_list)
     tester.plot_ROC_curve()
 
     # tester = ExtrinsicTester("paragraph", "kth_in_sent", suspect_file_list, source_file_list)

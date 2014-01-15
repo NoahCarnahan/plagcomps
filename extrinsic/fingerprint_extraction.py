@@ -184,49 +184,51 @@ class FingerprintExtractor:
 
 class FingerprintEvaluator:
 
-    def __init__(self, source_filenames, fingerprint_method="full", n=3):
+    def __init__(self, source_filenames, fingerprint_method="full", n=3, k=5):
         self.extractor = FingerprintExtractor()
         self.n = n
+        self.k = k
         self.fingerprint_method = fingerprint_method
         self.source_filenames = source_filenames
 
     def _get_fingerprint(self, filename, atom_type, session, base_path):
-        fp = extrinsic_processing._query_fingerprint(filename, self.fingerprint_method, self.n, 5, atom_type, session, base_path)
+        fp = extrinsic_processing._query_fingerprint(filename, self.fingerprint_method, self.n, self.k, atom_type, session, base_path)
         return fp
 
-    def classify_document(self, filename, atom_type, atom_index, session):
+    def classify_document(self, filename, atom_type, atom_index, fingerprint_method, n, k, session):
         '''
         Returns a list of (source_filename, similarity) tuples sorted in decreasing similarity to the 
         input document.
         '''
-        print 'classfiying:', filename
         fp = self._get_fingerprint(filename, atom_type, session, ExtrinsicUtility.CORPUS_SUSPECT_LOC)
         if atom_type == "full":
             fingerprint = fp.get_fingerprints(session)
         else:
             fingerprint = fp.get_fingerprints(session)[atom_index]
 
-        checked_fingerprint_ids = {}
         source_documents = {}
         # get the list of fingerprint ids for each minutia in the fingerprint
         for minutia in fingerprint:
-            ri = reverse_index._query_reverse_index(minutia, session)
-            for fingerprint_id in ri.fingerprint_ids:
-                # todo: make sure the fingerprinting technique/atom type/etc. is the same
+            if minutia == 0: # every document has 0, so minutia = 0 is basically useless
+                continue
+            ri = reverse_index._query_reverse_index(minutia, n, k, fingerprint_method, session)
+            for fingerprint_id_pair in ri.fingerprint_ids:
+                fingerprint_id = fingerprint_id_pair[0]
+                fingerprint_atom_index = fingerprint_id_pair[1]
+                
                 fp = extrinsic_processing._query_fingerprint_from_id(fingerprint_id, session)
-                if fingerprint_id not in checked_fingerprint_ids:
-                    checked_fingerprint_ids[fingerprint_id] = True
-                    print fingerprint_id
-                    print fp.document_name
-                    if len(fp.fingerprint) > 0 and type(fp.fingerprint[0]) == list: # is fp at a paragraph granularity?
-                        for i in xrange(len(fp.fingerprint)):
-                            if len(fp.fingerprint[i]): # make sure it's not an empty fingerprint
-                                source_documents[(fp.document_name, i)] = jaccard_similarity(fingerprint, fp.fingerprint[i])
-                            else:
-                                source_documents[(fp.document_name, i)] = 0
-                    else: # full document granularity
-                        source_documents[(fp.document_name, 0)] = jaccard_similarity(fingerprint, fp.fingerprint)
-    
+                source_fp = fp.get_fingerprints(session)
+
+                if len(source_fp) > 0 and type(source_fp[0]) == list: # is fp at a paragraph granularity?
+                    if len(source_fp[fingerprint_atom_index]): # make sure it's not an empty fingerprint
+                        source_documents[(fp.document_name, fingerprint_atom_index)] = jaccard_similarity(fingerprint, source_fp[fingerprint_atom_index])
+                    else:
+                        source_documents[(fp.document_name, fingerprint_atom_index)] = 0
+                else: # full document granularity
+                    source_documents[(fp.document_name, 0)] = jaccard_similarity(fingerprint, source_fp)
+
+        if not len(source_documents): # insert dummy for now...
+            source_documents[('dummy', 0)] = 0
 
         return sorted(source_documents.items() , key = operator.itemgetter(1), reverse=True)
 
@@ -265,6 +267,11 @@ if __name__ == '__main__':
     full = FingerprintEvaluator(sources, "full")
     kth = FingerprintEvaluator(sources, "kth_in_sent")
     anchor = FingerprintEvaluator(sources, "anchor")
+
+    ex = FingerprintExtractor()
+    sentences = ["Hi my name is Marcus and I'm working in the CMC.", "Why does our project have to be so ridiculous."]
+    print ex._get_kth_in_sent_fingerprint(sentences, 3, 5)
+
 
     # TODO this won't work right now. 
     # is there anything being tested here that isn't done in extrinsic_testing?
