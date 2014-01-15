@@ -13,6 +13,7 @@ class BaseUtility:
     '''
     SAMPLE_CORPUS_LOC = os.path.join(UTIL_LOC, '..', 'sample_corpus/')
 
+
     def read_file_list(self, file_name, base_location_path, include_txt_extension=True):
         '''
         Return list of absolute paths to files in <file_name> whose
@@ -121,8 +122,20 @@ class BaseUtility:
 class IntrinsicUtility(BaseUtility):
 
     TRAINING_LOC = os.path.join(UTIL_LOC, '..', 'corpus_partition/training_set_files.txt')
-    
     CORPUS_LOC = '/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents'
+
+    def read_corpus_file(self, rel_path):
+        '''
+        <rel_path> should be like 'part1/suspicious-document0000
+        Returns the text stored in <rel_path>'s file
+        '''
+        full_path = os.path.join(IntrinsicUtility.CORPUS_LOC, rel_path + '.txt')
+
+        f = file(full_path, 'rb')
+        text = f.read()
+        f.close()
+
+        return text
 
     def get_n_training_files(self, n=None, include_txt_extension=True):
         '''

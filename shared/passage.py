@@ -42,6 +42,13 @@ class IntrinsicPassage(Passage):
 	<atom_type> ('word', 'sentence', or 'paragraph')
 	and <features> (and dictionary mapping feature -> observed value for that feature)
 	'''
+
+	@staticmethod
+	def serialization_header(feature_names):
+		return ['start_index','end_index'] + \
+			   feature_names + ['plag_confidence', 'contains_plag']
+
+
 	def __init__(self, char_index_start, char_index_end, text, atom_type, features={}):
 		Passage.__init__(self, char_index_start, char_index_end, text)
 		self.atom_type = atom_type
@@ -53,6 +60,26 @@ class IntrinsicPassage(Passage):
 		'\nFeatures: ' + str(self.features) +  \
 		'\nPlag Confidence: ' + str(self.plag_confidence) + \
 		'\n------------'
+
+	def to_list(self, feature_names):
+		'''
+		Returns a list representation of this passage. Follows the 
+		template outlined in <IntrinsicPassage.serialization_header> 
+		i.e.
+		start_index, end_index, feat1, feat2, ..., plag_confidence, contains_plag
+
+		Note that feat1, feat2, ... are returned in the order of the features
+		passed in from <feature_names>
+		'''
+		feature_vals = [self.features[name] for name in feature_names]
+
+		plag_conf = self.plag_confidence if self.plag_confidence else 0
+		contains_plag = 1 if len(self.plag_spans) > 0 else 0
+		serialized = [self.char_index_start, self.char_index_end] + \
+					 feature_vals + [plag_conf, contains_plag]
+		
+		return serialized
+
 
 	def to_json(self):
 		'''
