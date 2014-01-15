@@ -12,7 +12,7 @@ def batch_serialize(n=50):
     Writes csv files ('serializations') of the passages parsed from first <n>
     training files 
     '''
-    out_dir = os.path.join(os.path.dirname(__file__))
+    out_dir = os.path.join(os.path.dirname(__file__), 'serialized')
     util = IntrinsicUtility()
     training_files = util.get_n_training_files(n, include_txt_extension=False)
 
@@ -21,7 +21,12 @@ def batch_serialize(n=50):
     out_files = [os.path.join(out_dir, os.path.basename(t) + '.csv') for t in training_files]
 
     for tf, xf, of in zip(text_files, xml_files, out_files):
-        extract_and_serialize(tf, xf, of)
+        # Only populate if outfile doesn't already exist
+        if os.path.exists(of):
+            print of, 'already existed'
+        else:
+            print of, 'did not exist. Working on it now.'
+            extract_and_serialize(tf, xf, of)
 
 
 def extract_and_serialize(txt_file, xml_file, out_file, atom_type='paragraph',
