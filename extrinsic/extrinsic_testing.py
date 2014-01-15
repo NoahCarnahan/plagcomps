@@ -26,7 +26,7 @@ from sqlalchemy.ext.associationproxy import association_proxy
 
 class ExtrinsicTester:
 
-    def __init__(self, atom_type, fingerprint_method, n, k, suspect_file_list, source_file_list):
+    def __init__(self, atom_type, fingerprint_method, n, k, confidence_method, suspect_file_list, source_file_list):
         self.suspicious_path_start = ExtrinsicUtility.CORPUS_SUSPECT_LOC
         self.corpus_path_start = ExtrinsicUtility.CORPUS_SRC_LOC
         source_dirs = os.listdir(self.corpus_path_start)
@@ -35,6 +35,7 @@ class ExtrinsicTester:
         self.fingerprint_method = fingerprint_method
         self.n = n
         self.k = k
+        self.confidence_method = confidence_method
         self.suspect_file_list = suspect_file_list
         self.source_file_list = source_file_list
         self.evaluator = fingerprint_extraction.FingerprintEvaluator(source_file_list, fingerprint_method, self.n, self.k)
@@ -60,7 +61,7 @@ class ExtrinsicTester:
             print f
             for i in xrange(len(acts)):
                 print 'Classifying', doc_name
-                atom_classifications = self.evaluator.classify_document(doc_name, self.atom_type, i, self.fingerprint_method, self.n, self.k, session)
+                atom_classifications = self.evaluator.classify_document(doc_name, self.atom_type, i, self.fingerprint_method, self.n, self.k, self.confidence_method, session)
                 # just take the most similar source document's similarity as the confidence of plagiarism for now.
                 classifications.append(atom_classifications[0][1])
                 print 'atom index:', str(i+1) + '/' + str(len(acts))
@@ -88,7 +89,7 @@ class ExtrinsicTester:
         pyplot.ylim([0.0, 1.0])
         pyplot.xlabel('False Positive Rate')
         pyplot.ylabel('True Positive Rate')
-        pyplot.title('Receiver Operating Characteristic -- Extrinsic w/ '+self.fingerprint_method+' fingerprinting')
+        pyplot.title('Extrinsic: method=' + self.fingerprint_method+' n=' + str(self.n) + ' confidence_method=' + self.confidence_method)
         pyplot.legend(loc="lower right")
         
         path = os.path.join(os.path.dirname(__file__), "../figures/roc_extrinsic_"+str(time.time())+"_"+self.fingerprint_method+".pdf")
@@ -101,26 +102,18 @@ if __name__ == "__main__":
     # print fp.get_fingerprints(session)
     
     util = ExtrinsicUtility()
-    num_files = 1
+    num_files = 3
 
     source_file_list, suspect_file_list = util.get_n_training_files(n=num_files, include_txt_extension=False)
 
     print 'Testing first', num_files, ' suspect files using a corpus of', len(source_file_list), 'source documents:'
     print 'Suspect filenames:', suspect_file_list
 
-    atom_type = "paragraph"
-    method = "kth_in_sent"
-    n = 3
+    atom_type = "paragraph" # ["paragraph", "full"]
+    method = "kth_in_sent" # ["kth_in_sent", "anchor", "full"]
+    n = 4
     k = 5
+    confidence_method = "containment" # ["containment", "jaccard"]
 
-    tester = ExtrinsicTester(atom_type, method, n, k, suspect_file_list, source_file_list)
+    tester = ExtrinsicTester(atom_type, method, n, k, confidence_method, suspect_file_list, source_file_list)
     tester.plot_ROC_curve()
-
-    # tester = ExtrinsicTester("paragraph", "full", suspect_file_list, source_file_list)
-    # tester.plot_ROC_curve()
-
-    # tester = ExtrinsicTester("paragraph", "kth_in_sent", suspect_file_list, source_file_list)
-    # tester.plot_ROC_curve()
-
-    # tester = ExtrinsicTester("paragraph", "anchor", suspect_file_list, source_file_list)
-    # tester.plot_ROC_curve()
