@@ -196,7 +196,7 @@ class FingerprintEvaluator:
         fp = extrinsic_processing._query_fingerprint(filename, self.fingerprint_method, self.n, self.k, atom_type, session, base_path)
         return fp
 
-    def classify_document(self, filename, atom_type, atom_index, fingerprint_method, n, k, session):
+    def classify_document(self, filename, atom_type, atom_index, fingerprint_method, n, k, confidence_method, session):
         '''
         Returns a list of (source_filename, similarity) tuples sorted in decreasing similarity to the 
         input document.
@@ -222,11 +222,11 @@ class FingerprintEvaluator:
 
                 if len(source_fp) > 0 and type(source_fp[0]) == list: # is fp at a paragraph granularity?
                     if len(source_fp[fingerprint_atom_index]): # make sure it's not an empty fingerprint
-                        source_documents[(fp.document_name, fingerprint_atom_index)] = jaccard_similarity(fingerprint, source_fp[fingerprint_atom_index])
+                        source_documents[(fp.document_name, fingerprint_atom_index)] = get_plagiarism_confidence(fingerprint, source_fp[fingerprint_atom_index], confidence_method)
                     else:
                         source_documents[(fp.document_name, fingerprint_atom_index)] = 0
                 else: # full document granularity
-                    source_documents[(fp.document_name, 0)] = jaccard_similarity(fingerprint, source_fp)
+                    source_documents[(fp.document_name, 0)] = get_plagiarism_confidence(fingerprint, source_fp, confidence_method)
 
         if not len(source_documents): # insert dummy for now...
             source_documents[('dummy', 0)] = 0
@@ -243,8 +243,23 @@ class FingerprintEvaluator:
             print os.path.basename(src), sim
         print 
 
+
+def get_plagiarism_confidence(suspect_fingerprint, source_fingerprint, confidence_method):
+    '''
+    Wrapper function for set similarity measures.  Returns the similarity between the input
+    fingerprint sets and uses the appropriate function as given by confidence_method.
+    '''
+    if confidence_method == "jaccard":
+        return jaccard_similarity(suspect_fingerprint, source_fingerprint)
+    elif confidence_method == "containment":
+        return containment_similarity(suspect_fingerprint, source_fingerprint)
+    else:
+        raise Exception("Invalid plagiarism confidence method: " + confidence_method)
+
 def jaccard_similarity(a, b):
-    '''a and b are lists (multisets) of fingerprints of which we want to find the similarity'''
+    '''
+    Measures the jaccard similarity of input sets a and b
+    '''
     intersection_size = len(set(a).intersection(set(b)))
     # len([k for k in a if k in b])
     union_size = len(a) + len(b) - intersection_size
@@ -252,6 +267,17 @@ def jaccard_similarity(a, b):
         return float(intersection_size) / union_size
     else:
         return 0
+
+def containment_similarity(a, b):
+    '''
+    Measures the percent of elements in set a that are also contained in set b.
+    '''
+    intersection_size = len(set(a).intersection(set(b)))
+    if len(a) > 0:
+        return float(intersection_size) / len(a)
+    else:
+        return 0
+
 
 def anchor_test():
     text = 'good, should be caught. also am should be, as well as cat. end of doc is here.'

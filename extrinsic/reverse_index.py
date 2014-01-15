@@ -17,6 +17,8 @@ Base = declarative_base()
 reverse_indexes = {}
 
 def _query_reverse_index(minutia, n, k, method, session):
+    if method != "kth_in_sent":
+        k = 0
     key = str(minutia) + str(n) + str(k) + method
     if key in reverse_indexes:
         return reverse_indexes[key]

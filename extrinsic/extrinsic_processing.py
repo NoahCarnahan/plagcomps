@@ -6,8 +6,6 @@ from ..tokenization import *
 from ..dbconstants import username, password, dbname
 import reverse_index
 
-import cProfile, pstats, StringIO
-
 import sqlalchemy
 from sqlalchemy import Table, Column, Sequence, Integer, String, Text, Float, DateTime, ForeignKey, and_
 from sqlalchemy.orm import relationship, backref, sessionmaker
@@ -171,6 +169,7 @@ class FingerPrint(Base):
             return cPickle.loads(str(self.fingerprint))
         else:
             # uncomment these lines if you want to generate reverse indexes from the existing fingerprints in the database
+            # Ask Marcus if you're unsure about this!
             # paragraph_fingerprints = cPickle.loads(str(self.fingerprint))
             # print self.id
             # i = 0
@@ -185,39 +184,7 @@ class FingerPrint(Base):
             # return paragraph_fingerprints
             
             return cPickle.loads(str(self.fingerprint))
-                
-class _ParagraphIndex(Base):
-    __tablename__ = "paragraph_indices"
-    fingerprint_id = Column(Integer, ForeignKey('fingerprints.id'), primary_key=True)
-    paragraph_fingerprints_id = Column(Integer, ForeignKey('paragraph_fingerprints.id'), primary_key=True)
-    special_key = Column(Integer)
-    fingerprint = relationship(FingerPrint, backref=backref(
-            "paragraph_fingerprints",
-            collection_class=attribute_mapped_collection("special_key"),
-            cascade="all, delete-orphan"
-            )
-        )
-    kw = relationship("_ParagraphFingerprint")
-    pf = association_proxy('kw', 'pf')
 
-class _ParagraphFingerprint(Base):
-    __tablename__ = "paragraph_fingerprints"
-    id = Column(Integer, primary_key=True)
-    pf = Column(ARRAY(Integer))
-    def __init__(self, pf):
-        self.pf=pf
-
-
-def testRun():
-    '''
-    this is a testRun
-    '''
-    session = Session()
-    documents = ["/part4/suspicious-document06242", "/part5/suspicious-document08911", "/part3/suspicious-document04127", "/part6/suspicious-document11686"]
-    for docs in documents:
-        fp = _query_fingerprint(docs, "full", 3, 5, "paragraph", session, ExtrinsicUtility.CORPUS_SUSPECT_LOC)
-        print fp.get_fingerprints(session)[0:4]
-    session.close()
 
 def populate_database():
     '''
@@ -234,32 +201,27 @@ def populate_database():
     source_file_listing.close()
 
     counter = 0
-    for filename in all_test_files:
-        print 'populating', filename
-        for atom_type in ["paragraph"]:
-            for method in ["anchor"]: # add other fingerprint methods
-                for n in xrange(3,5):
-                    for k in [5]:
+    for atom_type in ["paragraph"]:
+        for method in ["full", "anchor", "kth_in_sent"]: # add other fingerprint methods
+            for n in xrange(3,7):
+                for k in [5]:
+                    counter = 0
+                    for filename in all_test_files:
+                        print filename, method, n, k
                         fp = _query_fingerprint(filename, method, n, k, atom_type, session, ExtrinsicUtility.CORPUS_SUSPECT_LOC)
                         fp.get_fingerprints(session)
-        counter += 1
-        if counter%1 == 0:
-            print "Progress on suspects: ", counter/float(len(all_test_files)), '(' + str(counter) + '/' + str(len(all_test_files)) + ')'
-    
-    counter = 0
-    for filename in all_source_files:
-        print 'populating', filename
-        for atom_type in ["paragraph"]:
-            for method in ["anchor"]: # add other fingerprint methods
-                for n in xrange(3,5):
-                    for k in [5]: # used with k-th in sent only
-                        # print "Calculating fingerprint for ", filename, " with atom_type=", atom_type, "using ", method , "and ", n, "-gram"
+                        counter += 1
+                        if counter%1 == 0:
+                            print "Progress on suspects: ", counter/float(len(all_test_files)), '(' + str(counter) + '/' + str(len(all_test_files)) + ')'
+                    counter = 0
+                    for filename in all_source_files:
+                        print filename, method, n, k
                         fp = _query_fingerprint(filename, method, n, k, atom_type, session, ExtrinsicUtility.CORPUS_SRC_LOC)
                         fp.get_fingerprints(session)
-        counter += 1
-        if counter%1 == 0:
-            print "Progress on sources: ", counter/float(len(all_source_files)), '(' + str(counter) + '/' + str(len(all_source_files)) + ')'
-    
+                        counter += 1
+                        if counter%1 == 0:
+                            print "Progress on sources: ", counter/float(len(all_source_files)), '(' + str(counter) + '/' + str(len(all_source_files)) + ')'
+
     session.close()
 
 url = "postgresql://%s:%s@%s" % (username, password, dbname)
@@ -268,14 +230,6 @@ Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 
 if __name__ == "__main__":
-    #testRun()
     #unitTest()
-    pr = cProfile.Profile()
-    pr.enable()
     populate_database()
-    pr.disable()
-    s = StringIO.StringIO()
-    sortby = 'cumulative'
-    ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
-    ps.print_stats()
-    print s.getvalue()
+    
