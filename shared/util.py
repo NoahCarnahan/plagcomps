@@ -53,6 +53,18 @@ class BaseUtility:
                 spans.append((start, end))
         return spans
 
+    def add_ground_truth_to_passages(self, passages, xml_path):
+        plag_spans = self.get_plagiarized_spans(xml_path)
+        
+        for p in passages:
+            for s in plag_spans:
+                # A tuple if there is any overlap, otherwise None
+                overlap = self.overlap((p.char_index_start, p.char_index_end), s, return_length=False)
+
+                if overlap:
+                    p.add_plag_span(overlap)
+
+
     def get_bare_passages_and_plagiarized_spans(self, doc_path, xml_path, atom_type):
         '''
         TODO finish this: the idea is to create passage objects that contain information
@@ -81,14 +93,29 @@ class BaseUtility:
 
         return all_passages
 
-    def overlap(self, interval1, interval2):
+    def overlap(self, interval1, interval2, return_length=True):
         '''
-        TODO finish this too: 
+        If <return_length>,
+        returns the length of the overlap between <interval1> and <interval2>,
+        both of which are tuples. 
+
+        Otherwise returns a tuple of the overlapping character indices, if there 
+        is any overlap. If there is no overlap, returns None 
         '''
         start_overlap = max(interval1[0], interval2[0])
         end_overlap = min(interval1[1], interval2[1])
+        diff = end_overlap - start_overlap - 1
 
-        return max(0, end_overlap - start_overlap - 1)
+        overlap_length = max(0, diff)
+
+        if return_length:
+            return overlap_length
+        elif overlap_length > 0:
+            # Overlap and expecting a tuple returned
+            return (start_overlap, end_overlap)
+        else:
+            # No overlap 
+            return None
 
 
 class IntrinsicUtility(BaseUtility):
@@ -109,6 +136,7 @@ class IntrinsicUtility(BaseUtility):
         n = len(all_training_files) if n is None else n
 
         return all_training_files[:n]
+
 
 class ExtrinsicUtility(BaseUtility):
 

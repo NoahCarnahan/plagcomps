@@ -1,6 +1,6 @@
 import hmm
 
-from numpy import array, matrix
+from numpy import array, matrix, random
 from scipy.cluster.vq import kmeans2, whiten
 from scipy.spatial.distance import pdist
 from scipy.cluster.hierarchy import linkage, fcluster
@@ -57,6 +57,9 @@ def _kmeans(stylo_vectors, k):
     return confidences
 
 
+def _log_regression(stylo_vectors):
+    pass
+
 def _agglom(stylo_vectors, k):
     '''
     Given a list of stylo_vectors, where each element is itself a list ('vector'),
@@ -101,12 +104,45 @@ def _hmm(stylo_vectors, k):
     plag_cluster = Counter(assigned_clusters).most_common()[-1][0]
     return [1 if x == plag_cluster else 0 for x in assigned_clusters]
 
+def two_normal_test(n, spacing):
+    first = [[random.normal()] for x in range(n)]
+    second = [[random.normal(spacing)] for x in range(n)]
+
+    for c in ["kmeans", "agglom", "hmm"]:
+        print c, cluster(c, 2, first + second)
+
 def _test():
-    fs = [[4.5,5.2,1.9],[1.1,2.03,2.45],[4.5,5.2,8.1]]
+    fs = [
+        [4.5, 5.2, 1.9],
+        [1.1, 2.03, 2.45],
+        [4.5, 5.2, 8.1]
+    ]
+    cluster_one = [
+        [1.0, 1.0],
+        [1.25, 1.25],
+        [1.5, 1.5],
+        [1.75, 1.75],
+        [2.0, 2.0]
+    ]
+    cluster_two = [
+        [10.0, 10.0],
+        [10.25, 10.25],
+        [10.5, 10.5],
+        [10.75, 10.75],
+        [11.0, 11.0]
+    ]
+
+    fs_obvious = cluster_one + cluster_two
+
+    print cluster("kmeans", 2, fs_obvious)
+    print cluster("agglom", 2, fs_obvious)
+    print cluster("hmm", 2, fs_obvious)
+
     print cluster("kmeans", 2, fs)
     print cluster("agglom", 2, fs)
     print cluster("hmm", 2, fs)
 
 if __name__ == "__main__":
-    _test()
+    #_test()
+    _two_normal_test(10, 2)
         

@@ -101,7 +101,7 @@ if __name__ == "__main__":
     # print fp.get_fingerprints(session)
     
     util = ExtrinsicUtility()
-    num_files = 5
+    num_files = 1
 
     source_file_list, suspect_file_list = util.get_n_training_files(n=num_files, include_txt_extension=False)
 
@@ -115,6 +115,9 @@ if __name__ == "__main__":
 
     tester = ExtrinsicTester(atom_type, method, n, k, suspect_file_list, source_file_list)
     tester.plot_ROC_curve()
+
+    # tester = ExtrinsicTester("paragraph", "full", suspect_file_list, source_file_list)
+    # tester.plot_ROC_curve()
 
     # tester = ExtrinsicTester("paragraph", "kth_in_sent", suspect_file_list, source_file_list)
     # tester.plot_ROC_curve()
