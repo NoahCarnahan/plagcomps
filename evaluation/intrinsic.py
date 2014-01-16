@@ -501,23 +501,34 @@ def _test():
                                      'average_word_length',], session)
     session.close()
     
-def _cluster_auc_test(num_plag, num_noplag, mean_diff, std):
+def _cluster_auc_test(num_plag, num_noplag, mean_diff, std, dimensions = 1, repetitions = 1):
     '''
     roc area under curve evaluation of various clustering techniques
     creates two peaks based on normal distributions and tries to cluster them
     prints out AUC stat for each cluster type
     '''
-    first = [[scipy.random.normal(0, std)] for x in range(num_noplag)] 
-    second = [[scipy.random.normal(mean_diff, std)] for x in range(num_plag)] 
-    features = first + second
-    actuals = [0] * num_noplag + [1] * num_plag
+    if repetitions > 1:
+        averages = {}
 
-    for clus_type in ["kmeans", "agglom", "hmm"]:
-        confidences = cluster(clus_type, 2, features)
-        fpr, tpr, thresholds = sklearn.metrics.roc_curve(actuals, confidences, pos_label=1)
-        roc_auc = sklearn.metrics.auc(fpr, tpr)
-        print clus_type, roc_auc
+    for rep in range(repetitions):
 
+        first = [[scipy.random.normal(0, std)] for x in range(num_noplag)] 
+        second = [[scipy.random.normal(mean_diff, std)] for x in range(num_plag)] 
+        features = first + second
+        actuals = [0] * num_noplag + [1] * num_plag
+
+        for clus_type in ["kmeans", "agglom", "hmm"]:
+            confidences = cluster(clus_type, 2, features)
+            fpr, tpr, thresholds = sklearn.metrics.roc_curve(actuals, confidences, pos_label=1)
+            roc_auc = sklearn.metrics.auc(fpr, tpr)
+            if repetitions == 1:
+                print clus_type, roc_auc
+            else:
+                averages[clus_type] = averages.get(clus_type, []) + [roc_auc]
+
+    if repetitions > 1:
+        for key in averages:
+            print sum(averages[key]) / float(max(1, len(averages[key])))
 
 if __name__ == "__main__":
     features = ['punctuation_percentage',
@@ -526,4 +537,4 @@ if __name__ == "__main__":
                 'avg(num_chars)',]
     #print evaluate_n_documents(features, "kmeans", 2, "paragraph", 100)
 
-    print _cluster_auc_test(10, 100, 2, 1)
+    print _cluster_auc_test(10, 100, 100, 1, 1, 10)
