@@ -23,7 +23,7 @@ def _query_fingerprint(docs, method, n, k, atom_type, session, base_path):
     queries the database to see if the fingerprint in question exists in the database.
     If it does, it will be returned, otherwise it is created and added to the database.
     '''
-    if method != "kth_in_sent":
+    if method != "kth_in_sent" and method != "winnow-k":
         k = 0
     try:
         q = session.query(FingerPrint).filter(and_(FingerPrint.document_name == docs, FingerPrint.atom_type == atom_type, FingerPrint.method == method, FingerPrint.n == n, FingerPrint.k == k))

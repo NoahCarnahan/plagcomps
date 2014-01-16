@@ -16,8 +16,6 @@ class FingerprintExtractor:
 
     def __init__(self):
         self.anchors = ['ul', 'ay', 'oo', 'yo', 'si', 'ca', 'am', 'ie', 'mo', 'rt']
-        self.noise_threshold = 8
-        self.guarantee_threshold = 15
         self.hash_span = 10000
 
     def _gen_string_hash(self, in_string):
@@ -66,7 +64,7 @@ class FingerprintExtractor:
             words_stripped = tokenization.strip_punctuation(words)
             fingerprint = self._get_anchor_fingerprint_by_word(words_stripped, n)
         elif method == "winnow-k":
-            fingerprint = self._get_winnow_k(document, self.noise_threshold, self.guarantee_threshold)
+            fingerprint = self._get_winnow_k(document, n, k)
 
         return fingerprint
     
@@ -156,7 +154,6 @@ class FingerprintExtractor:
 
     def _get_winnow_k(self, document, k, t):
         document = "".join(self._strip_punctuation(document).lower().split())
-        print document
         fingerprint = []
         document_hash = []
         w = t-k+1
