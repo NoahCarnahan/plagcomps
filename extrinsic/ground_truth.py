@@ -51,8 +51,13 @@ class GroundTruth(Base):
         initializes FingerPrint
         '''
         self.document_name = doc
-        self._doc_path = base_path + self.document_name + ".txt"
-        self._doc_xml_path = base_path + self.document_name + ".xml"
+        if base_path in self.document_name:
+            self._doc_path = self.document_name + ".txt"
+            self._doc_xml_path = self.document_name + ".xml"
+        else:
+            self._doc_path = base_path + self.document_name + ".txt"
+            self._doc_xml_path = base_path + self.document_name + ".xml"
+
         self.atom_type = atom_type
         
     def get_ground_truth(self, session):

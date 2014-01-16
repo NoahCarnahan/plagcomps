@@ -16,8 +16,6 @@ class FingerprintExtractor:
 
     def __init__(self):
         self.anchors = ['ul', 'ay', 'oo', 'yo', 'si', 'ca', 'am', 'ie', 'mo', 'rt']
-        self.noise_threshold = 8
-        self.guarantee_threshold = 15
         self.hash_span = 10000
 
     def _gen_string_hash(self, in_string):
@@ -66,7 +64,7 @@ class FingerprintExtractor:
             words_stripped = tokenization.strip_punctuation(words)
             fingerprint = self._get_anchor_fingerprint_by_word(words_stripped, n)
         elif method == "winnow-k":
-            fingerprint = self._get_winnow_k(document, self.noise_threshold, self.guarantee_threshold)
+            fingerprint = self._get_winnow_k(document, n, k)
 
         return fingerprint
     
@@ -156,7 +154,6 @@ class FingerprintExtractor:
 
     def _get_winnow_k(self, document, k, t):
         document = "".join(self._strip_punctuation(document).lower().split())
-        print document
         fingerprint = []
         document_hash = []
         w = t-k+1
@@ -185,17 +182,18 @@ class FingerprintExtractor:
 
 class FingerprintEvaluator:
 
-    def __init__(self, source_filenames, fingerprint_method="full", n=3):
+    def __init__(self, source_filenames, fingerprint_method="full", n=3, k=5):
         self.extractor = FingerprintExtractor()
         self.n = n
+        self.k = k
         self.fingerprint_method = fingerprint_method
         self.source_filenames = source_filenames
 
     def _get_fingerprint(self, filename, atom_type, session, base_path):
-        fp = extrinsic_processing._query_fingerprint(filename, self.fingerprint_method, self.n, 5, atom_type, session, base_path)
+        fp = extrinsic_processing._query_fingerprint(filename, self.fingerprint_method, self.n, self.k, atom_type, session, base_path)
         return fp
 
-    def classify_document(self, filename, atom_type, atom_index, session):
+    def classify_document(self, filename, atom_type, atom_index, fingerprint_method, n, k, confidence_method, session):
         '''
         Returns a list of (source_filename, similarity) tuples sorted in decreasing similarity to the 
         input document.
@@ -209,18 +207,26 @@ class FingerprintEvaluator:
         source_documents = {}
         # get the list of fingerprint ids for each minutia in the fingerprint
         for minutia in fingerprint:
-            ri = reverse_index._query_reverse_index(minutia)
-            for fingerprint_id in ri.fingerprint_ids:
-                fp = extrinsic_processing._query_fingerprint_from_id(fingerprint_id)
-                print fp.document_name
-                if len(fp) > 0 and type(fp[0]) == list: # is fp at a paragraph granularity?
-                    for i in xrange(len(fp.fingerprint)):
-                        if len(fp.fingerprint[i]): # make sure it's not an empty fingerprint
-                            source_documents[(fp.document_name, i)] = jaccard_similarity(fingerprint, fp.fingerprint[i])
-                        else:
-                            source_documents[(fp.document_name, i)] = 0
+            if minutia == 0: # every document has 0, so minutia = 0 is basically useless
+                continue
+            ri = reverse_index._query_reverse_index(minutia, n, k, fingerprint_method, session)
+            for fingerprint_id_pair in ri.fingerprint_ids:
+                fingerprint_id = fingerprint_id_pair[0]
+                fingerprint_atom_index = fingerprint_id_pair[1]
+                
+                fp = extrinsic_processing._query_fingerprint_from_id(fingerprint_id, session)
+                source_fp = fp.get_fingerprints(session)
+
+                if len(source_fp) > 0 and type(source_fp[0]) == list: # is fp at a paragraph granularity?
+                    if len(source_fp[fingerprint_atom_index]): # make sure it's not an empty fingerprint
+                        source_documents[(fp.document_name, fingerprint_atom_index)] = get_plagiarism_confidence(fingerprint, source_fp[fingerprint_atom_index], confidence_method)
+                    else:
+                        source_documents[(fp.document_name, fingerprint_atom_index)] = 0
                 else: # full document granularity
-                    source_documents[(fp.document_name, 0)] = jaccard_similarity(fingerprint, fp.fingerprint)
+                    source_documents[(fp.document_name, 0)] = get_plagiarism_confidence(fingerprint, source_fp, confidence_method)
+
+        if not len(source_documents): # insert dummy for now...
+            source_documents[('dummy', 0)] = 0
 
         return sorted(source_documents.items() , key = operator.itemgetter(1), reverse=True)
 
@@ -234,8 +240,23 @@ class FingerprintEvaluator:
             print os.path.basename(src), sim
         print 
 
+
+def get_plagiarism_confidence(suspect_fingerprint, source_fingerprint, confidence_method):
+    '''
+    Wrapper function for set similarity measures.  Returns the similarity between the input
+    fingerprint sets and uses the appropriate function as given by confidence_method.
+    '''
+    if confidence_method == "jaccard":
+        return jaccard_similarity(suspect_fingerprint, source_fingerprint)
+    elif confidence_method == "containment":
+        return containment_similarity(suspect_fingerprint, source_fingerprint)
+    else:
+        raise Exception("Invalid plagiarism confidence method: " + confidence_method)
+
 def jaccard_similarity(a, b):
-    '''a and b are lists (multisets) of fingerprints of which we want to find the similarity'''
+    '''
+    Measures the jaccard similarity of input sets a and b
+    '''
     intersection_size = len(set(a).intersection(set(b)))
     # len([k for k in a if k in b])
     union_size = len(a) + len(b) - intersection_size
@@ -243,6 +264,17 @@ def jaccard_similarity(a, b):
         return float(intersection_size) / union_size
     else:
         return 0
+
+def containment_similarity(a, b):
+    '''
+    Measures the percent of elements in set a that are also contained in set b.
+    '''
+    intersection_size = len(set(a).intersection(set(b)))
+    if len(a) > 0:
+        return float(intersection_size) / len(a)
+    else:
+        return 0
+
 
 def anchor_test():
     text = 'good, should be caught. also am should be, as well as cat. end of doc is here.'
@@ -266,6 +298,11 @@ if __name__ == '__main__':
     f.close()
     fe._get_winnow_k(text, 8, 15)
 
+
+
+    ex = FingerprintExtractor()
+    sentences = ["Hi my name is Marcus and I'm working in the CMC.", "Why does our project have to be so ridiculous."]
+    print ex._get_kth_in_sent_fingerprint(sentences, 3, 5)
 
 
     # TODO this won't work right now. 
