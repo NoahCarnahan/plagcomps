@@ -507,14 +507,27 @@ def _cluster_auc_test(num_plag, num_noplag, mean_diff, std, dimensions = 1, repe
     creates two peaks based on normal distributions and tries to cluster them
     prints out AUC stat for each cluster type
     '''
+    print "running cluster auc test with", num_plag, num_noplag, mean_diff, std, dimensions, repetitions
     if repetitions > 1:
         averages = {}
 
     for rep in range(repetitions):
 
-        first = [[scipy.random.normal(0, std)] for x in range(num_noplag)] 
-        second = [[scipy.random.normal(mean_diff, std)] for x in range(num_plag)] 
-        features = first + second
+        noplag_features = []
+        for i in range(num_noplag):
+            cur = []
+            for j in range(dimensions):
+                cur.append(scipy.random.normal(0, std))
+            noplag_features.append(cur)
+
+        plag_features = []
+        for i in range(num_plag):
+            cur = []
+            for j in range(dimensions):
+                cur.append(scipy.random.normal(mean_diff, std))
+            plag_features.append(cur)
+
+        features = noplag_features + plag_features
         actuals = [0] * num_noplag + [1] * num_plag
 
         for clus_type in ["kmeans", "agglom", "hmm"]:
@@ -528,7 +541,7 @@ def _cluster_auc_test(num_plag, num_noplag, mean_diff, std, dimensions = 1, repe
 
     if repetitions > 1:
         for key in averages:
-            print sum(averages[key]) / float(max(1, len(averages[key])))
+            print key, sum(averages[key]) / float(max(1, len(averages[key])))
 
 if __name__ == "__main__":
     features = ['punctuation_percentage',
@@ -537,4 +550,4 @@ if __name__ == "__main__":
                 'avg(num_chars)',]
     #print evaluate_n_documents(features, "kmeans", 2, "paragraph", 100)
 
-    print _cluster_auc_test(10, 100, 100, 1, 1, 10)
+    _cluster_auc_test(10, 100, 2, 1, 1, 50)
