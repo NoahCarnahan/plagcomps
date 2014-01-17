@@ -203,7 +203,7 @@ def populate_database():
     counter = 0
     for atom_type in ["paragraph"]:
         for method in ["full", "anchor", "kth_in_sent"]: # add other fingerprint methods
-            for n in xrange(3,7):
+            for n in xrange(7,9):
                 for k in [5]:
                     counter = 0
                     for filename in all_test_files:
