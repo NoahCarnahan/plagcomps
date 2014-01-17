@@ -570,8 +570,11 @@ class FeatureExtractor:
                 num_syl += [len(list(y for y in x if y[-1].isdigit())) for x in cmud[word]][0]
             except KeyError:
                 num_syl += (end-start)%3
-        
-        return 206.835 - 1.015*(num_words / float(num_sentences)) - 84.6*(num_syl / float(num_words))
+        try:
+            return 206.835 - 1.015*(num_words / float(num_sentences)) - 84.6*(num_syl / float(num_words))
+        except ZeroDivisionError:
+            # Either num of word or num of sentences was zero, so return 100, an "easy" score (according to wikipedia)
+            return 100
 
 def _test():
 
