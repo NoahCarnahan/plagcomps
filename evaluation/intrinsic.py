@@ -48,7 +48,7 @@ def populate_EVERYTHING():
 
     for doc in all_test_files:
         for atom_type in ["sentence", "paragraph",]:
-            for feature in ['avg(num_chars)', "std(num_chars)", 'stopword_percentage', 'average_sentence_length', 'punctuation_percentage', "syntactic_complexity", "syntactic_complexity_average", "avg_internal_word_freq_class", "avg_external_word_freq_class"]:
+            for feature in ['avg(num_chars)', "std(num_chars)", 'stopword_percentage', 'average_sentence_length', 'punctuation_percentage', "syntactic_complexity", "syntactic_complexity_average", "avg_internal_word_freq_class", "avg_external_word_freq_class", "flesch_reading_ease"]:
                 d = _get_reduced_docs(atom_type, [doc], session)[0]
                 print "Calculating", feature, "for", str(d), str(datetime.datetime.now())
                 d.get_feature_vectors([feature], session)
@@ -76,7 +76,8 @@ def populate_database(atom_type, num, features=None):
                     'syntactic_complexity',
                     "avg(num_chars)",
                     "std(num_chars)",
-                    "syntactic_complexity_average"
+                    "syntactic_complexity_average",
+                    "flesch_reading_ease",
                     ]
     
     count = 0
