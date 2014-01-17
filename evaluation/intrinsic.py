@@ -137,6 +137,58 @@ def evaluate(features, cluster_type, k, atom_type, docs):
     roc_path, roc_auc = _roc(reduced_docs, plag_likelihoods, features, cluster_type, k, atom_type)
     session.close()
     return roc_path, roc_auc
+    
+def compare_cluster_methods(feature, n, cluster_types):
+    '''
+    Generates a plot that displays ROC curves based on the first n documents and the given
+    feature. Creates an ROC curve for each of the cluster methods in cluster_types.
+    cluster_types should be a list of tuples like ("means", 2).
+    '''
+    
+    # Get the reduced_docs
+    docs = IntrinsicUtility().get_n_training_files(n)
+    session = Session()
+    reduced_docs = _get_reduced_docs("paragraph", docs, session)
+    
+    # Prepare to plot
+    pyplot.clf()
+    
+    # plot a curve for each clustering strategy
+    for meth_name, k in cluster_types:
+        # build confidences and actuals
+        confidences = []
+        actuals = []
+        for d in reduced_docs:
+            # add to confidences
+            passage_confidences = cluster(meth_name, k, d.get_feature_vectors([feature], session))
+            for c in passage_confidences:
+                confidences.append(c)
+            # add to actuals
+            spans = d.get_spans()
+            for i in xrange(len(spans)):
+                span = spans[i]
+                actuals.append(1 if d.span_is_plagiarized(span) else 0)
+        
+        # Calculate the fpr and tpr
+        fpr, tpr, thresholds = sklearn.metrics.roc_curve(actuals, confidences, pos_label=1)
+        roc_auc = sklearn.metrics.auc(fpr, tpr)
+        pyplot.plot(fpr, tpr, label='%s (area = %0.2f)' % (str(k)+meth_name, roc_auc))
+    
+    # plot labels and such
+    pyplot.plot([0, 1], [0, 1], 'k--')
+    pyplot.xlim([0.0, 1.0])
+    pyplot.ylim([0.0, 1.0])
+    pyplot.xlabel('False Positive Rate')
+    pyplot.ylabel('True Positive Rate')
+    pyplot.title(feature + ", " + str(n) + " docs") 
+    pyplot.legend(loc="lower right")
+    
+    path = ospath.join(ospath.dirname(__file__), "../figures/clust_comp_"+feature+"_"+str(time.time())+".pdf")
+    pyplot.savefig(path)
+    
+    session.close()
+    
+    return path
 
 def _stats_evaluate_n_documents(features, atom_type, n):
     '''
