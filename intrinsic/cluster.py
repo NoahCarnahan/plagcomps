@@ -13,6 +13,10 @@ def cluster(method, k, items):
         return _agglom(items, k)
     elif method == "hmm":
         return _hmm(items, k)
+    elif method == "median_simple":
+        return _median_simple(items)
+    elif method == "median_kmeans":
+        return _median_kmeans(items, k)
     else:
         raise ValueError("Invalid cluster method. Acceptable values are 'kmeans', 'agglom', or 'hmm'.")
 
@@ -56,6 +60,52 @@ def _kmeans(stylo_vectors, k):
         
     return confidences
 
+def _median_kmeans(stylo_vectors, k):
+    if not (len(stylo_vectors) and len(stylo_vectors[0]) == 1):
+        raise ValueError("Cluster method '_median_kmeans' can only handle 1-dimensional stylometric vectors.")
+        return
+    feature_mat = array(stylo_vectors)
+    normalized_features = whiten(feature_mat)
+    centroids, assigned_clusters = kmeans2(normalized_features, k, minit = 'points')
+    # find largest cluster, and call it the "non-plagiarized" cluster
+    non_plag_cluster = Counter(assigned_clusters).most_common()[0][0] # non-plag is largest cluster
+    non_plag_vectors = [x for i, x in enumerate(stylo_vectors, 0) if assigned_clusters[i] == non_plag_cluster]
+    # get median of non-plagiarized cluster
+    non_plag_vectors_copy = non_plag_vectors[:]
+    non_plag_vectors_copy.sort()
+    median = _get_list_median(non_plag_vectors_copy)
+    # find max dist from median and build confidences
+    max_dist = float(max([abs(vec[0] - median) for vec in stylo_vectors]))
+    confidences = [abs(vec[0] - median) / max_dist for vec in stylo_vectors]
+    return confidences
+
+def _median_simple(stylo_vectors):
+    '''
+    Given a list of 1-dimensional stylo_vectors, generated confidences in the following way:
+    1. Find median of stylo_vectors
+    2. Find max distance from median
+    3. Construct confidences for points by taking their percentage of the max distance from median
+    '''
+    length = len(stylo_vectors)
+    if length > 0 and len(stylo_vectors[0]) == 1:
+        stylo_vectors_copy = stylo_vectors[:]
+        stylo_vectors_copy.sort()  
+        median = _get_list_median(stylo_vectors_copy)
+        max_dist = float(max(median - stylo_vectors_copy[0][0], stylo_vectors_copy[-1][0] - median))
+        confidences = [abs(x[0] - median) / max_dist for x in stylo_vectors]
+        return confidences
+    else:
+        raise ValueError("Cluster method 'median_simple' can only handle 1-dimensional stylometric vectors.")
+
+def _get_list_median(vectors):
+    '''
+    Helper function that returns the median of the given SORTED vector list.
+    '''
+    length = len(vectors)
+    if length % 2 == 0:
+        return (vectors[length / 2][0] + vectors[(length / 2) - 1][0]) / 2.0
+    else:
+        return float(vectors[length / 2][0])
 
 def _log_regression(stylo_vectors):
     pass
@@ -143,6 +193,17 @@ def _test():
     print cluster("hmm", 2, fs)
 
 if __name__ == "__main__":
-    #_test()
-    _two_normal_test(10, 2)
+    # _test()
+    # _two_normal_test(10, 2)
+
+    v = [[1], [2], [3], [10], [11], [12], [13], [25], [26], [27]]
+    print _median_kmeans(v, 3)
+
+
+
+
+
+
+
+
         

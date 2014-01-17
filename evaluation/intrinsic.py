@@ -100,11 +100,11 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n):
     roc_path, roc_auc = evaluate(features, cluster_type, k, atom_type, first_training_files)
     
     # Store the figures in the database
-    session = Session()
-    f = _Figure(roc_path, "roc", roc_auc, sorted(features), cluster_type, k, atom_type, n)
-    session.add(f)
-    session.commit()
-    session.close()
+    # session = Session()
+    # f = _Figure(roc_path, "roc", roc_auc, sorted(features), cluster_type, k, atom_type, n)
+    # session.add(f)
+    # session.commit()
+    # session.close()
     
     return roc_path, roc_auc
 
@@ -255,6 +255,7 @@ def _roc(reduced_docs, plag_likelihoods, features = None, cluster_type = None, k
     # confidences is a list of confidence scores for passages
     # So, if confidences[i] = .3 and actuals[i] = 1 then passage i is plagiarized and
     # we are .3 certain that it is plagiarism (So its in the non-plag cluster).
+
     fpr, tpr, thresholds = sklearn.metrics.roc_curve(actuals, confidences, pos_label=1)
     roc_auc = sklearn.metrics.auc(fpr, tpr)
     
@@ -273,7 +274,7 @@ def _roc(reduced_docs, plag_likelihoods, features = None, cluster_type = None, k
     pyplot.legend(loc="lower right")
     
     #path = "figures/roc"+str(time.time())+".pdf"
-    path = ospath.join(ospath.dirname(__file__), "../figures/roc"+str(time.time())+".pdf")
+    path = ospath.join(ospath.dirname(__file__), "../figures/rocMARCUSTESTING"+str(time.time())+".pdf")
     pyplot.savefig(path)
     return path, roc_auc
 
@@ -540,5 +541,18 @@ def _cluster_auc_test(num_plag, num_noplag, mean_diff, std, dimensions = 1, repe
             print key, sum(averages[key])/float(max(1, len(averages[key])))
 
 if __name__ == "__main__":
-    _test()
+    # _test()
+    features = ['average_sentence_length']
+    cluster_type = 'median_simple'
+    k = 2
+    atom_type = 'paragraph'
+    n = 100
+    evaluate_n_documents(features, cluster_type, k, atom_type, n)
+
+
+
+
+
+
+
 
