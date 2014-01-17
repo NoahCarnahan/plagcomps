@@ -146,7 +146,7 @@ class FeatureExtractor:
 
     def _get_nested_feature_call(self, feat_name):    
         '''
-        decompose a nested feature call such as "avg(std(char_length))" into [avg, std, char_length]
+        Decompose a nested feature call such as "avg(std(char_length))" into [avg, std, char_length]
         '''
         return_list = []
         while '(' in feat_name:
@@ -216,7 +216,6 @@ class FeatureExtractor:
 
     #def _init_feature_std(self, feature_name):
     #    '''take in a feature and build sum tables for querying std of that feature'''
-
 
     def word_to_sentence_std(self, word_feature_name, sent_spans_index_start, sent_spans_index_end):
         '''sample method for zachs framework'''
@@ -447,20 +446,19 @@ class FeatureExtractor:
             complexity = self.syntactic_complexity(word_spans[0], word_spans[1])
             sum_table.append(complexity + sum_table[-1])
 
-        self.syntactic_complexity_sum_table = sum_table
-
-        syntactic_complexity_average_initialized = True
+        self.features["syntactic_complexity_average"] = sum_table
 
     def syntactic_complexity_average(self, sent_spans_index_start, sent_spans_index_end):
         '''
         Computes the average syntactic complexity for each sentence in the given paragraphs and averages them
         '''
 
-        if not self.syntactic_complexity_average_initalized:
+        if "syntactic_complexity_average" not in self.features:
             self._init_syntactic_complexity_average() 
         
-        end_sum = self.syntactic_complexity_sum_table[sent_spans_index_end]
-        start_sum = self.syntactic_complexity_sum_table[sent_spans_index_start]
+        sum_table = self.features["syntactic_complexity_average"]
+        end_sum = sum_table[sent_spans_index_end]
+        start_sum = sum_table[sent_spans_index_start]
         total_syntactic_complexity = end_sum - start_sum
         num_sents = sent_spans_index_end - sent_spans_index_start
         return float(total_syntactic_complexity) / max(num_sents, 1)

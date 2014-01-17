@@ -33,11 +33,13 @@ import scipy, random
 Base = declarative_base()
 
 DEBUG = True
+DB_VERSION_NUMBER = 5
 
-def _populate_EVERYTHING():
+def populate_EVERYTHING():
     '''
     Populate the database with ReducedDocs for all documents, atom types, and features.
     This takes days.
+    ACTUALY DOES NOT DO WORD ATOMS!!!
     '''
 
     all_test_files = IntrinsicUtility().get_n_training_files()
@@ -45,8 +47,8 @@ def _populate_EVERYTHING():
     session = Session()
 
     for doc in all_test_files:
-        for atom_type in ["word","sentence", "paragraph"]:
-            for feature in ['punctuation_percentage', 'stopword_percentage', 'average_sentence_length', 'average_word_length',]:
+        for atom_type in ["sentence", "paragraph",]:
+            for feature in ['avg(num_chars)', "std(num_chars)", 'stopword_percentage', 'average_sentence_length', 'punctuation_percentage', "syntactic_complexity", "syntactic_complexity_average", "avg_internal_word_freq_class", "avg_external_word_freq_class"]:
                 d = _get_reduced_docs(atom_type, [doc], session)[0]
                 print "Calculating", feature, "for", str(d), str(datetime.datetime.now())
                 d.get_feature_vectors([feature], session)
@@ -69,13 +71,12 @@ def populate_database(atom_type, num, features=None):
         features = ['punctuation_percentage',
                     'stopword_percentage',
                     'average_sentence_length',
-                    'average_word_length',
-                # Tests haven't been written for these:
-                    #'avg_internal_word_freq_class',
-                    #'avg_external_word_freq_class',
-                # These are broken:
-                    #'pos_percentage_vector',
-                    #'syntactic_complexity',
+                    'avg_internal_word_freq_class',
+                    'avg_external_word_freq_class',
+                    'syntactic_complexity',
+                    "avg(num_chars)",
+                    "std(num_chars)",
+                    "syntactic_complexity_average"
                     ]
     
     count = 0
@@ -137,8 +138,6 @@ def evaluate(features, cluster_type, k, atom_type, docs):
     session.close()
     return roc_path, roc_auc
 
-
-
 def _stats_evaluate_n_documents(features, atom_type, n):
     '''
     Does _feature_stats_evaluate(features, atom_type, doc) on the first n docuemtns of the training
@@ -198,8 +197,6 @@ def _feature_stats_evaluate(features, atom_type, docs):
     different_doc_outfile.close()
     session.close() 
 
-
-
 def _get_reduced_docs(atom_type, docs, session, create_new=True):
     '''
     Return ReducedDoc objects for the given atom_type for each of the documents in docs. docs is a
@@ -214,7 +211,7 @@ def _get_reduced_docs(atom_type, docs, session, create_new=True):
     reduced_docs = []
     for doc in docs:
         try:
-            r = session.query(ReducedDoc).filter(and_(ReducedDoc.full_path == doc, ReducedDoc.atom_type == atom_type, ReducedDoc.version_number == 2)).one()
+            r = session.query(ReducedDoc).filter(and_(ReducedDoc.full_path == doc, ReducedDoc.atom_type == atom_type, ReducedDoc.version_number == DB_VERSION_NUMBER)).one()
         except sqlalchemy.orm.exc.NoResultFound, e:
             if create_new:
                 r = ReducedDoc(doc, atom_type)
@@ -326,7 +323,7 @@ class ReducedDoc(Base):
         
         self.atom_type = atom_type
         self.timestamp = datetime.datetime.now()
-        self.version_number = 2
+        self.version_number = DB_VERSION_NUMBER
         
         # NOTE: I think the note below is outdated/different now.
         #       Now FeatureExtractor.get_feature_vectors() does return a feature for each
@@ -469,7 +466,7 @@ class _Figure(Base):
         
         self.figure_path = figure_path
         self.timestamp = datetime.datetime.now()
-        self.version_number = 3
+        self.version_number = DB_VERSION_NUMBER
         self.figure_type = figure_type
         self.auc = auc
         self.features = features
@@ -477,7 +474,6 @@ class _Figure(Base):
         self.k = k
         self.atom_type = atom_type
         self.n = n
-
     
 # an Engine, which the Session will use for connection resources
 url = "postgresql://%s:%s@%s" % (username, password, dbname)
@@ -501,21 +497,33 @@ def _test():
                                      'average_word_length',], session)
     session.close()
     
-def _cluster_auc_test(num_plag, num_noplag, mean_diff, std, repetitions=1):
+def _cluster_auc_test(num_plag, num_noplag, mean_diff, std, dimensions = 1, repetitions = 1):
     '''
     roc area under curve evaluation of various clustering techniques
     creates two peaks based on normal distributions and tries to cluster them
     prints out AUC stat for each cluster type
     '''
-    print "cluster auc test with", num_plag, num_noplag, mean_diff, std, repetitions
+    print "running cluster auc test with", num_plag, num_noplag, mean_diff, std, dimensions, repetitions
     if repetitions > 1:
         averages = {}
 
     for rep in range(repetitions):
-        # instantiate our randomly generated feature vectors
-        first = [[scipy.random.normal(0, std)] for x in range(num_noplag)] 
-        second = [[scipy.random.normal(mean_diff, std)] for x in range(num_plag)] 
-        features = first + second
+
+        noplag_features = []
+        for i in range(num_noplag):
+            cur = []
+            for j in range(dimensions):
+                cur.append(scipy.random.normal(0, std))
+            noplag_features.append(cur)
+
+        plag_features = []
+        for i in range(num_plag):
+            cur = []
+            for j in range(dimensions):
+                cur.append(scipy.random.normal(mean_diff, std))
+            plag_features.append(cur)
+
+        features = noplag_features + plag_features
         actuals = [0] * num_noplag + [1] * num_plag
 
         for clus_type in ["kmeans", "agglom", "hmm"]:
@@ -531,14 +539,6 @@ def _cluster_auc_test(num_plag, num_noplag, mean_diff, std, repetitions=1):
         for key in averages:
             print key, sum(averages[key])/float(max(1, len(averages[key])))
 
-
 if __name__ == "__main__":
-    features = ['punctuation_percentage',
-                'stopword_percentage',
-                'average_sentence_length',
-                'avg(num_chars)',]
-    print evaluate_n_documents(features, "kmeans", 2, "paragraph", 100)
-
-    #_cluster_auc_test(100, 1000, 1.5, 0.5, 10)
-
+    _test()
 
