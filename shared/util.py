@@ -14,7 +14,7 @@ class BaseUtility:
     SAMPLE_CORPUS_LOC = os.path.join(UTIL_LOC, '..', 'sample_corpus/')
 
 
-    def read_file_list(self, file_name, base_location_path, include_txt_extension=True):
+    def read_file_list(self, file_name, base_location_path, include_txt_extension=True, min_len=None):
         '''
         Return list of absolute paths to files in <file_name> whose
         location is relative to <base_location_path>
@@ -137,18 +137,39 @@ class IntrinsicUtility(BaseUtility):
 
         return text
 
-    def get_n_training_files(self, n=None, include_txt_extension=True):
+    def get_n_training_files(self, n=None, include_txt_extension=True, min_len=None):
         '''
         Returns first <n> training files, or all of them if <n> is not specified
+
+        If <min_len> is specified, only return files which contain at least <min_len>
+        characters. 
         '''
         all_training_files = self.read_file_list(IntrinsicUtility.TRAINING_LOC, 
                                                  IntrinsicUtility.CORPUS_LOC,
                                                  include_txt_extension=include_txt_extension)
-
-        # Default to using all training files if <n> isn't specified
+        
+        to_return = []
+         # Default to using all training files if <n> isn't specified
         n = len(all_training_files) if n is None else n
 
-        return all_training_files[:n]
+        if min_len:
+            # Read through files until finding <n> documents of 
+            # length >= min_len
+            for fname in all_training_files:
+                if len(to_return) >= n:
+                    break
+                else:
+                    f = file(fname, 'rb')
+                    text = f.read()
+                    f.close()
+
+                    if len(text) >= min_len:
+                        to_return.append(fname)
+
+        else:
+            to_return = all_training_files[:n]
+
+        return to_return
 
 
 class ExtrinsicUtility(BaseUtility):

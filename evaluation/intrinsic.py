@@ -96,6 +96,10 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n):
     documents parsed by atom_type, using the given features, cluster_type, and number of clusters k.
     '''
     # Get the first n training files
+    # NOTE (nj) pass keyword arg min_len=35000 (or some length) in order to 
+    # get <n> files which all contain at least 350000 (or some length) characters, like:
+    # first_training_files = IntrinsicUtility().get_n_training_files(n, min_len=35000)
+    # as is done in Stein's paper
     first_training_files = IntrinsicUtility().get_n_training_files(n)
     
     roc_path, roc_auc = evaluate(features, cluster_type, k, atom_type, first_training_files)
@@ -591,6 +595,21 @@ def _cluster_auc_test(num_plag, num_noplag, mean_diff, std, dimensions = 1, repe
     if repetitions > 1:
         for key in averages:
             print key, sum(averages[key])/float(max(1, len(averages[key])))
+
+
+# import plagcomps.evaluation.intrinsic as intr
+# features = ['punctuation_percentage',
+#                     'stopword_percentage',
+#                     'average_sentence_length',
+#                     'avg_internal_word_freq_class',
+#                     'avg_external_word_freq_class',
+#                     'syntactic_complexity',
+#                     "avg(num_chars)",
+#                     "std(num_chars)",
+#                     "syntactic_complexity_average",
+#                     "flesch_reading_ease",
+#                     ]
+# intr.evaluate_n_documents(features, 'outlier', 2, 'paragraph', 1)
 
 if __name__ == "__main__":
     _test()
