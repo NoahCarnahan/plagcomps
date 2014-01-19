@@ -143,7 +143,11 @@ def compare_cluster_methods(feature, n, cluster_types):
     '''
     Generates a plot that displays ROC curves based on the first n documents and the given
     feature. Creates an ROC curve for each of the cluster methods in cluster_types.
-    cluster_types should be a list of tuples like ("means", 2).
+    cluster_types should be a list of tuples like (function_obj, label, (argument list)).
+    argument list should NOT include the final argument, which is assumed to be feature
+    vectors.
+    So, one might call the function as follows:
+       compare_cluster_methods("average_word_length", 100, [(cluster, "2means", ("kmeans,"2))])
     '''
     
     # Get the reduced_docs
@@ -155,13 +159,17 @@ def compare_cluster_methods(feature, n, cluster_types):
     pyplot.clf()
     
     # plot a curve for each clustering strategy
-    for meth_name, k in cluster_types:
+    for method in cluster_types:
+        func = method[0]
+        label = method[1]
+        
         # build confidences and actuals
         confidences = []
         actuals = []
         for d in reduced_docs:
             # add to confidences
-            passage_confidences = cluster(meth_name, k, d.get_feature_vectors([feature], session))
+            args = method[2] + (d.get_feature_vectors([feature], session),)
+            passage_confidences = func(*args)
             for c in passage_confidences:
                 confidences.append(c)
             # add to actuals
@@ -173,7 +181,7 @@ def compare_cluster_methods(feature, n, cluster_types):
         # Calculate the fpr and tpr
         fpr, tpr, thresholds = sklearn.metrics.roc_curve(actuals, confidences, pos_label=1)
         roc_auc = sklearn.metrics.auc(fpr, tpr)
-        pyplot.plot(fpr, tpr, label='%s (area = %0.2f)' % (str(k)+meth_name, roc_auc))
+        pyplot.plot(fpr, tpr, label='%s (area = %0.2f)' % (label, roc_auc))
     
     # plot labels and such
     pyplot.plot([0, 1], [0, 1], 'k--')
