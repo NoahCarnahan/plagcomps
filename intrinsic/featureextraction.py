@@ -116,35 +116,89 @@ class FeatureExtractor:
         
         vect = []
         for feat_name in features:
+            # if the feature has a ( in it, we assume it includes a meta-feature such as "avg( )"
             if '(' in feat_name:
-                nested_feature_call = self._get_nested_feature_call(feat_name)
-                feat_name = nested_feature_call[-1]
+                nested_feature_name = self._deconstruct_nested_feature_name(feat_name)
+                feat_name = nested_feature_name[-1]
             else:
-                nested_feature_call = None 
+                nested_feature_name = None 
             
-            if self._feature_type(feat_name) == "char": 
-                start, end = start_index, end_index
-            else:                
-                if self._feature_type(feat_name) == "word":
-                    spans = self.word_spans
-                elif self._feature_type(feat_name) == "sentence":
-                    spans = self.sentence_spans
-                elif self._feature_type(feat_name) == "paragraph":
-                    spans = self.paragraph_spans
-                start, end = spanutils.slice(spans, start_index, end_index, return_indices = True)
-            
-            if nested_feature_call != None:
-                if self._feature_type(feat_name) == "word":
-                    spans = self.sentence_spans
+            if nested_feature_name != None:
+                #print "nfc", nested_feature_name
+                # Each meta-feature we apply (avg, std, etc.) "expands" the feature type
+                # for example, num_chars is a word feature, avg(num_chars) is a setence feature,
+                #    and avg(avg(num_chars)) is a paragraph feature
+
+                subfeatures = []
+                subfeatures.insert(0, nested_feature_name.pop(-1))
+
+                # We will index the atom types in the following array so that we can easily advance them
+                atom_types = ["char", "word", "sentence", "paragraph"]
+                cur_atom_type = self._feature_type(feat_name)
+                #print "my cur atom type is", cur_atom_type
+
+                while len(nested_feature_name) > 0:
+                    try:
+                        cur_atom_type = atom_types[atom_types.index(cur_atom_type) + 1]
+                    except IndexError:
+                        raise ValueError("More metafeatures than can be applied here.")
+                    cur_meta_feature = nested_feature_name.pop(-1)
+                    #print "my cur atom type is", cur_atom_type
+
+                    if cur_meta_feature == "avg":
+                        if cur_atom_type == "word":
+                            subfeatures.insert(0, "char_to_word_average")
+                        elif cur_atom_type == "sentence":
+                            subfeatures.insert(0, "word_to_sentence_average")
+                        elif cur_atom_type == "paragraph":
+                            subfeatures.insert(0, "sentence_to_paragraph_average")
+                        else:
+                           raise ValueError("Unable to average that kind of feature")
+                    
+                    elif cur_meta_feature == "std":
+                        if cur_atom_type == "word":
+                            subfeatures.insert(0, "char_to_word_std")
+                        elif cur_atom_type == "sentence":
+                            subfeatures.insert(0, "word_to_sentence_std")
+                        elif cur_atom_type == "paragraph":
+                            subfeatures.insert(0, "sentence_to_paragraph_std")
+                        else:
+                           raise ValueError("Unable to std that kind of feature")
+                    
+                
+                # Set the spans of our meta feature to be on the most external call
+                # for example, if we are doing avg(avg(num_chars)), then the most-outer average
+                # gives us a paragraph feature, and we should therefore have paragraph spans
+                if cur_atom_type == "char": 
+                    start, end = start_index, end_index
+                else:                
+                    if cur_atom_type == "word":
+                        spans = self.word_spans
+                    elif cur_atom_type == "sentence":
+                        spans = self.sentence_spans
+                    elif cur_atom_type == "paragraph":
+                        spans = self.paragraph_spans
                     start, end = spanutils.slice(spans, start_index, end_index, return_indices = True)
-                    vect.append(self.word_to_sentence_average(feat_name, start, end))
+                vect.append(self.meta_feature(subfeatures, start, end))
+                    
             else:
+                # No nested features, so things are easy
+                if self._feature_type(feat_name) == "char": 
+                    start, end = start_index, end_index
+                else:                
+                    if self._feature_type(feat_name) == "word":
+                        spans = self.word_spans
+                    elif self._feature_type(feat_name) == "sentence":
+                        spans = self.sentence_spans
+                    elif self._feature_type(feat_name) == "paragraph":
+                        spans = self.paragraph_spans
+                    start, end = spanutils.slice(spans, start_index, end_index, return_indices = True)
                 actual_feature_function = getattr(self, feat_name)
                 vect.append(actual_feature_function(start, end))
             
         return tuple(vect)
 
-    def _get_nested_feature_call(self, feat_name):    
+    def _deconstruct_nested_feature_name(self, feat_name):    
         '''
         decompose a nested feature call such as "avg(std(char_length))" into [avg, std, char_length]
         '''
@@ -157,6 +211,12 @@ class FeatureExtractor:
         return_list.append(feat_name.replace(")", ""))
 
         return return_list
+
+    def _construct_nested_feature_name(self, feat_list):    
+        '''
+        compose a nested feature call such as "avg(std(char_length))" from [avg, std, char_length]
+        '''
+        return "(".join(feat_list) + ")" * (len(feat_list) - 1)
 
     def _feature_type(self, func_name):
         '''
@@ -194,51 +254,128 @@ class FeatureExtractor:
             self._init_num_chars()
 
         return self.features["num_chars"][word_spans_index_end] - self.features["num_chars"][word_spans_index_start]
+
+    def meta_paragraph_feature(self, subfeatures, para_spans_index_start, para_spans_index_end):
+        '''meta_paragraph_feature([word_to_sentence_average, num_chars], 0, 1)'''
+
+        # get the start and end character indices from our paragraph indices
+        start = self.paragraph_spans[para_spans_index_start][0]
+        end = self.paragraph_spans[para_spans_index_end - 1][1]
         
-    def word_to_sentence_average(self, word_feature_name, sent_spans_index_start, sent_spans_index_end):
-        '''takes in a word feature and sentence span range
+        sentence_index_range = spanutils.slice(self.sentence_spans, start, end, return_indices = True)
+        
+    def meta_feature(self, subfeatures, spans_index_start, spans_index_end):
+        '''
+        wrapper function that calls the first subfeature with the rest of the subfeatures as its argument
+        for example:
+        self.meta_feature([word_to_sentence_average, num_chars], 0, 10)
+        will return the average number of characters per word pulled from the first 10 sentences
+        '''
+        print "running a metafeature with", subfeatures
+
+        outer_feature = getattr(self, subfeatures[0])
+        inner_features = subfeatures[1:]
+        if len(inner_features) > 0:
+            return outer_feature(subfeatures[1:], spans_index_start, spans_index_end) 
+        else:
+            return outer_feature(spans_index_start, spans_index_end)
+    
+    def sentence_to_paragraph_average(self, subfeatures, para_spans_index_start, para_spans_index_end):
+        '''
+        takes a sentence feature (or a sentence-level meta-feature) and applies it to every sentence
+        in the specified paragraphs, and then averages its result over the number of sentences
+        '''
+        # get the start and end character indices from our paragraph indices
+        start = self.paragraph_spans[para_spans_index_start][0]
+        end = self.paragraph_spans[para_spans_index_end - 1][1]
+        # get the index range for the words we will consider
+        sentence_index_range = spanutils.slice(self.sentence_spans, start, end, return_indices = True)
+
+        # if we only have a single subfeature, we will use that as our sentence feature
+        if len(subfeatures) == 1:
+            sentence_feature = getattr(self, subfeatures[0])
+            # sum the values of our sentence feature over each of our sentences    
+            sentence_sum = sentence_feature(sentence_index_range[0], sentence_index_range[1])
+        else:
+            sentence_sum = self.meta_feature(subfeatures, sentence_index_range[0], sentence_index_range[1])
+
+        # return the average
+        return float(sentence_sum) / max(1, sentence_index_range[1] - sentence_index_range[0]) 
+
+    def word_to_sentence_average(self, subfeatures, sent_spans_index_start, sent_spans_index_end):
+        '''
+        takes in a word feature (or a word-level meta-feature) and sentence span range
         applies the word feature to each word in the specified sentences, and then averages the results
         over the number of words.'''
 
         # get the start and end character indices from our sentence indices
         start = self.sentence_spans[sent_spans_index_start][0]
         end = self.sentence_spans[sent_spans_index_end - 1][1]
-
-        word_feature = getattr(self, word_feature_name)
-
         # get the index range for the words we will consider
         word_index_range = spanutils.slice(self.word_spans, start, end, return_indices = True)
-        # sum the values of our word_feature over each of our words    
-        word_sum = word_feature(word_index_range[0], word_index_range[1])
+
+        # if we only have a single subfeature, we will use that as our word feature
+        if len(subfeatures) == 1:
+            word_feature = getattr(self, subfeatures[0])
+            # sum the values of our word feature over each of our words    
+            word_sum = word_feature(word_index_range[0], word_index_range[1])
+        else:
+            word_sum = self.meta_feature(subfeatures, word_index_range[0], word_index_range[1])
 
         # return the average
         return float(word_sum) / max(1, word_index_range[1] - word_index_range[0]) 
 
-    #def _init_feature_std(self, feature_name):
-    #    '''take in a feature and build sum tables for querying std of that feature'''
+    def _init_feature_std(self, nested_feature_name):
+        '''take in a nested std feature and build sum tables for querying std of that feature'''
+        subfeatures = self._deconstruct_nested_feature_name(nested_feature_name)
 
+        if len(subfeatures) == 2:
+            # if we're just doing the std of a non-nested feature, we can use that features sum table
+            # this would apply for something like "std(num_chars)"
+            feature_name = subfeatures[1]
+            if feature_name not in self.features:
+                init_func = getattr(self, "_init_" + feature_name)
+                init_func()
 
-    def word_to_sentence_std(self, word_feature_name, sent_spans_index_start, sent_spans_index_end):
-        '''sample method for zachs framework'''
+            # build the sum tables for std calculation
+            sum_x = self.features[feature_name]
+            x2 = [0] + [(sum_x[i+1] - sum_x[i]) ** 2 for i in range(len(sum_x) - 1)]
+            sum_x2 = [sum(x2[:1+i]) for i in range(len(x2))]
+    
+            self.features[nested_feature_name] = [sum_x, sum_x2]
+        else:
+            # if we want the std of a nested feature, we need to figure that out
+            raise NotImplementedError("You cannot take the std of a nested feature yet")
+            
+
+    def word_to_sentence_std(self, subfeatures, sent_spans_index_start, sent_spans_index_end):
+        '''
+        Takes in a subfeature list and sentence spans and returns the standard deviation
+        of the subfeatures taken on each queried sentence
+        '''
 
         # get the start and end character indices from our sentence indices
         start = self.sentence_spans[sent_spans_index_start][0]
         end = self.sentence_spans[sent_spans_index_end - 1][1]
         
-        augmented_feature_name = "std(" + word_feature_name + ")"
+        nested_feature_name = self._construct_nested_feature_name(["std"] + subfeatures)
 
-        if not self.features.contains(augmented_feature_name):
-            init_func = getattr(self, "_init_" + augmented_feature_name) 
-            init_func()
+        # make sure the sum tables for the std feature is built
+        if nested_feature_name not in self.features:
+            self._init_feature_std(nested_feature_name)
         
-        sum_x = self.features[augmented_feature_name][0]
-        sum_x2 = self.features[augmented_feature_name][1]
+        sum_x = self.features[nested_feature_name][0]
+        sum_x2 = self.features[nested_feature_name][1]
 
-        square_sum = sum_x2[t] - sum_x2[s]
-        u = float(sum_x[t] - sum_x[s]) / (t - s)
+        word_spans = spanutils.slice(self.word_spans, start, end, True)
+        word_start, word_end = word_spans
+
+        # math
+        square_sum = sum_x2[word_end] - sum_x2[word_start]
+        u = float(sum_x[word_end] - sum_x[word_start]) / (word_end - word_start)
     
-        x = square_sum - 2 * u * (sum_x[t] - sum_x[s]) + (t-s) * u * u
-        return math.sqrt(x / float(t - s))
+        x = square_sum - 2 * u * (sum_x[word_end] - sum_x[word_start]) + (word_end - word_start) * u * u
+        return math.sqrt(x / float(word_end - word_start))
     
     def _init_average_word_length(self):
         '''
@@ -247,7 +384,7 @@ class FeatureExtractor:
         '''
         # TODO: Check if words are punctuation/have punctuation on them?
         
-        sum_table = [0]
+        
         for start, end in self.word_spans:
             sum_table.append((end - start) + sum_table[-1])
         self.word_length_sum_table = sum_table
@@ -599,11 +736,11 @@ def _test():
         print "syntactic_complexity_average test FAILED"
     '''  
 if __name__ == "__main__":
-    _test()
+    #_test()
 
-    #f = FeatureExtractor("I absolutely go incredibly far. Zach went fast over crab sand land.")
-    #f._init_num_chars()
-    #print f.get_feature_vectors(["average_sentence_length", "num_chars", "avg(num_chars)"], "sentence")
+    f = FeatureExtractor("I absolutely go incredibly far. Zach went fast over sand crab land.")
+    print f.get_feature_vectors(["num_chars", "avg(num_chars)", "avg(avg(num_chars))", "std(num_chars)", "avg(std(num_chars))", "std(std(num_chars))"], "paragraph")
+
     #print "chars",  f.num_chars(0, 5)
     #print "avg", f.word_to_sentence_average("num_chars", 0, 1)
     #print "word_spans", f.get_spans("word")
