@@ -273,7 +273,7 @@ class FeatureExtractor:
         self.meta_feature([word_to_sentence_average, num_chars], 0, 10)
         will return the average number of characters per word pulled from the first 10 sentences
         '''
-        print "running a metafeature with", subfeatures
+        #print "running a metafeature with", subfeatures
 
         outer_feature = getattr(self, subfeatures[0])
         inner_features = subfeatures[1:]
@@ -851,9 +851,9 @@ def _test():
     #    print "syntactic_complexity_average test FAILED"
     
 if __name__ == "__main__":
-    #_test()
+    _test()
 
-    f = FeatureExtractor("I absolutely go incredibly far. Zach went fast over sand crab land.")
+    #f = FeatureExtractor("I absolutely go incredibly far. Zach went fast over sand crab land.")
     #print f.get_feature_vectors(["num_chars", "avg(num_chars)", "avg(avg(num_chars))", "std(num_chars)", "avg(std(num_chars))", "std(std(num_chars))"], "paragraph")
-    print f.get_feature_vectors(["punctuation_percentage", "avg(punctuation_percentage)", "std(punctuation_percentage)"], "paragraph")
+    #print f.get_feature_vectors(["punctuation_percentage", "avg(punctuation_percentage)", "avg(avg(punctuation_percentage))", "avg(avg(avg(punctuation_percentage)))"], "paragraph")
 
