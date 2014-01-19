@@ -18,8 +18,6 @@ import matplotlib
 matplotlib.use('pdf')
 import matplotlib.pyplot as pyplot
 
-
-
 import sqlalchemy
 from sqlalchemy import Table, Column, Sequence, Integer, String, Float, DateTime, ForeignKey, and_
 from sqlalchemy.orm import relationship, backref, sessionmaker
