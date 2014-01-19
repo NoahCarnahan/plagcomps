@@ -1,6 +1,8 @@
 dbconstants.py
 db_constants.py
 restructure/plagcomps/dbconstants.py
+intrinsic/serialized/*.pdf
+intrinsic/serialized/*.csv
 
 *.py[cod]
 

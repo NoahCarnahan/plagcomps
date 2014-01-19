@@ -33,11 +33,13 @@ import scipy, random
 Base = declarative_base()
 
 DEBUG = True
+DB_VERSION_NUMBER = 5
 
-def _populate_EVERYTHING():
+def populate_EVERYTHING():
     '''
     Populate the database with ReducedDocs for all documents, atom types, and features.
     This takes days.
+    ACTUALY DOES NOT DO WORD ATOMS!!!
     '''
 
     all_test_files = IntrinsicUtility().get_n_training_files()
@@ -45,8 +47,8 @@ def _populate_EVERYTHING():
     session = Session()
 
     for doc in all_test_files:
-        for atom_type in ["word","sentence", "paragraph"]:
-            for feature in ['punctuation_percentage', 'stopword_percentage', 'average_sentence_length', 'average_word_length',]:
+        for atom_type in ["sentence", "paragraph",]:
+            for feature in ['avg(num_chars)', "std(num_chars)", 'stopword_percentage', 'average_sentence_length', 'punctuation_percentage', "syntactic_complexity", "syntactic_complexity_average", "avg_internal_word_freq_class", "avg_external_word_freq_class", "flesch_reading_ease"]:
                 d = _get_reduced_docs(atom_type, [doc], session)[0]
                 print "Calculating", feature, "for", str(d), str(datetime.datetime.now())
                 d.get_feature_vectors([feature], session)
@@ -69,13 +71,13 @@ def populate_database(atom_type, num, features=None):
         features = ['punctuation_percentage',
                     'stopword_percentage',
                     'average_sentence_length',
-                    'average_word_length',
-                # Tests haven't been written for these:
-                    #'avg_internal_word_freq_class',
-                    #'avg_external_word_freq_class',
-                # These are broken:
-                    #'pos_percentage_vector',
-                    #'syntactic_complexity',
+                    'avg_internal_word_freq_class',
+                    'avg_external_word_freq_class',
+                    'syntactic_complexity',
+                    "avg(num_chars)",
+                    "std(num_chars)",
+                    "syntactic_complexity_average",
+                    "flesch_reading_ease",
                     ]
     
     count = 0
@@ -94,6 +96,10 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n):
     documents parsed by atom_type, using the given features, cluster_type, and number of clusters k.
     '''
     # Get the first n training files
+    # NOTE (nj) pass keyword arg min_len=35000 (or some length) in order to 
+    # get <n> files which all contain at least 350000 (or some length) characters, like:
+    # first_training_files = IntrinsicUtility().get_n_training_files(n, min_len=35000)
+    # as is done in Stein's paper
     first_training_files = IntrinsicUtility().get_n_training_files(n)
     
     roc_path, roc_auc = evaluate(features, cluster_type, k, atom_type, first_training_files)
@@ -136,8 +142,58 @@ def evaluate(features, cluster_type, k, atom_type, docs):
     roc_path, roc_auc = _roc(reduced_docs, plag_likelihoods, features, cluster_type, k, atom_type)
     session.close()
     return roc_path, roc_auc
-
-
+    
+def compare_cluster_methods(feature, n, cluster_types):
+    '''
+    Generates a plot that displays ROC curves based on the first n documents and the given
+    feature. Creates an ROC curve for each of the cluster methods in cluster_types.
+    cluster_types should be a list of tuples like ("means", 2).
+    '''
+    
+    # Get the reduced_docs
+    docs = IntrinsicUtility().get_n_training_files(n)
+    session = Session()
+    reduced_docs = _get_reduced_docs("paragraph", docs, session)
+    
+    # Prepare to plot
+    pyplot.clf()
+    
+    # plot a curve for each clustering strategy
+    for meth_name, k in cluster_types:
+        # build confidences and actuals
+        confidences = []
+        actuals = []
+        for d in reduced_docs:
+            # add to confidences
+            passage_confidences = cluster(meth_name, k, d.get_feature_vectors([feature], session))
+            for c in passage_confidences:
+                confidences.append(c)
+            # add to actuals
+            spans = d.get_spans()
+            for i in xrange(len(spans)):
+                span = spans[i]
+                actuals.append(1 if d.span_is_plagiarized(span) else 0)
+        
+        # Calculate the fpr and tpr
+        fpr, tpr, thresholds = sklearn.metrics.roc_curve(actuals, confidences, pos_label=1)
+        roc_auc = sklearn.metrics.auc(fpr, tpr)
+        pyplot.plot(fpr, tpr, label='%s (area = %0.2f)' % (str(k)+meth_name, roc_auc))
+    
+    # plot labels and such
+    pyplot.plot([0, 1], [0, 1], 'k--')
+    pyplot.xlim([0.0, 1.0])
+    pyplot.ylim([0.0, 1.0])
+    pyplot.xlabel('False Positive Rate')
+    pyplot.ylabel('True Positive Rate')
+    pyplot.title(feature + ", " + str(n) + " docs") 
+    pyplot.legend(loc="lower right")
+    
+    path = ospath.join(ospath.dirname(__file__), "../figures/clust_comp_"+feature+"_"+str(time.time())+".pdf")
+    pyplot.savefig(path)
+    
+    session.close()
+    
+    return path
 
 def _stats_evaluate_n_documents(features, atom_type, n):
     '''
@@ -198,8 +254,6 @@ def _feature_stats_evaluate(features, atom_type, docs):
     different_doc_outfile.close()
     session.close() 
 
-
-
 def _get_reduced_docs(atom_type, docs, session, create_new=True):
     '''
     Return ReducedDoc objects for the given atom_type for each of the documents in docs. docs is a
@@ -214,7 +268,7 @@ def _get_reduced_docs(atom_type, docs, session, create_new=True):
     reduced_docs = []
     for doc in docs:
         try:
-            r = session.query(ReducedDoc).filter(and_(ReducedDoc.full_path == doc, ReducedDoc.atom_type == atom_type, ReducedDoc.version_number == 2)).one()
+            r = session.query(ReducedDoc).filter(and_(ReducedDoc.full_path == doc, ReducedDoc.atom_type == atom_type, ReducedDoc.version_number == DB_VERSION_NUMBER)).one()
         except sqlalchemy.orm.exc.NoResultFound, e:
             if create_new:
                 r = ReducedDoc(doc, atom_type)
@@ -326,7 +380,7 @@ class ReducedDoc(Base):
         
         self.atom_type = atom_type
         self.timestamp = datetime.datetime.now()
-        self.version_number = 2
+        self.version_number = DB_VERSION_NUMBER
         
         # NOTE: I think the note below is outdated/different now.
         #       Now FeatureExtractor.get_feature_vectors() does return a feature for each
@@ -469,7 +523,7 @@ class _Figure(Base):
         
         self.figure_path = figure_path
         self.timestamp = datetime.datetime.now()
-        self.version_number = 3
+        self.version_number = DB_VERSION_NUMBER
         self.figure_type = figure_type
         self.auc = auc
         self.features = features
@@ -477,7 +531,6 @@ class _Figure(Base):
         self.k = k
         self.atom_type = atom_type
         self.n = n
-
     
 # an Engine, which the Session will use for connection resources
 url = "postgresql://%s:%s@%s" % (username, password, dbname)
@@ -507,14 +560,27 @@ def _cluster_auc_test(num_plag, num_noplag, mean_diff, std, dimensions = 1, repe
     creates two peaks based on normal distributions and tries to cluster them
     prints out AUC stat for each cluster type
     '''
+    print "running cluster auc test with", num_plag, num_noplag, mean_diff, std, dimensions, repetitions
     if repetitions > 1:
         averages = {}
 
     for rep in range(repetitions):
 
-        first = [[scipy.random.normal(0, std)] for x in range(num_noplag)] 
-        second = [[scipy.random.normal(mean_diff, std)] for x in range(num_plag)] 
-        features = first + second
+        noplag_features = []
+        for i in range(num_noplag):
+            cur = []
+            for j in range(dimensions):
+                cur.append(scipy.random.normal(0, std))
+            noplag_features.append(cur)
+
+        plag_features = []
+        for i in range(num_plag):
+            cur = []
+            for j in range(dimensions):
+                cur.append(scipy.random.normal(mean_diff, std))
+            plag_features.append(cur)
+
+        features = noplag_features + plag_features
         actuals = [0] * num_noplag + [1] * num_plag
 
         for clus_type in ["kmeans", "agglom", "hmm"]:
@@ -528,13 +594,23 @@ def _cluster_auc_test(num_plag, num_noplag, mean_diff, std, dimensions = 1, repe
 
     if repetitions > 1:
         for key in averages:
-            print sum(averages[key]) / float(max(1, len(averages[key])))
+            print key, sum(averages[key])/float(max(1, len(averages[key])))
+
+
+# import plagcomps.evaluation.intrinsic as intr
+# features = ['punctuation_percentage',
+#                     'stopword_percentage',
+#                     'average_sentence_length',
+#                     'avg_internal_word_freq_class',
+#                     'avg_external_word_freq_class',
+#                     'syntactic_complexity',
+#                     "avg(num_chars)",
+#                     "std(num_chars)",
+#                     "syntactic_complexity_average",
+#                     "flesch_reading_ease",
+#                     ]
+# intr.evaluate_n_documents(features, 'outlier', 2, 'paragraph', 1)
 
 if __name__ == "__main__":
-    features = ['punctuation_percentage',
-                'stopword_percentage',
-                'average_sentence_length',
-                'avg(num_chars)',]
-    #print evaluate_n_documents(features, "kmeans", 2, "paragraph", 100)
+    _test()
 
-    print _cluster_auc_test(10, 100, 100, 1, 1, 10)

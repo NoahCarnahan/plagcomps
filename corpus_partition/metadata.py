@@ -1,5 +1,7 @@
 
 from scipy.stats import scoreatpercentile
+from plagcomps.shared.util import IntrinsicUtility
+
 import matplotlib.pyplot as plt
 import xml.etree.ElementTree as ET
 import os
@@ -95,6 +97,27 @@ def five_num_summary(arr):
 
 	print min_val, first_quart, median, third_quart, max_val
 	print 'Mean', sum(arr) / float(len(arr)), '\n'
+
+def doc_lengths(thresh=35000):
+	'''
+	Prints the pct. of documents which contain at least <thresh> characters
+	'''
+	util = IntrinsicUtility()
+	training_docs = util.get_n_training_files()
+	lengths = []
+	long_enough = 0
+
+	for fname in training_docs:
+		f = file(fname, 'rb')
+		text = f.read()
+		f.close()
+
+		lengths.append(len(text))
+		if len(text) > thresh:
+			long_enough += 1
+
+	print float(long_enough) / len(training_docs), 'were long enough'
+
 
 if __name__ == '__main__':
 	summarize_data() 

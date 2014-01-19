@@ -1,4 +1,5 @@
 import hmm
+from plagcomps.intrinsic import outlier_detection
 
 from numpy import array, matrix, random
 from scipy.cluster.vq import kmeans2, whiten
@@ -13,6 +14,8 @@ def cluster(method, k, items):
         return _agglom(items, k)
     elif method == "hmm":
         return _hmm(items, k)
+    elif method == "outlier":
+        return outlier_detection.density_based(items)
     else:
         raise ValueError("Invalid cluster method. Acceptable values are 'kmeans', 'agglom', or 'hmm'.")
 
@@ -56,9 +59,6 @@ def _kmeans(stylo_vectors, k):
         
     return confidences
 
-
-def _log_regression(stylo_vectors):
-    pass
 
 def _agglom(stylo_vectors, k):
     '''

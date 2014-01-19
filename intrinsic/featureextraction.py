@@ -9,6 +9,8 @@ import math
 import cPickle
 import os.path
 
+from nltk.corpus import cmudict
+
 # To add a new feature, write a new method for FeatureExtractor.
 # The method must take two arguments. They may be named (char_index_start,
 # char_index_end), (word_spans_index_start, word_spans_index_end),
@@ -200,7 +202,7 @@ class FeatureExtractor:
 
     def _deconstruct_nested_feature_name(self, feat_name):    
         '''
-        decompose a nested feature call such as "avg(std(char_length))" into [avg, std, char_length]
+        Decompose a nested feature call such as "avg(std(char_length))" into [avg, std, char_length]
         '''
         return_list = []
         while '(' in feat_name:
@@ -584,20 +586,19 @@ class FeatureExtractor:
             complexity = self.syntactic_complexity(word_spans[0], word_spans[1])
             sum_table.append(complexity + sum_table[-1])
 
-        self.syntactic_complexity_sum_table = sum_table
-
-        syntactic_complexity_average_initialized = True
+        self.features["syntactic_complexity_average"] = sum_table
 
     def syntactic_complexity_average(self, sent_spans_index_start, sent_spans_index_end):
         '''
         Computes the average syntactic complexity for each sentence in the given paragraphs and averages them
         '''
 
-        if not self.syntactic_complexity_average_initalized:
+        if "syntactic_complexity_average" not in self.features:
             self._init_syntactic_complexity_average() 
         
-        end_sum = self.syntactic_complexity_sum_table[sent_spans_index_end]
-        start_sum = self.syntactic_complexity_sum_table[sent_spans_index_start]
+        sum_table = self.features["syntactic_complexity_average"]
+        end_sum = sum_table[sent_spans_index_end]
+        start_sum = sum_table[sent_spans_index_start]
         total_syntactic_complexity = end_sum - start_sum
         num_sents = sent_spans_index_end - sent_spans_index_start
         return float(total_syntactic_complexity) / max(num_sents, 1)
@@ -674,7 +675,44 @@ class FeatureExtractor:
         total = sum_table[word_spans_index_end] - sum_table[word_spans_index_start]
         num_words = word_spans_index_end - word_spans_index_start
         return float(total) / max(num_words, 1)
+    
+    def _init_flesch_reading_ease(self):
         
+        self.features["flesch_reading_ease"] = cmudict.dict()
+    
+    def flesch_reading_ease(self, para_spans_index_start, para_spans_index_end):
+        '''
+        This a paragraph level feature that returns the Flesh-Kincaid readability score for the given
+        paragraph.
+        '''
+        # The following link explains the feature
+        # http://en.wikipedia.org/wiki/Flesch%E2%80%93Kincaid_readability_tests
+        # The following link explains syllabifaction
+        # https://groups.google.com/forum/#!topic/nltk-users/mCOh_u7V8_I
+        # The syllabification code here is taken from that discussion thread.
+        
+        if "flesch_reading_ease" not in self.features:
+            self._init_flesch_reading_ease()
+        
+        para_span = self.paragraph_spans[para_spans_index_start:para_spans_index_end][0]        # The span for the paragraph in question
+        num_sentences = len(spanutils.slice(self.sentence_spans, para_span[0], para_span[1]))   # Number of sentences in the paragraph
+        word_spans = spanutils.slice(self.word_spans, para_span[0], para_span[1])
+        num_words = len(word_spans)
+        
+        cmud = self.features["flesch_reading_ease"]
+        num_syl = 0                                                                            # total number of sylables in the paragraph
+        for start, end in word_spans:
+            
+            word = self.text[start:end].strip(".").lower()
+            try:
+                num_syl += [len(list(y for y in x if y[-1].isdigit())) for x in cmud[word]][0]
+            except KeyError:
+                num_syl += (end-start)%3
+        try:
+            return 206.835 - 1.015*(num_words / float(num_sentences)) - 84.6*(num_syl / float(num_words))
+        except ZeroDivisionError:
+            # Either num of word or num of sentences was zero, so return 100, an "easy" score (according to wikipedia)
+            return 100
 
 def _test():
 
@@ -718,7 +756,7 @@ def _test():
     
     # TODO: ADD TEST FOR EXTERNAL WORD FREQ CLASS
     f.get_feature_vectors(["avg_external_word_freq_class"], "sentence")
-    print "avg_external_word_freq_class DOES NOT EXIST"
+    print "avg_external_word_freq_class test DOES NOT EXIST"
     
     f = FeatureExtractor("The brown fox ate. I go to the school? Believe it. I go.")
     #print f.get_feature_vectors(["syntactic_complexity"], "sentence")
@@ -727,22 +765,21 @@ def _test():
     else:
         print "syntactic_complexity test FAILED"
 
-    '''
-    f = FeatureExtractor("The brown fox ate. I go to the school. Believe it. I go.")
-    #print f.get_feature_vectors(["syntactic_complexity_average"], "paragraph")
-    if f.get_feature_vectors(["syntactic_complexity_average"], "paragraph") == [(0.5,)]:
-        print "syntactic_complexity_average test passed"
-    else:
-        print "syntactic_complexity_average test FAILED"
-    '''  
+    f = FeatureExtractor("I absolutely go incredibly far. Zach went fast over crab sand land.\n\nThis is a new paragraph. This is the second sentence in that paragraph. This exsquisite utterance is indubitably the third sentence of this fine text.\n\nPlagiarism detection can be operationalized by decomposing a document into natural sections, such as sentences, chapters, or topically related blocks, and analyzing the variance of stylometric features for these sections. In this regard the decision problems in Sect. 1.2 are of decreasing complexity: instances of AVFIND are comprised of both a selection problem (finding suspicious sections) and an AVOUTLIER problem; instances of AVBATCH are a restricted variant of AVOUTLIER since one has the additional knowledge that all elements of a batch are (or are not) outliers at the same time.")
+    f.get_feature_vectors(["flesch_reading_ease"], "paragraph")
+    print "flesch_reading_ease test DOES NOT EXIST"
+    
+    #f = FeatureExtractor("The brown fox ate. I go to the school. Believe it. I go.")
+    ##print f.get_feature_vectors(["syntactic_complexity_average"], "paragraph")
+    #if f.get_feature_vectors(["syntactic_complexity_average"], "paragraph") == [(0.5,)]:
+    #    print "syntactic_complexity_average test passed"
+    #else:
+    #    print "syntactic_complexity_average test FAILED"
+    
 if __name__ == "__main__":
-    #_test()
+    _test()
 
-    f = FeatureExtractor("I absolutely go incredibly far. Zach went fast over sand crab land.")
-    print f.get_feature_vectors(["num_chars", "avg(num_chars)", "avg(avg(num_chars))", "std(num_chars)", "avg(std(num_chars))", "std(std(num_chars))"], "paragraph")
+    #f = FeatureExtractor("I absolutely go incredibly far. Zach went fast over sand crab land.")
+    #print f.get_feature_vectors(["num_chars", "avg(num_chars)", "avg(avg(num_chars))", "std(num_chars)", "avg(std(num_chars))", "std(std(num_chars))"], "paragraph")
 
-    #print "chars",  f.num_chars(0, 5)
-    #print "avg", f.word_to_sentence_average("num_chars", 0, 1)
-    #print "word_spans", f.get_spans("word")
-    #print "sent_spans", f.get_spans("sentence")
 

@@ -7,7 +7,7 @@ from plagcomps.shared.util import IntrinsicUtility
 from plagcomps.intrinsic.cluster import cluster
 
 
-def batch_serialize(n=50):
+def batch_serialize(n=100):
     '''
     Writes csv files ('serializations') of the passages parsed from first <n>
     training files 
@@ -22,9 +22,7 @@ def batch_serialize(n=50):
 
     for tf, xf, of in zip(text_files, xml_files, out_files):
         # Only populate if outfile doesn't already exist
-        if os.path.exists(of):
-            print of, 'already existed'
-        else:
+        if not os.path.exists(of):
             print of, 'did not exist. Working on it now.'
             extract_and_serialize(tf, xf, of)
 
