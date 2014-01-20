@@ -4,7 +4,7 @@ from ..shared.util import BaseUtility
 from ..dbconstants import username
 from ..dbconstants import password
 from ..dbconstants import dbname
-from ..intrinsic.cluster import cluster
+from plagcomps.intrinsic.cluster import cluster
 
 import datetime
 import numpy.random
@@ -103,11 +103,11 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n):
     roc_path, roc_auc = evaluate(features, cluster_type, k, atom_type, first_training_files)
     
     # Store the figures in the database
-    session = Session()
-    f = _Figure(roc_path, "roc", roc_auc, sorted(features), cluster_type, k, atom_type, n)
-    session.add(f)
-    session.commit()
-    session.close()
+    # session = Session()
+    # f = _Figure(roc_path, "roc", roc_auc, sorted(features), cluster_type, k, atom_type, n)
+    # session.add(f)
+    # session.commit()
+    # session.close()
     
     return roc_path, roc_auc
 
@@ -318,6 +318,7 @@ def _roc(reduced_docs, plag_likelihoods, features = None, cluster_type = None, k
     # confidences is a list of confidence scores for passages
     # So, if confidences[i] = .3 and actuals[i] = 1 then passage i is plagiarized and
     # we are .3 certain that it is plagiarism (So its in the non-plag cluster).
+
     fpr, tpr, thresholds = sklearn.metrics.roc_curve(actuals, confidences, pos_label=1)
     roc_auc = sklearn.metrics.auc(fpr, tpr)
     
@@ -336,7 +337,7 @@ def _roc(reduced_docs, plag_likelihoods, features = None, cluster_type = None, k
     pyplot.legend(loc="lower right")
     
     #path = "figures/roc"+str(time.time())+".pdf"
-    path = ospath.join(ospath.dirname(__file__), "../figures/roc"+str(time.time())+".pdf")
+    path = ospath.join(ospath.dirname(__file__), "../figures/rocMARCUSTESTING"+str(time.time())+".pdf")
     pyplot.savefig(path)
     return path, roc_auc
 
@@ -620,3 +621,4 @@ def _cluster_auc_test(num_plag, num_noplag, mean_diff, std, dimensions = 1, repe
 if __name__ == "__main__":
     _test()
     #_stats_evaluate_n_documents(["num_chars", "avg(num_chars)", "std(num_chars)", "avg(avg(num_chars))", "avg(std(num_chars)"], "paragraph", 25) 
+

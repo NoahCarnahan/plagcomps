@@ -290,39 +290,8 @@ if __name__ == '__main__':
     
     full = FingerprintEvaluator(sources, "full")
     kth = FingerprintEvaluator(sources, "kth_in_sent")
-    anchor = FingerprintEvaluator(sources, "anchor")'''
-
-    fe = FingerprintExtractor()
-    f = open("hp.txt")
-    text = f.read()
-    f.close()
-    fe._get_winnow_k(text, 8, 15)
-
-
-
+    anchor = FingerprintEvaluator(sources, "anchor")
+    '''
     ex = FingerprintExtractor()
-    sentences = ["Hi my name is Marcus and I'm working in the CMC.", "Why does our project have to be so ridiculous."]
-    print ex._get_kth_in_sent_fingerprint(sentences, 3, 5)
-
-
-    # TODO this won't work right now. 
-    # is there anything being tested here that isn't done in extrinsic_testing?
-# # ev = FingerprintEvaluator(["sample_corpus/easy_source.txt"])
-# # ev.classify_document("sample_corpus/easy_test.txt")
-
-#   test_files = util.get_sample_test_paths()
-
-#   for test_doc in test_files:
-#       print "testing", os.path.basename(test_doc)
-#       full_doc = open(test_doc, 'r')
-#       text = full_doc.read()
-#       full_doc.close()
-
-#       full.classify_and_display(text)
-#       kth.classify_and_display(text)
-#       anchor.classify_and_display(text)
-#       print '-'*20
-
-#   #print ex.get_fingerprint(corp.raw("austen-sense.txt"), 3, "anchor")
-#   #print ex.get_fingerprint(corp.raw("austen-emma.txt"), 3, "anchor")
- 
+    document = "Hi my name is Marcus and I'm working in the CMC. Why does our project have to be so ridiculous."
+    print ex.get_fingerprint(document, 3, method="anchor")

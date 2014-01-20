@@ -102,7 +102,7 @@ if __name__ == "__main__":
     # print fp.get_fingerprints(session)
     
     util = ExtrinsicUtility()
-    num_files = 3
+    num_files = 10
 
     source_file_list, suspect_file_list = util.get_n_training_files(n=num_files, include_txt_extension=False)
 
@@ -110,10 +110,10 @@ if __name__ == "__main__":
     print 'Suspect filenames:', suspect_file_list
 
     atom_type = "paragraph" # ["paragraph", "full"]
-    method = "kth_in_sent" # ["kth_in_sent", "anchor", "full"]
-    n = 4
+    method = "anchor" # ["kth_in_sent", "anchor", "full"]
+    n = 5
     k = 5
-    confidence_method = "containment" # ["containment", "jaccard"]
+    confidence_method = "jaccard" # ["containment", "jaccard"]
 
     tester = ExtrinsicTester(atom_type, method, n, k, confidence_method, suspect_file_list, source_file_list)
     tester.plot_ROC_curve()
