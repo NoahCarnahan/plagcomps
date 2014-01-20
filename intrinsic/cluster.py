@@ -7,6 +7,8 @@ from scipy.spatial.distance import pdist
 from scipy.cluster.hierarchy import linkage, fcluster
 from collections import Counter
 
+from kmedians import kmedians
+
 def cluster(method, k, items):
     if method == "kmeans":
         return _kmeans(items, k)
@@ -18,6 +20,14 @@ def cluster(method, k, items):
         return outlier_detection.density_based(items)
     else:
         raise ValueError("Invalid cluster method. Acceptable values are 'kmeans', 'agglom', or 'hmm'.")
+
+def _kmedians(stylo_vectors, k):
+    features = array(stylo_vectors)
+
+    clusterer = kmedians(k)
+    clusterer.fit(features)
+
+    return clusterer.get_confidences()
 
 def _kmeans(stylo_vectors, k):
     '''
