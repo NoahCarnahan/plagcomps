@@ -1,7 +1,7 @@
 from numpy import mean, std, sqrt, log, exp
 from scipy.stats import norm
 
-def density_based(stylo_vectors, impurity=.2):
+def density_based(stylo_vectors, center_at_mean=True, num_to_ignore=1, impurity=.2):
     '''
     Implements the algorithm described in Stein, Lipka, Prettenhofer's
     "Intrinsic Plagiarism Analysis", Section 2.4 "Outlier Detection"
@@ -13,6 +13,12 @@ def density_based(stylo_vectors, impurity=.2):
     be extended to remove the <k> largest/smallest observations before computing
     sample mean/std)
 
+    if <center_at_mean>, then normal dist is centered at feature's mean
+    if not, then normal dist at feature's median
+
+    When calculating the mean, the minimum and maximum <num_to_ignore> elements
+    are ignored. 
+
     NOTE <impurity> argument is ignored right now.
     '''
     transpose = _rotate_vectors(stylo_vectors)
@@ -20,7 +26,7 @@ def density_based(stylo_vectors, impurity=.2):
 
     means, stds, mins, medians, maxs = [], [], [], [], []
     for row in transpose:
-        cur_mean, cur_std, cur_min, cur_median, cur_max = _get_distribution_features(row)
+        cur_mean, cur_std, cur_min, cur_median, cur_max = _get_distribution_features(row, num_to_ignore)
         means.append(cur_mean)
         stds.append(cur_std)
         mins.append(cur_min)
@@ -35,35 +41,32 @@ def density_based(stylo_vectors, impurity=.2):
         featurewise_nonplag_prob = []
         featurewise_plag_prob = []
 
-        
-        # plag_prob = impurity
-        # non_plag_prob = (1 - impurity)
-
         for feat_num in xrange(len(vec)):
             # TODO plag_prob is just constant -- precompute this
             cur_val = vec[feat_num]
-            cur_mean, cur_std = means[feat_num], stds[feat_num]
+            cur_center = means[feat_num] if center_at_mean else medians[feat_num]
+            cur_std = stds[feat_num]
             cur_min, cur_max = mins[feat_num], maxs[feat_num]
             
-            if not _in_uncertainty_interval(cur_val, cur_mean, cur_std):
-                featurewise_nonplag_prob.append(_get_norm_prob(cur_val, cur_mean, cur_std))
+            if not _in_uncertainty_interval(cur_val, cur_center, cur_std):
+                featurewise_nonplag_prob.append(_get_norm_prob(cur_val, cur_center, cur_std))
                 featurewise_plag_prob.append(_get_unif_prob(cur_val, cur_min, cur_max))
             # TODO what happens if all points are in uncertainty interval??
 
         
         # Sum up logs and exponentiate as opposed to multiplying lots of
         # small numbers
+        # TODO could weight each feature differently
         plag_prob = exp(sum(log(featurewise_plag_prob)))
         non_plag_prob = exp(sum(log(featurewise_nonplag_prob)))
+
         # TODO: Should we use calculated non_plag_prob or calculated plag_prob?
-        # Or a ratio of the two?
+        # Or a ratio of the two? i.e. (plag_prob / non_plag_prob)
         if plag_prob > non_plag_prob:
             confidences.append(plag_prob)
             # TODO deal with division by 0 if trying to use a ratio
-            #confidences.append(plag_prob / non_plag_prob)
         else:
             confidences.append(1 - plag_prob)
-            #confidences.append(non_plag_prob / plag_prob)
             
     scaled = _scale_confidences(confidences)
 
@@ -82,7 +85,7 @@ def _scale_confidences(confs):
         return [x / max_conf for x in confs]
 
 
-def _get_distribution_features(row, extremes_to_ignore=1):
+def _get_distribution_features(row, extremes_to_ignore):
     '''
     <row> corresponds to all the observed values of feature
 
@@ -102,14 +105,14 @@ def _get_distribution_features(row, extremes_to_ignore=1):
     return mean_of_row, std_of_row, min_val, median_val, max_val
 
 
-def _in_uncertainty_interval(x, mean_dist, sd_dist):
+def _in_uncertainty_interval(x, center, sd_dist):
     '''
     Returns whether <x> is between 1 and 2 standard deviations away from
-    <mean_dist> in either direction. Such points are dubbed "uncertain"
+    <center> in either direction. Such points are dubbed "uncertain"
     in Stein et. al.'s paper
     '''
-    right_interval = (mean_dist + sd_dist, mean_dist + 2 * sd_dist)
-    left_interval = (mean_dist - 2 * sd_dist, mean_dist - sd_dist)
+    right_interval = (center + sd_dist, center + 2 * sd_dist)
+    left_interval = (center - 2 * sd_dist, center - sd_dist)
 
     if right_interval[0] <= x <= right_interval[1] or \
         left_interval[0] <= x <= left_interval[1]:

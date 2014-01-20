@@ -88,17 +88,20 @@ def populate_database(atom_type, num, features=None):
 
     session.close()
 
-def evaluate_n_documents(features, cluster_type, k, atom_type, n):
+def evaluate_n_documents(features, cluster_type, k, atom_type, n, min_len=None):
     '''
     Return the evaluation (roc curve path, area under the roc curve) of the first n training
     documents parsed by atom_type, using the given features, cluster_type, and number of clusters k.
+
+    <min_len> is the minimum number of characters a document must contain
+    in order to be included. If None, then all documents are considered
     '''
     # Get the first n training files
     # NOTE (nj) pass keyword arg min_len=35000 (or some length) in order to 
-    # get <n> files which all contain at least 350000 (or some length) characters, like:
+    # get <n> files which all contain at least 35000 (or some length) characters, like:
     # first_training_files = IntrinsicUtility().get_n_training_files(n, min_len=35000)
     # as is done in Stein's paper
-    first_training_files = IntrinsicUtility().get_n_training_files(n)
+    first_training_files = IntrinsicUtility().get_n_training_files(n, min_len=min_len)
     
     # Also returns reduced_docs from <first_training_files>
     roc_path, roc_auc, _ = evaluate(features, cluster_type, k, atom_type, first_training_files)
@@ -112,7 +115,7 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n):
     
     return roc_path, roc_auc
 
-def evaluate(features, cluster_type, k, atom_type, docs, reduced_docs=None):
+def evaluate(features, cluster_type, k, atom_type, docs, reduced_docs=None, **clusterargs):
     '''
     Return the roc curve path and area under the roc curve for the given list of documents parsed
     by atom_type, using the given features, cluster_type, and number of clusters k.
@@ -137,7 +140,9 @@ def evaluate(features, cluster_type, k, atom_type, docs, reduced_docs=None):
         count += 1
         if DEBUG:
             print "On document", d, ". The", count, "th document."
-        likelihood = cluster(cluster_type, k, d.get_feature_vectors(features, session))
+
+        feature_vecs = d.get_feature_vectors(features, session)
+        likelihood = cluster(cluster_type, k, feature_vecs, **clusterargs)
         plag_likelihoods.append(likelihood)
     
     roc_path, roc_auc = _roc(reduced_docs, plag_likelihoods, features, cluster_type, k, atom_type)
@@ -146,6 +151,35 @@ def evaluate(features, cluster_type, k, atom_type, docs, reduced_docs=None):
     # Return reduced_docs for caching in case we call <evaluate> multiple times
     return roc_path, roc_auc, reduced_docs
     
+def compare_outlier_params(n, features=None, min_len=None):
+    atom_types = ['paragraph', 'sentence']
+    center_at_mean = [True, False]
+    num_to_ignore = [1, 3, 5]
+
+    docs = IntrinsicUtility().get_n_training_files(n, min_len=min_len)
+    if not features:
+        features = FeatureExtractor.get_all_feature_function_names()
+
+    results = []
+    
+    for atom_type in atom_types:
+        for ignored in num_to_ignore:
+            for c in center_at_mean:
+                roc_path, roc_auc, reduced_docs = \
+                    evaluate(features, 'outlier', 2, atom_type, docs,
+                             center_at_mean=c, num_to_ignore=ignored)
+
+                one_trial = (atom_type, min_len, ignored, roc_path, roc_auc)
+                results.append(one_trial)
+                print one_trial
+                print '-'*30
+
+    for r in results:
+        print r
+    return results
+
+
+
 def compare_cluster_methods(feature, n, cluster_types):
     '''
     Generates a plot that displays ROC curves based on the first n documents and the given
@@ -632,4 +666,3 @@ def _cluster_auc_test(num_plag, num_noplag, mean_diff, std, dimensions = 1, repe
 if __name__ == "__main__":
     _test()
     #_stats_evaluate_n_documents(["num_chars", "avg(num_chars)", "std(num_chars)", "avg(avg(num_chars))", "avg(std(num_chars)"], "paragraph", 25) 
-

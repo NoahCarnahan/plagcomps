@@ -11,7 +11,7 @@ from scipy.cluster.hierarchy import linkage, fcluster
 from collections import Counter
 
 
-def cluster(method, k, items):
+def cluster(method, k, items, **kwargs):
     if method == "kmeans":
         return _kmeans(items, k)
     elif method == "agglom":
@@ -23,7 +23,7 @@ def cluster(method, k, items):
     elif method == "median_kmeans":
         return _median_kmeans(items, k)
     elif method == "outlier":
-        return outlier_detection.density_based(items)
+        return outlier_detection.density_based(items, **kwargs)
     elif method == "kmedians":
         return _kmedians(items, k)
     else:
