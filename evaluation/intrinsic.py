@@ -181,6 +181,11 @@ def compare_cluster_methods(feature, n, cluster_types):
                 actuals.append(1 if d.span_is_plagiarized(span) else 0)
         
         # Calculate the fpr and tpr
+       # Outlier breaks here.
+        print "----"*20
+        print "method: ", method
+        print "fewature", feature       
+        print "----"*20
         fpr, tpr, thresholds = sklearn.metrics.roc_curve(actuals, confidences, pos_label=1)
         roc_auc = sklearn.metrics.auc(fpr, tpr)
         pyplot.plot(fpr, tpr, label='%s (area = %0.2f)' % (label, roc_auc))
@@ -318,7 +323,7 @@ def _roc(reduced_docs, plag_likelihoods, features = None, cluster_type = None, k
     # confidences is a list of confidence scores for passages
     # So, if confidences[i] = .3 and actuals[i] = 1 then passage i is plagiarized and
     # we are .3 certain that it is plagiarism (So its in the non-plag cluster).
-
+    
     fpr, tpr, thresholds = sklearn.metrics.roc_curve(actuals, confidences, pos_label=1)
     roc_auc = sklearn.metrics.auc(fpr, tpr)
     

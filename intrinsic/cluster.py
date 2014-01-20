@@ -72,8 +72,36 @@ def _kmeans(stylo_vectors, k):
             confidences.append(conf)
     else:
         # TODO: Develop a notion of confidence when k != 2
-        plag_cluster = Counter(assigned_clusters).most_common()[-1][0]
-        confidences = [1 if x == plag_cluster else 0 for x in assigned_clusters]
+        non_plag_cluster = Counter(assigned_clusters).most_common()[0][0]
+        max_dist = 0
+        max_dist_vec = normalized_features[0]
+
+        for i in xrange(len(assigned_clusters)):
+            if assigned_clusters[i] == non_plag_cluster:
+                dist = float(pdist(matrix([centroids[non_plag_cluster], normalized_features[i]]))) 
+                if dist > max_dist:
+                    max_dist_vec = normalized_features[i]
+                    max_dist = dist
+
+        avg_centroid_dist = 0
+        sum_dist = 0
+        centroid_distance = {}
+        for center in centroids:
+            sum_dist += float(pdist(matrix([center, centroids[non_plag_cluster]])))
+            avg_centroid_dist = float(sum_dist/len(centroids))
+        
+        confidences = []
+        for i in xrange(len(assigned_clusters)):
+            try:
+                if assigned_clusters[i] != non_plag_cluster:
+                    distance_from_max = float(pdist(matrix([max_dist_vec, normalized_features[i]])))
+                    centroid_distance = float(pdist(matrix([centroids[assigned_clusters[i]], centroids[non_plag_cluster]])))
+                    conf = (1-(float(1/(max_dist/distance_from_max))))*float(centroid_distance/avg_centroid_dist)
+                    confidences.append(conf)
+                else:
+                    confidences.append(0)
+            except:
+                confidences.append(0)
         
     return confidences
 
@@ -88,6 +116,7 @@ def _median_kmeans(stylo_vectors, k):
     feature_mat = array(stylo_vectors)
     normalized_features = whiten(feature_mat)
     centroids, assigned_clusters = kmeans2(normalized_features, k, minit = 'points')
+
     # find largest cluster, and call it the "non-plagiarized" cluster
     non_plag_cluster = Counter(assigned_clusters).most_common()[0][0] # non-plag is largest cluster
     non_plag_vectors = [x for i, x in enumerate(stylo_vectors, 0) if assigned_clusters[i] == non_plag_cluster]
@@ -229,18 +258,20 @@ def _all_clusters_all_features():
         (ev.cluster, "kmeans", ("kmeans", 2)),
         (ev.cluster, "agglom", ("agglom", 2)),
         (ev.cluster, "hmm", ("hmm", 2)),
-        (ev.cluster, "outlier", ("outlier", None)),
+        (ev.cluster, "kmeans", ("kmeans", 3)),
+        (ev.cluster, "kmeans", ("kmeans", 4)),
+        (ev.cluster, "kmeans", ("kmeans", 5))
     ]
 
     unique_features = []
     
-    for char_feature in [
-        "punctuation_percentage",
-    ]:
-        for char_modifier in [
-            "", "avg(", "std(", "avg(avg(", "avg(std(", "avg(avg(avg(", "avg(avg(std("
-        ]:
-            unique_features.append(char_modifier + char_feature + ")" * char_modifier.count("("))
+    #for char_feature in [
+    #    "punctuation_percentage",
+    #]:
+    #    for char_modifier in [
+    #        "", "avg(", "std(", "avg(avg(", "avg(std(", "avg(avg(avg(", "avg(avg(std("
+    #    ]:
+    #        unique_features.append(char_modifier + char_feature + ")" * char_modifier.count("("))
 
     for word_feature in [
         "num_chars",
@@ -268,5 +299,4 @@ def _all_clusters_all_features():
 
 if __name__ == "__main__":
     #_test()
-    _all_clusters_all_features()
-        
+    _all_clusters_all_features() 
