@@ -883,6 +883,22 @@ class FeatureExtractor:
             if word.strip(".").lower() == target_word:
                 total += 1
         return total
+        
+    def pos_trigram(self, word_spans_index_start, word_spans_index_end, pos):
+        '''
+        pos is a tuple of parts-of-speech e.g. ("NN", "NN", "NN")
+        '''
+       
+        # make sure that we have done PoS tagging
+        if not self.pos_tagged:
+            self._init_tag_list(self.text)
+        
+        total = 0
+        for i in range(word_spans_index_start, word_spans_index_end-2):
+            tag1, tag2, tag3, = self.pos_tags[i][1], self.pos_tags[i+1][1], self.pos_tags[i+2][1]
+            if (tag1, tag2, tag3) == pos:
+                total += 1
+        return total
 
 def _test():
 
