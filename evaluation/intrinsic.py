@@ -620,5 +620,5 @@ def _cluster_auc_test(num_plag, num_noplag, mean_diff, std, dimensions = 1, repe
 # intr.evaluate_n_documents(features, 'outlier', 2, 'paragraph', 1)
 
 if __name__ == "__main__":
-    _test()
-
+    #_test()
+    _stats_evaluate_n_documents(["num_chars", "avg(num_chars)", "std(num_chars)", "avg(avg(num_chars))", "avg(std(num_chars)"], "paragraph", 25) 

@@ -21,8 +21,6 @@ from nltk.corpus import cmudict
 # self.paragraph_spans. These indices represent the first (inclusive) and last (exclusive)
 # character, word, sentence, or paragraph that the feature is being extracted from.
 #
-# For example, average_word_length(4, 10) returns the average length of words 4 through 9.
-#
 # A certain amount of preprocessing may be desirable. Add a method called
 # _init_my_new_feature_name and call it in the __init__ method.
 
@@ -36,7 +34,6 @@ class FeatureExtractor:
     
         self.features = {}
 
-        self.average_word_length_initialized = False
         self.pos_tags = None
         self.pos_tagged = False
 
@@ -223,7 +220,7 @@ class FeatureExtractor:
     def _feature_type(self, func_name):
         '''
         Return at what atom level the feature with the given name operates.
-        For example _feature_type("average_word_length") returns "word".
+        For example _feature_type("num_chars") returns "word".
         '''
         try:
             func = getattr(self, func_name)
@@ -273,7 +270,7 @@ class FeatureExtractor:
         self.meta_feature([word_to_sentence_average, num_chars], 0, 10)
         will return the average number of characters per word pulled from the first 10 sentences
         '''
-        print "running a metafeature with", subfeatures
+        #print "running a metafeature with", subfeatures
 
         outer_feature = getattr(self, subfeatures[0])
         inner_features = subfeatures[1:]
@@ -452,36 +449,6 @@ class FeatureExtractor:
     
         x = square_sum - 2 * u * (sum_x[char_end] - sum_x[char_start]) + (char_end - char_start) * u * u
         return math.sqrt(x / float(char_end - char_start))
-    
-    def _init_average_word_length(self):
-        '''
-        Initializes the word_length_sum_table. word_length_sum_table[i] is the sum of the
-        lengths of words from 0 to i-1.
-        '''
-        # TODO: Check if words are punctuation/have punctuation on them?
-        
-        
-        for start, end in self.word_spans:
-            sum_table.append((end - start) + sum_table[-1])
-        self.word_length_sum_table = sum_table
-        
-        self.average_word_length_initialized = True
-    
-    def average_word_length(self, word_spans_index_start, word_spans_index_end):
-        '''
-        Return the average word length for words [word_spans_index_start : word_spans_index_end].
-        
-        For example: If self.text = "The brown fox jumped" then self.word_spans = [(0, 3),
-        (4, 9), (10, 13), (14, 20)]. So, average_word_length(1, 3) returns 4, the average
-        length of "brown" and "fox" (which are designated by the spans (4, 9) and
-        (10, 13)).
-        '''
-        if not self.average_word_length_initialized:
-            self._init_average_word_length()
-            
-        total_word_length = self.word_length_sum_table[word_spans_index_end] - self.word_length_sum_table[word_spans_index_start]
-        num_words = word_spans_index_end - word_spans_index_start
-        return float(total_word_length) / max(num_words, 1)
     
     def _init_average_sentence_length(self):
         '''
@@ -819,9 +786,9 @@ def _test():
 
     #print f.get_feature_vectors(["avg(num_chars)"], "sentence")
     if f.get_feature_vectors(["avg(num_chars)"], "sentence") == [(3.75,), (5.0,), (3.0,)]:
-        print "average_word_length test passed"
+        print "avg(num_chars) test passed"
     else:
-        print "average_word_length test FAILED"
+        print "avg(num_chars) test FAILED"
 
     # TODO: ADD TEST FOR INTERNAL WORD FREQ CLASS
     f.get_feature_vectors(["avg_internal_word_freq_class"], "sentence")
@@ -851,9 +818,9 @@ def _test():
     #    print "syntactic_complexity_average test FAILED"
     
 if __name__ == "__main__":
-    #_test()
+    _test()
 
-    f = FeatureExtractor("I absolutely go incredibly far. Zach went fast over sand crab land.")
+    #f = FeatureExtractor("I absolutely go incredibly far. Zach went fast over sand crab land.")
     #print f.get_feature_vectors(["num_chars", "avg(num_chars)", "avg(avg(num_chars))", "std(num_chars)", "avg(std(num_chars))", "std(std(num_chars))"], "paragraph")
-    print f.get_feature_vectors(["punctuation_percentage", "avg(punctuation_percentage)", "std(punctuation_percentage)"], "paragraph")
+    #print f.get_feature_vectors(["punctuation_percentage", "avg(punctuation_percentage)", "std(punctuation_percentage)"], "paragraph")
 
