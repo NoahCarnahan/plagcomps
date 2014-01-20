@@ -842,6 +842,47 @@ class FeatureExtractor:
         except ZeroDivisionError:
             # Either num of word or num of sentences was zero, so return 100, an "easy" score (according to wikipedia)
             return 0
+    
+    def frequency_of_word_of(self, word_spans_index_start, word_spans_index_end):
+        '''
+        This is a word level feature that returns the number of occurences of the word "of" for the
+        given words.
+        '''
+        return self._frequency_of_word(word_spans_index_start, word_spans_index_end, "of")
+        
+    def frequency_of_word_is(self, word_spans_index_start, word_spans_index_end):
+        '''
+        This is a word level feature that returns the number of occurences of the word "is" for the
+        given words.
+        '''
+        return self._frequency_of_word(word_spans_index_start, word_spans_index_end, "is")
+        
+    def frequency_of_word_the(self, word_spans_index_start, word_spans_index_end):
+        '''
+        This is a word level feature that returns the number of occurences of the word "the" for the
+        given words.
+        '''
+        return self._frequency_of_word(word_spans_index_start, word_spans_index_end, "the")
+        
+    def frequency_of_word_been(self, word_spans_index_start, word_spans_index_end):
+        '''
+        This is a word level feature that returns the number of occurences of the word "been" for the
+        given words.
+        '''
+        return self._frequency_of_word(word_spans_index_start, word_spans_index_end, "been")
+
+    def _frequency_of_word(self, start, end, target_word):
+        '''
+        This helper function return the number of occurence of target_word in in the section of text
+        deliminated by the start and end self.word_spans indices.
+        '''
+        total = 0
+        for i in range(start, end):
+            w_start, w_end = self.word_spans[i]
+            word = self.text[w_start:w_end]
+            if word.strip(".").lower() == target_word:
+                total += 1
+        return total
 
 def _test():
 
@@ -908,6 +949,36 @@ def _test():
         print "average_syllables_per_word test passed"
     else:
         print "average_syllables_per_word test FAILED"
+    
+    f = FeatureExtractor("The brown fox ate. I go to the school? Believe it. Of mice and men. How have you been?")
+    #print f.get_feature_vectors(["average_syllables_per_word"], "sentence")
+    if f.get_feature_vectors(["frequency_of_word_of"], "sentence") == [(0,), (0,), (0,), (1,), (0,)]:
+        print "frequency_of_word_of test passed"
+    else:
+        print "frequency_of_word_of test FAILED"
+        
+    f = FeatureExtractor("The brown fox ate. I go to the school? Believe it. This is reprehensible. How have you been?")
+    #print f.get_feature_vectors(["average_syllables_per_word"], "sentence")
+    if f.get_feature_vectors(["frequency_of_word_been"], "sentence") == [(0,), (0,), (0,), (0,), (1,)]:
+        print "frequency_of_word_been test passed"
+    else:
+        print "frequency_of_word_been test FAILED"
+    
+    f = FeatureExtractor("The brown fox ate. I go to the school? Believe it. This is reprehensible. How have you been?")
+    #print f.get_feature_vectors(["average_syllables_per_word"], "sentence")
+    if f.get_feature_vectors(["frequency_of_word_the"], "sentence") == [(1,), (1,), (0,), (0,), (0,)]:
+        print "frequency_of_word_the test passed"
+    else:
+        print "frequency_of_word_the test FAILED"
+    
+    f = FeatureExtractor("The brown fox ate. I go to the school? Believe it. This is reprehensible. How have you been?")
+    #print f.get_feature_vectors(["average_syllables_per_word"], "sentence")
+    if f.get_feature_vectors(["frequency_of_word_is"], "sentence") == [(0,), (0,), (0,), (1,), (0,)]:
+        print "frequency_of_word_is test passed"
+    else:
+        print "frequency_of_word_is test FAILED"
+    
+    
     
     #f = FeatureExtractor("The brown fox ate. I go to the school. Believe it. I go.")
     ##print f.get_feature_vectors(["syntactic_complexity_average"], "paragraph")
