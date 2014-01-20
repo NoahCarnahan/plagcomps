@@ -65,8 +65,11 @@ def _scale_confidences(confs):
     the maximum "confidence"
     '''
     max_conf = max(confs)
-
-    return [x / max_conf for x in confs]
+    
+    if max_conf == 0:
+        return [0]
+    else:
+        return [x / max_conf for x in confs]
 
 
 def _get_distribution_features(row):

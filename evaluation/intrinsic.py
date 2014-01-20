@@ -4,7 +4,7 @@ from ..shared.util import BaseUtility
 from ..dbconstants import username
 from ..dbconstants import password
 from ..dbconstants import dbname
-from ..intrinsic.cluster import cluster
+from plagcomps.intrinsic.cluster import cluster
 
 import datetime
 import numpy.random
@@ -17,8 +17,6 @@ import sklearn.metrics
 import matplotlib
 matplotlib.use('pdf')
 import matplotlib.pyplot as pyplot
-
-
 
 import sqlalchemy
 from sqlalchemy import Table, Column, Sequence, Integer, String, Float, DateTime, ForeignKey, and_
@@ -105,11 +103,11 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n):
     roc_path, roc_auc = evaluate(features, cluster_type, k, atom_type, first_training_files)
     
     # Store the figures in the database
-    session = Session()
-    f = _Figure(roc_path, "roc", roc_auc, sorted(features), cluster_type, k, atom_type, n)
-    session.add(f)
-    session.commit()
-    session.close()
+    # session = Session()
+    # f = _Figure(roc_path, "roc", roc_auc, sorted(features), cluster_type, k, atom_type, n)
+    # session.add(f)
+    # session.commit()
+    # session.close()
     
     return roc_path, roc_auc
 
@@ -147,7 +145,11 @@ def compare_cluster_methods(feature, n, cluster_types):
     '''
     Generates a plot that displays ROC curves based on the first n documents and the given
     feature. Creates an ROC curve for each of the cluster methods in cluster_types.
-    cluster_types should be a list of tuples like ("means", 2).
+    cluster_types should be a list of tuples like (function_obj, label, (argument list)).
+    argument list should NOT include the final argument, which is assumed to be feature
+    vectors.
+    So, one might call the function as follows:
+       compare_cluster_methods("average_word_length", 100, [(cluster, "2means", ("kmeans,"2))])
     '''
     
     # Get the reduced_docs
@@ -159,13 +161,17 @@ def compare_cluster_methods(feature, n, cluster_types):
     pyplot.clf()
     
     # plot a curve for each clustering strategy
-    for meth_name, k in cluster_types:
+    for method in cluster_types:
+        func = method[0]
+        label = method[1]
+        
         # build confidences and actuals
         confidences = []
         actuals = []
         for d in reduced_docs:
             # add to confidences
-            passage_confidences = cluster(meth_name, k, d.get_feature_vectors([feature], session))
+            args = method[2] + (d.get_feature_vectors([feature], session),)
+            passage_confidences = func(*args)
             for c in passage_confidences:
                 confidences.append(c)
             # add to actuals
@@ -175,9 +181,14 @@ def compare_cluster_methods(feature, n, cluster_types):
                 actuals.append(1 if d.span_is_plagiarized(span) else 0)
         
         # Calculate the fpr and tpr
+       # Outlier breaks here.
+        print "----"*20
+        print "method: ", method
+        print "fewature", feature       
+        print "----"*20
         fpr, tpr, thresholds = sklearn.metrics.roc_curve(actuals, confidences, pos_label=1)
         roc_auc = sklearn.metrics.auc(fpr, tpr)
-        pyplot.plot(fpr, tpr, label='%s (area = %0.2f)' % (str(k)+meth_name, roc_auc))
+        pyplot.plot(fpr, tpr, label='%s (area = %0.2f)' % (label, roc_auc))
     
     # plot labels and such
     pyplot.plot([0, 1], [0, 1], 'k--')
@@ -312,6 +323,7 @@ def _roc(reduced_docs, plag_likelihoods, features = None, cluster_type = None, k
     # confidences is a list of confidence scores for passages
     # So, if confidences[i] = .3 and actuals[i] = 1 then passage i is plagiarized and
     # we are .3 certain that it is plagiarism (So its in the non-plag cluster).
+    
     fpr, tpr, thresholds = sklearn.metrics.roc_curve(actuals, confidences, pos_label=1)
     roc_auc = sklearn.metrics.auc(fpr, tpr)
     
@@ -330,7 +342,7 @@ def _roc(reduced_docs, plag_likelihoods, features = None, cluster_type = None, k
     pyplot.legend(loc="lower right")
     
     #path = "figures/roc"+str(time.time())+".pdf"
-    path = ospath.join(ospath.dirname(__file__), "../figures/roc"+str(time.time())+".pdf")
+    path = ospath.join(ospath.dirname(__file__), "../figures/rocMARCUSTESTING"+str(time.time())+".pdf")
     pyplot.savefig(path)
     return path, roc_auc
 
@@ -613,4 +625,5 @@ def _cluster_auc_test(num_plag, num_noplag, mean_diff, std, dimensions = 1, repe
 
 if __name__ == "__main__":
     _test()
+    #_stats_evaluate_n_documents(["num_chars", "avg(num_chars)", "std(num_chars)", "avg(avg(num_chars))", "avg(std(num_chars)"], "paragraph", 25) 
 
