@@ -1,4 +1,5 @@
 import hmm
+from plagcomps.intrinsic import outlier_detection
 
 from numpy import array, matrix, random
 from scipy.cluster.vq import kmeans2, whiten
@@ -17,6 +18,8 @@ def cluster(method, k, items):
         return _median_simple(items)
     elif method == "median_kmeans":
         return _median_kmeans(items, k)
+    elif method == "outlier":
+        return outlier_detection.density_based(items)
     else:
         raise ValueError("Invalid cluster method. Acceptable values are 'kmeans', 'agglom', or 'hmm'.")
 
@@ -107,9 +110,6 @@ def _get_list_median(vectors):
     else:
         return float(vectors[length / 2][0])
 
-def _log_regression(stylo_vectors):
-    pass
-
 def _agglom(stylo_vectors, k):
     '''
     Given a list of stylo_vectors, where each element is itself a list ('vector'),
@@ -198,12 +198,5 @@ if __name__ == "__main__":
 
     v = [[1], [2], [3], [10], [11], [12], [13], [25], [26], [27]]
     print _median_kmeans(v, 3)
-
-
-
-
-
-
-
 
         

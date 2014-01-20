@@ -48,7 +48,7 @@ def populate_EVERYTHING():
 
     for doc in all_test_files:
         for atom_type in ["sentence", "paragraph",]:
-            for feature in ['avg(num_chars)', "std(num_chars)", 'stopword_percentage', 'average_sentence_length', 'punctuation_percentage', "syntactic_complexity", "syntactic_complexity_average", "avg_internal_word_freq_class", "avg_external_word_freq_class"]:
+            for feature in ['avg(num_chars)', "std(num_chars)", 'stopword_percentage', 'average_sentence_length', 'punctuation_percentage', "syntactic_complexity", "syntactic_complexity_average", "avg_internal_word_freq_class", "avg_external_word_freq_class", "flesch_reading_ease"]:
                 d = _get_reduced_docs(atom_type, [doc], session)[0]
                 print "Calculating", feature, "for", str(d), str(datetime.datetime.now())
                 d.get_feature_vectors([feature], session)
@@ -76,7 +76,8 @@ def populate_database(atom_type, num, features=None):
                     'syntactic_complexity',
                     "avg(num_chars)",
                     "std(num_chars)",
-                    "syntactic_complexity_average"
+                    "syntactic_complexity_average",
+                    "flesch_reading_ease",
                     ]
     
     count = 0
@@ -95,6 +96,10 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n):
     documents parsed by atom_type, using the given features, cluster_type, and number of clusters k.
     '''
     # Get the first n training files
+    # NOTE (nj) pass keyword arg min_len=35000 (or some length) in order to 
+    # get <n> files which all contain at least 350000 (or some length) characters, like:
+    # first_training_files = IntrinsicUtility().get_n_training_files(n, min_len=35000)
+    # as is done in Stein's paper
     first_training_files = IntrinsicUtility().get_n_training_files(n)
     
     roc_path, roc_auc = evaluate(features, cluster_type, k, atom_type, first_training_files)
@@ -137,6 +142,66 @@ def evaluate(features, cluster_type, k, atom_type, docs):
     roc_path, roc_auc = _roc(reduced_docs, plag_likelihoods, features, cluster_type, k, atom_type)
     session.close()
     return roc_path, roc_auc
+    
+def compare_cluster_methods(feature, n, cluster_types):
+    '''
+    Generates a plot that displays ROC curves based on the first n documents and the given
+    feature. Creates an ROC curve for each of the cluster methods in cluster_types.
+    cluster_types should be a list of tuples like (function_obj, label, (argument list)).
+    argument list should NOT include the final argument, which is assumed to be feature
+    vectors.
+    So, one might call the function as follows:
+       compare_cluster_methods("average_word_length", 100, [(cluster, "2means", ("kmeans,"2))])
+    '''
+    
+    # Get the reduced_docs
+    docs = IntrinsicUtility().get_n_training_files(n)
+    session = Session()
+    reduced_docs = _get_reduced_docs("paragraph", docs, session)
+    
+    # Prepare to plot
+    pyplot.clf()
+    
+    # plot a curve for each clustering strategy
+    for method in cluster_types:
+        func = method[0]
+        label = method[1]
+        
+        # build confidences and actuals
+        confidences = []
+        actuals = []
+        for d in reduced_docs:
+            # add to confidences
+            args = method[2] + (d.get_feature_vectors([feature], session),)
+            passage_confidences = func(*args)
+            for c in passage_confidences:
+                confidences.append(c)
+            # add to actuals
+            spans = d.get_spans()
+            for i in xrange(len(spans)):
+                span = spans[i]
+                actuals.append(1 if d.span_is_plagiarized(span) else 0)
+        
+        # Calculate the fpr and tpr
+        fpr, tpr, thresholds = sklearn.metrics.roc_curve(actuals, confidences, pos_label=1)
+        roc_auc = sklearn.metrics.auc(fpr, tpr)
+        pyplot.plot(fpr, tpr, label='%s (area = %0.2f)' % (label, roc_auc))
+    
+    # plot labels and such
+    pyplot.plot([0, 1], [0, 1], 'k--')
+    pyplot.xlim([0.0, 1.0])
+    pyplot.ylim([0.0, 1.0])
+    pyplot.xlabel('False Positive Rate')
+    pyplot.ylabel('True Positive Rate')
+    pyplot.title(feature + ", " + str(n) + " docs") 
+    pyplot.legend(loc="lower right")
+    
+    path = ospath.join(ospath.dirname(__file__), "../figures/clust_comp_"+feature+"_"+str(time.time())+".pdf")
+    pyplot.savefig(path)
+    
+    session.close()
+    
+    return path
 
 def _stats_evaluate_n_documents(features, atom_type, n):
     '''
@@ -539,6 +604,21 @@ def _cluster_auc_test(num_plag, num_noplag, mean_diff, std, dimensions = 1, repe
     if repetitions > 1:
         for key in averages:
             print key, sum(averages[key])/float(max(1, len(averages[key])))
+
+
+# import plagcomps.evaluation.intrinsic as intr
+# features = ['punctuation_percentage',
+#                     'stopword_percentage',
+#                     'average_sentence_length',
+#                     'avg_internal_word_freq_class',
+#                     'avg_external_word_freq_class',
+#                     'syntactic_complexity',
+#                     "avg(num_chars)",
+#                     "std(num_chars)",
+#                     "syntactic_complexity_average",
+#                     "flesch_reading_ease",
+#                     ]
+# intr.evaluate_n_documents(features, 'outlier', 2, 'paragraph', 1)
 
 if __name__ == "__main__":
     # _test()
