@@ -1,4 +1,4 @@
-from numpy import mean, std, sqrt
+from numpy import mean, std, sqrt, log, exp
 from scipy.stats import norm
 
 def density_based(stylo_vectors, impurity=.2):
@@ -18,21 +18,26 @@ def density_based(stylo_vectors, impurity=.2):
     transpose = _rotate_vectors(stylo_vectors)
     confidences = []
 
-    means, stds, mins, maxs = [], [], [], []
+    means, stds, mins, medians, maxs = [], [], [], [], []
     for row in transpose:
-        cur_mean, cur_std, cur_min, cur_max = _get_distribution_features(row)
+        cur_mean, cur_std, cur_min, cur_median, cur_max = _get_distribution_features(row)
         means.append(cur_mean)
         stds.append(cur_std)
         mins.append(cur_min)
+        medians.append(cur_median)
         maxs.append(cur_max)
 
     for i in xrange(len(stylo_vectors)):
         vec = stylo_vectors[i]
+        # For current <vec>,
+        # featurewise_plag_prob[i] == prob. that feature <i> 
+        # was plagiarized in <vec>
+        featurewise_nonplag_prob = []
+        featurewise_plag_prob = []
+
+        
         # plag_prob = impurity
         # non_plag_prob = (1 - impurity)
-
-        plag_prob = 1.0
-        non_plag_prob = 1.0
 
         for feat_num in xrange(len(vec)):
             # TODO plag_prob is just constant -- precompute this
@@ -41,10 +46,15 @@ def density_based(stylo_vectors, impurity=.2):
             cur_min, cur_max = mins[feat_num], maxs[feat_num]
             
             if not _in_uncertainty_interval(cur_val, cur_mean, cur_std):
-                non_plag_prob *= _get_norm_prob(cur_val, cur_mean, cur_std)
-                plag_prob *= _get_unif_prob(cur_val, cur_min, cur_max)
+                featurewise_nonplag_prob.append(_get_norm_prob(cur_val, cur_mean, cur_std))
+                featurewise_plag_prob.append(_get_unif_prob(cur_val, cur_min, cur_max))
             # TODO what happens if all points are in uncertainty interval??
 
+        
+        # Sum up logs and exponentiate as opposed to multiplying lots of
+        # small numbers
+        plag_prob = exp(sum(log(featurewise_plag_prob)))
+        non_plag_prob = exp(sum(log(featurewise_nonplag_prob)))
         # TODO: Should we use calculated non_plag_prob or calculated plag_prob?
         # Or a ratio of the two?
         if plag_prob > non_plag_prob:
@@ -72,40 +82,24 @@ def _scale_confidences(confs):
         return [x / max_conf for x in confs]
 
 
-def _get_distribution_features(row):
+def _get_distribution_features(row, extremes_to_ignore=1):
     '''
     <row> corresponds to all the observed values of feature
 
     Per Section 2.4 in Stein, Lipka, Prettenhofer's "Intrinsic Plagiarism Analysis",
     removes min and max when calculating parameters of Gaussian distribution
     '''
-    min_index, max_index = 0, 0
-    min_val, max_val = row[min_index], row[max_index]
+    sorted_row = sorted(row)
 
-    for i in range(len(row)):
-        obs = row[i]
+    min_val = sorted_row[0]
+    max_val = sorted_row[-1]
+    median_val = sorted_row[len(sorted_row) / 2]
 
-        # Update the extremes. Could keep a heap of smallest/largest
-        # in the case that we want to exclude more than just the single maximum
-        # and single minimum
-        if obs > max_val:
-            max_index = i
-            max_val = obs
-        if obs < min_val:
-            min_index = i
-            min_val = obs
-
-    first_extreme = min(min_index, max_index)
-    second_extreme = max(min_index, max_index)
-
-    row_without_extremes = row[:first_extreme] + row[first_extreme + 1 : second_extreme] + \
-                           row[second_extreme + 1:]
-
-
+    row_without_extremes = sorted_row[extremes_to_ignore : -extremes_to_ignore]
     mean_of_row = mean(row_without_extremes)
     std_of_row = std(row_without_extremes)
 
-    return mean_of_row, std_of_row, min_val, max_val
+    return mean_of_row, std_of_row, min_val, median_val, max_val
 
 
 def _in_uncertainty_interval(x, mean_dist, sd_dist):

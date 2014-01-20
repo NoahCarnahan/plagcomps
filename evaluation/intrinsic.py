@@ -100,7 +100,8 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n):
     # as is done in Stein's paper
     first_training_files = IntrinsicUtility().get_n_training_files(n)
     
-    roc_path, roc_auc = evaluate(features, cluster_type, k, atom_type, first_training_files)
+    # Also returns reduced_docs from <first_training_files>
+    roc_path, roc_auc, _ = evaluate(features, cluster_type, k, atom_type, first_training_files)
     
     # Store the figures in the database
     # session = Session()
@@ -111,7 +112,7 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n):
     
     return roc_path, roc_auc
 
-def evaluate(features, cluster_type, k, atom_type, docs):
+def evaluate(features, cluster_type, k, atom_type, docs, reduced_docs=None):
     '''
     Return the roc curve path and area under the roc curve for the given list of documents parsed
     by atom_type, using the given features, cluster_type, and number of clusters k.
@@ -126,7 +127,9 @@ def evaluate(features, cluster_type, k, atom_type, docs):
     
     session = Session()
     
-    reduced_docs = _get_reduced_docs(atom_type, docs, session)
+    # If previous call cached <reduced_docs>, don't re-query the DB
+    if not reduced_docs:
+        reduced_docs = _get_reduced_docs(atom_type, docs, session)
     plag_likelihoods = []
     
     count = 0
@@ -139,7 +142,9 @@ def evaluate(features, cluster_type, k, atom_type, docs):
     
     roc_path, roc_auc = _roc(reduced_docs, plag_likelihoods, features, cluster_type, k, atom_type)
     session.close()
-    return roc_path, roc_auc
+
+    # Return reduced_docs for caching in case we call <evaluate> multiple times
+    return roc_path, roc_auc, reduced_docs
     
 def compare_cluster_methods(feature, n, cluster_types):
     '''
@@ -621,7 +626,8 @@ def _cluster_auc_test(num_plag, num_noplag, mean_diff, std, dimensions = 1, repe
 #                     "syntactic_complexity_average",
 #                     "flesch_reading_ease",
 #                     ]
-# intr.evaluate_n_documents(features, 'outlier', 2, 'paragraph', 1)
+# features = FeatureExtractor.get_all_feature_function_names()
+# print evaluate_n_documents(features, 'outlier', 2, 'paragraph', 100)
 
 if __name__ == "__main__":
     _test()
