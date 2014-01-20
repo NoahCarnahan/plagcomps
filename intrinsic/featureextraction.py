@@ -21,8 +21,6 @@ from nltk.corpus import cmudict
 # self.paragraph_spans. These indices represent the first (inclusive) and last (exclusive)
 # character, word, sentence, or paragraph that the feature is being extracted from.
 #
-# For example, average_word_length(4, 10) returns the average length of words 4 through 9.
-#
 # A certain amount of preprocessing may be desirable. Add a method called
 # _init_my_new_feature_name and call it in the __init__ method.
 
@@ -36,7 +34,7 @@ class FeatureExtractor:
     
         self.features = {}
 
-        self.average_word_length_initialized = False
+        self._cmud = None # initialized by self._syl()
         self.pos_tags = None
         self.pos_tagged = False
 
@@ -223,7 +221,7 @@ class FeatureExtractor:
     def _feature_type(self, func_name):
         '''
         Return at what atom level the feature with the given name operates.
-        For example _feature_type("average_word_length") returns "word".
+        For example _feature_type("num_chars") returns "word".
         '''
         try:
             func = getattr(self, func_name)
@@ -273,7 +271,7 @@ class FeatureExtractor:
         self.meta_feature([word_to_sentence_average, num_chars], 0, 10)
         will return the average number of characters per word pulled from the first 10 sentences
         '''
-        print "running a metafeature with", subfeatures
+        #print "running a metafeature with", subfeatures
 
         outer_feature = getattr(self, subfeatures[0])
         inner_features = subfeatures[1:]
@@ -453,35 +451,27 @@ class FeatureExtractor:
         x = square_sum - 2 * u * (sum_x[char_end] - sum_x[char_start]) + (char_end - char_start) * u * u
         return math.sqrt(x / float(char_end - char_start))
     
-    def _init_average_word_length(self):
+    def _init_average_syllables_per_word(self):
         '''
-        Initializes the word_length_sum_table. word_length_sum_table[i] is the sum of the
-        lengths of words from 0 to i-1.
+        Initializes the average syllables sum table. sum_table[i] is the sum of the number
+        of syllables of words from 0 to i-1.
         '''
-        # TODO: Check if words are punctuation/have punctuation on them?
-        
-        
+        sum_table = [0]
         for start, end in self.word_spans:
-            sum_table.append((end - start) + sum_table[-1])
-        self.word_length_sum_table = sum_table
-        
-        self.average_word_length_initialized = True
+            sum_table.append(sum_table[-1]+self._syl(start, end))
+        self.features["average_syllables_per_word"] = sum_table
     
-    def average_word_length(self, word_spans_index_start, word_spans_index_end):
+    def average_syllables_per_word(self, word_spans_index_start, word_spans_index_end):
         '''
-        Return the average word length for words [word_spans_index_start : word_spans_index_end].
+        Return the average number of syllables per word.
+        '''
+        if "average_syllables_per_word" not in self.features:
+            self._init_average_syllables_per_word()
         
-        For example: If self.text = "The brown fox jumped" then self.word_spans = [(0, 3),
-        (4, 9), (10, 13), (14, 20)]. So, average_word_length(1, 3) returns 4, the average
-        length of "brown" and "fox" (which are designated by the spans (4, 9) and
-        (10, 13)).
-        '''
-        if not self.average_word_length_initialized:
-            self._init_average_word_length()
-            
-        total_word_length = self.word_length_sum_table[word_spans_index_end] - self.word_length_sum_table[word_spans_index_start]
+        sum_table = self.features["average_syllables_per_word"]
+        total_syllables = sum_table[word_spans_index_end] - sum_table[word_spans_index_start]
         num_words = word_spans_index_end - word_spans_index_start
-        return float(total_word_length) / max(num_words, 1)
+        return float(total_syllables) / max(num_words, 1)
     
     def _init_average_sentence_length(self):
         '''
@@ -750,43 +740,75 @@ class FeatureExtractor:
         num_words = word_spans_index_end - word_spans_index_start
         return float(total) / max(num_words, 1)
     
-    def _init_flesch_reading_ease(self):
-        
-        self.features["flesch_reading_ease"] = cmudict.dict()
+    def _init_syl(self):
     
-    def flesch_reading_ease(self, para_spans_index_start, para_spans_index_end):
+        self._cmud = cmudict.dict()
+    
+    def _syl(self, start, end):
         '''
-        This a paragraph level feature that returns the Flesh-Kincaid readability score for the given
-        paragraph.
+        Returns the number of syllables in the word designated by the given start and end
+        word indices.
         '''
-        # The following link explains the feature
-        # http://en.wikipedia.org/wiki/Flesch%E2%80%93Kincaid_readability_tests
+        # NOTE This is not a feature, but this function is used by other features.
+        
         # The following link explains syllabifaction
         # https://groups.google.com/forum/#!topic/nltk-users/mCOh_u7V8_I
         # The syllabification code here is taken from that discussion thread.
         
-        if "flesch_reading_ease" not in self.features:
-            self._init_flesch_reading_ease()
+        if self._cmud == None:
+            self._init_syl()
         
-        para_span = self.paragraph_spans[para_spans_index_start:para_spans_index_end][0]        # The span for the paragraph in question
-        num_sentences = len(spanutils.slice(self.sentence_spans, para_span[0], para_span[1]))   # Number of sentences in the paragraph
+        word = self.text[start:end].strip(".").lower()
+        try:
+            syls = [len(list(y for y in x if y[-1].isdigit())) for x in self._cmud[word]][0]
+        except KeyError:
+            syls = (end-start)%3
+        return syls
+        
+    def flesch_reading_ease(self, para_spans_index_start, para_spans_index_end):
+        '''
+        This is a paragraph level feature that returns the Flesch readability score for the given
+        paragraph.
+        '''
+        # The following link explains the feature
+        # http://en.wikipedia.org/wiki/Flesch%E2%80%93Kincaid_readability_tests
+        
+        # get the span for the paragraph in question
+        para_span = self.paragraph_spans[para_spans_index_start:para_spans_index_end][0]
+        # get number of sentences in the paragraph
+        num_sentences = len(spanutils.slice(self.sentence_spans, para_span[0], para_span[1]))
         word_spans = spanutils.slice(self.word_spans, para_span[0], para_span[1])
         num_words = len(word_spans)
         
-        cmud = self.features["flesch_reading_ease"]
-        num_syl = 0                                                                            # total number of sylables in the paragraph
+        num_syl = 0  # total number of sylables in the paragraph                                                                          
         for start, end in word_spans:
-            
-            word = self.text[start:end].strip(".").lower()
-            try:
-                num_syl += [len(list(y for y in x if y[-1].isdigit())) for x in cmud[word]][0]
-            except KeyError:
-                num_syl += (end-start)%3
+            num_syl += self._syl(start, end)
         try:
             return 206.835 - 1.015*(num_words / float(num_sentences)) - 84.6*(num_syl / float(num_words))
         except ZeroDivisionError:
             # Either num of word or num of sentences was zero, so return 100, an "easy" score (according to wikipedia)
             return 100
+            
+    def flesch_kincaid_grade(self, para_spans_index_start, para_spans_index_end):
+        '''
+        This is a paragraph level feature that returns the Flesh-Kincaid grade level for
+        the given paragraph.
+        '''
+        # get the span for the paragraph in question
+        para_span = self.paragraph_spans[para_spans_index_start:para_spans_index_end][0]
+        # get number of sentences in the paragraph
+        num_sentences = len(spanutils.slice(self.sentence_spans, para_span[0], para_span[1]))
+        word_spans = spanutils.slice(self.word_spans, para_span[0], para_span[1])
+        num_words = len(word_spans)
+        
+        num_syl = 0  # total number of sylables in the paragraph                                                                          
+        for start, end in word_spans:
+            num_syl += self._syl(start, end)
+        try:
+            return 0.39*(num_words / float(num_sentences)) + 11.8*(num_syl / float(num_words))-15.59
+        except ZeroDivisionError:
+            # Either num of word or num of sentences was zero, so return 100, an "easy" score (according to wikipedia)
+            return 0
 
 def _test():
 
@@ -819,9 +841,9 @@ def _test():
 
     #print f.get_feature_vectors(["avg(num_chars)"], "sentence")
     if f.get_feature_vectors(["avg(num_chars)"], "sentence") == [(3.75,), (5.0,), (3.0,)]:
-        print "average_word_length test passed"
+        print "avg(num_chars) test passed"
     else:
-        print "average_word_length test FAILED"
+        print "avg(num_chars) test FAILED"
 
     # TODO: ADD TEST FOR INTERNAL WORD FREQ CLASS
     f.get_feature_vectors(["avg_internal_word_freq_class"], "sentence")
@@ -843,6 +865,17 @@ def _test():
     f.get_feature_vectors(["flesch_reading_ease"], "paragraph")
     print "flesch_reading_ease test DOES NOT EXIST"
     
+    f = FeatureExtractor("I absolutely go incredibly far. Zach went fast over crab sand land.\n\nThis is a new paragraph. This is the second sentence in that paragraph. This exsquisite utterance is indubitably the third sentence of this fine text.\n\nPlagiarism detection can be operationalized by decomposing a document into natural sections, such as sentences, chapters, or topically related blocks, and analyzing the variance of stylometric features for these sections. In this regard the decision problems in Sect. 1.2 are of decreasing complexity: instances of AVFIND are comprised of both a selection problem (finding suspicious sections) and an AVOUTLIER problem; instances of AVBATCH are a restricted variant of AVOUTLIER since one has the additional knowledge that all elements of a batch are (or are not) outliers at the same time.")
+    f.get_feature_vectors(["flesch_kincaid_grade"], "paragraph")
+    print "flesch_kincaid_grade test DOES NOT EXIST"
+    
+    f = FeatureExtractor("The brown fox ate. I go to the school? Believe it. This is reprehensible.")
+    #print f.get_feature_vectors(["average_syllables_per_word"], "sentence")
+    if f.get_feature_vectors(["average_syllables_per_word"], "sentence") == [(1/1.0,), (1/1.0,), (3/2.0,), (7/3.0,)]:
+        print "average_syllables_per_word test passed"
+    else:
+        print "average_syllables_per_word test FAILED"
+    
     #f = FeatureExtractor("The brown fox ate. I go to the school. Believe it. I go.")
     ##print f.get_feature_vectors(["syntactic_complexity_average"], "paragraph")
     #if f.get_feature_vectors(["syntactic_complexity_average"], "paragraph") == [(0.5,)]:
@@ -851,9 +884,10 @@ def _test():
     #    print "syntactic_complexity_average test FAILED"
     
 if __name__ == "__main__":
-    #_test()
+    _test()
 
-    f = FeatureExtractor("I absolutely go incredibly far. Zach went fast over sand crab land.")
+    #f = FeatureExtractor("I absolutely go incredibly far. Zach went fast over sand crab land.")
     #print f.get_feature_vectors(["num_chars", "avg(num_chars)", "avg(avg(num_chars))", "std(num_chars)", "avg(std(num_chars))", "std(std(num_chars))"], "paragraph")
-    print f.get_feature_vectors(["punctuation_percentage", "avg(punctuation_percentage)", "std(punctuation_percentage)"], "paragraph")
+    ##print f.get_feature_vectors(["num_chars", "avg(num_chars)", "avg(avg(num_chars))", "std(num_chars)", "avg(std(num_chars))", "std(std(num_chars))"], "paragraph")
+    #print f.get_feature_vectors(["punctuation_percentage", "avg(punctuation_percentage)", "std(punctuation_percentage)"], "paragraph")
 

@@ -619,18 +619,6 @@ def _cluster_auc_test(num_plag, num_noplag, mean_diff, std, dimensions = 1, repe
 # intr.evaluate_n_documents(features, 'outlier', 2, 'paragraph', 1)
 
 if __name__ == "__main__":
-    # _test()
-    features = ['average_sentence_length']
-    cluster_type = 'median_simple'
-    k = 2
-    atom_type = 'paragraph'
-    n = 100
-    evaluate_n_documents(features, cluster_type, k, atom_type, n)
-
-
-
-
-
-
-
+    _test()
+    #_stats_evaluate_n_documents(["num_chars", "avg(num_chars)", "std(num_chars)", "avg(avg(num_chars))", "avg(std(num_chars)"], "paragraph", 25) 
 
