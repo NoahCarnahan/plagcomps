@@ -60,30 +60,38 @@ def density_based(stylo_vectors, center_at_mean=True, num_to_ignore=1, impurity=
         plag_prob = exp(sum(log(featurewise_plag_prob)))
         non_plag_prob = exp(sum(log(featurewise_nonplag_prob)))
 
-        # TODO: Should we use calculated non_plag_prob or calculated plag_prob?
-        # Or a ratio of the two? i.e. (plag_prob / non_plag_prob)
-        if plag_prob > non_plag_prob:
-            confidences.append(plag_prob)
-            # TODO deal with division by 0 if trying to use a ratio
-        else:
-            confidences.append(1 - plag_prob)
+        # TODO: How should we use calculated non_plag_prob or calculated plag_prob?
+        # A ratio of the two? i.e. (plag_prob / non_plag_prob)
+        confidences.append(_get_confidence(plag_prob, non_plag_prob))
             
     scaled = _scale_confidences(confidences)
 
     return scaled
+
+def _get_confidence(plag_prob, non_plag_prob):
+    '''
+    Returns some notion of confidence:
+    If we think there's plag., return the Naive Bayes estimated prob of plag
+    If not, return the negative of the Naive Bayes estimate prob of NOT plag
+
+    Note that these values are scaled later on to be between 0 and 1
+    '''
+    if plag_prob > non_plag_prob:
+        return plag_prob
+    else:
+        return -non_plag_prob
 
 def _scale_confidences(confs):
     '''
     Scales all "confidences" to (0, 1) interval simply by dividing by 
     the maximum "confidence"
     '''
+    # offset will be either 0 or some negative number, in which case
+    # we subtract the negative offset (i.e. add)
+    offset = min(min(confs), 0.0)
     max_conf = max(confs)
-    
-    if max_conf == 0:
-        return [0]
-    else:
-        return [x / max_conf for x in confs]
 
+    return [(x - offset) / max_conf for x in confs]
 
 def _get_distribution_features(row, extremes_to_ignore):
     '''
