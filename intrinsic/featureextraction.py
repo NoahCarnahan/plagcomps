@@ -25,6 +25,48 @@ from nltk.corpus import cmudict
 # _init_my_new_feature_name and call it in the __init__ method.
 
 class FeatureExtractor:
+
+    @staticmethod
+    def get_all_feature_function_names(include_nested=False):
+        '''
+        Returns the names of all functions which compute features by
+        examining their arguments.
+
+        If <include_nested>, then functions like 'char_to_word_average',
+        'sentence_to_paragraph_average' and others which can be nested
+        are also returned.
+
+        By default, nested features are NOT returned
+        '''
+        feature_function_names = []
+
+        feature_arg_options = set([
+            'char_index_start', 
+            'word_spans_index_start', 
+            'sent_spans_index_start', 
+            'para_spans_index_start'
+        ])
+
+        # all_methods[i] == (<func_name>, <unbound_method_obj>)
+        all_methods = inspect.getmembers(FeatureExtractor, predicate=inspect.ismethod)
+
+        for func_name, func in all_methods:
+            func_args = set(inspect.getargspec(func).args)
+
+            valid_func = len(feature_arg_options.intersection(func_args)) > 0
+
+            # Has some overlap -- may be a nested function
+            if include_nested and valid_func:
+                feature_function_names.append(func_name)
+
+            # Has some overlap, but we want to ignore nested functions
+            # (which include 'subfeatures' as an argument)
+            if not include_nested and valid_func and \
+                    'subfeatures' not in func_args:
+                feature_function_names.append(func_name)
+
+        return feature_function_names
+
     
     def __init__(self, text):
         self.text = text
