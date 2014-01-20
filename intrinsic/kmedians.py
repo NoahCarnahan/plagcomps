@@ -16,12 +16,9 @@ from operator import itemgetter
 
 ##############################################################################
 # Generate sample data
-np.random.seed(0)
 
-centers = [[10, 10], [-10, -10], [10, -10]]
-n_clusters = len(centers)
-vectors, labels_true = make_blobs(n_samples=100, centers=centers, cluster_std=12.3)
-class kmedians(BaseEstimator):
+
+class KMedians(BaseEstimator):
 
     def __init__(self, k, max_iter=100, random_state=0, tol=1e-4):
         self.k = k
@@ -76,17 +73,23 @@ class kmedians(BaseEstimator):
             sizes[i] = len(np.extract(condition, self.labels_))
 
         no_plag_cluster = sorted(sizes.iteritems(), key = itemgetter(1), reverse=True)[0]
-        print no_plag_cluster
 
         confidences = []
         distances = euclidean_distances(self.vectors, self.cluster_centers_[no_plag_cluster[0]])
+        
         max_distance = np.amax(distances)
         for distance in distances:
             confidences.append(distance[0] / max_distance)
 
         return confidences
 
-kmedians = kmedians(k=2)
-kmedians.fit(vectors)
-print kmedians.get_confidences()
-
+if __name__ == "__main__":
+    np.random.seed(0)
+    
+    centers = [[10, 10], [-10, -10], [10, -10]]
+    n_clusters = len(centers)
+    vectors, labels_true = make_blobs(n_samples=100, centers=centers, cluster_std=12.3)
+    kmedians = KMedians(k=2)
+    kmedians.fit(vectors)
+    print kmedians.get_confidences()
+    

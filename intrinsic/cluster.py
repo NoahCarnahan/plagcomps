@@ -1,5 +1,8 @@
 import hmm
-from plagcomps.intrinsic import outlier_detection
+from kmedians import KMedians
+import outlier_detection
+#from plagcomps.intrinsic import outlier_detection
+
 
 from numpy import array, matrix, random
 from scipy.cluster.vq import kmeans2, whiten
@@ -7,7 +10,6 @@ from scipy.spatial.distance import pdist
 from scipy.cluster.hierarchy import linkage, fcluster
 from collections import Counter
 
-from kmedians import kmedians
 
 def cluster(method, k, items):
     if method == "kmeans":
@@ -22,13 +24,15 @@ def cluster(method, k, items):
         return _median_kmeans(items, k)
     elif method == "outlier":
         return outlier_detection.density_based(items)
+    elif method == "kmedians":
+        return _kmedians(items, k)
     else:
         raise ValueError("Invalid cluster method. Acceptable values are 'kmeans', 'agglom', or 'hmm'.")
 
 def _kmedians(stylo_vectors, k):
     features = array(stylo_vectors)
 
-    clusterer = kmedians(k)
+    clusterer = KMedians(k)
     clusterer.fit(features)
 
     return clusterer.get_confidences()
@@ -204,16 +208,20 @@ def _test():
 
     fs_obvious = cluster_one + cluster_two
 
-    print cluster("kmeans", 2, fs_obvious)
-    print cluster("agglom", 2, fs_obvious)
-    print cluster("hmm", 2, fs_obvious)
+    for method in ["kmeans", "agglom", "hmm", "kmedians"]:
+        print method, cluster(method, 2, fs_obvious)
+#    print cluster("kmeans", 2, fs_obvious)
+#    print cluster("agglom", 2, fs_obvious)
+#    print cluster("hmm", 2, fs_obvious)
+#    print "hi", cluster("kmedians", 2, fs_obvious)
 
     print cluster("kmeans", 2, fs)
     print cluster("agglom", 2, fs)
     print cluster("hmm", 2, fs)
+    print cluster("kmedians", 2, fs)
 
 if __name__ == "__main__":
-    # _test()
+    #_test()
     import plagcomps.evaluation.intrinsic as ev
     ev.compare_cluster_methods("avg_external_word_freq_class", 200, [(ev.cluster, "simple_median", ("median_simple", None)), (ev.cluster, "kmeans_median", ("median_kmeans", 2))])
 
