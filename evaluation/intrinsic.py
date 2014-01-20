@@ -4,7 +4,7 @@ from ..shared.util import BaseUtility
 from ..dbconstants import username
 from ..dbconstants import password
 from ..dbconstants import dbname
-from ..intrinsic.cluster import cluster
+from plagcomps.intrinsic.cluster import cluster
 
 import datetime
 import numpy.random
@@ -17,8 +17,6 @@ import sklearn.metrics
 import matplotlib
 matplotlib.use('pdf')
 import matplotlib.pyplot as pyplot
-
-
 
 import sqlalchemy
 from sqlalchemy import Table, Column, Sequence, Integer, String, Float, DateTime, ForeignKey, and_

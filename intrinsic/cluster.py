@@ -64,6 +64,10 @@ def _kmeans(stylo_vectors, k):
     return confidences
 
 def _median_kmeans(stylo_vectors, k):
+    '''
+    Run kmeans.  Find the median in the largest cluster.  Calculate confidences of all data points
+    as the (normalized) distance from the median.
+    '''
     if not (len(stylo_vectors) and len(stylo_vectors[0]) == 1):
         raise ValueError("Cluster method '_median_kmeans' can only handle 1-dimensional stylometric vectors.")
         return
@@ -79,7 +83,10 @@ def _median_kmeans(stylo_vectors, k):
     median = _get_list_median(non_plag_vectors_copy)
     # find max dist from median and build confidences
     max_dist = float(max([abs(vec[0] - median) for vec in stylo_vectors]))
-    confidences = [abs(vec[0] - median) / max_dist for vec in stylo_vectors]
+    if max_dist > 0:
+        confidences = [abs(vec[0] - median) / max_dist for vec in stylo_vectors]
+    else:
+        confidences = [0 for vec in stylo_vectors]
     return confidences
 
 def _median_simple(stylo_vectors):
@@ -95,7 +102,10 @@ def _median_simple(stylo_vectors):
         stylo_vectors_copy.sort()  
         median = _get_list_median(stylo_vectors_copy)
         max_dist = float(max(median - stylo_vectors_copy[0][0], stylo_vectors_copy[-1][0] - median))
-        confidences = [abs(x[0] - median) / max_dist for x in stylo_vectors]
+        if max_dist > 0:
+            confidences = [abs(x[0] - median) / max_dist for x in stylo_vectors]
+        else:
+            confidences = [0 for x in stylo_vectors]
         return confidences
     else:
         raise ValueError("Cluster method 'median_simple' can only handle 1-dimensional stylometric vectors.")
@@ -194,9 +204,8 @@ def _test():
 
 if __name__ == "__main__":
     # _test()
-    # _two_normal_test(10, 2)
+    import plagcomps.evaluation.intrinsic as ev
+    ev.compare_cluster_methods("avg_external_word_freq_class", 200, [(ev.cluster, "simple_median", ("median_simple", None)), (ev.cluster, "kmeans_median", ("median_kmeans", 2))])
 
-    v = [[1], [2], [3], [10], [11], [12], [13], [25], [26], [27]]
-    print _median_kmeans(v, 3)
 
         
