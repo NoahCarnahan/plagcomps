@@ -220,10 +220,53 @@ def _test():
     print cluster("hmm", 2, fs)
     print cluster("kmedians", 2, fs)
 
+def _all_clusters_all_features():
+    import plagcomps.evaluation.intrinsic as ev
+    clusterings = [
+        (ev.cluster, "simple_median", ("median_simple", None)),
+        (ev.cluster, "kmeans_median", ("median_kmeans", 2)),
+        (ev.cluster, "kmedians", ("kmedians", 2)),
+        (ev.cluster, "kmeans", ("kmeans", 2)),
+        (ev.cluster, "agglom", ("agglom", 2)),
+        (ev.cluster, "hmm", ("hmm", 2)),
+        (ev.cluster, "outlier", ("outlier", None)),
+    ]
+
+    unique_features = []
+    
+    for char_feature in [
+        "punctuation_percentage",
+    ]:
+        for char_modifier in [
+            "", "avg(", "std(", "avg(avg(", "avg(std(", "avg(avg(avg(", "avg(avg(std("
+        ]:
+            unique_features.append(char_modifier + char_feature + ")" * char_modifier.count("("))
+
+    for word_feature in [
+        "num_chars",
+        "average_syllables_per_word",
+        "stopword_percentage",
+        "syntactic_complexity", 
+        "avg_external_word_freq_class", 
+        "avg_internal_word_freq_class", 
+    ]:
+        for word_modifier in [
+            "", "avg(", "std(", "avg(avg(", "avg(std("
+        ]:
+            unique_features.append(word_modifier + word_feature + ")" * word_modifier.count("("))
+
+    for sentence_feature in [
+        "flesch_reading_ease",
+    ]:
+        for sentence_modifier in [
+            "", "avg(", "std("
+        ]:
+            unique_features.append(sentence_modifier + sentence_feature + ")" * sentence_modifier.count("("))
+
+    for feature in unique_features:
+        ev.compare_cluster_methods(feature, 200, clusterings)
+
 if __name__ == "__main__":
     #_test()
-    import plagcomps.evaluation.intrinsic as ev
-    ev.compare_cluster_methods("avg_external_word_freq_class", 200, [(ev.cluster, "simple_median", ("median_simple", None)), (ev.cluster, "kmeans_median", ("median_kmeans", 2))])
-
-
+    _all_clusters_all_features()
         

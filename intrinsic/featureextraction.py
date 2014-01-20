@@ -255,15 +255,6 @@ class FeatureExtractor:
 
         return self.features["num_chars"][word_spans_index_end] - self.features["num_chars"][word_spans_index_start]
 
-    def meta_paragraph_feature(self, subfeatures, para_spans_index_start, para_spans_index_end):
-        '''meta_paragraph_feature([word_to_sentence_average, num_chars], 0, 1)'''
-
-        # get the start and end character indices from our paragraph indices
-        start = self.paragraph_spans[para_spans_index_start][0]
-        end = self.paragraph_spans[para_spans_index_end - 1][1]
-        
-        sentence_index_range = spanutils.slice(self.sentence_spans, start, end, return_indices = True)
-        
     def meta_feature(self, subfeatures, spans_index_start, spans_index_end):
         '''
         wrapper function that calls the first subfeature with the rest of the subfeatures as its argument
