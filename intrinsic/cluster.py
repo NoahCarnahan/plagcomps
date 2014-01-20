@@ -258,6 +258,7 @@ def _all_clusters_all_features():
         (ev.cluster, "kmeans", ("kmeans", 2)),
         (ev.cluster, "agglom", ("agglom", 2)),
         (ev.cluster, "hmm", ("hmm", 2)),
+        #(ev.cluster, "outlier", ("outlier", 2))  was crashing
         (ev.cluster, "kmeans", ("kmeans", 3)),
         (ev.cluster, "kmeans", ("kmeans", 4)),
         (ev.cluster, "kmeans", ("kmeans", 5))
