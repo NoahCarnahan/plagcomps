@@ -32,6 +32,21 @@ def print_simple_trigrams():
     for p in pairs:
         print p
 
+def unique_trigrams(d, min=24):
+    print len([1 for tri, count in d.items() if count > min])
+
+def instances_of_ith_gram(i):
+    '''
+    Prints the number of instance of the ith most common trigram.
+    '''
+    pairs = zip(trigrams.values(), trigrams.keys())
+    pairs.sort(reverse=True)
+    
+    print pairs[i-1][0]
+    
+
 if __name__ == "__main__":
-    print_trigrams()
-    print_simple_tags()
+    #print_trigrams()
+    #print_simple_tags()
+    unique_trigrams(trigrams)
+    instances_of_ith_gram(25)

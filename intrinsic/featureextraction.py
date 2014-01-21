@@ -26,22 +26,6 @@ from nltk.corpus import cmudict
 
 class FeatureExtractor:
 
-    _valid_pos_trigrams = [
-        ("NN", "VB", "NN"),
-        ("NN", "NN", "VB"),
-        ("VB", "NN", "NN"),
-        ("NN", "IN", "NP"), # noun preposition propernoun
-        ("NN", "NN", "CC"), # noun noun coordinatingconjunction
-        ("NNS", "IN", "DT"), # nounplural preposition determiner
-        ("DT", "NNS", "IN"), # determiner nounplural preposition
-        ("VB", "NN", "VB"),
-        ("DT", "NN", "IN"), # determiner noun preposition
-        ("NN", "NN", "NN"),
-        ("NN", "IN", "DT"), # noun preposition determiner
-        ("NN", "IN", "NN"), # noun preposition noun
-        ("VB", "IN", "DT"), #verb preposition determiner
-    ]
-
     @staticmethod
     def get_all_feature_function_names(include_nested=False):
         '''
@@ -82,8 +66,23 @@ class FeatureExtractor:
                 feature_function_names.append(func_name)
         
         # pos_trigram is a special case
+        valid_pos_trigrams = [
+            ("NN", "VB", "NN"),
+            ("NN", "NN", "VB"),
+            ("VB", "NN", "NN"),
+            ("NN", "IN", "NP"), # noun preposition propernoun
+            ("NN", "NN", "CC"), # noun noun coordinatingconjunction
+            ("NNS", "IN", "DT"), # nounplural preposition determiner
+            ("DT", "NNS", "IN"), # determiner nounplural preposition
+            ("VB", "NN", "VB"),
+            ("DT", "NN", "IN"), # determiner noun preposition
+            ("NN", "NN", "NN"),
+            ("NN", "IN", "DT"), # noun preposition determiner
+            ("NN", "IN", "NN"), # noun preposition noun
+            ("VB", "IN", "DT"), #verb preposition determiner
+        ]
         feature_function_names.remove("pos_trigram")
-        for tags in _valid_pos_trigrams:
+        for tags in valid_pos_trigrams:
             feature_function_names.append("pos_trigram,%s,%s,%s" % tags)
         
         return feature_function_names
