@@ -26,6 +26,22 @@ from nltk.corpus import cmudict
 
 class FeatureExtractor:
 
+    _valid_pos_trigrams = [
+        ("NN", "VB", "NN"),
+        ("NN", "NN", "VB"),
+        ("VB", "NN", "NN"),
+        ("NN", "IN", "NP"), # noun preposition propernoun
+        ("NN", "NN", "CC"), # noun noun coordinatingconjunction
+        ("NNS", "IN", "DT"), # nounplural preposition determiner
+        ("DT", "NNS", "IN"), # determiner nounplural preposition
+        ("VB", "NN", "VB"),
+        ("DT", "NN", "IN"), # determiner noun preposition
+        ("NN", "NN", "NN"),
+        ("NN", "IN", "DT"), # noun preposition determiner
+        ("NN", "IN", "NN"), # noun preposition noun
+        ("VB", "IN", "DT"), #verb preposition determiner
+    ]
+
     @staticmethod
     def get_all_feature_function_names(include_nested=False):
         '''
@@ -64,7 +80,12 @@ class FeatureExtractor:
             if not include_nested and valid_func and \
                     'subfeatures' not in func_args:
                 feature_function_names.append(func_name)
-
+        
+        # pos_trigram is a special case
+        feature_function_names.remove("pos_trigram")
+        for tags in _valid_pos_trigrams:
+            feature_function_names.append("pos_trigram,%s,%s,%s" % tags)
+        
         return feature_function_names
 
     
@@ -225,18 +246,25 @@ class FeatureExtractor:
                     
             else:
                 # No nested features, so things are easy
-                if self._feature_type(feat_name) == "char": 
-                    start, end = start_index, end_index
-                else:                
-                    if self._feature_type(feat_name) == "word":
-                        spans = self.word_spans
-                    elif self._feature_type(feat_name) == "sentence":
-                        spans = self.sentence_spans
-                    elif self._feature_type(feat_name) == "paragraph":
-                        spans = self.paragraph_spans
-                    start, end = spanutils.slice(spans, start_index, end_index, return_indices = True)
-                actual_feature_function = getattr(self, feat_name)
-                vect.append(actual_feature_function(start, end))
+                
+                #special case for pos_trigram
+                if feat_name.startswith("pos_trigram"):
+                    dont_care, first, second, third = feat_name.split(",")
+                    start, end = spanutils.slice(self.word_spans, start_index, end_index, return_indices = True)
+                    vect.append(self.pos_trigram(start, end, (first, second, third)))
+                else:
+                    if self._feature_type(feat_name) == "char": 
+                        start, end = start_index, end_index
+                    else:                
+                        if self._feature_type(feat_name) == "word":
+                            spans = self.word_spans
+                        elif self._feature_type(feat_name) == "sentence":
+                            spans = self.sentence_spans
+                        elif self._feature_type(feat_name) == "paragraph":
+                            spans = self.paragraph_spans
+                        start, end = spanutils.slice(spans, start_index, end_index, return_indices = True)
+                    actual_feature_function = getattr(self, feat_name)
+                    vect.append(actual_feature_function(start, end))
             
         return tuple(vect)
 
@@ -888,10 +916,13 @@ class FeatureExtractor:
         '''
         pos is a tuple of parts-of-speech e.g. ("NN", "NN", "NN")
         '''
+        #  http://www.aaai.org/Papers/Workshops/1998/WS-98-05/WS98-05-001.pdf
        
         # make sure that we have done PoS tagging
         if not self.pos_tagged:
             self._init_tag_list(self.text)
+        
+        print self.pos_tags
         
         total = 0
         for i in range(word_spans_index_start, word_spans_index_end-2):
@@ -967,32 +998,39 @@ def _test():
         print "average_syllables_per_word test FAILED"
     
     f = FeatureExtractor("The brown fox ate. I go to the school? Believe it. Of mice and men. How have you been?")
-    #print f.get_feature_vectors(["average_syllables_per_word"], "sentence")
+    #print f.get_feature_vectors(["frequency_of_word_of"], "sentence")
     if f.get_feature_vectors(["frequency_of_word_of"], "sentence") == [(0,), (0,), (0,), (1,), (0,)]:
         print "frequency_of_word_of test passed"
     else:
         print "frequency_of_word_of test FAILED"
         
     f = FeatureExtractor("The brown fox ate. I go to the school? Believe it. This is reprehensible. How have you been?")
-    #print f.get_feature_vectors(["average_syllables_per_word"], "sentence")
+    #print f.get_feature_vectors(["frequency_of_word_been"], "sentence")
     if f.get_feature_vectors(["frequency_of_word_been"], "sentence") == [(0,), (0,), (0,), (0,), (1,)]:
         print "frequency_of_word_been test passed"
     else:
         print "frequency_of_word_been test FAILED"
     
     f = FeatureExtractor("The brown fox ate. I go to the school? Believe it. This is reprehensible. How have you been?")
-    #print f.get_feature_vectors(["average_syllables_per_word"], "sentence")
+    #print f.get_feature_vectors(["frequency_of_word_the"], "sentence")
     if f.get_feature_vectors(["frequency_of_word_the"], "sentence") == [(1,), (1,), (0,), (0,), (0,)]:
         print "frequency_of_word_the test passed"
     else:
         print "frequency_of_word_the test FAILED"
     
     f = FeatureExtractor("The brown fox ate. I go to the school? Believe it. This is reprehensible. How have you been?")
-    #print f.get_feature_vectors(["average_syllables_per_word"], "sentence")
+    #print f.get_feature_vectors(["frequency_of_word_is"], "sentence")
     if f.get_feature_vectors(["frequency_of_word_is"], "sentence") == [(0,), (0,), (0,), (1,), (0,)]:
         print "frequency_of_word_is test passed"
     else:
         print "frequency_of_word_is test FAILED"
+        
+    f = FeatureExtractor("The mad hatter likes tea and the red queen hates alice.")
+    #print f.get_feature_vectors(["pos_trigram,NN,NN,NN"], "sentence")
+    if f.get_feature_vectors(["pos_trigram,NN,NN,NN"], "sentence") == [(1,)]:
+        print "pos_trigram,NN,NN,NN test passed"
+    else:
+        print "pos_trigram,NN,NN,NN test FAILED"
     
     
     
