@@ -152,6 +152,17 @@ def evaluate(features, cluster_type, k, atom_type, docs, reduced_docs=None, **cl
     return roc_path, roc_auc, reduced_docs
     
 def compare_outlier_params(n, features=None, min_len=None):
+    '''
+    Tries a number of combinations of parameters for outlier classification,
+    namely different atom_types, methods of centering distributions, and number
+    of extreme points to ignore.
+
+    Runs on <n> documents using all features unless <features> is a provided
+    argument. 
+
+    Only run on documents of length at least <min_len>, or all documents
+    if <min_len> is not a provided argument
+    '''
     atom_types = ['paragraph', 'sentence']
     center_at_mean = [True, False]
     num_to_ignore = [1, 3, 5]
@@ -169,7 +180,7 @@ def compare_outlier_params(n, features=None, min_len=None):
                     evaluate(features, 'outlier', 2, atom_type, docs,
                              center_at_mean=c, num_to_ignore=ignored)
 
-                one_trial = (atom_type, min_len, ignored, roc_path, roc_auc)
+                one_trial = (atom_type, min_len, c, ignored, roc_path, roc_auc)
                 results.append(one_trial)
                 print one_trial
                 print '-'*30
@@ -380,8 +391,7 @@ def _roc(reduced_docs, plag_likelihoods, features = None, cluster_type = None, k
         pyplot.title('Receiver operating characteristic')
     pyplot.legend(loc="lower right")
     
-    #path = "figures/roc"+str(time.time())+".pdf"
-    path = ospath.join(ospath.dirname(__file__), "../figures/rocMARCUSTESTING"+str(time.time())+".pdf")
+    path = ospath.join(ospath.dirname(__file__), "../figures/roc"+str(time.time())+".pdf")
     pyplot.savefig(path)
     return path, roc_auc
 
@@ -662,7 +672,8 @@ def _cluster_auc_test(num_plag, num_noplag, mean_diff, std, dimensions = 1, repe
 #                     ]
 # features = FeatureExtractor.get_all_feature_function_names()
 # print evaluate_n_documents(features, 'outlier', 2, 'paragraph', 100)
+# compare_outlier_params(50)
 
 if __name__ == "__main__":
-    _test()
-    #_stats_evaluate_n_documents(["num_chars", "avg(num_chars)", "std(num_chars)", "avg(avg(num_chars))", "avg(std(num_chars)"], "paragraph", 25) 
+    #_test()
+    _stats_evaluate_n_documents(["num_chars", "avg(num_chars)", "std(num_chars)", "avg(avg(num_chars))", "avg(std(num_chars)"], "paragraph", 25) 

@@ -1,5 +1,6 @@
 from numpy import mean, std, sqrt, log, exp
 from scipy.stats import norm
+import math
 
 def density_based(stylo_vectors, center_at_mean=True, num_to_ignore=1, impurity=.2):
     '''
@@ -47,10 +48,22 @@ def density_based(stylo_vectors, center_at_mean=True, num_to_ignore=1, impurity=
             cur_center = means[feat_num] if center_at_mean else medians[feat_num]
             cur_std = stds[feat_num]
             cur_min, cur_max = mins[feat_num], maxs[feat_num]
+
             
-            if not _in_uncertainty_interval(cur_val, cur_center, cur_std):
-                featurewise_nonplag_prob.append(_get_norm_prob(cur_val, cur_center, cur_std))
-                featurewise_plag_prob.append(_get_unif_prob(cur_val, cur_min, cur_max))
+            # A std of 0 => the feature is constant, and therefore won't 
+            # help us distinguish anything!
+            if cur_std != 0.0 and not _in_uncertainty_interval(cur_val, cur_center, cur_std):
+                cur_norm_prob = _get_norm_prob(cur_val, cur_center, cur_std)
+                if math.isnan(cur_norm_prob):
+                    print 'NORMAL GOT ONE!', cur_norm_prob
+                    print 'params', cur_val, cur_center, cur_std
+                featurewise_nonplag_prob.append(cur_norm_prob)
+
+                cur_unif_prob = _get_unif_prob(cur_val, cur_min, cur_max)
+                if math.isnan(cur_unif_prob):
+                    print 'UNIF GOT ONE!', cur_unif_prob
+                    print 'params', cur_val, cur_center, cur_std
+                featurewise_plag_prob.append(cur_unif_prob)
             # TODO what happens if all points are in uncertainty interval??
 
         
@@ -65,6 +78,7 @@ def density_based(stylo_vectors, center_at_mean=True, num_to_ignore=1, impurity=
         confidences.append(_get_confidence(plag_prob, non_plag_prob))
             
     scaled = _scale_confidences(confidences)
+
 
     return scaled
 
@@ -89,9 +103,9 @@ def _scale_confidences(confs):
     # offset will be either 0 or some negative number, in which case
     # we subtract the negative offset (i.e. add)
     offset = min(min(confs), 0.0)
-    max_conf = max(confs)
+    max_conf_with_offset = max(confs) - offset
 
-    return [(x - offset) / max_conf for x in confs]
+    return [(x - offset) / max_conf_with_offset for x in confs]
 
 def _get_distribution_features(row, extremes_to_ignore):
     '''
@@ -130,10 +144,21 @@ def _in_uncertainty_interval(x, center, sd_dist):
 
 
 def _get_norm_prob(x, loc, scale):
+    '''
+    Returns normal PDF evaluated at <x> for a normal dist centered at <loc> 
+    with SD == <scale>
+    '''
     return norm.pdf(x, loc, scale)
 
 def _get_unif_prob(v, min_val, max_val):
-    return 1.0 / (max_val - min_val)
+    '''
+    Returns uniform PDF (probability density function)
+    '''
+    diff = max_val - min_val
+    if diff == 0:
+        return 1.0
+    else:
+        return 1.0 / (max_val - min_val)
 
 def _rotate_vectors(mat):
     '''
