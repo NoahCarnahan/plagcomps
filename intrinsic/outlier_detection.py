@@ -14,6 +14,9 @@ import math
 # stylometric features). Done in:
 # _scale_confidences(confs) 
 
+MIN_PROB = 10**(-30)
+
+
 def density_based(stylo_vectors, center_at_mean=True, num_to_ignore=1, impurity=.2):
     '''
     Implements the algorithm described in Stein, Lipka, Prettenhofer's
@@ -66,16 +69,19 @@ def density_based(stylo_vectors, center_at_mean=True, num_to_ignore=1, impurity=
             # A std of 0 => the feature is constant, and therefore won't 
             # help us distinguish anything!
             if cur_std != 0.0 and not _in_uncertainty_interval(cur_val, cur_center, cur_std):
+
                 cur_norm_prob = _get_norm_prob(cur_val, cur_center, cur_std)
-                if math.isnan(cur_norm_prob):
-                    print 'NORMAL GOT ONE!', cur_norm_prob
-                    print 'params', cur_val, cur_center, cur_std
+                if math.isnan(cur_norm_prob) or cur_norm_prob == 0.0:
+                    print 'Norm prob was nan or 0: %f. Using MIN_PROB' % cur_norm_prob
+                    
+                cur_norm_prob = max(MIN_PROB, cur_norm_prob)
                 featurewise_nonplag_prob.append(cur_norm_prob)
 
                 cur_unif_prob = _get_unif_prob(cur_val, cur_min, cur_max)
-                if math.isnan(cur_unif_prob):
-                    print 'UNIF GOT ONE!', cur_unif_prob
-                    print 'params', cur_val, cur_center, cur_std
+                if math.isnan(cur_unif_prob) or cur_unif_prob == 0.0:
+                    print 'Unif prob was nan or 0: %f. Using MIN_PROB' % cur_unif_prob
+
+                cur_unif_prob = max(MIN_PROB, cur_unif_prob)
                 featurewise_plag_prob.append(cur_unif_prob)
             # TODO what happens if all points are in uncertainty interval??
 

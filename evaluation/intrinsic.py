@@ -153,25 +153,23 @@ def compare_outlier_params(n, features=None, min_len=None):
     '''
     atom_types = ['paragraph', 'sentence']
     center_at_mean = [True, False]
-    num_to_ignore = [1, 3, 5]
 
     docs = IntrinsicUtility().get_n_training_files(n, min_len=min_len)
     if not features:
         features = FeatureExtractor.get_all_feature_function_names()
 
     results = []
+
     
     for atom_type in atom_types:
-        for ignored in num_to_ignore:
-            for c in center_at_mean:
-                roc_path, roc_auc, reduced_docs = \
-                    evaluate(features, 'outlier', 2, atom_type, docs,
-                             center_at_mean=c, num_to_ignore=ignored)
+        for c in center_at_mean:
+            roc_path, roc_auc, reduced_docs = \
+                evaluate(features, 'outlier', 2, atom_type, docs, center_at_mean=c)
 
-                one_trial = (atom_type, min_len, c, ignored, roc_path, roc_auc)
-                results.append(one_trial)
-                print one_trial
-                print '-'*30
+            one_trial = (atom_type, min_len, c, roc_path, roc_auc)
+            results.append(one_trial)
+            print one_trial
+            print '-'*30
 
     for r in results:
         print r
