@@ -262,7 +262,7 @@ class FeatureExtractor:
                     
             else:
                 # No nested features, so things are easy
-                
+
                 #special case for pos_trigram, vowelness_trigram, word_unigram
                 if feat_name.startswith("pos_trigram"):
                     feat_func, first, second, third = feat_name.split(",")
@@ -920,9 +920,7 @@ class FeatureExtractor:
         # make sure that we have done PoS tagging
         if not self.pos_tagged:
             self._init_tag_list(self.text)
-        
-        print self.pos_tags
-        
+                
         total = 0
         for i in range(word_spans_index_start, word_spans_index_end-2):
             tag1, tag2, tag3, = self.pos_tags[i][1], self.pos_tags[i+1][1], self.pos_tags[i+2][1]

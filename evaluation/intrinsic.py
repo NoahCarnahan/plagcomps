@@ -66,25 +66,13 @@ def populate_database(atom_type, num, features=None):
     first_training_files = util.get_n_training_files(num)
 
     if features == None:
-        features = ['punctuation_percentage',
-                    'stopword_percentage',
-                    'average_sentence_length',
-                    'avg_internal_word_freq_class',
-                    'avg_external_word_freq_class',
-                    'syntactic_complexity',
-                    "avg(num_chars)",
-                    "std(num_chars)",
-                    "syntactic_complexity_average",
-                    "flesch_reading_ease",
-                    ]
+        features = FeatureExtractor.get_all_feature_function_names()
     
-    count = 0
     for doc in first_training_files:
-        count += 1
-        if DEBUG:
-            print "On document", count
         d = _get_reduced_docs(atom_type, [doc], session)[0]
-        d.get_feature_vectors(features, session)
+        for feature in features:
+            print "Calculating", feature, "for", str(d), str(datetime.datetime.now())
+            d.get_feature_vectors([feature], session)
 
     session.close()
 
@@ -487,15 +475,18 @@ class ReducedDoc(Base):
                 return True
         return False
         
-    def _get_feature_values(self, feature, session):
+    def _get_feature_values(self, feature, session, populate = True):
         '''
         Returns the list of feature values for the given feature, instantiating them if
-        need be.
+        need be. If populate is False, feature values will not be instantiatiated.
         '''
         try:
             return self._features[feature]
             
         except KeyError:
+            if populate == False:
+                raise KeyError()
+    
             # Read the file
             f = open(self.full_path, 'r')
             text = f.read()
@@ -647,22 +638,5 @@ def _cluster_auc_test(num_plag, num_noplag, mean_diff, std, dimensions = 1, repe
         for key in averages:
             print key, sum(averages[key])/float(max(1, len(averages[key])))
 
-
-# import plagcomps.evaluation.intrinsic as intr
-# features = ['punctuation_percentage',
-#                     'stopword_percentage',
-#                     'average_sentence_length',
-#                     'avg_internal_word_freq_class',
-#                     'avg_external_word_freq_class',
-#                     'syntactic_complexity',
-#                     "avg(num_chars)",
-#                     "std(num_chars)",
-#                     "syntactic_complexity_average",
-#                     "flesch_reading_ease",
-#                     ]
-# features = FeatureExtractor.get_all_feature_function_names()
-# print evaluate_n_documents(features, 'outlier', 2, 'paragraph', 100)
-
 if __name__ == "__main__":
     _test()
-    #_stats_evaluate_n_documents(["num_chars", "avg(num_chars)", "std(num_chars)", "avg(avg(num_chars))", "avg(std(num_chars)"], "paragraph", 25) 
