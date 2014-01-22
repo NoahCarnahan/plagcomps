@@ -99,7 +99,6 @@ class FeatureExtractor:
         valid_word_unigrams = ["is", "of", "been", "the"]
         feature_function_names.remove("word_unigram")
         for w in valid_word_unigrams:
-            print w
             feature_function_names.append("word_unigram,%s" % w)
         
 
