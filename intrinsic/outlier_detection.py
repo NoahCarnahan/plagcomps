@@ -1,6 +1,18 @@
 from numpy import mean, std, sqrt, log, exp
 from scipy.stats import norm
 
+
+# (nj) TODO: Come up with different (better?) ways of
+# (1) Combining "probabilities" for a single passage. Right now we just mulitply 
+# the probabilities we get from each of the features. Done in:
+# _combine_feature_probs(prob_vector)
+# (2) Building a "confidence" score based on the relative "probability" of 
+# a passage being plagiarized vs. not-plagiarized. Done in:
+# _get_confidence(plag_prob, non_plag_prob) 
+# (3) Scaling the "confidence" scores across an entire document (set of 
+# stylometric features). Done in:
+# _scale_confidences(confs) 
+
 def density_based(stylo_vectors, center_at_mean=True, num_to_ignore=1, impurity=.2):
     '''
     Implements the algorithm described in Stein, Lipka, Prettenhofer's
@@ -36,8 +48,9 @@ def density_based(stylo_vectors, center_at_mean=True, num_to_ignore=1, impurity=
     for i in xrange(len(stylo_vectors)):
         vec = stylo_vectors[i]
         # For current <vec>,
-        # featurewise_plag_prob[i] == prob. that feature <i> 
-        # was plagiarized in <vec>
+        # featurewise_plag_prob[i] == prob. that feature <i> was plagiarized in <vec>
+        # NOTE that these are taken from PDFs, so they don't actually correspond
+        # to real probabilities 
         featurewise_nonplag_prob = []
         featurewise_plag_prob = []
 
@@ -57,16 +70,24 @@ def density_based(stylo_vectors, center_at_mean=True, num_to_ignore=1, impurity=
         # Sum up logs and exponentiate as opposed to multiplying lots of
         # small numbers
         # TODO could weight each feature differently
-        plag_prob = exp(sum(log(featurewise_plag_prob)))
-        non_plag_prob = exp(sum(log(featurewise_nonplag_prob)))
+        plag_prob = _combine_feature_probs(featurewise_plag_prob)
+        non_plag_prob = _combine_feature_probs(featurewise_nonplag_prob)
 
         # TODO: How should we use calculated non_plag_prob or calculated plag_prob?
-        # A ratio of the two? i.e. (plag_prob / non_plag_prob)
+        # A ratio of the two? i.e. (plag_prob / non_plag_prob)?
         confidences.append(_get_confidence(plag_prob, non_plag_prob))
             
     scaled = _scale_confidences(confidences)
 
     return scaled
+
+def _combine_feature_probs(prob_vector):
+    '''
+    Returns the Naive Bayes version of combining probabilites: just multiply them.
+    Note that we take the sum of the log of each probability and exponentiate
+    in hopes of avoiding underflow when multiplying many small numbers
+    '''
+    return exp(sum(log(prob_vector)))
 
 def _get_confidence(plag_prob, non_plag_prob):
     '''
