@@ -65,7 +65,7 @@ class FeatureExtractor:
                     'subfeatures' not in func_args:
                 feature_function_names.append(func_name)
         
-        # pos_trigram is a special case
+        # pos_trigram, word_unigram, and vowelness_trigram are special cases
         valid_pos_trigrams = [
             ("NN", "VB", "NN"),
             ("NN", "NN", "VB"),
@@ -84,7 +84,25 @@ class FeatureExtractor:
         feature_function_names.remove("pos_trigram")
         for tags in valid_pos_trigrams:
             feature_function_names.append("pos_trigram,%s,%s,%s" % tags)
+            
+        valid_vowelness_trigrams = [
+            ("C", "V", "C"),
+            ("C", "V", "V"),
+            ("V", "V", "C"),
+            ("V", "V", "V"),
+            
+        ]
+        feature_function_names.remove("vowelness_trigram")
+        for tris in valid_vowelness_trigrams:
+            feature_function_names.append("vowelness_trigram,%s,%s,%s" % tris)
+            
+        valid_word_unigrams = ["is", "of", "been", "the"]
+        feature_function_names.remove("word_unigram")
+        for w in valid_word_unigrams:
+            print w
+            feature_function_names.append("word_unigram,%s" % w)
         
+
         return feature_function_names
 
     
@@ -246,11 +264,22 @@ class FeatureExtractor:
             else:
                 # No nested features, so things are easy
                 
-                #special case for pos_trigram
+                #special case for pos_trigram, vowelness_trigram, word_unigram
                 if feat_name.startswith("pos_trigram"):
-                    dont_care, first, second, third = feat_name.split(",")
+                    feat_func, first, second, third = feat_name.split(",")
                     start, end = spanutils.slice(self.word_spans, start_index, end_index, return_indices = True)
-                    vect.append(self.pos_trigram(start, end, (first, second, third)))
+                    vect.append(getattr(self, feat_func)(start, end, (first, second, third)))
+                    
+                elif feat_name.startswith("vowelness_trigram"):
+                    feat_func, first, second, third = feat_name.split(",")
+                    vect.append(getattr(self, feat_func)(start_index, end_index, (first, second, third)))
+                    
+                elif feat_name.startswith("word_unigram"):
+                    feat_func, target_word = feat_name.split(",")
+                    start, end = spanutils.slice(self.word_spans, start_index, end_index, return_indices = True)
+                    vect.append(getattr(self, feat_func)(start, end, target_word))
+                
+                
                 else:
                     if self._feature_type(feat_name) == "char": 
                         start, end = start_index, end_index
@@ -870,47 +899,19 @@ class FeatureExtractor:
             # Either num of word or num of sentences was zero, so return 100, an "easy" score (according to wikipedia)
             return 0
     
-    def frequency_of_word_of(self, word_spans_index_start, word_spans_index_end):
+    def word_unigram(self, word_spans_index_start, word_spans_index_end, target_word):
         '''
-        This is a word level feature that returns the number of occurences of the word "of" for the
-        given words.
-        '''
-        return self._frequency_of_word(word_spans_index_start, word_spans_index_end, "of")
-        
-    def frequency_of_word_is(self, word_spans_index_start, word_spans_index_end):
-        '''
-        This is a word level feature that returns the number of occurences of the word "is" for the
-        given words.
-        '''
-        return self._frequency_of_word(word_spans_index_start, word_spans_index_end, "is")
-        
-    def frequency_of_word_the(self, word_spans_index_start, word_spans_index_end):
-        '''
-        This is a word level feature that returns the number of occurences of the word "the" for the
-        given words.
-        '''
-        return self._frequency_of_word(word_spans_index_start, word_spans_index_end, "the")
-        
-    def frequency_of_word_been(self, word_spans_index_start, word_spans_index_end):
-        '''
-        This is a word level feature that returns the number of occurences of the word "been" for the
-        given words.
-        '''
-        return self._frequency_of_word(word_spans_index_start, word_spans_index_end, "been")
-
-    def _frequency_of_word(self, start, end, target_word):
-        '''
-        This helper function return the number of occurence of target_word in in the section of text
-        deliminated by the start and end self.word_spans indices.
+        This is a word level feature that returns the number of occurences of the word <target_word>
+        for the given words.
         '''
         total = 0
-        for i in range(start, end):
+        for i in range(word_spans_index_start, word_spans_index_end):
             w_start, w_end = self.word_spans[i]
             word = self.text[w_start:w_end]
             if word.strip(".").lower() == target_word:
                 total += 1
         return total
-        
+    
     def pos_trigram(self, word_spans_index_start, word_spans_index_end, pos):
         '''
         pos is a tuple of parts-of-speech e.g. ("NN", "NN", "NN")
@@ -929,6 +930,29 @@ class FeatureExtractor:
             if (tag1, tag2, tag3) == pos:
                 total += 1
         return total
+        
+    def vowelness_trigram(self, char_index_start, char_index_end, tri):
+        '''
+        This feature returns the number of occurences of the given "vowelness" trigram. That is,
+        the items of the trigram are either "V" for vowel, "C" for consonant, or "X" for other.
+        
+        tri is a tuple of character types (consonant or vowel), e.g. ("V", "C", "V")
+        '''
+        def vowel_or_consonant(char):
+            if char in "aeiou":
+                return "V"
+            elif char in "qwrtypsdfghjklzxcvbnm":
+                return "C"
+            else:
+                return "X"
+
+        total = 0
+        for char_i in range(char_index_start, char_index_end-2):
+            c1, c2, c3 = self.text[char_i].lower(), self.text[char_i+1].lower(), self.text[char_i+2].lower()
+            if vowel_or_consonant(c1) == tri[0] and vowel_or_consonant(c2) == tri[1] and vowel_or_consonant(c3) == tri[2]:
+                total += 1
+        return total
+            
 
 def _test():
 
@@ -996,34 +1020,13 @@ def _test():
     else:
         print "average_syllables_per_word test FAILED"
     
-    f = FeatureExtractor("The brown fox ate. I go to the school? Believe it. Of mice and men. How have you been?")
-    #print f.get_feature_vectors(["frequency_of_word_of"], "sentence")
-    if f.get_feature_vectors(["frequency_of_word_of"], "sentence") == [(0,), (0,), (0,), (1,), (0,)]:
-        print "frequency_of_word_of test passed"
-    else:
-        print "frequency_of_word_of test FAILED"
-        
     f = FeatureExtractor("The brown fox ate. I go to the school? Believe it. This is reprehensible. How have you been?")
-    #print f.get_feature_vectors(["frequency_of_word_been"], "sentence")
-    if f.get_feature_vectors(["frequency_of_word_been"], "sentence") == [(0,), (0,), (0,), (0,), (1,)]:
-        print "frequency_of_word_been test passed"
+    #print f.get_feature_vectors(["word_unigram,the"], "sentence")
+    if f.get_feature_vectors(["word_unigram,the"], "sentence") == [(1,), (1,), (0,), (0,), (0,)]:
+        print "word_unigram,the test passed"
     else:
-        print "frequency_of_word_been test FAILED"
-    
-    f = FeatureExtractor("The brown fox ate. I go to the school? Believe it. This is reprehensible. How have you been?")
-    #print f.get_feature_vectors(["frequency_of_word_the"], "sentence")
-    if f.get_feature_vectors(["frequency_of_word_the"], "sentence") == [(1,), (1,), (0,), (0,), (0,)]:
-        print "frequency_of_word_the test passed"
-    else:
-        print "frequency_of_word_the test FAILED"
-    
-    f = FeatureExtractor("The brown fox ate. I go to the school? Believe it. This is reprehensible. How have you been?")
-    #print f.get_feature_vectors(["frequency_of_word_is"], "sentence")
-    if f.get_feature_vectors(["frequency_of_word_is"], "sentence") == [(0,), (0,), (0,), (1,), (0,)]:
-        print "frequency_of_word_is test passed"
-    else:
-        print "frequency_of_word_is test FAILED"
-        
+        print "word_unigram,the test FAILED"
+          
     f = FeatureExtractor("The mad hatter likes tea and the red queen hates alice.")
     #print f.get_feature_vectors(["pos_trigram,NN,NN,NN"], "sentence")
     if f.get_feature_vectors(["pos_trigram,NN,NN,NN"], "sentence") == [(1,)]:
@@ -1031,20 +1034,12 @@ def _test():
     else:
         print "pos_trigram,NN,NN,NN test FAILED"
     
-    
-    
-    #f = FeatureExtractor("The brown fox ate. I go to the school. Believe it. I go.")
-    ##print f.get_feature_vectors(["syntactic_complexity_average"], "paragraph")
-    #if f.get_feature_vectors(["syntactic_complexity_average"], "paragraph") == [(0.5,)]:
-    #    print "syntactic_complexity_average test passed"
-    #else:
-    #    print "syntactic_complexity_average test FAILED"
+    f = FeatureExtractor("The mad hatter likes tea and the red queen hates alice.")
+    print f.get_feature_vectors(["vowelness_trigram,C,V,C"], "sentence")
+    if f.get_feature_vectors(["vowelness_trigram,C,V,C"], "sentence") == [(9,)]:
+        print "vowelness_trigram,C,V,C test passed"
+    else:
+        print "vowelness_trigram,C,V,C test FAILED"
     
 if __name__ == "__main__":
     _test()
-
-    #f = FeatureExtractor("I absolutely go incredibly far. Zach went fast over sand crab land.")
-    #print f.get_feature_vectors(["num_chars", "avg(num_chars)", "avg(avg(num_chars))", "std(num_chars)", "avg(std(num_chars))", "std(std(num_chars))"], "paragraph")
-    ##print f.get_feature_vectors(["num_chars", "avg(num_chars)", "avg(avg(num_chars))", "std(num_chars)", "avg(std(num_chars))", "std(std(num_chars))"], "paragraph")
-    #print f.get_feature_vectors(["punctuation_percentage", "avg(punctuation_percentage)", "std(punctuation_percentage)"], "paragraph")
-
