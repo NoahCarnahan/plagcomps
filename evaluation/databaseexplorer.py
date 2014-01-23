@@ -26,7 +26,7 @@ def retreive_feat_vect(doc_name, atom_type, feature, version):
     q = session.query(ReducedDoc).filter(and_(ReducedDoc.full_path == doc_name, ReducedDoc.atom_type == atom_type, ReducedDoc.version_number == version))
     r = q.one()
     print r.id
-    feature_values = r._get_feature_values(session, feature, populate = False)
+    feature_values = r._get_feature_values(feature, session, populate = False)
     
     return feature_values
     

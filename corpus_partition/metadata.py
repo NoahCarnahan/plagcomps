@@ -83,7 +83,6 @@ def get_base_file_names(full_dir_path):
 
 	return all_file_bases
 
-
 def five_num_summary(arr):
 	'''
 	Prints <min, 25th percentile, median, 75th percentile, max>
@@ -117,6 +116,42 @@ def doc_lengths(thresh=35000):
 			long_enough += 1
 
 	print float(long_enough) / len(training_docs), 'were long enough'
+
+
+def explore_training_corpus(n=1000):
+	'''
+	'''
+	util = IntrinsicUtility()
+	training_texts = util.get_n_training_files(n)
+	training_xmls = [s.replace('txt', 'xml') for s in training_texts]
+
+	file_lengths = []
+	pct_plags = []
+	for text_file, xml_file in zip(training_texts, training_xmls):
+		with file(text_file) as f:
+			text = f.read()
+
+		text_len = len(text)
+		plag_spans = util.get_plagiarized_spans(xml_file)
+		plag_len = sum([end - start for start, end in plag_spans])
+		plag_pct = float(plag_len) / text_len
+
+		file_lengths.append(text_len)
+		pct_plags.append(plag_pct)
+
+	#outfile = os.path.join(os.path.dirname(__file__), 'training_lengths.csv')
+	outfile = 'training_lengths.csv'
+
+	f = file(outfile, 'wb')
+	f.write('file_num, length, pct_plag\n')
+
+	for i in xrange(len(file_lengths)):
+		line = '%i, %i, %f\n' % (i, file_lengths[i], pct_plags[i])
+		f.write(line)
+	f.close()
+
+	return zip(file_lengths, pct_plags)
+
 
 
 if __name__ == '__main__':

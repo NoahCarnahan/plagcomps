@@ -137,12 +137,15 @@ class IntrinsicUtility(BaseUtility):
 
         return text
 
-    def get_n_training_files(self, n=None, include_txt_extension=True, min_len=None):
+    def get_n_training_files(self, n=None, include_txt_extension=True, min_len=None, first_doc_num=0):
         '''
         Returns first <n> training files, or all of them if <n> is not specified
 
         If <min_len> is specified, only return files which contain at least <min_len>
         characters. 
+
+        <first_doc_num> defaults to 0, and indicates where the <n> documents should
+        start counting from
         '''
         all_training_files = self.read_file_list(IntrinsicUtility.TRAINING_LOC, 
                                                  IntrinsicUtility.CORPUS_LOC,
@@ -155,7 +158,7 @@ class IntrinsicUtility(BaseUtility):
         if min_len:
             # Read through files until finding <n> documents of 
             # length >= min_len
-            for fname in all_training_files:
+            for fname in all_training_files[first_doc_num:]:
                 if len(to_return) >= n:
                     break
                 else:
@@ -167,7 +170,7 @@ class IntrinsicUtility(BaseUtility):
                         to_return.append(fname)
 
         else:
-            to_return = all_training_files[:n]
+            to_return = all_training_files[first_doc_num : n + first_doc_num]
 
         return to_return
 
