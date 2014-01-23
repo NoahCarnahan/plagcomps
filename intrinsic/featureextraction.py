@@ -799,26 +799,38 @@ class FeatureExtractor:
         if not self.pos_frequency_count_table_initialized:
             self._init_pos_frequency_table()
         #print "querying syntactic complexity of", word_spans_index_start, "to", word_spans_index_end    
-        conjunctions_table = self.pos_frequency_count_table.get("SUB", None)
-        if conjunctions_table != None:
-            #print "conjunctions", conjunctions_table[word_spans_index_start:word_spans_index_end+1]
-            num_conjunctions = conjunctions_table[word_spans_index_end] - conjunctions_table[word_spans_index_start]
-        else:
-            num_conjunctions = 0
 
-        wh_table = self.pos_frequency_count_table.get("WH", None)
-        if wh_table != None:
-            #print "wh", wh_table[word_spans_index_start:word_spans_index_end+1]
-            num_wh_pronouns = wh_table[word_spans_index_end] - wh_table[word_spans_index_start]
-        else:
-            num_wh_pronouns = 0
+        try:
 
-        verb_table = self.pos_frequency_count_table.get("VERBS", None)
-        if verb_table != None:
-            #print "verbs", verb_table[word_spans_index_start:word_spans_index_end+1]
-            num_verb_forms = verb_table[word_spans_index_end] - verb_table[word_spans_index_start]
-        else:
-            num_verb_forms = 0
+            conjunctions_table = self.pos_frequency_count_table.get("SUB", None)
+            if conjunctions_table != None:
+                #print "conjunctions", conjunctions_table[word_spans_index_start:word_spans_index_end+1]
+                num_conjunctions = conjunctions_table[word_spans_index_end] - conjunctions_table[word_spans_index_start]
+            else:
+                num_conjunctions = 0
+
+            wh_table = self.pos_frequency_count_table.get("WH", None)
+            if wh_table != None:
+                #print "wh", wh_table[word_spans_index_start:word_spans_index_end+1]
+                num_wh_pronouns = wh_table[word_spans_index_end] - wh_table[word_spans_index_start]
+            else:
+                num_wh_pronouns = 0
+
+            verb_table = self.pos_frequency_count_table.get("VERBS", None)
+            if verb_table != None:
+                #print "verbs", verb_table[word_spans_index_start:word_spans_index_end+1]
+                num_verb_forms = verb_table[word_spans_index_end] - verb_table[word_spans_index_start]
+            else:
+                num_verb_forms = 0
+
+        except IndexError:
+            with open("SyntacticCompliexityError.txt", "w") as error_file:
+                error_file.write(str(self.text[self.word_spans[word_spans_index_start][0]:]))
+                error_file.write("-------")
+                error_file.write(self.word_spans[word_spans_index_start:])
+                error_file.write("-------")
+                error_file.write(self.pos_frequency_count_table)
+            raise IndexError("There appears to be an indexing problem with POS tags! Alert Zach!")
         
         return 2 * num_conjunctions + 2 * num_wh_pronouns + num_verb_forms
 
