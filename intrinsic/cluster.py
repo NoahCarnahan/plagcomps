@@ -266,40 +266,44 @@ def _all_clusters_all_features():
 
     unique_features = []
     
-    #for char_feature in [
-    #    "punctuation_percentage",
-    #]:
-    #    for char_modifier in [
-    #        "", "avg(", "std(", "avg(avg(", "avg(std(", "avg(avg(avg(", "avg(avg(std("
-    #    ]:
-    #        unique_features.append(char_modifier + char_feature + ")" * char_modifier.count("("))
+    for char_feature in [
+        "punctuation_percentage",
+    ]:
+        for char_modifier in [
+            "", "avg(", "std(", "avg(avg(", "avg(std(", "avg(avg(avg(", "avg(avg(std("
+        ]:
+            unique_features.append(char_modifier + char_feature + ")" * char_modifier.count("("))
 
     for word_feature in [
-        #"num_chars",
-        #"average_syllables_per_word",
-        #"stopword_percentage",
-        #"syntactic_complexity", 
-        #"avg_external_word_freq_class", 
-        #"avg_internal_word_freq_class", 
+        "num_chars",
+        "average_syllables_per_word",
+        "stopword_percentage",
+        "syntactic_complexity", 
+        "avg_external_word_freq_class", 
+        "avg_internal_word_freq_class", 
     ]:
-        unique_features.append(word_feature)
-        #for word_modifier in [
-        #    "", "avg(", "std(", "avg(avg(", "avg(std("
-        #]:
-        #    unique_features.append(word_modifier + word_feature + ")" * word_modifier.count("("))
+        for word_modifier in [
+            "", "avg(", "std(", "avg(avg(", "avg(std("
+        ]:
+            unique_features.append(word_modifier + word_feature + ")" * word_modifier.count("("))
 
     for sentence_feature in [
-        #"flesch_reading_ease",
+        "flesch_reading_ease",
         "yule_k_characteristic",
+        "honore_r_measure",
+        "gunning_fog_index",
     ]:
-        unique_features.append(sentence_feature)
         for sentence_modifier in [
             "", "avg(", "std("
         ]:
             unique_features.append(sentence_modifier + sentence_feature + ")" * sentence_modifier.count("("))
 
+    print "running on features:", unique_features
+
     for feature in unique_features:
-        ev.compare_cluster_methods(feature, 200, clusterings)
+        if feature != "yule_k_characteristic": 
+            print "running clusterings on", feature
+            ev.compare_cluster_methods(feature, 200, clusterings)
 
 if __name__ == "__main__":
     #_test()
