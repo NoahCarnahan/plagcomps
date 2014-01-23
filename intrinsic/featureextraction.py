@@ -574,7 +574,40 @@ class FeatureExtractor:
 
         return 10000 * (M2 - M1) / max(1, (M1 ** 2))
 
+    def _init_num_complex_words(self):
+        '''
+        init sum table of number of complex words (3+ syllables)
+        '''
+
+        sum_table = [0]
+        for start, end in self.word_spans:
+            num = sum_table[-1]
+            num_syl = self._syl(start, end)
+            if num_syl > 2:
+                num += 1
+            sum_table.append(num)
+
+        self.features["num_complex_words"] = sum_table
     
+    def gunning_fog_index(self, sent_spans_index_start, sent_spans_index_end):
+        '''
+        A measure of sentence complexity
+        definition off http://en.wikipedia.org/wiki/Gunning_fog_index
+        '''
+
+        average_sentence_length = self.average_sentence_length(sent_spans_index_start, sent_spans_index_end)
+ 
+        spans = self.sentence_spans[sent_spans_index_start:sent_spans_index_end]
+        start, end = spans[0][0], spans[-1][1]
+        word_start, word_end = spanutils.slice(self.word_spans, start, end, True)
+
+        if "num_complex_words" not in self.features:
+            self._init_num_complex_words()
+        complex_words_table = self.features["num_complex_words"]
+        percent_complex_words = (complex_words_table[word_end] - complex_words_table[word_start]) / float(max(1, word_end - word_start))
+
+        return .4 * (average_sentence_length + 100 * percent_complex_words)
+
     def _init_average_syllables_per_word(self):
         '''
         Initializes the average syllables sum table. sum_table[i] is the sum of the number
@@ -1073,8 +1106,22 @@ def _test():
         print "vowelness_trigram,C,V,C test passed"
     else:
         print "vowelness_trigram,C,V,C test FAILED"
+
+    f = FeatureExtractor("The mad hatter likes tea and the red queen hates alice. Images of the Mandelbrot set display an elaborate boundary that reveals progressively ever-finer recursive detail at increasing magnifications. The style of this repeating detail depends on the region of the set being examined. The set's boundary also incorporates smaller versions of the main shape, so the fractal property of self-similarity applies to the entire set, and not just to its parts.")
+    #print "yule_k_characteristic", f.get_feature_vectors(["yule_k_characteristic"], "paragraph")
+    vectors =  f.get_feature_vectors(["yule_k_characteristic"], "paragraph")
+    if [round(x[0], 4) for x in vectors] == [555.3578]:
+        print "yule_k_characteristic test passed"
+    else:
+        print "yule_k_characteristic test FAILED"
+
+    f = FeatureExtractor("The mad hatter likes tea and the red queen hates alice. Images of the Mandelbrot set display an elaborate boundary that reveals progressively ever-finer recursive detail at increasing magnifications. The style of this repeating detail depends on the region of the set being examined. The set's boundary also incorporates smaller versions of the main shape, so the fractal property of self-similarity applies to the entire set, and not just to its parts.")
+    #print f.get_feature_vectors(["gunning_fog_index"], "sentence")
+    vectors =  f.get_feature_vectors(["gunning_fog_index"], "sentence")
+    if [round(x[0], 4) for x in vectors] == [4.4, 20.5333, 11.3333, 17.5613]:
+        print "gunning_fog_index test passed"
+    else:
+        print "gunning_fog_index test FAILED"
     
 if __name__ == "__main__":
-    #_test()
-    f = FeatureExtractor("The dog and the cat napped. The dog was brown. The cat was orange.")
-    print f.get_feature_vectors(["yule_k_characteristic"], "sentence")
+    _test()

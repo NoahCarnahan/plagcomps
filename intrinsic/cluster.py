@@ -276,11 +276,11 @@ def _all_clusters_all_features():
 
     for word_feature in [
         #"num_chars",
-        "average_syllables_per_word",
-        "stopword_percentage",
-        "syntactic_complexity", 
-        "avg_external_word_freq_class", 
-        "avg_internal_word_freq_class", 
+        #"average_syllables_per_word",
+        #"stopword_percentage",
+        #"syntactic_complexity", 
+        #"avg_external_word_freq_class", 
+        #"avg_internal_word_freq_class", 
     ]:
         unique_features.append(word_feature)
         #for word_modifier in [
@@ -289,16 +289,17 @@ def _all_clusters_all_features():
         #    unique_features.append(word_modifier + word_feature + ")" * word_modifier.count("("))
 
     for sentence_feature in [
-        "flesch_reading_ease",
+        #"flesch_reading_ease",
+        "yule_k_characteristic",
     ]:
         unique_features.append(sentence_feature)
-        #for sentence_modifier in [
-        #    "", "avg(", "std("
-        #]:
-        #    unique_features.append(sentence_modifier + sentence_feature + ")" * sentence_modifier.count("("))
+        for sentence_modifier in [
+            "", "avg(", "std("
+        ]:
+            unique_features.append(sentence_modifier + sentence_feature + ")" * sentence_modifier.count("("))
 
     for feature in unique_features:
-        ev.compare_cluster_methods(feature, 50, clusterings)
+        ev.compare_cluster_methods(feature, 200, clusterings)
 
 if __name__ == "__main__":
     #_test()
