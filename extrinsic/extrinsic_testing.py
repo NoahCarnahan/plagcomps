@@ -26,91 +26,94 @@ from sqlalchemy.ext.associationproxy import association_proxy
 
 class ExtrinsicTester:
 
-	def __init__(self, atom_type, fingerprint_method, suspect_file_list, source_file_list):
-		self.suspicious_path_start = ExtrinsicUtility.CORPUS_SUSPECT_LOC
-		self.corpus_path_start = ExtrinsicUtility.CORPUS_SRC_LOC
-		source_dirs = os.listdir(self.corpus_path_start)
-		
-		self.source_file_names, self.suspect_file_names = ExtrinsicUtility().get_n_training_files(include_txt_extension=False)
-	
-		# uncomment these two lines to test on reasonable sized corpus
-		# self.source_file_names = ["sample_corpus/source1", "sample_corpus/source2", "sample_corpus/source3"]
-		# self.suspect_file_names = ["sample_corpus/test1", "sample_corpus/test2", "sample_corpus/test3", "sample_corpus/test4"]
+    def __init__(self, atom_type, fingerprint_method, n, k, confidence_method, suspect_file_list, source_file_list):
+        self.suspicious_path_start = ExtrinsicUtility.CORPUS_SUSPECT_LOC
+        self.corpus_path_start = ExtrinsicUtility.CORPUS_SRC_LOC
+        source_dirs = os.listdir(self.corpus_path_start)
+            
+        self.atom_type = atom_type
+        self.fingerprint_method = fingerprint_method
+        self.n = n
+        self.k = k
+        self.confidence_method = confidence_method
+        self.suspect_file_list = suspect_file_list
+        self.source_file_list = source_file_list
+        self.evaluator = fingerprint_extraction.FingerprintEvaluator(source_file_list, fingerprint_method, self.n, self.k)
 
-		self.atom_type = atom_type
-		self.fingerprint_method = fingerprint_method
-		self.suspect_file_list = suspect_file_list
-		self.evaluator = fingerprint_extraction.FingerprintEvaluator(source_file_list, fingerprint_method, 3)
+    def _get_trials(self):
+        '''
+        For each testing document, split the document into atoms and classify each atom
+        as plagiarized or not-plagiarized. Build a list of classifications and a list
+        of the ground truths for each atom of each document.
+        '''
+        classifications = []
+        actuals = []
+        for f in self.suspect_file_list:
+            suspicious_document = open(f + '.txt')
+            doc = suspicious_document.read()
+            
+            suspicious_document.close()
+            doc_name = f.replace(self.suspicious_path_start, "")
 
-	def _get_trials(self):
-		'''
-		For each testing document, split the document into atoms and classify each atom
-		as plagiarized or not-plagiarized. Build a list of classifications and a list
-		of the ground truths for each atom of each document.
-		'''
-		classifications = []
-		actuals = []
-		for f in self.suspect_file_names:
-			suspicious_document = open(f + '.txt')
-			doc = suspicious_document.read()
-			# atom_spans = feature_extractor.get_spans(doc, self.atom_type)
-			# atoms = [doc[a[0]:a[1]] for a in atom_spans]
-			# TODO: make this a for loop over atoms once paragraph fingerprints are supported in the database
-			suspicious_document.close()
-			atom_classifications = self.evaluator.classify_document(f, self.atom_type, 0, session)
-			# just take the most similar source document's similarity as the confidence of plagiarism for now.
-			similarity = atom_classifications[0][1]
+            acts = ground_truth._query_ground_truth(f, self.atom_type, session, self.suspicious_path_start).get_ground_truth(session)
+            actuals += acts
 
-			acts = ground_truth._query_ground_truth(f, self.atom_type, session, self.suspicious_path_start)
-			actuals += acts
-			classifications += [similarity for i in xrange(len(acts))] # just classify each paragraph in a document as the same similarity
-		return classifications, actuals
+            print f
+            for i in xrange(len(acts)):
+                print 'Classifying', doc_name
+                atom_classifications = self.evaluator.classify_document(doc_name, self.atom_type, i, self.fingerprint_method, self.n, self.k, self.confidence_method, session)
+                # just take the most similar source document's similarity as the confidence of plagiarism for now.
+                classifications.append(atom_classifications[0][1])
+                print 'atom index:', str(i+1) + '/' + str(len(acts))
+                print 'confidence (actual, guess):', acts[i], atom_classifications[0][1]
 
-	def plot_ROC_curve(self):
-		'''
-		Outputs an ROC figure based on our plagiarism classifications and the 
-		ground truth of each atom.
-		'''
-		trials, actuals = self._get_trials()
+        return classifications, actuals
 
-		# actuals is a list of ground truth classifications for passages
-		# trials is a list consisting of 0s and 1s. 1 means we think the atom is plagiarized
-		fpr, tpr, thresholds = sklearn.metrics.roc_curve(actuals, trials, pos_label=1)
-		roc_auc = sklearn.metrics.auc(fpr, tpr)
+    def plot_ROC_curve(self):
+        '''
+        Outputs an ROC figure based on our plagiarism classifications and the 
+        ground truth of each atom.
+        '''
+        trials, actuals = self._get_trials()
 
-		# The following code is from http://scikit-learn.org/stable/auto_examples/plot_roc.html
-		pyplot.clf()
-		pyplot.plot(fpr, tpr, label='ROC curve (area = %0.2f)' % roc_auc)
-		pyplot.plot([0, 1], [0, 1], 'k--')
-		pyplot.xlim([0.0, 1.0])
-		pyplot.ylim([0.0, 1.0])
-		pyplot.xlabel('False Positive Rate')
-		pyplot.ylabel('True Positive Rate')
-		pyplot.title('Receiver Operating Characteristic -- Extrinsic w/ '+self.fingerprint_method+' fingerprinting')
-		pyplot.legend(loc="lower right")
-		
-		path = "figures/roc_extrinsic_"+str(time.time())+"_"+self.fingerprint_method+".pdf"
-		pyplot.savefig(path)
+        # actuals is a list of ground truth classifications for passages
+        # trials is a list consisting of 0s and 1s. 1 means we think the atom is plagiarized
+        fpr, tpr, thresholds = sklearn.metrics.roc_curve(actuals, trials, pos_label=1)
+        roc_auc = sklearn.metrics.auc(fpr, tpr)
+
+        # The following code is from http://scikit-learn.org/stable/auto_examples/plot_roc.html
+        pyplot.clf()
+        pyplot.plot(fpr, tpr, label='ROC curve (area = %0.2f)' % roc_auc)
+        pyplot.plot([0, 1], [0, 1], 'k--')
+        pyplot.xlim([0.0, 1.0])
+        pyplot.ylim([0.0, 1.0])
+        pyplot.xlabel('False Positive Rate')
+        pyplot.ylabel('True Positive Rate')
+        pyplot.title('Extrinsic: method=' + self.fingerprint_method+' n=' + str(self.n) + ' confidence_method=' + self.confidence_method)
+        pyplot.legend(loc="lower right")
+        
+        path = os.path.join(os.path.dirname(__file__), "../figures/roc_extrinsic_"+str(time.time())+"_"+self.fingerprint_method+".pdf")
+        pyplot.savefig(path)
 
 
 if __name__ == "__main__":
-	session = extrinsic_processing.Session()
-	# fp = extrinsic_processing._query_fingerprint('/part7/suspicious-document12675', "full", 3, 5, "paragraph", session, '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents')
-	# print fp.get_fingerprints(session)
-	
-	util = ExtrinsicUtility()
-	num_files = 5
+    session = extrinsic_processing.Session()
+    # fp = extrinsic_processing._query_fingerprint('/part7/suspicious-document12675', "full", 3, 5, "paragraph", session, '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents')
+    # print fp.get_fingerprints(session)
+    
+    util = ExtrinsicUtility()
+    num_files = 10
 
-	source_file_list, suspect_file_list = util.get_n_training_files(n=num_files, include_txt_extension=False)
+    source_file_list, suspect_file_list = util.get_n_training_files(n=num_files, include_txt_extension=False)
 
-	print 'Testing first', num_files, ' suspect files using a corpus of', len(source_file_list), 'source documents:'
-	print 'Suspect filenames:', suspect_file_list
+    print 'Testing first', num_files, ' suspect files using a corpus of', len(source_file_list), 'source documents:'
+    print 'Suspect filenames:', suspect_file_list
 
-	tester = ExtrinsicTester("paragraph", "full", suspect_file_list, source_file_list)
-	tester.plot_ROC_curve()
+    atom_type = "paragraph" # ["paragraph", "full"]
+    method = "anchor" # ["kth_in_sent", "anchor", "full"]
+    n = 5
+    k = 5
+    confidence_method = "jaccard" # ["containment", "jaccard"]
 
-	# tester = ExtrinsicTester("paragraph", "kth_in_sent", suspect_file_list, source_file_list)
-	# tester.plot_ROC_curve()
-
-	# tester = ExtrinsicTester("paragraph", "anchor", suspect_file_list, source_file_list)
-	# tester.plot_ROC_curve()
+    tester = ExtrinsicTester(atom_type, method, n, k, confidence_method, suspect_file_list, source_file_list)
+    tester.plot_ROC_curve()

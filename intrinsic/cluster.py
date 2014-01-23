@@ -1,21 +1,42 @@
 import hmm
 import featureextraction
+from kmedians import KMedians
+import outlier_detection
+#from plagcomps.intrinsic import outlier_detection
 
-from numpy import array, matrix
+
+from numpy import array, matrix, random
 from scipy.cluster.vq import kmeans2, whiten
 from scipy.spatial.distance import pdist
 from scipy.cluster.hierarchy import linkage, fcluster
 from collections import Counter
 
-def cluster(method, k, items):
+
+def cluster(method, k, items, **kwargs):
     if method == "kmeans":
         return _kmeans(items, k)
     elif method == "agglom":
         return _agglom(items, k)
     elif method == "hmm":
         return _hmm(items, k)
+    elif method == "median_simple":
+        return _median_simple(items)
+    elif method == "median_kmeans":
+        return _median_kmeans(items, k)
+    elif method == "outlier":
+        return outlier_detection.density_based(items, **kwargs)
+    elif method == "kmedians":
+        return _kmedians(items, k)
     else:
         raise ValueError("Invalid cluster method. Acceptable values are 'kmeans', 'agglom', or 'hmm'.")
+
+def _kmedians(stylo_vectors, k):
+    features = array(stylo_vectors)
+
+    clusterer = KMedians(k)
+    clusterer.fit(features)
+
+    return clusterer.get_confidences()
 
 def _kmeans(stylo_vectors, k):
     '''
@@ -34,7 +55,13 @@ def _kmeans(stylo_vectors, k):
     # Initialize <k> clusters to be points in input vectors
     centroids, assigned_clusters = kmeans2(normalized_features, k, minit = 'points')
     
+    
     # Get confidences
+    
+    # Special case when there is only one atom
+    if len(stylo_vectors) == 1:
+        return [0] # We are 0% confident that the atom is plagiarized.
+    
     if k == 2:
         confidences = []
         plag_cluster = Counter(assigned_clusters).most_common()[-1][0] #plag_cluster is the smallest cluster
@@ -46,11 +73,96 @@ def _kmeans(stylo_vectors, k):
             confidences.append(conf)
     else:
         # TODO: Develop a notion of confidence when k != 2
-        plag_cluster = Counter(assigned_clusters).most_common()[-1][0]
-        confidences = [1 if x == plag_cluster else 0 for x in assigned_clusters]
+        non_plag_cluster = Counter(assigned_clusters).most_common()[0][0]
+        max_dist = 0
+        max_dist_vec = normalized_features[0]
+
+        for i in xrange(len(assigned_clusters)):
+            if assigned_clusters[i] == non_plag_cluster:
+                dist = float(pdist(matrix([centroids[non_plag_cluster], normalized_features[i]]))) 
+                if dist > max_dist:
+                    max_dist_vec = normalized_features[i]
+                    max_dist = dist
+
+        avg_centroid_dist = 0
+        sum_dist = 0
+        centroid_distance = {}
+        for center in centroids:
+            sum_dist += float(pdist(matrix([center, centroids[non_plag_cluster]])))
+            avg_centroid_dist = float(sum_dist/len(centroids))
+        
+        confidences = []
+        for i in xrange(len(assigned_clusters)):
+            try:
+                if assigned_clusters[i] != non_plag_cluster:
+                    distance_from_max = float(pdist(matrix([max_dist_vec, normalized_features[i]])))
+                    centroid_distance = float(pdist(matrix([centroids[assigned_clusters[i]], centroids[non_plag_cluster]])))
+                    conf = (1-(float(1/(max_dist/distance_from_max))))*float(centroid_distance/avg_centroid_dist)
+                    confidences.append(conf)
+                else:
+                    confidences.append(0)
+            except:
+                confidences.append(0)
         
     return confidences
 
+def _median_kmeans(stylo_vectors, k):
+    '''
+    Run kmeans.  Find the median in the largest cluster.  Calculate confidences of all data points
+    as the (normalized) distance from the median.
+    '''
+    if not (len(stylo_vectors) and len(stylo_vectors[0]) == 1):
+        raise ValueError("Cluster method '_median_kmeans' can only handle 1-dimensional stylometric vectors.")
+        return
+    feature_mat = array(stylo_vectors)
+    normalized_features = whiten(feature_mat)
+    centroids, assigned_clusters = kmeans2(normalized_features, k, minit = 'points')
+
+    # find largest cluster, and call it the "non-plagiarized" cluster
+    non_plag_cluster = Counter(assigned_clusters).most_common()[0][0] # non-plag is largest cluster
+    non_plag_vectors = [x for i, x in enumerate(stylo_vectors, 0) if assigned_clusters[i] == non_plag_cluster]
+    # get median of non-plagiarized cluster
+    non_plag_vectors_copy = non_plag_vectors[:]
+    non_plag_vectors_copy.sort()
+    median = _get_list_median(non_plag_vectors_copy)
+    # find max dist from median and build confidences
+    max_dist = float(max([abs(vec[0] - median) for vec in stylo_vectors]))
+    if max_dist > 0:
+        confidences = [abs(vec[0] - median) / max_dist for vec in stylo_vectors]
+    else:
+        confidences = [0 for vec in stylo_vectors]
+    return confidences
+
+def _median_simple(stylo_vectors):
+    '''
+    Given a list of 1-dimensional stylo_vectors, generated confidences in the following way:
+    1. Find median of stylo_vectors
+    2. Find max distance from median
+    3. Construct confidences for points by taking their percentage of the max distance from median
+    '''
+    length = len(stylo_vectors)
+    if length > 0 and len(stylo_vectors[0]) == 1:
+        stylo_vectors_copy = stylo_vectors[:]
+        stylo_vectors_copy.sort()  
+        median = _get_list_median(stylo_vectors_copy)
+        max_dist = float(max(median - stylo_vectors_copy[0][0], stylo_vectors_copy[-1][0] - median))
+        if max_dist > 0:
+            confidences = [abs(x[0] - median) / max_dist for x in stylo_vectors]
+        else:
+            confidences = [0 for x in stylo_vectors]
+        return confidences
+    else:
+        raise ValueError("Cluster method 'median_simple' can only handle 1-dimensional stylometric vectors.")
+
+def _get_list_median(vectors):
+    '''
+    Helper function that returns the median of the given SORTED vector list.
+    '''
+    length = len(vectors)
+    if length % 2 == 0:
+        return (vectors[length / 2][0] + vectors[(length / 2) - 1][0]) / 2.0
+    else:
+        return float(vectors[length / 2][0])
 
 def _agglom(stylo_vectors, k):
     '''
@@ -124,6 +236,13 @@ def _hmm(stylo_vectors, k):
     #return cluster_assign , confidences
     return confidences
 
+def two_normal_test(n, spacing):
+    first = [[random.normal()] for x in range(n)]
+    second = [[random.normal(spacing)] for x in range(n)]
+
+    for c in ["kmeans", "agglom", "hmm"]:
+        print c, cluster(c, 2, first + second)
+
 def _test():
     doc = open('/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents/part1/suspicious-document00667.txt', 'r')
     text = doc.read()
@@ -137,7 +256,93 @@ def _test():
     print cluster("hmm", 2, fs)
     #print cluster("hmm", 2, fs)
     #print cluster("hmm", 2, fs)
+    
+    fs = [
+        [4.5, 5.2, 1.9],
+        [1.1, 2.03, 2.45],
+        [4.5, 5.2, 8.1]
+    ]
+    cluster_one = [
+        [1.0, 1.0],
+        [1.25, 1.25],
+        [1.5, 1.5],
+        [1.75, 1.75],
+        [2.0, 2.0]
+    ]
+    cluster_two = [
+        [10.0, 10.0],
+        [10.25, 10.25],
+        [10.5, 10.5],
+        [10.75, 10.75],
+        [11.0, 11.0]
+    ]
+
+    fs_obvious = cluster_one + cluster_two
+
+    for method in ["kmeans", "agglom", "hmm", "kmedians"]:
+        print method, cluster(method, 2, fs_obvious)
+#    print cluster("kmeans", 2, fs_obvious)
+#    print cluster("agglom", 2, fs_obvious)
+#    print cluster("hmm", 2, fs_obvious)
+#    print "hi", cluster("kmedians", 2, fs_obvious)
+
+    print cluster("kmeans", 2, fs)
+    print cluster("agglom", 2, fs)
+    print cluster("hmm", 2, fs)
+    print cluster("kmedians", 2, fs)
+
+def _all_clusters_all_features():
+    import plagcomps.evaluation.intrinsic as ev
+    clusterings = [
+        (ev.cluster, "simple_median", ("median_simple", None)),
+        (ev.cluster, "kmeans_median", ("median_kmeans", 2)),
+        (ev.cluster, "kmedians", ("kmedians", 2)),
+        (ev.cluster, "kmeans", ("kmeans", 2)),
+        (ev.cluster, "agglom", ("agglom", 2)),
+        (ev.cluster, "hmm", ("hmm", 2)),
+        #(ev.cluster, "outlier", ("outlier", 2))  was crashing
+        (ev.cluster, "kmeans", ("kmeans", 3)),
+        (ev.cluster, "kmeans", ("kmeans", 4)),
+        (ev.cluster, "kmeans", ("kmeans", 5))
+    ]
+
+    unique_features = []
+    
+    #for char_feature in [
+    #    "punctuation_percentage",
+    #]:
+    #    for char_modifier in [
+    #        "", "avg(", "std(", "avg(avg(", "avg(std(", "avg(avg(avg(", "avg(avg(std("
+    #    ]:
+    #        unique_features.append(char_modifier + char_feature + ")" * char_modifier.count("("))
+
+    for word_feature in [
+        #"num_chars",
+        #"average_syllables_per_word",
+        #"stopword_percentage",
+        #"syntactic_complexity", 
+        #"avg_external_word_freq_class", 
+        #"avg_internal_word_freq_class", 
+    ]:
+        unique_features.append(word_feature)
+        #for word_modifier in [
+        #    "", "avg(", "std(", "avg(avg(", "avg(std("
+        #]:
+        #    unique_features.append(word_modifier + word_feature + ")" * word_modifier.count("("))
+
+    for sentence_feature in [
+        #"flesch_reading_ease",
+        "yule_k_characteristic",
+    ]:
+        unique_features.append(sentence_feature)
+        for sentence_modifier in [
+            "", "avg(", "std("
+        ]:
+            unique_features.append(sentence_modifier + sentence_feature + ")" * sentence_modifier.count("("))
+
+    for feature in unique_features:
+        ev.compare_cluster_methods(feature, 200, clusterings)
 
 if __name__ == "__main__":
-    _test()
-        
+    #_test()
+    _all_clusters_all_features() 
