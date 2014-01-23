@@ -117,6 +117,7 @@ class FeatureExtractor:
         self._cmud = None # initialized by self._syl()
         self.pos_tags = None
         self.pos_tagged = False
+        self.lancaster_stemmer = None
 
         #TODO evaluate whether we want to keep this?
         self.pos_frequency_count_table_initialized = False
@@ -540,13 +541,12 @@ class FeatureExtractor:
         x = square_sum - 2 * u * (sum_x[char_end] - sum_x[char_start]) + (char_end - char_start) * u * u
         return math.sqrt(x / float(char_end - char_start))
 
-    def _init_yule_k_characteristic(self):
+    def _init_lancaster_stemmer(self):
         '''
         Initialize the sum table for yule's K characteristic
         '''
         from nltk.stem.lancaster import LancasterStemmer
         self.lancaster_stemmer = LancasterStemmer()
-        self.features["yule_k_characteristic"] = True
 
     def yule_k_characteristic(self, sent_spans_index_start, sent_spans_index_end):
         '''
@@ -555,8 +555,8 @@ class FeatureExtractor:
         # TODO figure out a way to make this constant time?
         # right now we are very slow
 
-        if "yule_k_characteristic" not in self.features:
-            self._init_yule_k_characteristic()
+        if not self.lancaster_stemmer:
+            self._init_lancaster_stemmer()
     
         spans = self.sentence_spans[sent_spans_index_start:sent_spans_index_end]
         start, end = spans[0][0], spans[-1][1]
@@ -607,6 +607,33 @@ class FeatureExtractor:
         percent_complex_words = (complex_words_table[word_end] - complex_words_table[word_start]) / float(max(1, word_end - word_start))
 
         return .4 * (average_sentence_length + 100 * percent_complex_words)
+
+    def honore_r_measure(self, sent_spans_index_start, sent_spans_index_end):
+        '''
+        R = 100 logN / (1 - V_1 / V)
+        where V_1 = # words appearing only once, V = total vocab size,
+        N = number of words
+        '''
+        if not self.lancaster_stemmer:
+            self._init_lancaster_stemmer()
+
+        spans = self.sentence_spans[sent_spans_index_start:sent_spans_index_end]
+        start, end = spans[0][0], spans[-1][1]
+        word_start, word_end = spanutils.slice(self.word_spans, start, end, True)
+
+        words = {}
+        for start, end in self.word_spans[word_start:word_end]:
+            word = self.lancaster_stemmer.stem(self.text[start:end])
+            if word in words:
+                words[word] = 0
+            else:
+                words[word] = 1
+
+        V = float(len(words)) + 1
+        V1 = float(sum(words.values()))
+        N = word_end - word_start
+
+        return 100 * math.log(N) / (1 - (V1 / V))
 
     def _init_average_syllables_per_word(self):
         '''
@@ -1122,6 +1149,14 @@ def _test():
         print "gunning_fog_index test passed"
     else:
         print "gunning_fog_index test FAILED"
+
+    f = FeatureExtractor("The mad hatter likes tea and the red queen hates alice. Images of the Mandelbrot set display an elaborate boundary that reveals progressively ever-finer recursive detail at increasing magnifications. The style of this repeating detail depends on the region of the set being examined. The set's boundary also incorporates smaller versions of the main shape, so the fractal property of self-similarity applies to the entire set, and not just to its parts.")
+    #print "honore_r_measure", f.get_feature_vectors(["honore_r_measure"], "paragraph")
+    vectors =  f.get_feature_vectors(["honore_r_measure"], "paragraph")
+    if [round(x[0], 4) for x in vectors] == [2331.4436]:
+        print "honore_r_measure test passed"
+    else:
+        print "honore_r_measure test FAILED"
     
 if __name__ == "__main__":
     _test()
