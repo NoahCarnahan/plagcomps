@@ -8,6 +8,7 @@ import string
 import math
 import cPickle
 import os.path
+from itertools import groupby
 
 from nltk.corpus import cmudict
 
@@ -544,6 +545,7 @@ class FeatureExtractor:
         Initialize the sum table for yule's K characteristic
         '''
         from nltk.stem.lancaster import LancasterStemmer
+        self.lancaster_stemmer = LancasterStemmer()
         self.features["yule_k_characteristic"] = True
 
     def yule_k_characteristic(self, sent_spans_index_start, sent_spans_index_end):
@@ -551,14 +553,26 @@ class FeatureExtractor:
         query the yule k characteristic
         '''
         # TODO figure out a way to make this constant time?
+        # right now we are very slow
 
         if "yule_k_characteristic" not in self.features:
             self._init_yule_k_characteristic()
+    
+        spans = self.sentence_spans[sent_spans_index_start:sent_spans_index_end]
+        start, end = spans[0][0], spans[-1][1]
+        text = self.text[start:end]
 
-        stemmer = LancasterStemmer()
-        text = self.text[self.sentence_spans[sent_spans_index_start]:self.sentence_spans[sent_spans_index_end]]
-        print text
+        freqs = {}
+        tokens = tokenization.tokenize(text, 'word', return_spans=False)
+        for token in tokens:
+            stem = self.lancaster_stemmer.stem(token.strip())
+            freqs[stem] = freqs.get(stem, 0) + 1
 
+        # Do Yule's calculations
+        M1 = float(len(freqs))
+        M2 = sum([len(list(g)) * (freq ** 2) for freq, g in groupby(sorted(freqs.values()))])
+
+        return 10000 * (M2 - M1) / max(1, (M1 ** 2))
 
     
     def _init_average_syllables_per_word(self):
@@ -1061,4 +1075,6 @@ def _test():
         print "vowelness_trigram,C,V,C test FAILED"
     
 if __name__ == "__main__":
-    _test()
+    #_test()
+    f = FeatureExtractor("The dog and the cat napped. The dog was brown. The cat was orange.")
+    print f.get_feature_vectors(["yule_k_characteristic"], "sentence")
