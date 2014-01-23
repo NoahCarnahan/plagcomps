@@ -96,14 +96,33 @@ def _hmm(stylo_vectors, k):
     #print 'centroids are: ', centroids
     #print assigned_clusters
     
-    #
-
+    '''feature_mat = array(stylo_vectors)
+    # Normalizes by column
+    normalized_features = whiten(feature_mat)
+    #Noah's version
+    if k == 2:
+        confidences = []
+        plag_cluster = Counter(assigned_clusters).most_common()[-1][0] #plag_cluster is the smallest cluster
+        not_plag_cluster = 1 if plag_cluster == 0 else 0
+        for feat_vec in normalized_features:
+            distance_from_plag = float(pdist(matrix([centroids[plag_cluster], feat_vec])))
+            distance_from_notplag = float(pdist(matrix([centroids[not_plag_cluster], feat_vec])))
+            conf = distance_from_notplag / (distance_from_notplag + distance_from_plag)
+            confidences.append(conf)
+    else:
+        # TODO: Develop a notion of confidence when k != 2
+        plag_cluster = Counter(assigned_clusters).most_common()[-1][0]
+        confidences = [1 if x == plag_cluster else 0 for x in assigned_clusters]
+        
+    return confidences
+    '''
     # Get confidences
     # TODO: Develop a real notion of confidence for hmm clustering
     plag_cluster = Counter(assigned_clusters).most_common()[-1][0]
     cluster_assign = [1 if x == plag_cluster else 0 for x in assigned_clusters]
-    confidences = hmm.get_confidences(stylo_vectors, centroids, cluster_assign)
-    return cluster_assign , confidences
+    confidences = hmm.get_confidences1(stylo_vectors, centroids, cluster_assign)
+    #return cluster_assign , confidences
+    return confidences
 
 def _test():
     doc = open('/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents/part1/suspicious-document00667.txt', 'r')

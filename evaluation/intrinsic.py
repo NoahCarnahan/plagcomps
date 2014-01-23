@@ -500,8 +500,11 @@ def _test():
     session.close()
     
 if __name__ == "__main__":
-    features = ['punctuation_percentage',
+    features = ['average_sentence_length', 
+                'syntactic_complexity',
+                'avg_internal_word_freq_class',
+                'avg_external_word_freq_class',
+                'punctuation_percentage',
                 'stopword_percentage',
-                'average_sentence_length',
                 'average_word_length',]
-    print evaluate_n_documents(features, "kmeans", 2, "paragraph", 100)
+    print evaluate_n_documents(features, "hmm", 2, "paragraph", 75)

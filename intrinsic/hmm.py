@@ -20,16 +20,16 @@ class _State :
 		probability = 0.02
 		for i in xrange(len(feature_vector)):
 			z_score = (feature_vector[i] - self.ft_list_means[i]) / self.ft_list_variances[i]
-			z_score *= 10
-			upper = math.floor(z_score+1)/10 * self.ft_list_variances[i] + self.ft_list_means[i]
-			lower = math.floor(z_score)/10 * self.ft_list_variances[i] + self.ft_list_means[i]
+			z_score *= 100
+			upper = math.floor(z_score+1)/100 * self.ft_list_variances[i] + self.ft_list_means[i]
+			lower = math.floor(z_score)/100 * self.ft_list_variances[i] + self.ft_list_means[i]
 			prob = scipy.stats.norm(self.ft_list_means[i], self.ft_list_variances[i]).cdf(upper) - scipy.stats.norm(self.ft_list_means[i], self.ft_list_variances[i]).cdf(lower)
 			
 			probability = prob
 		#return an adjusted probability, non-adjusted probabilities seem to break things.
 		return math.log(probability + 0.00001)
 		
-def get_confidences(stylo_vectors, centroids, cluster_assignments):
+def get_confidences1(stylo_vectors, centroids, cluster_assignments):
 	'''
 	Given the stylo vector list, centroid values and cluster assignments, returns a list of confidences
 	where confidences[i] pertains to stylo_vectors[i] -- only works for 2 clusters'''
@@ -70,20 +70,23 @@ def get_confidences(stylo_vectors, centroids, cluster_assignments):
 	maxdisttuple = list_plag_tuples[-1]
 	for x in xrange(len(list_plag_tuples)) :
 		temp = list_plag_tuples[x]
-		list_plag_tuples[x] = (1 - temp[0] / maxdisttuple[0], temp[1])
+		list_plag_tuples[x] = (1 - temp[0] / (maxdisttuple[0] + 0.000001), temp[1])
 	#print 'normalized list_nonplag_tuples is: ', list_plag_tuples
 	maxdisttuple = list_nonplag_tuples[-1]
 	for y in xrange(len(list_nonplag_tuples)) :
 		temp = list_nonplag_tuples[y]
-		list_nonplag_tuples[y] = (1.000001 - temp[0] / maxdisttuple[0], temp[1])
+		list_nonplag_tuples[y] = (1 - temp[0] / (maxdisttuple[0] + 0.000001), temp[1])
 	#now the lists have normalized distances from centroid
+	
+	
+	
+	
 	for vtuple in list_plag_tuples :
-		confidences[vtuple[1]] = vtuple[0]
+		confidences[vtuple[1]] = vtuple[0] / 2 + 0.5
 	for vectuple in list_nonplag_tuples :
-		confidences[vectuple[1]] = vectuple[0]
+		confidences[vectuple[1]] = vectuple[0] / 2
 	#return a list called confidences where confidences[i] = (normlized_distance of stylo_vectors[i])
 	#print 'confidences are: ', confidences
-
 	return confidences
 
 def hmm_cluster(stylo_vectors, k):
@@ -131,7 +134,8 @@ def hmm_cluster(stylo_vectors, k):
 			centroids.append([a/len(clusters_indices[i]) for a in centroid])
 		else:
 			centroids.append(centroid)
-
+	
+	print trained_path
 	return centroids, trained_path
 	
 def train_parameters(feature_vectors, states, initial_state_probs):
@@ -139,7 +143,7 @@ def train_parameters(feature_vectors, states, initial_state_probs):
 	viterbi_path, viterbi_max = viterbi(feature_vectors, states, initial_state_probs)
 	
 	percent_change = 100.0
-	while percent_change > 0.01:
+	while percent_change > 0.1:
 		num_states = [viterbi_path.count(i) for i in xrange(len(states))]
 
 		# calculate means of observed outputs with each state
