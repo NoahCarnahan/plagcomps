@@ -538,6 +538,28 @@ class FeatureExtractor:
     
         x = square_sum - 2 * u * (sum_x[char_end] - sum_x[char_start]) + (char_end - char_start) * u * u
         return math.sqrt(x / float(char_end - char_start))
+
+    def _init_yule_k_characteristic(self):
+        '''
+        Initialize the sum table for yule's K characteristic
+        '''
+        from nltk.stem.lancaster import LancasterStemmer
+        self.features["yule_k_characteristic"] = True
+
+    def yule_k_characteristic(self, sent_spans_index_start, sent_spans_index_end):
+        '''
+        query the yule k characteristic
+        '''
+        # TODO figure out a way to make this constant time?
+
+        if "yule_k_characteristic" not in self.features:
+            self._init_yule_k_characteristic()
+
+        stemmer = LancasterStemmer()
+        text = self.text[self.sentence_spans[sent_spans_index_start]:self.sentence_spans[sent_spans_index_end]]
+        print text
+
+
     
     def _init_average_syllables_per_word(self):
         '''
