@@ -76,7 +76,7 @@ def populate_database(atom_type, num, features=None):
 
     session.close()
 
-def evaluate_n_documents(features, cluster_type, k, atom_type, n, min_len=None):
+def evaluate_n_documents(features, cluster_type, k, atom_type, n, min_len=None, first_doc_num=0):
     '''
     Return the evaluation (roc curve path, area under the roc curve) of the first n training
     documents parsed by atom_type, using the given features, cluster_type, and number of clusters k.
@@ -89,7 +89,7 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n, min_len=None):
     # get <n> files which all contain at least 35000 (or some length) characters, like:
     # first_training_files = IntrinsicUtility().get_n_training_files(n, min_len=35000)
     # as is done in Stein's paper
-    first_training_files = IntrinsicUtility().get_n_training_files(n, min_len=min_len)
+    first_training_files = IntrinsicUtility().get_n_training_files(n, min_len=min_len, first_doc_num=first_doc_num)
     
     # Also returns reduced_docs from <first_training_files>
     roc_path, roc_auc, _ = evaluate(features, cluster_type, k, atom_type, first_training_files)
