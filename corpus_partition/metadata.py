@@ -1,6 +1,7 @@
 
 from scipy.stats import scoreatpercentile
 from plagcomps.shared.util import IntrinsicUtility
+from plagcomps.tokenization import tokenize
 
 import matplotlib.pyplot as plt
 import xml.etree.ElementTree as ET
@@ -127,9 +128,14 @@ def explore_training_corpus(n=1000):
 
 	file_lengths = []
 	pct_plags = []
+	total_paragraphs = []
+
 	for text_file, xml_file in zip(training_texts, training_xmls):
 		with file(text_file) as f:
 			text = f.read()
+
+		paragraphs_spans = tokenize(text, 'paragraph')
+		num_paragraphs = len(paragraphs_spans)
 
 		text_len = len(text)
 		plag_spans = util.get_plagiarized_spans(xml_file)
@@ -138,15 +144,16 @@ def explore_training_corpus(n=1000):
 
 		file_lengths.append(text_len)
 		pct_plags.append(plag_pct)
+		total_paragraphs.append(num_paragraphs)
 
 	#outfile = os.path.join(os.path.dirname(__file__), 'training_lengths.csv')
 	outfile = 'training_lengths.csv'
 
 	f = file(outfile, 'wb')
-	f.write('file_num, length, pct_plag\n')
+	f.write('file_num, length, pct_plag, num_paragraphs\n')
 
 	for i in xrange(len(file_lengths)):
-		line = '%i, %i, %f\n' % (i, file_lengths[i], pct_plags[i])
+		line = '%i, %i, %f, %i\n' % (i, file_lengths[i], pct_plags[i], total_paragraphs[i])
 		f.write(line)
 	f.close()
 
