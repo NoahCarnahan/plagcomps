@@ -106,11 +106,12 @@ class FeatureExtractor:
         return feature_function_names
 
     
-    def __init__(self, text):
+    def __init__(self, text, char_span_length=5000):
         self.text = text
         self.word_spans = tokenization.tokenize(text, "word")
         self.sentence_spans = tokenization.tokenize(text, "sentence")
         self.paragraph_spans = tokenization.tokenize(text, "paragraph")
+        self.nchar_spans = tokenization.tokenize(text, "nchars", char_span_length)
     
         self.features = {}
 
@@ -129,6 +130,8 @@ class FeatureExtractor:
             return self.sentence_spans
         elif atom_type == "paragraph":
             return self.paragraph_spans
+        elif atom_type == "nchars":
+            return self.nchar_spans
         else:
             raise ValueError("Invalid atom_type")
     
