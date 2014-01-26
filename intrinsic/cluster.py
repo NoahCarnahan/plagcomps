@@ -1,8 +1,8 @@
 import hmm
 from kmedians import KMedians
 import outlier_detection
+import classify
 #from plagcomps.intrinsic import outlier_detection
-
 
 from numpy import array, matrix, random
 from scipy.cluster.vq import kmeans2, whiten
@@ -26,6 +26,8 @@ def cluster(method, k, items, **kwargs):
         return outlier_detection.density_based(items, **kwargs)
     elif method == "kmedians":
         return _kmedians(items, k)
+    elif method == "nn_confidences":
+        return _nn_confidences(items)
     else:
         raise ValueError("Invalid cluster method. Acceptable values are 'kmeans', 'agglom', or 'hmm'.")
 
@@ -162,6 +164,11 @@ def _get_list_median(vectors):
         return (vectors[length / 2][0] + vectors[(length / 2) - 1][0]) / 2.0
     else:
         return float(vectors[length / 2][0])
+
+def _nn_confidences(items):
+    from classify import NeuralNetworkConfidencesClassifier
+    classifier = NeuralNetworkConfidencesClassifier()
+    return classifier.nn_confidences(items)
 
 def _agglom(stylo_vectors, k):
     '''

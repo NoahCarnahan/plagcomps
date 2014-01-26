@@ -376,6 +376,7 @@ def _roc(reduced_docs, plag_likelihoods, features = None, cluster_type = None, k
     
     fpr, tpr, thresholds = sklearn.metrics.roc_curve(actuals, confidences, pos_label=1)
     roc_auc = sklearn.metrics.auc(fpr, tpr)
+    print roc_auc
     
     # The following code is from http://scikit-learn.org/stable/auto_examples/plot_roc.html
     pyplot.clf()
@@ -676,4 +677,21 @@ def _cluster_auc_test(num_plag, num_noplag, mean_diff, std, dimensions = 1, repe
 
 if __name__ == "__main__":
     #_test()
-    _stats_evaluate_n_documents(["num_chars", "avg(num_chars)", "std(num_chars)", "avg(avg(num_chars))", "avg(std(num_chars)"], "paragraph", 25) 
+    #_stats_evaluate_n_documents(["num_chars", "avg(num_chars)", "std(num_chars)", "avg(avg(num_chars))", "avg(std(num_chars)"], "paragraph", 25) 
+
+    features = ['average_sentence_length',
+                 'average_syllables_per_word',
+                 'avg_external_word_freq_class',
+                 'avg_internal_word_freq_class',
+                 'flesch_kincaid_grade',
+                 'flesch_reading_ease',
+                 'num_chars',
+                 'punctuation_percentage',
+                 'stopword_percentage',
+                 'syntactic_complexity',
+                 'syntactic_complexity_average']
+    print evaluate_n_documents(features, 'nn_confidences', 2, 'paragraph', 100)
+
+
+
+

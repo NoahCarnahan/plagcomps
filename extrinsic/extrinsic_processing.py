@@ -209,7 +209,7 @@ def populate_database():
 
     counter = 0
     for atom_type in ["paragraph"]:
-        for method in ["full", "anchor", "kth_in_sent"]: # add other fingerprint methods
+        for method in ["anchor", "kth_in_sent"]: # add other fingerprint methods
             for n in xrange(3, 6):
                 for k in [5]:
                     counter = 0
@@ -229,6 +229,7 @@ def populate_database():
                         if counter%1 == 0:
                             print "Progress on sources (corpus=" + str(ExtrinsicUtility.TRAINING_SRC_LOC) + ": ", counter/float(len(all_source_files)), '(' + str(counter) + '/' + str(len(all_source_files)) + ')'
 
+
     session.close()
 
 url = "postgresql://%s:%s@%s" % (username, password, dbname)
@@ -239,4 +240,3 @@ Session = sessionmaker(bind=engine)
 if __name__ == "__main__":
     #unitTest()
     populate_database()
-    

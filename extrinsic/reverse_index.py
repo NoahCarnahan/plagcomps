@@ -72,12 +72,9 @@ class ReverseIndex(Base):
         Return True if the fingerprint_id was actually added; else return False.
         IMPORTANT: You need to manually call session.commit() after running this function.
         '''
-        if [fingerprint_id, atom_index] not in self.fingerprint_ids:
-            # can't do .append() because it won't register with sqlalchemy. One of the more infuriating things I've encountered.
-            self.fingerprint_ids = self.fingerprint_ids + [[fingerprint_id, atom_index]]
-            return True
-        else:
-            return False
+        # can't do .append() because it won't register with sqlalchemy. One of the more infuriating things I've encountered.
+        self.fingerprint_ids = self.fingerprint_ids + [[fingerprint_id, atom_index]]
+        return True
 
 def clean_reverse_index_entries():
     '''
