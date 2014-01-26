@@ -66,29 +66,17 @@ def populate_database(atom_type, num, features=None):
     first_training_files = util.get_n_training_files(num)
 
     if features == None:
-        features = ['punctuation_percentage',
-                    'stopword_percentage',
-                    'average_sentence_length',
-                    'avg_internal_word_freq_class',
-                    'avg_external_word_freq_class',
-                    'syntactic_complexity',
-                    "avg(num_chars)",
-                    "std(num_chars)",
-                    "syntactic_complexity_average",
-                    "flesch_reading_ease",
-                    ]
+        features = FeatureExtractor.get_all_feature_function_names()
     
-    count = 0
     for doc in first_training_files:
-        count += 1
-        if DEBUG:
-            print "On document", count
         d = _get_reduced_docs(atom_type, [doc], session)[0]
-        d.get_feature_vectors(features, session)
+        for feature in features:
+            print "Calculating", feature, "for", str(d), str(datetime.datetime.now())
+            d.get_feature_vectors([feature], session)
 
     session.close()
 
-def evaluate_n_documents(features, cluster_type, k, atom_type, n, min_len=None):
+def evaluate_n_documents(features, cluster_type, k, atom_type, n, min_len=None, first_doc_num=0):
     '''
     Return the evaluation (roc curve path, area under the roc curve) of the first n training
     documents parsed by atom_type, using the given features, cluster_type, and number of clusters k.
@@ -101,7 +89,7 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n, min_len=None):
     # get <n> files which all contain at least 35000 (or some length) characters, like:
     # first_training_files = IntrinsicUtility().get_n_training_files(n, min_len=35000)
     # as is done in Stein's paper
-    first_training_files = IntrinsicUtility().get_n_training_files(n, min_len=min_len)
+    first_training_files = IntrinsicUtility().get_n_training_files(n, min_len=min_len, first_doc_num=first_doc_num)
     
     # Also returns reduced_docs from <first_training_files>
     roc_path, roc_auc, _ = evaluate(features, cluster_type, k, atom_type, first_training_files)
@@ -165,25 +153,23 @@ def compare_outlier_params(n, features=None, min_len=None):
     '''
     atom_types = ['paragraph', 'sentence']
     center_at_mean = [True, False]
-    num_to_ignore = [1, 3, 5]
 
     docs = IntrinsicUtility().get_n_training_files(n, min_len=min_len)
     if not features:
         features = FeatureExtractor.get_all_feature_function_names()
 
     results = []
+
     
     for atom_type in atom_types:
-        for ignored in num_to_ignore:
-            for c in center_at_mean:
-                roc_path, roc_auc, reduced_docs = \
-                    evaluate(features, 'outlier', 2, atom_type, docs,
-                             center_at_mean=c, num_to_ignore=ignored)
+        for c in center_at_mean:
+            roc_path, roc_auc, reduced_docs = \
+                evaluate(features, 'outlier', 2, atom_type, docs, center_at_mean=c)
 
-                one_trial = (atom_type, min_len, c, ignored, roc_path, roc_auc)
-                results.append(one_trial)
-                print one_trial
-                print '-'*30
+            one_trial = (atom_type, min_len, c, roc_path, roc_auc)
+            results.append(one_trial)
+            print one_trial
+            print '-'*30
 
     for r in results:
         print r
@@ -498,15 +484,18 @@ class ReducedDoc(Base):
                 return True
         return False
         
-    def _get_feature_values(self, feature, session):
+    def _get_feature_values(self, feature, session, populate = True):
         '''
         Returns the list of feature values for the given feature, instantiating them if
-        need be.
+        need be. If populate is False, feature values will not be instantiatiated.
         '''
         try:
             return self._features[feature]
             
         except KeyError:
+            if populate == False:
+                raise KeyError()
+    
             # Read the file
             f = open(self.full_path, 'r')
             text = f.read()
@@ -658,27 +647,7 @@ def _cluster_auc_test(num_plag, num_noplag, mean_diff, std, dimensions = 1, repe
         for key in averages:
             print key, sum(averages[key])/float(max(1, len(averages[key])))
 
-
-# import plagcomps.evaluation.intrinsic as intr
-# features = ['punctuation_percentage',
-#                     'stopword_percentage',
-#                     'average_sentence_length',
-#                     'avg_internal_word_freq_class',
-#                     'avg_external_word_freq_class',
-#                     'syntactic_complexity',
-#                     "avg(num_chars)",
-#                     "std(num_chars)",
-#                     "syntactic_complexity_average",
-#                     "flesch_reading_ease",
-#                     ]
-# features = FeatureExtractor.get_all_feature_function_names()
-# print evaluate_n_documents(features, 'outlier', 2, 'paragraph', 100)
-# compare_outlier_params(50)
-
 if __name__ == "__main__":
-    #_test()
-    #_stats_evaluate_n_documents(["num_chars", "avg(num_chars)", "std(num_chars)", "avg(avg(num_chars))", "avg(std(num_chars)"], "paragraph", 25) 
-
     features = ['average_sentence_length',
                  'average_syllables_per_word',
                  'avg_external_word_freq_class',
@@ -691,7 +660,5 @@ if __name__ == "__main__":
                  'syntactic_complexity',
                  'syntactic_complexity_average']
     print evaluate_n_documents(features, 'nn_confidences', 2, 'paragraph', 100)
-
-
-
-
+    # _test()
+    

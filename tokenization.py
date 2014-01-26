@@ -2,7 +2,7 @@ import nltk
 import re
 import string
 
-def tokenize(text, atom_type, return_spans=True):
+def tokenize(text, atom_type, n=None, return_spans=True):
     '''
     By default, return a list of spans designating the location of 
     each passage in the given text. atom_type determines the type of passages.
@@ -18,6 +18,8 @@ def tokenize(text, atom_type, return_spans=True):
         return _tokenize_by_paragraph(text, return_spans)
     elif atom_type == "full":
     	return _tokenize_by_full(text, return_spans)
+    elif atom_type == "nchars":
+        return _tokenize_by_n_chars(text, n, return_spans)
     else:
         raise ValueError("Unacceptable atom_type")
     
@@ -67,6 +69,40 @@ def _tokenize_by_paragraph(text, return_spans):
         return spans
     else:
         return tokens
+
+def _tokenize_by_n_chars(text, n, return_spans=True):
+    '''
+    Returns spans of length <n> from text. The last spans "snaps out" to include
+    all characters meaning that the last span is likely to be longer than <n> characters. 
+    For example, if <text> is of length
+    65 and n=20, then we get spans:
+    [(0, 20), (20, 40), (40, 65)]
+    '''
+    spans = []
+    text_spans = []
+
+    if len(text) < n:
+        spans.append((0, len(text)))
+        text_spans.append(text)
+    else:
+        start_index = 0
+        end_index = n
+
+        while end_index < len(text) - n + 1:
+            spans.append((start_index, end_index))
+            text_spans.append(text[start_index : end_index])
+            start_index = end_index
+            end_index = min(end_index + n, len(text))
+
+        # Set the last span's ending index to be the end of document
+        spans.append((start_index, len(text)))
+        text_spans.append(text[start_index :])
+
+    if return_spans:
+        return spans
+    else:
+        return text_spans
+
 
 def strip_punctuation(words):
     '''

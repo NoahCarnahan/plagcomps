@@ -1,6 +1,24 @@
 from numpy import mean, std, sqrt, log, exp
-from scipy.stats import norm
+from scipy.stats import norm, shapiro, anderson
 import math
+
+
+# (nj) TODO: Come up with different (better?) ways of
+# (1) Combining "probabilities" for a single passage. Right now we just mulitply 
+# the probabilities we get from each of the features. Done in:
+# _combine_feature_probs(prob_vector)
+# (2) Building a "confidence" score based on the relative "probability" of 
+# a passage being plagiarized vs. not-plagiarized. Done in:
+# _get_confidence(plag_prob, non_plag_prob) 
+# (3) Scaling the "confidence" scores across an entire document (set of 
+# stylometric features). Done in:
+# _scale_confidences(confs) 
+
+MIN_PROB = 10**(-30)
+# The confidence we use when we are unable to calculate anything about the
+# likelihood of plag
+IMPURITY_ASSUMPTION = .2
+
 
 def density_based(stylo_vectors, center_at_mean=True, num_to_ignore=1, impurity=.2):
     '''
@@ -26,6 +44,8 @@ def density_based(stylo_vectors, center_at_mean=True, num_to_ignore=1, impurity=
     confidences = []
 
     means, stds, mins, medians, maxs = [], [], [], [], []
+    normality_pvals = []
+
     for row in transpose:
         cur_mean, cur_std, cur_min, cur_median, cur_max = _get_distribution_features(row, num_to_ignore)
         means.append(cur_mean)
@@ -34,11 +54,19 @@ def density_based(stylo_vectors, center_at_mean=True, num_to_ignore=1, impurity=
         medians.append(cur_median)
         maxs.append(cur_max)
 
+        # Print some data about the normality of our features
+        norm_p = _test_normality(row)
+        normality_pvals.append(norm_p)
+
+    print 'Normality pvals have min, max, mean:', min(normality_pvals), max(normality_pvals), mean(normality_pvals)
+    
+
     for i in xrange(len(stylo_vectors)):
         vec = stylo_vectors[i]
         # For current <vec>,
-        # featurewise_plag_prob[i] == prob. that feature <i> 
-        # was plagiarized in <vec>
+        # featurewise_plag_prob[i] == prob. that feature <i> was plagiarized in <vec>
+        # NOTE that these are taken from PDFs, so they don't actually correspond
+        # to real probabilities 
         featurewise_nonplag_prob = []
         featurewise_plag_prob = []
 
@@ -53,16 +81,19 @@ def density_based(stylo_vectors, center_at_mean=True, num_to_ignore=1, impurity=
             # A std of 0 => the feature is constant, and therefore won't 
             # help us distinguish anything!
             if cur_std != 0.0 and not _in_uncertainty_interval(cur_val, cur_center, cur_std):
+
                 cur_norm_prob = _get_norm_prob(cur_val, cur_center, cur_std)
-                if math.isnan(cur_norm_prob):
-                    print 'NORMAL GOT ONE!', cur_norm_prob
-                    print 'params', cur_val, cur_center, cur_std
+                if math.isnan(cur_norm_prob) or cur_norm_prob == 0.0:
+                    cur_norm_prob = MIN_PROB
+                    print 'Norm prob was nan or 0: %f. Using MIN_PROB' % cur_norm_prob
+
                 featurewise_nonplag_prob.append(cur_norm_prob)
 
                 cur_unif_prob = _get_unif_prob(cur_val, cur_min, cur_max)
-                if math.isnan(cur_unif_prob):
-                    print 'UNIF GOT ONE!', cur_unif_prob
-                    print 'params', cur_val, cur_center, cur_std
+                if math.isnan(cur_unif_prob) or cur_unif_prob == 0.0:
+                    cur_unif_prob = MIN_PROB
+                    print 'Unif prob was nan or 0: %f. Using MIN_PROB' % cur_unif_prob
+
                 featurewise_plag_prob.append(cur_unif_prob)
             # TODO what happens if all points are in uncertainty interval??
 
@@ -70,17 +101,39 @@ def density_based(stylo_vectors, center_at_mean=True, num_to_ignore=1, impurity=
         # Sum up logs and exponentiate as opposed to multiplying lots of
         # small numbers
         # TODO could weight each feature differently
-        plag_prob = exp(sum(log(featurewise_plag_prob)))
-        non_plag_prob = exp(sum(log(featurewise_nonplag_prob)))
+        plag_prob = _combine_feature_probs(featurewise_plag_prob)
+        non_plag_prob = _combine_feature_probs(featurewise_nonplag_prob)
 
         # TODO: How should we use calculated non_plag_prob or calculated plag_prob?
-        # A ratio of the two? i.e. (plag_prob / non_plag_prob)
+        # A ratio of the two? i.e. (plag_prob / non_plag_prob)?
         confidences.append(_get_confidence(plag_prob, non_plag_prob))
             
     scaled = _scale_confidences(confidences)
+    for s in scaled:
+        if math.isnan(s) or math.isinf(s):
+            print 'WHERE DID IT COME FROM?'
+            print featurewise_plag_prob
+            print featurewise_nonplag_prob
+            print zip(confidences, scaled)
+            print '-'*40 
 
 
     return scaled
+
+def _combine_feature_probs(prob_vector):
+    '''
+    Returns the Naive Bayes version of combining probabilites: just multiply them.
+    Note that we take the sum of the log of each probability and exponentiate
+    in hopes of avoiding underflow when multiplying many small numbers
+
+    If the probability vector is empty, then all features were in the uncertainty
+    interval. Return the IMPURITY_ASSUMPTION (unless something else logical comes
+    about)
+    '''
+    if len(prob_vector) == 0:
+        return IMPURITY_ASSUMPTION
+    else:
+        return exp(sum(log(prob_vector)))
 
 def _get_confidence(plag_prob, non_plag_prob):
     '''
@@ -99,13 +152,19 @@ def _scale_confidences(confs):
     '''
     Scales all "confidences" to (0, 1) interval simply by dividing by 
     the maximum "confidence"
+
+    If <confs> is constant (i.e. contains all the same values), return
+    a vector of all IMPURITY_ASSUMPTIONs. 
     '''
     # offset will be either 0 or some negative number, in which case
     # we subtract the negative offset (i.e. add)
     offset = min(min(confs), 0.0)
     max_conf_with_offset = max(confs) - offset
 
-    return [(x - offset) / max_conf_with_offset for x in confs]
+    if max_conf_with_offset == 0.0:
+        return [IMPURITY_ASSUMPTION for x in confs]
+    else:
+        return [(x - offset) / max_conf_with_offset for x in confs]
 
 def _get_distribution_features(row, extremes_to_ignore):
     '''
@@ -173,6 +232,17 @@ def _rotate_vectors(mat):
 
     return rotated
 
+def _test_normality(data, threshold=.05):
+    '''
+    '''
+    if len(data) < 4:
+        return 0
+    else:
+        test_stat, pval = shapiro(data)
+
+        return pval
+
+
 def _test():
     '''
     '''
@@ -202,7 +272,3 @@ def _test():
 
 if __name__ == '__main__':
     _test()
-
-
-
-
