@@ -65,6 +65,7 @@ def _kmeans(stylo_vectors, k):
         confidences = []
         plag_cluster = Counter(assigned_clusters).most_common()[-1][0] #plag_cluster is the smallest cluster
         not_plag_cluster = 1 if plag_cluster == 0 else 0
+    
         for feat_vec in normalized_features:
             distance_from_plag = float(pdist(matrix([centroids[plag_cluster], feat_vec])))
             distance_from_notplag = float(pdist(matrix([centroids[not_plag_cluster], feat_vec])))

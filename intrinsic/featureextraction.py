@@ -106,6 +106,19 @@ class FeatureExtractor:
         return feature_function_names
 
     
+    @staticmethod
+    def get_stein_paper_feature_names():
+        return [
+            'average_word_length',
+            'average_syllables_per_word',
+            'flesch_kincaid_grade',
+            'gunning_fog_index',
+            'honore_r_measure',
+            'yule_k_characteristic',
+            # Unclear whether paper uses internal or external
+            'avg_external_word_freq_class'
+        ]
+
     def __init__(self, text, char_span_length=5000):
         self.text = text
         self.word_spans = tokenization.tokenize(text, "word")
