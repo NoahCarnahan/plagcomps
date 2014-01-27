@@ -21,7 +21,8 @@ class FingerprintExtractor:
     def _gen_string_hash(self, in_string):
         '''
         Converts the given string <in_string> to an integer which is
-        roughly uniformly distributed over all possible values.
+        roughly uniformly distributed over all possible values. The integer is
+        between 0 and self.hash_span.
 
         This method is used in "Methods for Identifying Versioned and 
         Plagiarized Documents".
