@@ -360,25 +360,16 @@ def _roc(reduced_docs, plag_likelihoods, features = None, cluster_type = None, k
     # So, if confidences[i] = .3 and actuals[i] = 1 then passage i is plagiarized and
     # we are .3 certain that it is plagiarism (So its in the non-plag cluster).
     
-    fpr, tpr, thresholds = sklearn.metrics.roc_curve(actuals, confidences, pos_label=1)
-    roc_auc = sklearn.metrics.auc(fpr, tpr)
-    
-    # The following code is from http://scikit-learn.org/stable/auto_examples/plot_roc.html
-    pyplot.clf()
-    pyplot.plot(fpr, tpr, label='ROC curve (area = %0.2f)' % roc_auc)
-    pyplot.plot([0, 1], [0, 1], 'k--')
-    pyplot.xlim([0.0, 1.0])
-    pyplot.ylim([0.0, 1.0])
-    pyplot.xlabel('False Positive Rate')
-    pyplot.ylabel('True Positive Rate')
     if features and cluster_type and k and atom_type:
-        pyplot.title("ROC, %s, %s %s, %s" % (atom_type, cluster_type, k, features)) 
+        metadata = {
+            'features' : features,
+            'cluster_type' : cluster_type,
+            'atom_type' : atom_type
+        }
     else:
-        pyplot.title('Receiver operating characteristic')
-    pyplot.legend(loc="lower right")
-    
-    path = ospath.join(ospath.dirname(__file__), "../figures/roc"+str(time.time())+".pdf")
-    pyplot.savefig(path)
+        title_args = {}
+    path, roc_auc = BaseUtility.draw_roc(actuals, confidences, **metadata)
+
     return path, roc_auc
 
 class ReducedDoc(Base):
