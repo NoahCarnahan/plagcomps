@@ -94,12 +94,10 @@ class ExtrinsicTester:
         
         path = os.path.join(os.path.dirname(__file__), "../figures/roc_extrinsic_"+str(time.time())+"_"+self.fingerprint_method+".pdf")
         pyplot.savefig(path)
-
+        return roc_auc
 
 def main():
     session = extrinsic_processing.Session()
-    # fp = extrinsic_processing.query_fingerprint('/part7/suspicious-document12675', "full", 3, 5, "paragraph", session, '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents')
-    # print fp.get_print(session)
     
     util = ExtrinsicUtility()
     num_files = 1
@@ -116,7 +114,7 @@ def main():
     confidence_method = "jaccard" # ["containment", "jaccard"]
 
     tester = ExtrinsicTester(atom_type, method, n, k, confidence_method, suspect_file_list, source_file_list)
-    tester.plot_ROC_curve(session)
+    print tester.plot_ROC_curve(session)
 
 if __name__ == "__main__":
     main()

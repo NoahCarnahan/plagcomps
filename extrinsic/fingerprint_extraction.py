@@ -200,9 +200,9 @@ class FingerprintEvaluator:
         '''
         fp = self._get_fingerprint(filename, atom_type, session, ExtrinsicUtility.CORPUS_SUSPECT_LOC)
         if atom_type == "full":
-            fingerprint = fp.get_fingerprints(session)
+            fingerprint = fp.get_print(session)
         else:
-            fingerprint = fp.get_fingerprints(session)[atom_index]
+            fingerprint = fp.get_print(session)[atom_index]
 
         source_documents = {}
         # get the list of fingerprint ids for each minutia in the fingerprint
@@ -214,7 +214,7 @@ class FingerprintEvaluator:
                 fingerprint_id = fingerprint_id_pair[0]
                 fingerprint_atom_index = fingerprint_id_pair[1]
                 
-                fp = extrinsic_processing._query_fingerprint_from_id(fingerprint_id, session)
+                fp = extrinsic_processing.query_fingerprint_from_id(fingerprint_id, session)
                 source_fp = fp.get_print(session)
 
                 if len(source_fp) > 0 and type(source_fp[0]) == list: # is fp at a paragraph granularity?

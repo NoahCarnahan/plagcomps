@@ -65,10 +65,18 @@ def populate_database():
     source_file_listing.close()
 
     for atom_type in ["paragraph"]: # add other atom_type s
-        for method in ["full", "anchor", "kth_in_sent"]: # add other fingerprint methods
-            for n in xrange(3, 6):
+        for method in ["kth_in_sent"]: #["full", "anchor", "kth_in_sent"]: # add other fingerprint methods
+            for n in [5]: # 3 to 6
                 for k in [5]:
                     counter = 0
+                    for filename in all_test_files:
+                        print filename, method, n, k
+                        fp = query_fingerprint(filename, method, n, k, atom_type, session, ExtrinsicUtility.CORPUS_SUSPECT_LOC)
+                        fp.get_print(session)
+                        counter += 1
+                        if counter%1 == 0:
+                            print "Progress on sources (corpus=" + str(ExtrinsicUtility.TRAINING_SUSPECT_LOC) + ": ", counter/float(len(all_source_files)), '(' + str(counter) + '/' + str(len(all_source_files)) + ')'
+
                     for filename in all_source_files:
                         print filename, method, n, k
                         fp = query_fingerprint(filename, method, n, k, atom_type, session, ExtrinsicUtility.CORPUS_SRC_LOC)
@@ -124,6 +132,9 @@ class Fingerprint(Base):
         object. This method will either retrieve the print from the database if it exists
         or calculate it and store it if not.
         '''
+        
+        print "GETTING THE PRINT"
+        
         # TODO: If something modifies the returned fingerprints, will they be modified in the database too!? We definitely don't want that to happen.
         if self._fingerprint == []:
 
@@ -145,12 +156,13 @@ class Fingerprint(Base):
             for atom in atoms:
                 prnt.append(extractor.get_fingerprint(text, self.n, self.method, self.k))
             
+            print "ABOUT TO POPULATE REVERSE INDEX"
             # add each minutia to the reverse index
             if 'source' in self.document_name: # don't put suspcious documents' fingerprints in the reverse index
                 #atom_index = 0
                 #for fingerprint in prnt:
                 #    for minutia in fingerprint:
-                #        ri = reverse_index2._query_reverse_index(minutia, self.n, self.k, self.method, session)
+                #        ri = reverse_index._query_reverse_index(minutia, self.n, self.k, self.method, session)
                 #        ri.add_fingerprint_id(self.id, atom_index, session)
                 #    atom_index += 1
                 print 'inserting reverse_index entries...'
@@ -162,7 +174,7 @@ class Fingerprint(Base):
                         print str(i) + '/' + str(len(prnt)),
                         sys.stdout.flush()
                     for minutia in fingerprint:
-                        ri = reverse_index2._query_reverse_index(minutia, self.n, self.k, self.method, session)
+                        ri = reverse_index._query_reverse_index(minutia, self.n, self.k, self.method, session)
                         ri.add_fingerprint_id(self.id, atom_index, session)
                     atom_index += 1
                 print
@@ -203,4 +215,4 @@ def _test():
     fp.get_print(session)
 
 if __name__ == "__main__":
-    _test()
+    populate_database()
