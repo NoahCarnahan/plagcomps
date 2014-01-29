@@ -141,6 +141,10 @@ def _get_confidence(plag_prob, non_plag_prob):
     If we think there's plag., return the Naive Bayes estimated prob of plag
     If not, return the negative of the Naive Bayes estimate prob of NOT plag
 
+    Other options:
+    return plag_prob / (plag_prob + non_plag_prob) 
+    In brief testing, the above didn't perform as well.
+
     Note that these values are scaled later on to be between 0 and 1
     '''
     if plag_prob > non_plag_prob:

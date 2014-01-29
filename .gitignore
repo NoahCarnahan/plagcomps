@@ -2,6 +2,7 @@ dbconstants.py
 db_constants.py
 restructure/plagcomps/dbconstants.py
 intrinsic/serialized/*.pdf
+intrinsic/serialized/*.png
 intrinsic/serialized/*.csv
 
 # Add these manually with git add -f figures/foo.pdf
