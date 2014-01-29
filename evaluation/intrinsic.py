@@ -92,7 +92,12 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n, min_len=None, 
     first_training_files = IntrinsicUtility().get_n_training_files(n, min_len=min_len, first_doc_num=first_doc_num)
     
     # Also returns reduced_docs from <first_training_files>
-    roc_path, roc_auc, _ = evaluate(features, cluster_type, k, atom_type, first_training_files)
+    metadata = {
+        'min_len' : min_len,
+        'first_doc_num' : first_doc_num
+    }
+
+    roc_path, roc_auc, _ = evaluate(features, cluster_type, k, atom_type, first_training_files, metadata=metadata)
     
     # Store the figures in the database
     # session = Session()
@@ -103,7 +108,7 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n, min_len=None, 
     
     return roc_path, roc_auc
 
-def evaluate(features, cluster_type, k, atom_type, docs, reduced_docs=None, **clusterargs):
+def evaluate(features, cluster_type, k, atom_type, docs, reduced_docs=None, metadata={}, **clusterargs):
     '''
     Return the roc curve path and area under the roc curve for the given list of documents parsed
     by atom_type, using the given features, cluster_type, and number of clusters k.
@@ -114,8 +119,7 @@ def evaluate(features, cluster_type, k, atom_type, docs, reduced_docs=None, **cl
     atom_type is "word", "sentence", or "paragraph".
     docs should be a list of full path strings.
     '''
-    # TODO: Return more statistics, not just roc curve things. 
-    
+    # TODO: Return more statistics, not just roc curve things.
     session = Session()
     
     # If previous call cached <reduced_docs>, don't re-query the DB
@@ -133,7 +137,12 @@ def evaluate(features, cluster_type, k, atom_type, docs, reduced_docs=None, **cl
         likelihood = cluster(cluster_type, k, feature_vecs, **clusterargs)
         plag_likelihoods.append(likelihood)
     
-    roc_path, roc_auc = _roc(reduced_docs, plag_likelihoods, features, cluster_type, k, atom_type)
+    metadata['features'] = features
+    metadata['cluster_type'] = cluster_type
+    metadata['k'] = k
+    metadata['atom_type'] = atom_type
+    metadata['n'] = len(reduced_docs)
+    roc_path, roc_auc = _roc(reduced_docs, plag_likelihoods, **metadata)
     session.close()
 
     # Return reduced_docs for caching in case we call <evaluate> multiple times
@@ -327,14 +336,16 @@ def _get_reduced_docs(atom_type, docs, session, create_new=True):
         
     return reduced_docs
 
-def _roc(reduced_docs, plag_likelihoods, features = None, cluster_type = None, k = None, atom_type = None):
+def _roc(reduced_docs, plag_likelihoods, **metadata):
     '''
     Generates a reciever operator characterstic (roc) curve and returns both the path to a pdf
     containing a plot of this curve and the area under the curve. reduced_docs is a list of
     ReducedDocs, plag_likelihoods is a list of lists whrere plag_likelihoods[i][j] corresponds
     to the likelihood that the jth span in the ith reduced_doc was plagiarized.
     
-    The optional parameters allow for a more verbose title of the graph in the pdf document.
+    The optional parameters are written to a JSON file that stores metadata about the curve.
+    Suggested parameters are:
+    features, cluster_type, k, atom_type
     
     Note that all passages have equal weight for this curve. So, if one document is considerably
     longer than the others and our tool does especially poorly on this document, it will look as
@@ -359,15 +370,9 @@ def _roc(reduced_docs, plag_likelihoods, features = None, cluster_type = None, k
     # confidences is a list of confidence scores for passages
     # So, if confidences[i] = .3 and actuals[i] = 1 then passage i is plagiarized and
     # we are .3 certain that it is plagiarism (So its in the non-plag cluster).
-    
-    if features and cluster_type and k and atom_type:
-        metadata = {
-            'features' : features,
-            'cluster_type' : cluster_type,
-            'atom_type' : atom_type
-        }
-    else:
-        title_args = {}
+
+    # metadata generally also includes keys: features, cluster_type, k, atom_type
+    metadata['n'] = len(reduced_docs)    
     path, roc_auc = BaseUtility.draw_roc(actuals, confidences, **metadata)
 
     return path, roc_auc
@@ -636,6 +641,23 @@ def _cluster_auc_test(num_plag, num_noplag, mean_diff, std, dimensions = 1, repe
     if repetitions > 1:
         for key in averages:
             print key, sum(averages[key])/float(max(1, len(averages[key])))
+
+def _one_run():
+    '''
+    A general pattern for testing
+    '''
+    features = FeatureExtractor.get_all_feature_function_names()
+    features = [f for f in features if 'unigram' not in f and 'trigram' not in f]
+
+    cluster_type = 'outlier'
+    k = 2
+    atom_type = 'nchars'
+    n = 200
+    first_doc_num = 0
+
+    print evaluate_n_documents(features, cluster_type, k, atom_type, n, first_doc_num=first_doc_num, min_len=35000) 
+
+
 
 if __name__ == "__main__":
     _test()

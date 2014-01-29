@@ -39,7 +39,7 @@ def train(features, cluster_type, atom_type, ntrain, start_doc=0, regularization
     print 'Training mat dimesions', training_matrix.shape
     print training_matrix[0:10, ]
 
-    model = LogisticRegression(class_weight=class_weight, regularization=regularization)
+    model = LogisticRegression(class_weight=class_weight, penalty=regularization)
     model.fit(training_matrix, training_actuals)
     
     return model
@@ -96,7 +96,7 @@ def compare_params():
     '''
     features = FeatureExtractor.get_all_feature_function_names()
     features = [f for f in features if 'unigram' not in f and 'trigram' not in f]
-    cluster_type = 'kmeans'
+    cluster_type = 'outlier'
     atom_type = 'paragraph' 
     start_doc = 0
     ntrain = 100
@@ -214,4 +214,3 @@ def _test():
     
 if __name__ == '__main__':
     _test()
-    #compare_params()
