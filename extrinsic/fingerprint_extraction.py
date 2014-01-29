@@ -281,6 +281,7 @@ def anchor_test():
     ex = FingerprintExtractor()
     print ex.get_fingerprint(text, 4, method='anchor')
 
+
 if __name__ == '__main__':
     '''ex = FingerprintExtractor()
     corp = nltk.corpus.gutenberg

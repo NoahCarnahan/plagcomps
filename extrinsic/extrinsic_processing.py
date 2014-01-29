@@ -52,12 +52,13 @@ def _query_fingerprint_from_id(fingerprint_id, session):
 
 class FingerPrint(Base):
     '''
-    this is the object that we store in the database.
+    FingerPrint objects represent unique-ish lists of hashes from documents. These objects
+    are persisted in the database.
     '''
     
     __tablename__ = "fingerprints"
     
-    id = Column(Integer, Sequence("fingerprint_id_seq"), primary_key=True)
+    id = Column(Integer, Sequence("fingerprint_2_id_seq"), primary_key=True)
     document_name = Column(String, index=True)
     _doc_path = Column(String)
     _doc_xml_path = Column(String)
@@ -69,7 +70,7 @@ class FingerPrint(Base):
     timestamp = Column(DateTime)
     version_number = Column(Integer)
     
-    def __init__(self, doc, select_method, n, k, atom_type, base_path, version_number=2):
+    def __init__(self, doc, select_method, n, k, atom_type, base_path, version_number=4):
         '''
         initializes FingerPrint
         '''
@@ -193,6 +194,24 @@ class FingerPrint(Base):
             return cPickle.loads(str(self.fingerprint))
 
 
+def _noah_debug(file_name, base_path):
+	'''
+	This methods prints all the different types of fingerprints generated from one document.
+	'''
+	session = Session()
+	
+	for atom_type in ["paragraph"]:
+		for method in ["full", "anchor", "kth_in_sent"]:
+			for n in [3]:
+				for k in [5]:
+					counter = 0
+					print "(atom_type, method, n, k)", atom_type, method, n, k
+					fp = _query_fingerprint(file_name, method, n, k, atom_type, session, base_path)
+					finger_print =  fp.get_fingerprints(session)
+					print finger_print
+					
+	session.close()
+
 def populate_database():
     '''
     Opens a session and then populates the database using filename, method, n, k.
@@ -238,5 +257,6 @@ Session = sessionmaker(bind=engine)
 
 if __name__ == "__main__":
     #unitTest()
-    populate_database()
+    #populate_database()
+    _noah_debug("/part6/source-document10718", "/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/source-documents")
     
