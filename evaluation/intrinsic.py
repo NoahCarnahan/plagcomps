@@ -30,7 +30,7 @@ import scipy, random
 
 Base = declarative_base()
 
-DEBUG = True
+DEBUG = False
 DB_VERSION_NUMBER = 5
 
 def populate_EVERYTHING():
@@ -76,7 +76,7 @@ def populate_database(atom_type, num, features=None):
 
     session.close()
 
-def evaluate_n_documents(features, cluster_type, k, atom_type, n, min_len=None, first_doc_num=0):
+def evaluate_n_documents(features, cluster_type, k, atom_type, n, min_len=None, first_doc_num=0, feature_weights=None, feature_confidence_weights=None):
     '''
     Return the evaluation (roc curve path, area under the roc curve) of the first n training
     documents parsed by atom_type, using the given features, cluster_type, and number of clusters k.
@@ -92,7 +92,7 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n, min_len=None, 
     first_training_files = IntrinsicUtility().get_n_training_files(n, min_len=min_len, first_doc_num=first_doc_num)
     
     # Also returns reduced_docs from <first_training_files>
-    roc_path, roc_auc, _ = evaluate(features, cluster_type, k, atom_type, first_training_files)
+    roc_path, roc_auc, _ = evaluate(features, cluster_type, k, atom_type, first_training_files, feature_vector_weights=feature_weights, feature_confidence_weights=feature_confidence_weights)
     
     # Store the figures in the database
     # session = Session()
@@ -103,7 +103,7 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n, min_len=None, 
     
     return roc_path, roc_auc
 
-def evaluate(features, cluster_type, k, atom_type, docs, reduced_docs=None, **clusterargs):
+def evaluate(features, cluster_type, k, atom_type, docs, reduced_docs=None, feature_vector_weights=None, **clusterargs):
     '''
     Return the roc curve path and area under the roc curve for the given list of documents parsed
     by atom_type, using the given features, cluster_type, and number of clusters k.
@@ -130,6 +130,15 @@ def evaluate(features, cluster_type, k, atom_type, docs, reduced_docs=None, **cl
             print "On document", d, ". The", count, "th document."
 
         feature_vecs = d.get_feature_vectors(features, session)
+        if feature_vector_weights:
+            weighted_vecs = []
+            for vec in feature_vecs:
+                cur_weight_vec = []
+                for i, weight in enumerate(feature_vector_weights, 0):
+                    cur_weight_vec.append(vec[i] * weight)
+                weighted_vecs.append(cur_weight_vec)
+            feature_vecs = weighted_vecs
+
         likelihood = cluster(cluster_type, k, feature_vecs, **clusterargs)
         plag_likelihoods.append(likelihood)
     
@@ -354,7 +363,7 @@ def _roc(reduced_docs, plag_likelihoods, features = None, cluster_type = None, k
             span = spans[span_index]
             actuals.append(1 if doc.span_is_plagiarized(span) else 0)
             confidences.append(plag_likelihoods[doc_index][span_index])
-    
+
     # actuals is a list of ground truth classifications for passages
     # confidences is a list of confidence scores for passages
     # So, if confidences[i] = .3 and actuals[i] = 1 then passage i is plagiarized and
@@ -362,7 +371,7 @@ def _roc(reduced_docs, plag_likelihoods, features = None, cluster_type = None, k
     
     fpr, tpr, thresholds = sklearn.metrics.roc_curve(actuals, confidences, pos_label=1)
     roc_auc = sklearn.metrics.auc(fpr, tpr)
-    print roc_auc
+    # print roc_auc
     
     # The following code is from http://scikit-learn.org/stable/auto_examples/plot_roc.html
     pyplot.clf()
@@ -648,17 +657,20 @@ def _cluster_auc_test(num_plag, num_noplag, mean_diff, std, dimensions = 1, repe
             print key, sum(averages[key])/float(max(1, len(averages[key])))
 
 if __name__ == "__main__":
-    features = ['average_sentence_length',
-                 'average_syllables_per_word',
+    features = ['average_syllables_per_word',
                  'avg_external_word_freq_class',
                  'avg_internal_word_freq_class',
                  'flesch_kincaid_grade',
                  'flesch_reading_ease',
-                 'num_chars',
                  'punctuation_percentage',
                  'stopword_percentage',
                  'syntactic_complexity',
                  'syntactic_complexity_average']
-    print evaluate_n_documents(features, 'nn_confidences', 2, 'paragraph', 100)
+    feature_vector_weights = [64.21595144098977, 65.03971484167107, 33.085927263656664, 33.09580763716189, 46.37666732352944, 54.613532651311495, 88.27257512993424, 18.298800461449638, 64.76406164909085]
+    print evaluate_n_documents(features, 'kmeans', 2, 'paragraph', 5, feature_weights=feature_vector_weights, first_doc_num=100)
+
+    # feature_confidence_weights = [0.5604042889556622, 0.7165024021097798, 0.18220001387368367, 0.14511945022460548, 0.5941134321218833, 0.00001, 0.48010502107673214, 0.9877889777714537, 0.06024613211414226]
+    # print evaluate_n_documents(features, 'combine_confidences', 2, 'paragraph', 50, feature_confidence_weights=feature_confidence_weights, first_doc_num=200)
+
     # _test()
     

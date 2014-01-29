@@ -58,7 +58,7 @@ def density_based(stylo_vectors, center_at_mean=True, num_to_ignore=1, impurity=
         norm_p = _test_normality(row)
         normality_pvals.append(norm_p)
 
-    print 'Normality pvals have min, max, mean:', min(normality_pvals), max(normality_pvals), mean(normality_pvals)
+    # print 'Normality pvals have min, max, mean:', min(normality_pvals), max(normality_pvals), mean(normality_pvals)
     
 
     for i in xrange(len(stylo_vectors)):

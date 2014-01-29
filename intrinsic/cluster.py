@@ -28,6 +28,8 @@ def cluster(method, k, items, **kwargs):
         return _kmedians(items, k)
     elif method == "nn_confidences":
         return _nn_confidences(items)
+    elif method == "combine_confidences":
+        return _combine_confidences(items, **kwargs)
     else:
         raise ValueError("Invalid cluster method. Acceptable values are 'kmeans', 'agglom', or 'hmm'.")
 
@@ -56,7 +58,6 @@ def _kmeans(stylo_vectors, k):
     # Initialize <k> clusters to be points in input vectors
     centroids, assigned_clusters = kmeans2(normalized_features, k, minit = 'points')
     
-    
     # Get confidences
     
     # Special case when there is only one atom
@@ -68,10 +69,13 @@ def _kmeans(stylo_vectors, k):
         plag_cluster = Counter(assigned_clusters).most_common()[-1][0] #plag_cluster is the smallest cluster
         not_plag_cluster = 1 if plag_cluster == 0 else 0
         for feat_vec in normalized_features:
-            distance_from_plag = float(pdist(matrix([centroids[plag_cluster], feat_vec])))
-            distance_from_notplag = float(pdist(matrix([centroids[not_plag_cluster], feat_vec])))
-            conf = distance_from_notplag / (distance_from_notplag + distance_from_plag)
-            confidences.append(conf)
+            if plag_cluster < len(centroids) and plag_cluster >= 0:
+                distance_from_plag = float(pdist(matrix([centroids[plag_cluster], feat_vec])))
+                distance_from_notplag = float(pdist(matrix([centroids[not_plag_cluster], feat_vec])))
+                conf = distance_from_notplag / (distance_from_notplag + distance_from_plag)
+                confidences.append(conf)
+            else:
+                confidences.append(0)
     else:
         # TODO: Develop a notion of confidence when k != 2
         non_plag_cluster = Counter(assigned_clusters).most_common()[0][0]
@@ -169,6 +173,21 @@ def _nn_confidences(items):
     from classify import NeuralNetworkConfidencesClassifier
     classifier = NeuralNetworkConfidencesClassifier()
     return classifier.nn_confidences(items)
+
+def _combine_confidences(feature_vectors, feature_confidence_weights=None):
+    confidence_vectors = []
+    for fi in xrange(len(feature_vectors[0])):
+        single_feature_vecs = [[x[fi]] for x in feature_vectors]
+        confs = _kmeans(single_feature_vecs, 2)
+        for i, confidence in enumerate(confs, 0):
+            if len(confidence_vectors) <= i:
+                confidence_vectors.append([])
+            confidence_vectors[i].append(confidence * feature_confidence_weights[fi])
+            
+    confidences = []
+    for vec in confidence_vectors:
+        confidences.append(min(sum(vec), 1))
+    return confidences    
 
 def _agglom(stylo_vectors, k):
     '''
