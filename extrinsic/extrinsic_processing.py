@@ -5,6 +5,7 @@ import fingerprint_extraction
 from ..tokenization import *
 from ..dbconstants import username, password, dbname
 import reverse_index
+import sys
 
 import sqlalchemy
 from sqlalchemy import Table, Column, Sequence, Integer, String, Text, Float, DateTime, ForeignKey, and_
@@ -157,11 +158,17 @@ class FingerPrint(Base):
             if 'source' in self.document_name: # don't put suspcious documents' fingerprints in the reverse index
                 atom_index = 0
                 print 'inserting reverse_index entries...'
+                i = 0
                 for fingerprint in paragraph_fingerprints:
+                    i += 1
+                    if i % 5 == 0:
+                        print str(i) + '/' + str(len(paragraph_fingerprints)),
+                        sys.stdout.flush()
                     for minutia in fingerprint:
                         ri = reverse_index._query_reverse_index(minutia, self.n, self.k, self.method, session)
                         ri.add_fingerprint_id(self.id, atom_index, session)
                     atom_index += 1
+                print
             else:
                 print 'not placing', self.document_name, 'fingerprint into reverse_index'
 
@@ -202,17 +209,23 @@ def populate_database():
 
     counter = 0
     for atom_type in ["paragraph"]:
+<<<<<<< HEAD
         for method in ["full", "anchor", "kth_in_sent", "winnow-k"]: # add other fingerprint methods
             for n in xrange(5,8):
                 for k in [15]:
+=======
+        for method in ["full", "anchor", "kth_in_sent"]: # add other fingerprint methods
+            for n in xrange(3, 6):
+                for k in [5]:
+>>>>>>> f1f23ab2166a3384a323264074b9347268ad506f
                     counter = 0
-                    for filename in all_test_files:
-                        print filename, method, n, k
-                        fp = _query_fingerprint(filename, method, n, k, atom_type, session, ExtrinsicUtility.CORPUS_SUSPECT_LOC)
-                        fp.get_fingerprints(session)
-                        counter += 1
-                        if counter%1 == 0:
-                            print "Progress on suspects: ", counter/float(len(all_test_files)), '(' + str(counter) + '/' + str(len(all_test_files)) + ')'
+                    # for filename in all_test_files:
+                    #     print filename, method, n, k
+                    #     fp = _query_fingerprint(filename, method, n, k, atom_type, session, ExtrinsicUtility.CORPUS_SUSPECT_LOC)
+                    #     fp.get_fingerprints(session)
+                    #     counter += 1
+                    #     if counter%1 == 0:
+                    #         print "Progress on suspects (corpus=" + str(ExtrinsicUtility.TRAINING_SUSPECT_LOC) + ": ", counter/float(len(all_test_files)), '(' + str(counter) + '/' + str(len(all_test_files)) + ')'
                     counter = 0
                     for filename in all_source_files:
                         print filename, method, n, k
@@ -220,7 +233,7 @@ def populate_database():
                         fp.get_fingerprints(session)
                         counter += 1
                         if counter%1 == 0:
-                            print "Progress on sources: ", counter/float(len(all_source_files)), '(' + str(counter) + '/' + str(len(all_source_files)) + ')'
+                            print "Progress on sources (corpus=" + str(ExtrinsicUtility.TRAINING_SRC_LOC) + ": ", counter/float(len(all_source_files)), '(' + str(counter) + '/' + str(len(all_source_files)) + ')'
 
     session.close()
 

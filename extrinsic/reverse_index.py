@@ -19,9 +19,9 @@ reverse_indexes = {}
 def _query_reverse_index(minutia, n, k, method, session):
     if method != "kth_in_sent":
         k = 0
-    key = str(minutia) + str(n) + str(k) + method
-    if key in reverse_indexes:
-        return reverse_indexes[key]
+    # key = str(minutia) + str(n) + str(k) + method
+    # if key in reverse_indexes:
+    #     return reverse_indexes[key]
     try:
         q = session.query(ReverseIndex).filter(and_(ReverseIndex.minutia == minutia, ReverseIndex.method == method, ReverseIndex.n == n, ReverseIndex.k == k))
         ri = q.one()
@@ -29,7 +29,10 @@ def _query_reverse_index(minutia, n, k, method, session):
         ri = ReverseIndex(minutia, n, k, method)
         session.add(ri)
         session.commit()
-    reverse_indexes[key] = ri
+    # reverse_indexes[key] = ri
+    # if len(reverse_indexes) > 10000:
+    #     reverse_indexes.clear()
+    #     print 'cleared reverse_indexes cache'
     return ri
 
 class ReverseIndex(Base):

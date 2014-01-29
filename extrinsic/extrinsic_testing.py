@@ -174,6 +174,7 @@ class ExtrinsicTester:
 		
 
 if __name__ == "__main__":
+<<<<<<< HEAD
 	session = extrinsic_processing.Session()
 	# fp = extrinsic_processing._query_fingerprint('/part7/suspicious-document12675', "full", 3, 5, "paragraph", session, '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents')
 	# print fp.get_fingerprints(session)
@@ -197,3 +198,25 @@ if __name__ == "__main__":
 
 	tester = ExtrinsicTester(atom_type, method, n, k, confidence_method, suspect_file_list, source_file_list)
 	tester.plot_ROC_curve()
+=======
+    session = extrinsic_processing.Session()
+    # fp = extrinsic_processing._query_fingerprint('/part7/suspicious-document12675', "full", 3, 5, "paragraph", session, '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents')
+    # print fp.get_fingerprints(session)
+    
+    util = ExtrinsicUtility()
+    num_files = 10
+
+    source_file_list, suspect_file_list = util.get_n_training_files(n=num_files, include_txt_extension=False)
+
+    print 'Testing first', num_files, ' suspect files using a corpus of', len(source_file_list), 'source documents:'
+    print 'Suspect filenames:', suspect_file_list
+
+    atom_type = "paragraph" # ["paragraph", "full"]
+    method = "anchor" # ["kth_in_sent", "anchor", "full"]
+    n = 5
+    k = 5
+    confidence_method = "jaccard" # ["containment", "jaccard"]
+
+    tester = ExtrinsicTester(atom_type, method, n, k, confidence_method, suspect_file_list, source_file_list)
+    tester.plot_ROC_curve()
+>>>>>>> f1f23ab2166a3384a323264074b9347268ad506f
