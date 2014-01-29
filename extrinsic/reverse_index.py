@@ -1,4 +1,3 @@
-# reverse_index.py
 import datetime
 from ..dbconstants import username, password, dbname
 
@@ -39,7 +38,7 @@ class ReverseIndex(Base):
     '''
     Entry in the reverse_index table that maps single minutiae to documents that contain it in their fingerprints.
     '''
-    __tablename__ = "reverse_index"
+    __tablename__ = "st1_reverse_index"
     
     id = Column(Integer, Sequence("reverse_index_id_seq"), primary_key=True)
     minutia = Column(Integer, index=True)
@@ -94,7 +93,7 @@ def clean_reverse_index_entries():
         ri = _query_reverse_index(minutia, session)
         clean_ids = []
         for fid in ri.fingerprint_ids:
-            if extrinsic_processing._query_fingerprint_from_id(fid, session):
+            if extrinsic_processing.query_fingerprint_from_id(fid, session):
                 clean_ids.append(fid)
             else:
                 print 'Removing', fid, 'from', minutia
@@ -105,8 +104,10 @@ def clean_reverse_index_entries():
 
 url = "postgresql://%s:%s@%s" % (username, password, dbname)
 engine = sqlalchemy.create_engine(url)
+Base.metadata.drop_all(engine)
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 
 if __name__ == '__main__':
-     clean_reverse_index_entries() 
+    #clean_reverse_index_entries() 
+    pass

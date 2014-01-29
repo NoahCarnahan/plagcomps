@@ -190,7 +190,7 @@ class FingerprintEvaluator:
         self.source_filenames = source_filenames
 
     def _get_fingerprint(self, filename, atom_type, session, base_path):
-        fp = extrinsic_processing._query_fingerprint(filename, self.fingerprint_method, self.n, self.k, atom_type, session, base_path)
+        fp = extrinsic_processing.query_fingerprint(filename, self.fingerprint_method, self.n, self.k, atom_type, session, base_path)
         return fp
 
     def classify_document(self, filename, atom_type, atom_index, fingerprint_method, n, k, confidence_method, session):
@@ -215,7 +215,7 @@ class FingerprintEvaluator:
                 fingerprint_atom_index = fingerprint_id_pair[1]
                 
                 fp = extrinsic_processing._query_fingerprint_from_id(fingerprint_id, session)
-                source_fp = fp.get_fingerprints(session)
+                source_fp = fp.get_print(session)
 
                 if len(source_fp) > 0 and type(source_fp[0]) == list: # is fp at a paragraph granularity?
                     if len(source_fp[fingerprint_atom_index]): # make sure it's not an empty fingerprint

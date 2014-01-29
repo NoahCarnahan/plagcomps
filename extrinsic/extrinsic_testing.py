@@ -98,8 +98,8 @@ class ExtrinsicTester:
 
 def main():
     session = extrinsic_processing.Session()
-    # fp = extrinsic_processing._query_fingerprint('/part7/suspicious-document12675', "full", 3, 5, "paragraph", session, '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents')
-    # print fp.get_fingerprints(session)
+    # fp = extrinsic_processing.query_fingerprint('/part7/suspicious-document12675', "full", 3, 5, "paragraph", session, '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents')
+    # print fp.get_print(session)
     
     util = ExtrinsicUtility()
     num_files = 1

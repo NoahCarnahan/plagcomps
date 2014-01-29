@@ -11,54 +11,79 @@ import sqlalchemy
 from sqlalchemy import Table, Column, Sequence, Integer, String, Text, Float, DateTime, ForeignKey, and_
 from sqlalchemy.orm import relationship, backref, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.orderinglist import ordering_list
 from sqlalchemy.orm.collections import attribute_mapped_collection
 from sqlalchemy.dialects.postgresql import ARRAY
-from sqlalchemy.ext.associationproxy import association_proxy
-
-import cPickle # used for storing multidimensional python lists as fingerprints in the db
 
 Base = declarative_base()
 
-def _query_fingerprint(docs, method, n, k, atom_type, session, base_path):
+def query_fingerprint(doc, method, n, k, atom_type, session, base_path):
     '''
-    queries the database to see if the fingerprint in question exists in the database.
-    If it does, it will be returned, otherwise it is created and added to the database.
+    Query the database to see if the Fingerprint object in question exists in the database.
+    If it does, return it, otherwise create it and add it to the database.
     '''
-    if method != "kth_in_sent" and method != "winnow-k":
+    if method not in ["kth_in_sent", "winnow-k"]:
         k = 0
     try:
-        q = session.query(FingerPrint).filter(and_(FingerPrint.document_name == docs, FingerPrint.atom_type == atom_type, FingerPrint.method == method, FingerPrint.n == n, FingerPrint.k == k))
+        q = session.query(Fingerprint).filter(and_(Fingerprint.document_name == doc, Fingerprint.atom_type == atom_type, Fingerprint.method == method, Fingerprint.n == n, Fingerprint.k == k))
         fp = q.one()
     except sqlalchemy.orm.exc.NoResultFound, e:
-        fp = FingerPrint(docs, method, n, k, atom_type, base_path)
+        fp = Fingerprint(doc, method, n, k, atom_type, base_path)
         session.add(fp)
         session.commit()
     return fp
-
+    
 fingerprint_id_map = {}
-
-def _query_fingerprint_from_id(fingerprint_id, session):
-    if fingerprint_id in fingerprint_id_map:
+def query_fingerprint_from_id(fingerprint_id, session, use_map = False):
+    '''
+    Given a fingerprint_id, return the Fingerprint object from the database with this id.
+    '''
+    if use_map and fingerprint_id in fingerprint_id_map:
         return fingerprint_id_map[fingerprint_id]
     try:
-        q = session.query(FingerPrint).filter(FingerPrint.id == fingerprint_id)
+        q = session.query(Fingerprint).filter(Fingerprint.id == fingerprint_id)
         fp = q.one()
-        fingerprint_id_map[fingerprint_id] = fp
+        if use_map:
+            fingerprint_id_map[fingerprint_id] = fp
         return fp
     except sqlalchemy.orm.exc.NoResultFound, e:
         print 'ERROR: No fingerprint with id=' + str(fingerprint_id) + ' is in database!'
-        return
+        return None
 
+def populate_database():
+    '''
+    Open a session and then populate the database using filename, method, n, k.
+    '''
+    session = Session()
 
-class FingerPrint(Base):
-    '''
-    FingerPrint objects represent unique-ish lists of hashes from documents. These objects
-    are persisted in the database.
-    '''
+    test_file_listing = file(ExtrinsicUtility.TRAINING_SUSPECT_LOC)
+    all_test_files = [f.strip() for f in test_file_listing.readlines()]
+    test_file_listing.close()
     
-    __tablename__ = "fingerprints"
+    source_file_listing = file(ExtrinsicUtility.TRAINING_SRC_LOC)
+    all_source_files = [f.strip() for f in source_file_listing.readlines()]
+    source_file_listing.close()
+
+    for atom_type in ["paragraph"]: # add other atom_type s
+        for method in ["full", "anchor", "kth_in_sent"]: # add other fingerprint methods
+            for n in xrange(3, 6):
+                for k in [5]:
+                    counter = 0
+                    for filename in all_source_files:
+                        print filename, method, n, k
+                        fp = query_fingerprint(filename, method, n, k, atom_type, session, ExtrinsicUtility.CORPUS_SRC_LOC)
+                        fp.get_print(session)
+                        counter += 1
+                        if counter%1 == 0:
+                            print "Progress on sources (corpus=" + str(ExtrinsicUtility.TRAINING_SRC_LOC) + ": ", counter/float(len(all_source_files)), '(' + str(counter) + '/' + str(len(all_source_files)) + ')'
+
+    session.close()
+
+class Fingerprint(Base):
+    __tablename__ = "st1_fingerprint"
+    id = Column(Integer, Sequence("st1_fingerprint_id_seq"), primary_key=True)
+    _fingerprint = relationship("_FpSubList", order_by="_FpSubList.position", collection_class=ordering_list("position"))
     
-    id = Column(Integer, Sequence("fingerprint_2_id_seq"), primary_key=True)
     document_name = Column(String, index=True)
     _doc_path = Column(String)
     _doc_xml_path = Column(String)
@@ -66,13 +91,13 @@ class FingerPrint(Base):
     n = Column(Integer)
     k = Column(Integer)
     atom_type = Column(String)
-    fingerprint = Column(Text)
+    
     timestamp = Column(DateTime)
     version_number = Column(Integer)
     
-    def __init__(self, doc, select_method, n, k, atom_type, base_path, version_number=4):
+    def __init__(self, doc, selection_method, n, k, atom_type, base_path, version_number=1):
         '''
-        initializes FingerPrint
+        Initialize...
         '''
         self.document_name = doc
 
@@ -85,178 +110,97 @@ class FingerPrint(Base):
             self._doc_path = base_path + self.document_name + ".txt"
             self._doc_xml_path = base_path + self.document_name + ".xml"
         
-        self.method = select_method
+        self.method = selection_method
         self.n = n
         self.k = k
         self.atom_type = atom_type
         self.timestamp = datetime.datetime.now()
         self.version_number = version_number
-        
+    
+    def get_print(self, session):
+        '''
+        Returns the list of minutiae or the list of lists of minutiae that is the fingerprint
+        for document and fingerprinting technique given when constructing this Fingerprint
+        object. This method will either retrieve the print from the database if it exists
+        or calculate it and store it if not.
+        '''
+        # TODO: If something modifies the returned fingerprints, will they be modified in the database too!? We definitely don't want that to happen.
+        if self._fingerprint == []:
 
-    def __repr__(self):
-        '''
-        changes print representation for class FingerPrint
-        '''
-        return "<Document(%s,%s)>" % (self.document_name, self.atom_type)
-        
-    def get_fingerprints(self, session):
-        '''
-        helper function to return fingerprints by granularity of full text vs paragraph
-        '''
-        if self.atom_type == "paragraph":
-            return self._get_paragraph_fingerprints(session)
-        else:
-            return self._get_fingerprint(session)
-        
-    def _get_fingerprint(self, session):
-        '''
-        pseudo-private function to return fingerprint, returns previously calculated fingerprint if it exists.
-        Otherwise, it calculates the fingerprint and returns.  Uses the full text for fingerprint calculations.
-        '''
-        if self.fingerprint == None:
+            # Get the text
             f = open(self._doc_path, 'r')
             text = f.read()
             f.close()
-
-            fe = fingerprint_extraction.FingerprintExtractor()
-            fingerprint = fe.get_fingerprint(text, self.n, self.method, self.k)
+            if self.atom_type == "full":
+                atoms = [text]
+            elif self.atom_type == "paragraph":
+                paragraph_spans = tokenize(text, self.atom_type)
+                atoms = [text[start:end] for start, end in paragraph_spans]
+            else:
+                raise ValueError("Invalid atom_type! Only 'full' and 'paragraph' are allowed.")
             
-            self.fingerprint = cPickle.dumps(fingerprint)
-
+            # fingerprint the text
+            prnt = []
+            extractor = fingerprint_extraction.FingerprintExtractor()
+            for atom in atoms:
+                prnt.append(extractor.get_fingerprint(text, self.n, self.method, self.k))
+            
             # add each minutia to the reverse index
             if 'source' in self.document_name: # don't put suspcious documents' fingerprints in the reverse index
-                for minutia in fingerprint:
-                    ri = reverse_index._query_reverse_index(minutia, self.n, self.k, self.method, session)
-                    ri.add_fingerprint_id(self.id, 0, session)
-            session.commit()
-
-            return cPickle.loads(str(self.fingerprint))
-        else:
-            return cPickle.loads(str(self.fingerprint))
-        
-        
-    def _get_paragraph_fingerprints(self, session):
-        '''
-        pseudo-private function to return fingerprint, returns previously calculated fingerprint if it exists.
-        Otherwise, it calculates the fingerprint and returns.  Uses paragraphs for fingerprint calculations.
-        '''
-        if self.fingerprint == None:
-            f = open(self._doc_path, 'r')
-            text = f.read()
-            f.close()
-            paragraph_spans = tokenize(text, self.atom_type)
-
-            paragraph_fingerprints = []
-            fe = fingerprint_extraction.FingerprintExtractor()
-            print 'fingerprinting...'
-            for span in paragraph_spans:
-                paragraph = text[span[0]:span[1]]
-                fingerprint = fe.get_fingerprint(paragraph, self.n, self.method, self.k)
-                paragraph_fingerprints.append(fingerprint)
-            self.fingerprint = cPickle.dumps(paragraph_fingerprints)
-
-            # add each minutia to the reverse index
-            if 'source' in self.document_name: # don't put suspcious documents' fingerprints in the reverse index
-                atom_index = 0
+                #atom_index = 0
+                #for fingerprint in prnt:
+                #    for minutia in fingerprint:
+                #        ri = reverse_index2._query_reverse_index(minutia, self.n, self.k, self.method, session)
+                #        ri.add_fingerprint_id(self.id, atom_index, session)
+                #    atom_index += 1
                 print 'inserting reverse_index entries...'
                 i = 0
-                for fingerprint in paragraph_fingerprints:
+                atom_index = 0
+                for fingerprint in prnt:
                     i += 1
                     if i % 5 == 0:
-                        print str(i) + '/' + str(len(paragraph_fingerprints)),
+                        print str(i) + '/' + str(len(prnt)),
                         sys.stdout.flush()
                     for minutia in fingerprint:
-                        ri = reverse_index._query_reverse_index(minutia, self.n, self.k, self.method, session)
+                        ri = reverse_index2._query_reverse_index(minutia, self.n, self.k, self.method, session)
                         ri.add_fingerprint_id(self.id, atom_index, session)
                     atom_index += 1
                 print
-            else:
-                print 'not placing', self.document_name, 'fingerprint into reverse_index'
-
-            session.commit()
-            return cPickle.loads(str(self.fingerprint))
-        else:
-            # uncomment these lines if you want to generate reverse indexes from the existing fingerprints in the database
-            # Ask Marcus if you're unsure about this!
-            # paragraph_fingerprints = cPickle.loads(str(self.fingerprint))
-            # print self.id
-            # i = 0
-            #  # add each minutia to the reverse index
-            # for fingerprint in paragraph_fingerprints:
-            #     print i, len(fingerprint)
-            #     for minutia in fingerprint:
-            #         ri = reverse_index._query_reverse_index(minutia, self.n, self.k, self.method, session)
-            #         ri.add_fingerprint_id(self.id, i, session)
-            #      i += 1
-            # session.commit()
-            # return paragraph_fingerprints
             
-            return cPickle.loads(str(self.fingerprint))
+            # save the fingerprint
+            self._fingerprint = [_FpSubList(sub_list) for sub_list in prnt]
+            session.commit()
+            
+        # Return the fingerprint 
+        if self.atom_type == "full":
+            # Return a list of minutiae so that this behaves the same way the previous implementation did.
+            return self._fingerprint[0].minutiae
+        else:
+            return [x.minutiae for x in self._fingerprint]
 
-
-def _noah_debug(file_name, base_path):
-	'''
-	This methods prints all the different types of fingerprints generated from one document.
-	'''
-	session = Session()
-	
-	for atom_type in ["paragraph"]:
-		for method in ["full", "anchor", "kth_in_sent"]:
-			for n in [3]:
-				for k in [5]:
-					counter = 0
-					print "(atom_type, method, n, k)", atom_type, method, n, k
-					fp = _query_fingerprint(file_name, method, n, k, atom_type, session, base_path)
-					finger_print =  fp.get_fingerprints(session)
-					print finger_print
-					
-	session.close()
-
-def populate_database():
-    '''
-    Opens a session and then populates the database using filename, method, n, k.
-    '''
-    session = Session()
-
-    test_file_listing = file(ExtrinsicUtility.TRAINING_SUSPECT_LOC)
-    all_test_files = [f.strip() for f in test_file_listing.readlines()]
-    test_file_listing.close()
+class _FpSubList(Base):
+    __tablename__ = "st1_fp_sub_list"
+    id = Column(Integer, Sequence("st1_fp_sub_list_id_seq"), primary_key = True)
+    fingerprint_id = Column(Integer, ForeignKey("st1_fingerprint.id"))
+    position = Column(Integer)
+    minutiae = Column(ARRAY(Integer))
     
-    source_file_listing = file(ExtrinsicUtility.TRAINING_SRC_LOC)
-    all_source_files = [f.strip() for f in source_file_listing.readlines()]
-    source_file_listing.close()
-
-    counter = 0
-    for atom_type in ["paragraph"]:
-        for method in ["full", "anchor", "kth_in_sent"]: # add other fingerprint methods
-            for n in xrange(3, 6):
-                for k in [5]:
-                    counter = 0
-                    # for filename in all_test_files:
-                    #     print filename, method, n, k
-                    #     fp = _query_fingerprint(filename, method, n, k, atom_type, session, ExtrinsicUtility.CORPUS_SUSPECT_LOC)
-                    #     fp.get_fingerprints(session)
-                    #     counter += 1
-                    #     if counter%1 == 0:
-                    #         print "Progress on suspects (corpus=" + str(ExtrinsicUtility.TRAINING_SUSPECT_LOC) + ": ", counter/float(len(all_test_files)), '(' + str(counter) + '/' + str(len(all_test_files)) + ')'
-                    counter = 0
-                    for filename in all_source_files:
-                        print filename, method, n, k
-                        fp = _query_fingerprint(filename, method, n, k, atom_type, session, ExtrinsicUtility.CORPUS_SRC_LOC)
-                        fp.get_fingerprints(session)
-                        counter += 1
-                        if counter%1 == 0:
-                            print "Progress on sources (corpus=" + str(ExtrinsicUtility.TRAINING_SRC_LOC) + ": ", counter/float(len(all_source_files)), '(' + str(counter) + '/' + str(len(all_source_files)) + ')'
-
-    session.close()
+    def __init__(self, sub_list):
+        self.minutiae = sub_list
 
 url = "postgresql://%s:%s@%s" % (username, password, dbname)
 engine = sqlalchemy.create_engine(url)
+Base.metadata.drop_all(engine)
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 
+def _test():
+    '''
+    Fingerprints one document (or retreives it from the db if it already exists there)
+    '''
+    session = Session()
+    fp = query_fingerprint("/part6/source-document10718", "anchor", 3, 5, "paragraph", session, "/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/source-documents")
+    fp.get_print(session)
+
 if __name__ == "__main__":
-    #unitTest()
-    #populate_database()
-    _noah_debug("/part6/source-document10718", "/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/source-documents")
-    
+    _test()
