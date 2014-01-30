@@ -66,6 +66,7 @@ class ReverseIndex(Base):
         return self.fingerprint_ids
 
     def add_fingerprint_id(self, fingerprint_id, atom_index, session):
+        #print "Adding fingerprint id with id and atom_index", fingerprint_id, atom_index
         '''
         Adds the given fingerprint_id to the fingerprint_ids list if it's not already in the list. Might be a slow check...
         Return True if the fingerprint_id was actually added; else return False.
@@ -104,7 +105,7 @@ def clean_reverse_index_entries():
 
 url = "postgresql://%s:%s@%s" % (username, password, dbname)
 engine = sqlalchemy.create_engine(url)
-Base.metadata.drop_all(engine)
+#Base.metadata.drop_all(engine)
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 

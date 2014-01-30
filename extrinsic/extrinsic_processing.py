@@ -34,7 +34,7 @@ def query_fingerprint(doc, method, n, k, atom_type, session, base_path):
     return fp
     
 fingerprint_id_map = {}
-def query_fingerprint_from_id(fingerprint_id, session, use_map = False):
+def query_fingerprint_from_id(fingerprint_id, session, use_map = True):
     '''
     Given a fingerprint_id, return the Fingerprint object from the database with this id.
     '''
@@ -72,15 +72,15 @@ def populate_database():
                     for filename in all_test_files:
                         print filename, method, n, k
                         fp = query_fingerprint(filename, method, n, k, atom_type, session, ExtrinsicUtility.CORPUS_SUSPECT_LOC)
-                        fp.get_print(session)
+                        print fp.get_print(session)
                         counter += 1
                         if counter%1 == 0:
                             print "Progress on sources (corpus=" + str(ExtrinsicUtility.TRAINING_SUSPECT_LOC) + ": ", counter/float(len(all_source_files)), '(' + str(counter) + '/' + str(len(all_source_files)) + ')'
-
+                    counter = 0
                     for filename in all_source_files:
                         print filename, method, n, k
                         fp = query_fingerprint(filename, method, n, k, atom_type, session, ExtrinsicUtility.CORPUS_SRC_LOC)
-                        fp.get_print(session)
+                        print fp.get_print(session)
                         counter += 1
                         if counter%1 == 0:
                             print "Progress on sources (corpus=" + str(ExtrinsicUtility.TRAINING_SRC_LOC) + ": ", counter/float(len(all_source_files)), '(' + str(counter) + '/' + str(len(all_source_files)) + ')'
@@ -132,9 +132,7 @@ class Fingerprint(Base):
         object. This method will either retrieve the print from the database if it exists
         or calculate it and store it if not.
         '''
-        
-        print "GETTING THE PRINT"
-        
+                
         # TODO: If something modifies the returned fingerprints, will they be modified in the database too!? We definitely don't want that to happen.
         if self._fingerprint == []:
 
@@ -154,7 +152,7 @@ class Fingerprint(Base):
             prnt = []
             extractor = fingerprint_extraction.FingerprintExtractor()
             for atom in atoms:
-                prnt.append(extractor.get_fingerprint(text, self.n, self.method, self.k))
+                prnt.append(extractor.get_fingerprint(atom, self.n, self.method, self.k))
             
             print "ABOUT TO POPULATE REVERSE INDEX"
             # add each minutia to the reverse index
@@ -202,7 +200,7 @@ class _FpSubList(Base):
 
 url = "postgresql://%s:%s@%s" % (username, password, dbname)
 engine = sqlalchemy.create_engine(url)
-Base.metadata.drop_all(engine)
+#Base.metadata.drop_all(engine)
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 
@@ -213,6 +211,11 @@ def _test():
     session = Session()
     fp = query_fingerprint("/part6/source-document10718", "anchor", 3, 5, "paragraph", session, "/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/source-documents")
     fp.get_print(session)
+
+def _other_test():
+    session = Session()
+    
+    # Get the fingerprint 
 
 if __name__ == "__main__":
     populate_database()

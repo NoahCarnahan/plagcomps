@@ -42,7 +42,7 @@ class ExtrinsicTester:
 
     def _get_trials(self, session):
         '''
-        For each testing document, split the document into atoms and classify each atom
+        For each suspect document, split the document into atoms and classify each atom
         as plagiarized or not-plagiarized. Build a list of classifications and a list
         of the ground truths for each atom of each document.
         '''
@@ -51,21 +51,24 @@ class ExtrinsicTester:
         for f in self.suspect_file_list:
             suspicious_document = open(f + '.txt')
             doc = suspicious_document.read()
-            
             suspicious_document.close()
+            
             doc_name = f.replace(self.suspicious_path_start, "")
 
             acts = ground_truth._query_ground_truth(f, self.atom_type, session, self.suspicious_path_start).get_ground_truth(session)
             actuals += acts
 
             print f
-            for i in xrange(len(acts)):
-                print 'Classifying', doc_name
-                atom_classifications = self.evaluator.classify_document(doc_name, self.atom_type, i, self.fingerprint_method, self.n, self.k, self.confidence_method, session)
+            print 'Classifying', doc_name
+            
+            for atom_index in xrange(len(acts)):    
+                atom_classifications = self.evaluator.classify_document(doc_name, self.atom_type, atom_index, self.fingerprint_method, self.n, self.k, self.confidence_method, session)
+                #print atom_classifications
                 # just take the most similar source document's similarity as the confidence of plagiarism for now.
                 classifications.append(atom_classifications[0][1])
-                print 'atom index:', str(i+1) + '/' + str(len(acts))
-                print 'confidence (actual, guess):', acts[i], atom_classifications[0][1]
+                
+                print 'atom index:', str(atom_index+1) + '/' + str(len(acts))
+                print 'confidence (actual, guess):', acts[atom_index], atom_classifications[0][1]
 
         return classifications, actuals
 
@@ -108,7 +111,7 @@ def main():
     print 'Suspect filenames:', suspect_file_list
 
     atom_type = "paragraph" # ["paragraph", "full"]
-    method = "anchor" # ["kth_in_sent", "anchor", "full"]
+    method = "kth_in_sent" # ["kth_in_sent", "anchor", "full"]
     n = 5
     k = 5
     confidence_method = "jaccard" # ["containment", "jaccard"]

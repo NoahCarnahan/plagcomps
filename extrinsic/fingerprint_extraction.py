@@ -211,6 +211,7 @@ class FingerprintEvaluator:
                 continue
             ri = reverse_index._query_reverse_index(minutia, n, k, fingerprint_method, session)
             for fingerprint_id_pair in ri.fingerprint_ids:
+
                 fingerprint_id = fingerprint_id_pair[0]
                 fingerprint_atom_index = fingerprint_id_pair[1]
                 
@@ -294,5 +295,8 @@ if __name__ == '__main__':
     anchor = FingerprintEvaluator(sources, "anchor")
     '''
     ex = FingerprintExtractor()
-    document = "Hi my name is Marcus and I'm working in the CMC. Why does our project have to be so ridiculous."
-    print ex.get_fingerprint(document, 3, method="anchor")
+    #text = "Hi my name is Marcus and I'm working in the CMC. Why does our project have to be so ridiculous."
+    f = open("/copyCats/itty-bitty-corpus/suspicious/einstein.txt","r")
+    text = f.read()
+    f.close()
+    print ex.get_fingerprint(text, 5, "kth_in_sent", 5)
