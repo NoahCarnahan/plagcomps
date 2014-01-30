@@ -21,7 +21,7 @@ class BaseUtility:
     SAMPLE_CORPUS_LOC = os.path.join(UTIL_LOC, '..', 'sample_corpus/')
 
     @staticmethod
-    def draw_roc(actuals, confidences, **metadata):
+    def draw_roc(actuals, confidences, save_figure=True, **metadata):
         '''
         Draws an ROC curve based on <actuals> and <confidences> and saves
         the figure to figures/roc<timestamp>
