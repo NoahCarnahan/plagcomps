@@ -103,7 +103,7 @@ def main():
     session = extrinsic_processing.Session()
     
     util = ExtrinsicUtility()
-    num_files = 1
+    num_files = 10
 
     source_file_list, suspect_file_list = util.get_n_training_files(n=num_files, include_txt_extension=False)
 

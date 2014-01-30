@@ -72,7 +72,7 @@ def populate_database():
                     for filename in all_test_files:
                         print filename, method, n, k
                         fp = query_fingerprint(filename, method, n, k, atom_type, session, ExtrinsicUtility.CORPUS_SUSPECT_LOC)
-                        print fp.get_print(session)
+                        fp.get_print(session)
                         counter += 1
                         if counter%1 == 0:
                             print "Progress on sources (corpus=" + str(ExtrinsicUtility.TRAINING_SUSPECT_LOC) + ": ", counter/float(len(all_source_files)), '(' + str(counter) + '/' + str(len(all_source_files)) + ')'
@@ -80,7 +80,7 @@ def populate_database():
                     for filename in all_source_files:
                         print filename, method, n, k
                         fp = query_fingerprint(filename, method, n, k, atom_type, session, ExtrinsicUtility.CORPUS_SRC_LOC)
-                        print fp.get_print(session)
+                        fp.get_print(session)
                         counter += 1
                         if counter%1 == 0:
                             print "Progress on sources (corpus=" + str(ExtrinsicUtility.TRAINING_SRC_LOC) + ": ", counter/float(len(all_source_files)), '(' + str(counter) + '/' + str(len(all_source_files)) + ')'
@@ -218,4 +218,5 @@ def _other_test():
     # Get the fingerprint 
 
 if __name__ == "__main__":
-    populate_database()
+    #populate_database()
+    pass
