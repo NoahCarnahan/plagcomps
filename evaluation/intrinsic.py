@@ -11,6 +11,7 @@ import numpy.random
 import xml.etree.ElementTree as ET
 import time
 import codecs
+import itertools
 from os import path as ospath
 
 import sklearn.metrics
@@ -647,7 +648,19 @@ def _one_run():
     A general pattern for testing
     '''
     features = FeatureExtractor.get_all_feature_function_names()
-    features = [f for f in features if 'unigram' not in f and 'trigram' not in f]
+
+    cluster_type = 'outlier'
+    k = 2
+    atom_type = 'nchars'
+    n = 250
+    first_doc_num = 0
+    
+    print evaluate_n_documents(features, cluster_type, k, atom_type, n, first_doc_num=first_doc_num) 
+
+def _try_k_feature_combinations(num_features=4):
+    '''
+    '''
+    features = FeatureExtractor.get_all_feature_function_names()
 
     cluster_type = 'outlier'
     k = 2
@@ -655,10 +668,17 @@ def _one_run():
     n = 200
     first_doc_num = 0
 
-    print evaluate_n_documents(features, cluster_type, k, atom_type, n, first_doc_num=first_doc_num, min_len=35000) 
-
-
-
+    results = {}
+    for feature_set in itertools.combinations(features, num_features):
+        print 'Working on:', feature_set
+        trial = evaluate_n_documents(feature_set, cluster_type, k, atom_type, n, first_doc_num=first_doc_num) 
+        print trial
+        results[tuple(feature_set)] = trial
+    print results
+    
+# To see our best runs by AUC (according to the attached JSON files),
+# navigate to the figures directory and run:
+# ls -t | grep json | xargs grep auc | awk '{print $1, $3; }' | sort -gk 2 | tail -n 20
+# Replace the 20 with a larger number to see more results
 if __name__ == "__main__":
     _test()
-    

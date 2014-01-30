@@ -36,9 +36,6 @@ def train(features, cluster_type, atom_type, ntrain, start_doc=0, regularization
     '''    
     training_matrix, training_actuals = _get_feature_conf_and_actuals(features, cluster_type, atom_type, start_doc, ntrain, **cluster_args)
     
-    print 'Training mat dimesions', training_matrix.shape
-    print training_matrix[0:10, ]
-
     model = LogisticRegression(class_weight=class_weight, penalty=regularization)
     model.fit(training_matrix, training_actuals)
     
@@ -142,7 +139,7 @@ def train_and_predict(features, cluster_type, atom_type, start_doc, ntrain, ntes
 
     confidences = predict(model, features, cluster_type, atom_type, test_start, ntest, **cluster_args)
 
-    return confidences
+    return model, confidences
 
 def _get_feature_conf_and_actuals(features, cluster_type, atom_type, start_doc, n, pct_plag=None, **cluster_args):
     '''
@@ -202,15 +199,22 @@ def _test():
     #     'avg_external_word_freq_class'
     # ]
     features = FeatureExtractor.get_all_feature_function_names()
-    features = [f for f in features if 'unigram' not in f and 'trigram' not in f]
     print features
     start_doc = 0
-    cluster_type = 'kmeans'
-    atom_type = 'paragraph'
+    cluster_type = 'outlier'
+    atom_type = 'nchars'
     ntrain = 10
     ntest = 25
 
-    confs = train_and_predict(features, cluster_type, atom_type, start_doc, ntrain, ntest)
+    model, confs = train_and_predict(features, cluster_type, atom_type, start_doc, ntrain, ntest)
+
+    coef_and_name = zip(model.coef_[0], features)
+    coef_and_name.sort(key=lambda x: abs(x[0]))
+    
+    # Prints features in order of absolute value of coefficient
+    for coef, name in coef_and_name:
+        print coef, name
+   
     
 if __name__ == '__main__':
     _test()
