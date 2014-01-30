@@ -51,6 +51,7 @@ class ExtrinsicTester:
         for f in self.suspect_file_list:
             suspicious_document = open(f + '.txt')
             doc = suspicious_document.read()
+            doc_num = self.suspect_file_list.index(f)+1
             
             suspicious_document.close()
             doc_name = f.replace(self.suspicious_path_start, "")
@@ -60,7 +61,7 @@ class ExtrinsicTester:
 
             print f
             for i in xrange(len(acts)):
-                print 'Classifying', doc_name
+                print 'Classifying', doc_name, "(",doc_num,")"
                 atom_classifications = self.evaluator.classify_document(doc_name, self.atom_type, i, self.fingerprint_method, self.n, self.k, self.confidence_method, session)
                 # just take the most similar source document's similarity as the confidence of plagiarism for now.
                 classifications.append(atom_classifications[0][1])
@@ -100,7 +101,7 @@ def main():
     session = extrinsic_processing.Session()
     
     util = ExtrinsicUtility()
-    num_files = 1
+    num_files = 10
 
     source_file_list, suspect_file_list = util.get_n_training_files(n=num_files, include_txt_extension=False)
 
