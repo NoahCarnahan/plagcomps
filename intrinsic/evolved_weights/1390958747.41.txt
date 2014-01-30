@@ -1,0 +1,36 @@
+- GenomeBase
+	Score:			 0.590574
+	Fitness:		 0.679985
+
+	Params:		 {'gauss_mu': 0, 'gauss_sigma': 0.1111111111111111, 'rangemax': 1.0, 'rangemin': 0}
+
+	Slot [Evaluator] (Count: 1)
+		Name: eval_func_confidences - Weight: 0.50
+	Slot [Initializator] (Count: 1)
+		Name: G1DListInitializatorReal - Weight: 0.50
+		Doc:  Real initialization function of G1DList
+
+   This initializator accepts the *rangemin* and *rangemax* genome parameters.
+
+   
+	Slot [Mutator] (Count: 1)
+		Name: G1DListMutatorRealGaussian - Weight: 0.50
+		Doc:  The mutator of G1DList, Gaussian Mutator
+
+   Accepts the *rangemin* and *rangemax* genome parameters, both optional. Also
+   accepts the parameter *gauss_mu* and the *gauss_sigma* which respectively
+   represents the mean and the std. dev. of the random distribution.
+
+   
+	Slot [Crossover] (Count: 1)
+		Name: G1DListCrossoverSinglePoint - Weight: 0.50
+		Doc:  The crossover of G1DList, Single Point
+
+   .. warning:: You can't use this crossover method for lists with just one element.
+
+   
+
+- G1DList
+	List size:	 9
+	List:		 [0.09303955398671009, 0.3625874435694747, 1.0, 0.3837266759069541, 0.6152421656395682, 0.8262918182926005, 0, 0.3555357165807033, 0.1518771687037943]
+

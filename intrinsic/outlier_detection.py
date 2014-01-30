@@ -68,6 +68,7 @@ def density_based(stylo_vectors, center_at_mean=True, num_to_ignore=1, impurity=
         # to real probabilities 
         featurewise_nonplag_prob = []
         featurewise_plag_prob = []
+        featurewise_confs = []
 
         for feat_num in xrange(len(vec)):
             # TODO plag_prob is just constant -- precompute this
@@ -94,8 +95,11 @@ def density_based(stylo_vectors, center_at_mean=True, num_to_ignore=1, impurity=
                     print 'Unif prob was nan or 0: %f. Using MIN_PROB' % cur_unif_prob
 
                 featurewise_plag_prob.append(cur_unif_prob)
+
+                #featurewise_confs.append(_get_confidence(cur_unif_prob, cur_norm_prob))
             # TODO what happens if all points are in uncertainty interval??
 
+        
         
         # Sum up logs and exponentiate as opposed to multiplying lots of
         # small numbers
@@ -106,6 +110,8 @@ def density_based(stylo_vectors, center_at_mean=True, num_to_ignore=1, impurity=
         # TODO: How should we use calculated non_plag_prob or calculated plag_prob?
         # A ratio of the two? i.e. (plag_prob / non_plag_prob)?
         confidences.append(_get_confidence(plag_prob, non_plag_prob))
+
+        #confidences.append(_combine_feature_probs(featurewise_confs))
             
     scaled = _scale_confidences(confidences)
     for s in scaled:

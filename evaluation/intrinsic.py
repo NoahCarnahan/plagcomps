@@ -11,6 +11,7 @@ import numpy.random
 import xml.etree.ElementTree as ET
 import time
 import codecs
+import itertools
 from os import path as ospath
 
 import sklearn.metrics
@@ -76,7 +77,7 @@ def populate_database(atom_type, num, features=None):
 
     session.close()
 
-def evaluate_n_documents(features, cluster_type, k, atom_type, n, min_len=None, first_doc_num=0):
+def evaluate_n_documents(features, cluster_type, k, atom_type, n, save_roc_figure=True, min_len=None, first_doc_num=0, feature_weights=None, feature_confidence_weights=None):
     '''
     Return the evaluation (roc curve path, area under the roc curve) of the first n training
     documents parsed by atom_type, using the given features, cluster_type, and number of clusters k.
@@ -92,12 +93,13 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n, min_len=None, 
     first_training_files = IntrinsicUtility().get_n_training_files(n, min_len=min_len, first_doc_num=first_doc_num)
     
     # Also returns reduced_docs from <first_training_files>
+
     metadata = {
         'min_len' : min_len,
         'first_doc_num' : first_doc_num
     }
 
-    roc_path, roc_auc, _ = evaluate(features, cluster_type, k, atom_type, first_training_files, metadata=metadata)
+    roc_path, roc_auc, _ = evaluate(features, cluster_type, k, atom_type, first_training_files, save_roc_figure=save_roc_figure, feature_vector_weights=feature_weights, feature_confidence_weights=feature_confidence_weights, metadata=metadata)
     
     # Store the figures in the database
     # session = Session()
@@ -108,7 +110,8 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n, min_len=None, 
     
     return roc_path, roc_auc
 
-def evaluate(features, cluster_type, k, atom_type, docs, reduced_docs=None, metadata={}, **clusterargs):
+
+def evaluate(features, cluster_type, k, atom_type, docs, save_roc_figure=True, reduced_docs=None, feature_vector_weights=None, metadata={}, **clusterargs):
     '''
     Return the roc curve path and area under the roc curve for the given list of documents parsed
     by atom_type, using the given features, cluster_type, and number of clusters k.
@@ -134,6 +137,15 @@ def evaluate(features, cluster_type, k, atom_type, docs, reduced_docs=None, meta
             print "On document", d, ". The", count, "th document."
 
         feature_vecs = d.get_feature_vectors(features, session)
+        if feature_vector_weights:
+            weighted_vecs = []
+            for vec in feature_vecs:
+                cur_weight_vec = []
+                for i, weight in enumerate(feature_vector_weights, 0):
+                    cur_weight_vec.append(vec[i] * weight)
+                weighted_vecs.append(cur_weight_vec)
+            feature_vecs = weighted_vecs
+
         likelihood = cluster(cluster_type, k, feature_vecs, **clusterargs)
         plag_likelihoods.append(likelihood)
     
@@ -142,7 +154,7 @@ def evaluate(features, cluster_type, k, atom_type, docs, reduced_docs=None, meta
     metadata['k'] = k
     metadata['atom_type'] = atom_type
     metadata['n'] = len(reduced_docs)
-    roc_path, roc_auc = _roc(reduced_docs, plag_likelihoods, **metadata)
+    roc_path, roc_auc = _roc(reduced_docs, plag_likelihoods, save_roc_figure=save_roc_figure, **metadata)
     session.close()
 
     # Return reduced_docs for caching in case we call <evaluate> multiple times
@@ -336,7 +348,7 @@ def _get_reduced_docs(atom_type, docs, session, create_new=True):
         
     return reduced_docs
 
-def _roc(reduced_docs, plag_likelihoods, **metadata):
+def _roc(reduced_docs, plag_likelihoods, save_roc_figure=True, **metadata):
     '''
     Generates a reciever operator characterstic (roc) curve and returns both the path to a pdf
     containing a plot of this curve and the area under the curve. reduced_docs is a list of
@@ -365,7 +377,7 @@ def _roc(reduced_docs, plag_likelihoods, **metadata):
             span = spans[span_index]
             actuals.append(1 if doc.span_is_plagiarized(span) else 0)
             confidences.append(plag_likelihoods[doc_index][span_index])
-    
+
     # actuals is a list of ground truth classifications for passages
     # confidences is a list of confidence scores for passages
     # So, if confidences[i] = .3 and actuals[i] = 1 then passage i is plagiarized and
@@ -373,7 +385,7 @@ def _roc(reduced_docs, plag_likelihoods, **metadata):
 
     # metadata generally also includes keys: features, cluster_type, k, atom_type
     metadata['n'] = len(reduced_docs)    
-    path, roc_auc = BaseUtility.draw_roc(actuals, confidences, **metadata)
+    path, roc_auc = BaseUtility.draw_roc(actuals, confidences, save_roc_figure=save_roc_figure, **metadata)
 
     return path, roc_auc
 
@@ -653,17 +665,53 @@ def _one_run():
     A general pattern for testing
     '''
     features = FeatureExtractor.get_all_feature_function_names()
-    features = [f for f in features if 'unigram' not in f and 'trigram' not in f]
 
     cluster_type = 'kmeans'
+    k = 2
+    atom_type = 'nchars'
+    n = 250
+    first_doc_num = 0
+    
+    print evaluate_n_documents(features, cluster_type, k, atom_type, n, first_doc_num=first_doc_num) 
+
+def _try_k_feature_combinations(num_features=4):
+    '''
+    '''
+    features = FeatureExtractor.get_all_feature_function_names()
+
+    cluster_type = 'outlier'
     k = 2
     atom_type = 'nchars'
     n = 200
     first_doc_num = 0
 
-    print evaluate_n_documents(features, cluster_type, k, atom_type, n, first_doc_num=first_doc_num, min_len=35000) 
-
-
-
+    results = {}
+    for feature_set in itertools.combinations(features, num_features):
+        print 'Working on:', feature_set
+        trial = evaluate_n_documents(feature_set, cluster_type, k, atom_type, n, first_doc_num=first_doc_num) 
+        print trial
+        results[tuple(feature_set)] = trial
+    print results
+    
+# To see our best runs by AUC (according to the attached JSON files),
+# navigate to the figures directory and run:
+# ls -t | grep json | xargs grep auc | awk '{print $1, $3; }' | sort -gk 2 | tail -n 20
+# Replace the 20 with a larger number to see more results
 if __name__ == "__main__":
     _test()
+    features = FeatureExtractor.get_all_feature_function_names()
+
+    features = ['average_syllables_per_word',
+                 'avg_external_word_freq_class',
+                 'avg_internal_word_freq_class',
+                 'flesch_kincaid_grade',
+                 'flesch_reading_ease',
+                 'punctuation_percentage',
+                 'stopword_percentage',
+                 'syntactic_complexity',
+                 'syntactic_complexity_average']
+    # # feature_vector_weights = [64.21595144098977, 65.03971484167107, 33.085927263656664, 33.09580763716189, 46.37666732352944, 54.613532651311495, 88.27257512993424, 18.298800461449638, 64.76406164909085]
+    # # print evaluate_n_documents(features, 'kmeans', 2, 'paragraph', 5, feature_weights=feature_vector_weights, first_doc_num=100)
+
+    feature_confidence_weights = [0.11634266536927457, 0.00001, 0.00001, 0.24057688123990467, 0.9197291859334842, 0.00001, 0.04971611007849723, 0.00001, 0.25485906286808285]
+    print evaluate_n_documents(features, 'combine_confidences', 2, 'nchars', 50, feature_confidence_weights=feature_confidence_weights, first_doc_num=300)
