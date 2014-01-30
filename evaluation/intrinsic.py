@@ -603,7 +603,7 @@ def _test():
         print r.get_feature_vectors(['punctuation_percentage',
                                      'stopword_percentage',
                                      'average_sentence_length',
-                                     'average_word_length',], session)
+                                     ], session)
     session.close()
     
 def _cluster_auc_test(num_plag, num_noplag, mean_diff, std, dimensions = 1, repetitions = 1):
@@ -655,7 +655,7 @@ def _one_run():
     features = FeatureExtractor.get_all_feature_function_names()
     features = [f for f in features if 'unigram' not in f and 'trigram' not in f]
 
-    cluster_type = 'outlier'
+    cluster_type = 'kmeans'
     k = 2
     atom_type = 'nchars'
     n = 200
@@ -667,4 +667,3 @@ def _one_run():
 
 if __name__ == "__main__":
     _test()
-    
