@@ -209,9 +209,9 @@ def populate_database():
 
     counter = 0
     for atom_type in ["paragraph"]:
-        for method in ["anchor", "kth_in_sent"]: # add other fingerprint methods
-            for n in xrange(3, 6):
-                for k in [5]:
+        for method in ["full", "anchor", "kth_in_sent", "winnow-k"]: # add other fingerprint methods
+            for n in xrange(5,8):
+                for k in [15]:
                     counter = 0
                     # for filename in all_test_files:
                     #     print filename, method, n, k

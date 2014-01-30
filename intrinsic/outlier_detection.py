@@ -58,9 +58,8 @@ def density_based(stylo_vectors, center_at_mean=True, num_to_ignore=1, impurity=
         norm_p = _test_normality(row)
         normality_pvals.append(norm_p)
 
-    # print 'Normality pvals have min, max, mean:', min(normality_pvals), max(normality_pvals), mean(normality_pvals)
+    #print 'Normality pvals have min, max, mean:', min(normality_pvals), max(normality_pvals), mean(normality_pvals)
     
-
     for i in xrange(len(stylo_vectors)):
         vec = stylo_vectors[i]
         # For current <vec>,
@@ -142,15 +141,18 @@ def _get_confidence(plag_prob, non_plag_prob):
     If not, return the negative of the Naive Bayes estimate prob of NOT plag
 
     Other options:
-    return plag_prob / (plag_prob + non_plag_prob) 
-    In brief testing, the above didn't perform as well.
-
-    Note that these values are scaled later on to be between 0 and 1
-    '''
     if plag_prob > non_plag_prob:
         return plag_prob
     else:
         return -non_plag_prob
+    
+    The above is an old notion of confidence, which eventually gets
+    scaled. It worked well at the start, but also doesn't make a ton
+    of sense...
+
+    Note that these values are scaled later on to be between 0 and 1
+    '''
+    return plag_prob / (plag_prob + non_plag_prob) 
 
 def _scale_confidences(confs):
     '''

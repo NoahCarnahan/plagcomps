@@ -302,8 +302,12 @@ class ExtrinsicUtility(BaseUtility):
             if os.path.exists(full_path):
                 return full_path
 
-
-
-
-
-
+if __name__ == '__main__':
+    # To test gen_n_training_files:
+    # python -m plagcomps.shared.util | xargs grep -m 1 "artificial-plagiarism" | wc -l
+    # which should output n*pct_plag 
+    util = IntrinsicUtility()
+    trainers = util.get_n_training_files(n=200, first_doc_num=0, pct_plag=.5)
+    xmls = [x.replace('txt', 'xml') for x in trainers]
+    for x in xmls:
+        print x
