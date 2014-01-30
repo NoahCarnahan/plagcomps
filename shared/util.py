@@ -176,11 +176,17 @@ class ExtrinsicUtility(BaseUtility):
 
     # TRAINING_SRC_LOC = os.path.join(UTIL_LOC, '..', 'extrinsic_corpus_partition/extrinsic_training_source_files.txt')
     # TRAINING_SUSPECT_LOC = os.path.join(UTIL_LOC, '..', 'extrinsic_corpus_partition/extrinsic_training_suspect_files.txt')
-    TRAINING_SRC_LOC = os.path.join(UTIL_LOC, '..', 'extrinsic_corpus_partition/small_sample_corpus/sample_source_listing2.txt')
-    TRAINING_SUSPECT_LOC = os.path.join(UTIL_LOC, '..', 'extrinsic_corpus_partition/small_sample_corpus/sample_suspect_listing2.txt')
-
-    CORPUS_SRC_LOC = '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/source-documents'
-    CORPUS_SUSPECT_LOC = '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents'
+    #TRAINING_SRC_LOC = os.path.join(UTIL_LOC, '..', 'extrinsic_corpus_partition/small_sample_corpus/sample_source_listing2.txt')
+    #TRAINING_SUSPECT_LOC = os.path.join(UTIL_LOC, '..', 'extrinsic_corpus_partition/small_sample_corpus/sample_suspect_listing2.txt')
+    
+    #CORPUS_SRC_LOC = '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/source-documents'
+    #CORPUS_SUSPECT_LOC = '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents'
+    
+    # itty bitty corpus created from wikipedia articles
+    TRAINING_SRC_LOC = "/copyCats/itty-bitty-corpus/source/roster.txt"
+    TRAINING_SUSPECT_LOC = "/copyCats/itty-bitty-corpus/suspicious/roster.txt"
+    CORPUS_SRC_LOC = "/copyCats/itty-bitty-corpus/source"
+    CORPUS_SUSPECT_LOC = "/copyCats/itty-bitty-corpus/suspicious"
 
     def get_n_training_files(self, n=None, file_type='both', include_txt_extension=True):
         '''

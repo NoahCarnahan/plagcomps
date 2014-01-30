@@ -55,9 +55,9 @@ class FingerPrint(Base):
     this is the object that we store in the database.
     '''
     
-    __tablename__ = "fingerprints"
+    __tablename__ = "st2_fingerprint"
     
-    id = Column(Integer, Sequence("fingerprint_id_seq"), primary_key=True)
+    id = Column(Integer, Sequence("st2_fingerprint_id_seq"), primary_key=True)
     document_name = Column(String, index=True)
     _doc_path = Column(String)
     _doc_xml_path = Column(String)
@@ -209,17 +209,17 @@ def populate_database():
 
     counter = 0
     for atom_type in ["paragraph"]:
-        for method in ["full", "anchor", "kth_in_sent"]: # add other fingerprint methods
-            for n in xrange(3, 6):
+        for method in ["kth_in_sent"]: # add other fingerprint methods
+            for n in [5]:
                 for k in [5]:
                     counter = 0
-                    # for filename in all_test_files:
-                    #     print filename, method, n, k
-                    #     fp = _query_fingerprint(filename, method, n, k, atom_type, session, ExtrinsicUtility.CORPUS_SUSPECT_LOC)
-                    #     fp.get_fingerprints(session)
-                    #     counter += 1
-                    #     if counter%1 == 0:
-                    #         print "Progress on suspects (corpus=" + str(ExtrinsicUtility.TRAINING_SUSPECT_LOC) + ": ", counter/float(len(all_test_files)), '(' + str(counter) + '/' + str(len(all_test_files)) + ')'
+                    for filename in all_test_files:
+                        print filename, method, n, k
+                        fp = _query_fingerprint(filename, method, n, k, atom_type, session, ExtrinsicUtility.CORPUS_SUSPECT_LOC)
+                        fp.get_fingerprints(session)
+                        counter += 1
+                        if counter%1 == 0:
+                            print "Progress on suspects (corpus=" + str(ExtrinsicUtility.TRAINING_SUSPECT_LOC) + ": ", counter/float(len(all_test_files)), '(' + str(counter) + '/' + str(len(all_test_files)) + ')'
                     counter = 0
                     for filename in all_source_files:
                         print filename, method, n, k

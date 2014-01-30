@@ -40,7 +40,7 @@ class ExtrinsicTester:
         self.source_file_list = source_file_list
         self.evaluator = fingerprint_extraction.FingerprintEvaluator(source_file_list, fingerprint_method, self.n, self.k)
 
-    def _get_trials(self):
+    def _get_trials(self, session):
         '''
         For each testing document, split the document into atoms and classify each atom
         as plagiarized or not-plagiarized. Build a list of classifications and a list
@@ -69,12 +69,12 @@ class ExtrinsicTester:
 
         return classifications, actuals
 
-    def plot_ROC_curve(self):
+    def plot_ROC_curve(self, session):
         '''
         Outputs an ROC figure based on our plagiarism classifications and the 
         ground truth of each atom.
         '''
-        trials, actuals = self._get_trials()
+        trials, actuals = self._get_trials(session)
 
         # actuals is a list of ground truth classifications for passages
         # trials is a list consisting of 0s and 1s. 1 means we think the atom is plagiarized
@@ -94,15 +94,13 @@ class ExtrinsicTester:
         
         path = os.path.join(os.path.dirname(__file__), "../figures/roc_extrinsic_"+str(time.time())+"_"+self.fingerprint_method+".pdf")
         pyplot.savefig(path)
+        return roc_auc
 
-
-if __name__ == "__main__":
+def main():
     session = extrinsic_processing.Session()
-    # fp = extrinsic_processing._query_fingerprint('/part7/suspicious-document12675', "full", 3, 5, "paragraph", session, '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents')
-    # print fp.get_fingerprints(session)
     
     util = ExtrinsicUtility()
-    num_files = 10
+    num_files = 1
 
     source_file_list, suspect_file_list = util.get_n_training_files(n=num_files, include_txt_extension=False)
 
@@ -110,10 +108,13 @@ if __name__ == "__main__":
     print 'Suspect filenames:', suspect_file_list
 
     atom_type = "paragraph" # ["paragraph", "full"]
-    method = "anchor" # ["kth_in_sent", "anchor", "full"]
+    method = "kth_in_sent" # ["kth_in_sent", "anchor", "full"]
     n = 5
     k = 5
     confidence_method = "jaccard" # ["containment", "jaccard"]
 
     tester = ExtrinsicTester(atom_type, method, n, k, confidence_method, suspect_file_list, source_file_list)
-    tester.plot_ROC_curve()
+    print tester.plot_ROC_curve(session)
+
+if __name__ == "__main__":
+    main()

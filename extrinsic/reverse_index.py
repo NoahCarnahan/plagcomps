@@ -39,7 +39,7 @@ class ReverseIndex(Base):
     '''
     Entry in the reverse_index table that maps single minutiae to documents that contain it in their fingerprints.
     '''
-    __tablename__ = "reverse_index"
+    __tablename__ = "st2_reverse_index"
     
     id = Column(Integer, Sequence("reverse_index_id_seq"), primary_key=True)
     minutia = Column(Integer, index=True)
