@@ -473,10 +473,16 @@ class ReducedDoc(Base):
         '''
         # TODO: Consider other ways to judge if an atom is plagiarized or not. 
         #       For example, look to see if the WHOLE atom in a plagiarized segment (?)
+
+        cheating = False
         
         for s in self._plagiarized_spans:
-            if BaseUtility().overlap(span, s) > 0:
-                return True
+            if not cheating:
+                if BaseUtility().overlap(span, s) > 0:
+                    return True
+            else:
+                if BaseUtility().overlap(span, s) > (span[1] - span[0])/2.0:
+                    return True
         return False
         
     def _get_feature_values(self, feature, session, populate = True):
@@ -592,7 +598,7 @@ def _test():
     
     first_training_files = IntrinsicUtility().get_n_training_files(3)
     
-    rs =  _get_reduced_docs("paragraph", first_training_files, session)
+    rs =  _get_reduced_docs("nchars", first_training_files, session)
     for r in rs:
         print r.get_feature_vectors(['punctuation_percentage',
                                      'stopword_percentage',
