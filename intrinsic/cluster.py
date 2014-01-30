@@ -73,7 +73,10 @@ def _kmeans(stylo_vectors, k):
             if plag_cluster < len(centroids) and plag_cluster >= 0:
                 distance_from_plag = float(pdist(matrix([centroids[plag_cluster], feat_vec])))
                 distance_from_notplag = float(pdist(matrix([centroids[not_plag_cluster], feat_vec])))
-                conf = distance_from_notplag / (distance_from_notplag + distance_from_plag)
+                if distance_from_notplag + distance_from_plag > 0:
+                    conf = distance_from_notplag / (distance_from_notplag + distance_from_plag)
+                else:
+                    conf = 0
                 confidences.append(conf)
             else:
                 confidences.append(0)

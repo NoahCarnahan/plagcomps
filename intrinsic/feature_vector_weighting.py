@@ -1,6 +1,8 @@
 from os import path as ospath
 import time
 
+from ..intrinsic.featureextraction import FeatureExtractor
+
 from pyevolve import G1DList
 from pyevolve import GSimpleGA
 import pyevolve.Consts
@@ -29,11 +31,13 @@ Base = declarative_base()
 
 class FeatureVectorWeightsEvolver:
 
-    def __init__(self, features, n, raw_features, first_doc_num):
+    def __init__(self, features, n, raw_features, first_doc_num, atom_type, cluster_type):
         self.num_documents = n
         self.features = features
         self.raw_features = raw_features
         self.first_doc_num = first_doc_num
+        self.atom_type = atom_type
+        self.cluster_type = cluster_type
 
 
     def evolve_weights(self):
@@ -57,15 +61,18 @@ class FeatureVectorWeightsEvolver:
         path = ospath.join(ospath.dirname(__file__), "evolved_weights/"+str(time.time())+".txt")
         f = open(path, 'w')
         f.write(str(ga.bestIndividual()))
+        f.write(str(self.features))
         f.close()
         print ga.bestIndividual()
 
 
     def eval_func_confidences(self, feature_weights):
-        feature_weights = [max(0.00001, x) for x in feature_weights]
+        weights_sum = float(sum(feature_weights))
+        # "normalize" (I don't know if that's the right word) the weights, and make sure none are equal to 0
+        feature_weights = [max(0.00001, x/weights_sum) for x in feature_weights]
         IU = IntrinsicUtility()
-        all_test_files = IU.get_n_training_files(n=self.num_documents, first_doc_num=self.first_doc_num, pct_plag=1)
-        reduced_docs = _get_reduced_docs("paragraph", all_test_files, session)
+        all_test_files = IU.get_n_training_files(n=self.num_documents, first_doc_num=self.first_doc_num, min_len=35000, pct_plag=1)
+        reduced_docs = _get_reduced_docs(self.atom_type, all_test_files, session)
 
         actuals = []
         confidences = []
@@ -75,7 +82,7 @@ class FeatureVectorWeightsEvolver:
             vi = 0
             for doc in reduced_docs:
                 feature_vectors = doc.get_feature_vectors([feature], session)
-                confs = cluster("kmeans", 2, feature_vectors)
+                confs = cluster(self.cluster_type, 2, feature_vectors)
                 for i, confidence in enumerate(confs, 0):
                     if len(confidence_vectors) <= vi:
                         confidence_vectors.append([])
@@ -98,7 +105,7 @@ class FeatureVectorWeightsEvolver:
 
     def eval_func_raw_features(self, feature_weights):
         feature_weights = [max(0.00001, x) for x in feature_weights]
-        roc_path, roc_auc = evaluate_n_documents(features, 'kmeans', 2, 'paragraph', self.num_documents, feature_weights=feature_weights, first_doc_num=self.first_doc_num)
+        roc_path, roc_auc = evaluate_n_documents(self.features, self.cluster_type, 2, self.atom_type, self.num_documents, save_roc_figure=False, feature_weights=feature_weights, first_doc_num=self.first_doc_num)
         print 'evaluated:', roc_auc, [w for w in feature_weights]
         return roc_auc
 
@@ -115,17 +122,21 @@ Session = sessionmaker(bind=engine)
 if __name__ == '__main__':
     session = Session()
 
-    features = ['average_syllables_per_word',
-                 'avg_external_word_freq_class',
-                 'avg_internal_word_freq_class',
-                 'flesch_kincaid_grade',
-                 'flesch_reading_ease',
-                 'punctuation_percentage',
-                 'stopword_percentage',
-                 'syntactic_complexity',
-                 'syntactic_complexity_average']
+    # features = ['average_syllables_per_word',
+    #              'avg_external_word_freq_class',
+    #              'avg_internal_word_freq_class',
+    #              'flesch_kincaid_grade',
+    #              'flesch_reading_ease',
+    #              'punctuation_percentage',
+    #              'stopword_percentage',
+    #              'syntactic_complexity',
+    #              'syntactic_complexity_average']
+    features = FeatureExtractor.get_all_feature_function_names()
+
     n=100
     first_doc_num=100
-    trainer_raw_weights = False
-    evolver = FeatureVectorWeightsEvolver(features, n, trainer_raw_weights, first_doc_num)
+    train_raw_weights = False
+    atom_type = "nchars"
+    cluster_type = "kmeans"
+    evolver = FeatureVectorWeightsEvolver(features, n, train_raw_weights, first_doc_num, atom_type, cluster_type)
     evolver.evolve_weights()
