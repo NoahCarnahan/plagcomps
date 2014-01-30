@@ -105,8 +105,10 @@ def clean_reverse_index_entries():
 
 url = "postgresql://%s:%s@%s" % (username, password, dbname)
 engine = sqlalchemy.create_engine(url)
+#Base.metadata.drop_all(engine)
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 
 if __name__ == '__main__':
-     clean_reverse_index_entries() 
+     #clean_reverse_index_entries() 
+     pass

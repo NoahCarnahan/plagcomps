@@ -233,10 +233,12 @@ def populate_database():
 
 url = "postgresql://%s:%s@%s" % (username, password, dbname)
 engine = sqlalchemy.create_engine(url)
+#Base.metadata.drop_all(engine)
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 
 if __name__ == "__main__":
     #unitTest()
-    populate_database()
+    #populate_database()
+    pass
     
