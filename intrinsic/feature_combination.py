@@ -2,7 +2,7 @@ from plagcomps.dbconstants import username
 from plagcomps.dbconstants import password
 from plagcomps.dbconstants import dbname
 from plagcomps.shared.util import IntrinsicUtility, BaseUtility
-from plagcomps.evaluation.intrinsic import ReducedDoc, _get_reduced_docs
+from plagcomps.evaluation.intrinsic import ReducedDoc, _get_reduced_docs, run_individual_features, evaluate_n_documents
 from plagcomps.intrinsic.cluster import cluster
 from plagcomps.corpus_partition.metadata import five_num_summary
 from plagcomps.intrinsic.featureextraction import FeatureExtractor
@@ -120,8 +120,6 @@ def compare_params():
     print results
     return results
 
-
-
 def train_and_predict(features, cluster_type, atom_type, start_doc, ntrain, ntest, **cluster_args):
     '''
     Trains a LogisticRegression model on the documents [start_doc : start_doc + ntrain]
@@ -215,6 +213,56 @@ def _test():
     for coef, name in coef_and_name:
         print coef, name
    
+def stepwise_feature_selection(features, cluster_type, k, atom_type, n, min_len=None, first_doc_num=0):
+    '''
+    A greedy implementation of "stepwise" feature selection. Given the above parameters,
+    try combining the best individual features combined with one another
+
     
+    '''
+    # Returns list of tuples like (AUC, feature, PDF path)
+    one_feature_results = run_individual_features(features, cluster_type, k, atom_type, n, min_len=min_len, first_doc_num=first_doc_num)
+    ranked_features = [t[1] for t in one_feature_results]
+
+    # Tuple like (AUC, feature_list, PDF path)
+    combination_results = []
+
+    for first_feat_num in xrange(len(ranked_features) - 1):
+        for last_feat_num in xrange(1, len(ranked_features)):
+            feature_set = ranked_features[first_feat_num : last_feat_num]
+            print 'Using features:', feature_set
+
+            pdf_path, auc = evaluate_n_documents(feature_set, cluster_type, k, atom_type, n, min_len=min_len, first_doc_num=first_doc_num) 
+            combination_results.append((auc, feature_set, pdf_path))
+
+            print 'Current results:'
+            f = file('temp_selection_output.txt', 'wb')
+            for cur_auc, cur_feats, _ in sorted(combination_results, reverse=True):
+                print cur_auc, cur_feats
+                f.write('%f, %s\n' % (cur_auc, str(cur_feats)))
+            f.close()
+
+    combination_results.sort()
+    for auc, feats, path in combination_results:
+        print auc
+        print feats
+        print path
+        print '-'*20
+
+    return combination_results
+
+def _default_stepwise_params():
+    features = FeatureExtractor.get_all_feature_function_names()
+
+    cluster_type = 'outlier'
+    k = 2
+    atom_type = 'paragraph'
+    n = 350
+    first_doc_num = 0
+    
+    results = stepwise_feature_selection(features, cluster_type, k, atom_type, n, first_doc_num=first_doc_num)
+    print results
+
+
 if __name__ == '__main__':
     _test()

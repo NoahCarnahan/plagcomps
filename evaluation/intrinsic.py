@@ -111,7 +111,7 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n, save_roc_figur
     return roc_path, roc_auc
 
 
-def evaluate(features, cluster_type, k, atom_type, docs, save_roc_figure=True, reduced_docs=None, feature_vector_weights=None, metadata={}, **clusterargs):
+def evaluate(features, cluster_type, k, atom_type, docs, save_roc_figure=True, reduced_docs=None, feature_vector_weights=None, feature_confidence_weights=None, metadata={}, **clusterargs):
     '''
     Return the roc curve path and area under the roc curve for the given list of documents parsed
     by atom_type, using the given features, cluster_type, and number of clusters k.
@@ -692,6 +692,24 @@ def _try_k_feature_combinations(num_features=4):
         print trial
         results[tuple(feature_set)] = trial
     print results
+
+def run_individual_features(features, cluster_type, k, atom_type, n, min_len=None, first_doc_num=0):
+    # List of tuples like (AUC, feature, PDF path)
+    results = []
+
+    for feat in features:
+        trial = evaluate_n_documents([feat], cluster_type, k, atom_type, n, first_doc_num=first_doc_num) 
+        results.append((trial[1], feat, trial[0]))
+        for f, t, _ in results:
+            print f
+            print t
+            print '-'*20
+
+    # Sorts by first element by default -- make [0]th element the 
+    # largest AUC
+    results.sort(reverse=True)
+
+    return results
     
 # To see our best runs by AUC (according to the attached JSON files),
 # navigate to the figures directory and run:
