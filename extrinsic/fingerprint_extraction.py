@@ -8,7 +8,7 @@ import string, random, re, operator
 from .. import tokenization
 from ..shared.util import ExtrinsicUtility
 import reverse_index
-import extrinsic_processing
+import db_test
 
 # TODO: omit words tokenized by nltk that are just puncuation
 
@@ -189,43 +189,39 @@ class FingerprintEvaluator:
         self.fingerprint_method = fingerprint_method
         self.source_filenames = source_filenames
 
-    def _get_fingerprint(self, filename, atom_type, session, base_path):
-        fp = extrinsic_processing.query_fingerprint(filename, self.fingerprint_method, self.n, self.k, atom_type, session, base_path)
-        return fp
+    #def _get_fingerprint(self, filename, atom_type, session, base_path):
+    #    fp = extrinsic_processing.query_fingerprint(filename, self.fingerprint_method, self.n, self.k, atom_type, session, base_path)
+    #    return fp
 
     def classify_document(self, filename, atom_type, atom_index, fingerprint_method, n, k, confidence_method, session):
         '''
         Returns a list of (source_filename, similarity) tuples sorted in decreasing similarity to the 
         input document.
         '''
-        fp = self._get_fingerprint(filename, atom_type, session, ExtrinsicUtility.CORPUS_SUSPECT_LOC)
+        #fp = self._get_fingerprint(filename, atom_type, session, ExtrinsicUtility.CORPUS_SUSPECT_LOC)
+        #if atom_type == "full":
+        #    fingerprint = fp.get_print(session)
+        #else:
+        #    fingerprint = fp.get_print(session)[atom_index]
+        
         if atom_type == "full":
-            fingerprint = fp.get_print(session)
-        else:
-            fingerprint = fp.get_print(session)[atom_index]
+            atom_index = 0
+        fingerprint = db_test.get_fingerprint(filename, ExtrinsicUtility.CORPUS_SUSPECT_LOC, fingerprint_method, n, k, atom_type, atom_index, False, session).hash_values
 
         source_documents = {}
         # get the list of fingerprint ids for each minutia in the fingerprint
         for minutia in fingerprint:
             if minutia == 0: # every document has 0, so minutia = 0 is basically useless
                 continue
-            ri = reverse_index._query_reverse_index(minutia, n, k, fingerprint_method, session)
-            for fingerprint_id_pair in ri.fingerprint_ids:
-
-                fingerprint_id = fingerprint_id_pair[0]
-                fingerprint_atom_index = fingerprint_id_pair[1]
                 
-                fp = extrinsic_processing.query_fingerprint_from_id(fingerprint_id, session)
-                source_fp = fp.get_print(session)
-
-                if len(source_fp) > 0 and type(source_fp[0]) == list: # is fp at a paragraph granularity?
-                    if len(source_fp[fingerprint_atom_index]): # make sure it's not an empty fingerprint
-                        source_documents[(fp.document_name, fingerprint_atom_index)] = get_plagiarism_confidence(fingerprint, source_fp[fingerprint_atom_index], confidence_method)
-                    else:
-                        source_documents[(fp.document_name, fingerprint_atom_index)] = 0
-                else: # full document granularity
-                    source_documents[(fp.document_name, 0)] = get_plagiarism_confidence(fingerprint, source_fp, confidence_method)
-
+                
+            source_fps = db_test.get_fingerprints_by_hash(minutia, fingerprint_method, n, k, atom_type, session)
+            for fp in source_fps:
+                if len(fp.hash_values): # make sure its not an empty fingerprint
+                    source_documents[(fp.doc_name, fp.atom_number)] = get_plagiarism_confidence(fingerprint, fp.hash_values, confidence_method)
+                else:
+                    source_documents[(fp.doc_name, fp.atom_number)] = 0
+                
         if not len(source_documents): # insert dummy for now...
             source_documents[('dummy', 0)] = 0
 

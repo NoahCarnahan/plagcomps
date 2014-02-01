@@ -12,9 +12,10 @@ import os
 import time
 import nltk
 import fingerprint_extraction
-import extrinsic_processing
+import db_test
 import ground_truth
 from ..shared.util import ExtrinsicUtility
+from ..tokenization import tokenize
 
 import sqlalchemy
 from sqlalchemy import Table, Column, Sequence, Integer, String, Float, DateTime, ForeignKey, and_
@@ -99,8 +100,13 @@ class ExtrinsicTester:
         pyplot.savefig(path)
         return roc_auc
 
-def main():
-    session = extrinsic_processing.Session()
+def evaluate(method, n, k, atom_type, confidence_method, num_files=100000):
+    '''
+    Runs our tool with the given parameters and return the area under the roc.
+    If a num_files is given, only run on the first num_file suspicious documents.
+    '''
+    
+    session = db_test.Session()
     
     util = ExtrinsicUtility()
     num_files = 10
@@ -110,14 +116,8 @@ def main():
     print 'Testing first', num_files, ' suspect files using a corpus of', len(source_file_list), 'source documents:'
     print 'Suspect filenames:', suspect_file_list
 
-    atom_type = "paragraph" # ["paragraph", "full"]
-    method = "kth_in_sent" # ["kth_in_sent", "anchor", "full"]
-    n = 5
-    k = 5
-    confidence_method = "jaccard" # ["containment", "jaccard"]
-
     tester = ExtrinsicTester(atom_type, method, n, k, confidence_method, suspect_file_list, source_file_list)
     print tester.plot_ROC_curve(session)
 
 if __name__ == "__main__":
-    main()
+    evaluate("kth_in_sent", 5, 5, "paragraph", "jaccard")
