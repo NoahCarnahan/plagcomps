@@ -118,7 +118,6 @@ class BaseUtility:
             # No overlap 
             return None
 
-
 class IntrinsicUtility(BaseUtility):
 
     TRAINING_LOC = os.path.join(UTIL_LOC, '..', 'corpus_partition/training_set_files.txt')
@@ -259,6 +258,21 @@ class ExtrinsicUtility(BaseUtility):
             if os.path.exists(full_path):
                 return full_path
 
+    def get_var_corp(self, n):
+        '''
+        Returns two lists of absolute paths. The first list is the first n suspicious documents
+        and the next is the source documents from which these suspicious documents have
+        plagiarised.
+        '''
+        loc = os.path.join(os.path.dirname(__file__), "..", "extrinsic_corpus_partition/var_corp.txt")
+        f = open(loc, "r")
+        lines = f.readlines()
+        f.close()
+        suspicious_files = eval(lines[0])
+        source_files = eval(lines[1])
+        source_cutoff = eval(lines[2])
+    
+        return suspicious_files[:n], source_files[:source_cutoff[n-1]]
 
 
 
