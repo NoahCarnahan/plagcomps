@@ -12,7 +12,7 @@ import os
 import time
 import nltk
 import fingerprint_extraction
-import db_test
+import fingerprintstorage
 import ground_truth
 from ..shared.util import ExtrinsicUtility
 from ..tokenization import tokenize
@@ -106,7 +106,7 @@ def evaluate(method, n, k, atom_type, confidence_method, num_files=100000):
     If a num_files is given, only run on the first num_file suspicious documents.
     '''
     
-    session = db_test.Session()
+    session = fingerprintstorage.Session()
     
     util = ExtrinsicUtility()
     num_files = 10

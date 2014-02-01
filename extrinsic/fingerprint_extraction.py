@@ -8,7 +8,7 @@ import string, random, re, operator
 from .. import tokenization
 from ..shared.util import ExtrinsicUtility
 import reverse_index
-import db_test
+import fingerprintstorage
 
 # TODO: omit words tokenized by nltk that are just puncuation
 
@@ -206,7 +206,7 @@ class FingerprintEvaluator:
         
         if atom_type == "full":
             atom_index = 0
-        fingerprint = db_test.get_fingerprint(filename, ExtrinsicUtility.CORPUS_SUSPECT_LOC, fingerprint_method, n, k, atom_type, atom_index, False, session).hash_values
+        fingerprint = fingerprintstorage.get_fingerprint(filename, ExtrinsicUtility.CORPUS_SUSPECT_LOC, fingerprint_method, n, k, atom_type, atom_index, False, session).hash_values
 
         source_documents = {}
         # get the list of fingerprint ids for each minutia in the fingerprint
@@ -215,7 +215,7 @@ class FingerprintEvaluator:
                 continue
                 
                 
-            source_fps = db_test.get_fingerprints_by_hash(minutia, fingerprint_method, n, k, atom_type, session)
+            source_fps = fingerprintstorage.get_fingerprints_by_hash(minutia, fingerprint_method, n, k, atom_type, session)
             for fp in source_fps:
                 if len(fp.hash_values): # make sure its not an empty fingerprint
                     source_documents[(fp.doc_name, fp.atom_number)] = get_plagiarism_confidence(fingerprint, fp.hash_values, confidence_method)
