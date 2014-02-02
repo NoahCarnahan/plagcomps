@@ -85,37 +85,33 @@ def get_fingerprints_by_hash(hash, method, n, k, atom_type, session):
     fingerprints = q.all()
     return fingerprints
        
-def _populate_db(method, n, k, atom_type):
+def populate_db(absolute_paths, method, n, k, atom_type, session = None):
     '''
-    Populate the database with Fingerprints and HashIndexs for each document in the corpus.
-    Use the fingerprint method, n, and k given.
+    Populate the database with Fingerprints and HashIndexs for each document in the
+    absolute_paths list. Use the fingerprint method, n, and k given. If hash_indexed is
+    True then the hash index will be populated for these documents as well.
     '''
-    session = Session()
-
-    suspect_file_listing = file(ExtrinsicUtility.TRAINING_SUSPECT_LOC)
-    all_suspect_files = [f.strip() for f in suspect_file_listing.readlines()]
-    suspect_file_listing.close()
     
-    source_file_listing = file(ExtrinsicUtility.TRAINING_SRC_LOC)
-    all_source_files = [f.strip() for f in source_file_listing.readlines()]
-    source_file_listing.close()
-
-    counter = 0
-    for filename in all_suspect_files:
-        print filename, method, n, k
-        get_fingerprints(filename, ExtrinsicUtility.CORPUS_SUSPECT_LOC, method, n, k, atom_type, False, session)
-        counter += 1
-        if counter%1 == 0:
-            print "Progress on suspects (corpus=" + str(ExtrinsicUtility.TRAINING_SUSPECT_LOC) + ": ", counter/float(len(all_suspect_files)), '(' + str(counter) + '/' + str(len(all_suspect_files)) + ')'
+    print "Populating db with", method, n, k, atom_type
+    
+    num_populated = 0
+    if session == None:
+        session = Session()
+    for abs_path in absolute_paths:
+        try:
+            abs_path.index("source")
+            base_path = ExtrinsicUtility().CORPUS_SRC_LOC
+            hash_index = True
+        except ValueError, e:
+            base_path = ExtrinsicUtility().CORPUS_SUSPECT_LOC
+            hash_index = False
             
-    counter = 0
-    for filename in all_source_files:
-        print filename, method, n, k
-        get_fingerprints(filename, ExtrinsicUtility.CORPUS_SRC_LOC, method, n, k, atom_type, True, session)
-        counter += 1
-        if counter%1 == 0:
-            print "Progress on sources (corpus=" + str(ExtrinsicUtility.TRAINING_SRC_LOC) + ": ", counter/float(len(all_source_files)), '(' + str(counter) + '/' + str(len(all_source_files)) + ')'
-                            
+        filename = abs_path.replace(base_path, "").replace(".txt", "")
+        print "Populating doc", num_populated+1, "of", len(absolute_paths), ":", filename, "-", str(datetime.datetime.now())
+        num_populated += 1
+        get_fingerprints(filename, base_path, method, n, k, atom_type, hash_index, session)
+        session.commit()
+    
     session.commit()
     session.close()
     
@@ -251,7 +247,12 @@ def _drop_tables():
 def _create_tables():
     Base.metadata.create_all(engine)
 def main():
-    _populate_db("kth_in_sent", 5, 5, "paragraph")
+    srs, sus = ExtrinsicUtility().get_training_files(n=200)
+    populate_db(sus+srs, "kth_in_sent", 5, 5, "paragraph")
+    populate_db(sus+srs, "kth_in_sent", 3, 5, "paragraph")
+    populate_db(sus+srs, "anchor", 5, 5, "paragraph")
+    populate_db(sus+srs, "anchor", 3, 3, "paragraph")
+    populate_db(sus+srs, "full", 3, 5, "paragraph")
 
 url = "postgresql://%s:%s@%s" % (username, password, dbname)
 engine = sqlalchemy.create_engine(url)
@@ -259,7 +260,4 @@ Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 
 if __name__ == "__main__":
-    #_drop_tables()
-    #_create_tables()
     main()
-    #_test()

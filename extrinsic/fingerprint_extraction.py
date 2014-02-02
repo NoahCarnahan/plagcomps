@@ -7,7 +7,6 @@ import os
 import string, random, re, operator
 from .. import tokenization
 from ..shared.util import ExtrinsicUtility
-import reverse_index
 import fingerprintstorage
 
 # TODO: omit words tokenized by nltk that are just puncuation

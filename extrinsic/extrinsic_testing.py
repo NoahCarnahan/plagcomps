@@ -1,7 +1,5 @@
 # extrinsic_testing.py
 
-import xml
-import random
 import scipy
 import sklearn
 import sklearn.metrics
@@ -10,20 +8,10 @@ matplotlib.use('pdf')
 import matplotlib.pyplot as pyplot
 import os
 import time
-import nltk
 import fingerprint_extraction
 import fingerprintstorage
 import ground_truth
 from ..shared.util import ExtrinsicUtility
-from ..tokenization import tokenize
-
-import sqlalchemy
-from sqlalchemy import Table, Column, Sequence, Integer, String, Float, DateTime, ForeignKey, and_
-from sqlalchemy.orm import relationship, backref, sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm.collections import attribute_mapped_collection
-from sqlalchemy.dialects.postgresql import ARRAY
-from sqlalchemy.ext.associationproxy import association_proxy
 
 class ExtrinsicTester:
 
@@ -100,24 +88,24 @@ class ExtrinsicTester:
         pyplot.savefig(path)
         return roc_auc
 
-def evaluate(method, n, k, atom_type, confidence_method, num_files=100000):
+def evaluate(method, n, k, atom_type, confidence_method, num_files="all"):
     '''
-    Runs our tool with the given parameters and return the area under the roc.
-    If a num_files is given, only run on the first num_file suspicious documents.
+    Run our tool with the given parameters and return the area under the roc.
+    If a num_files is given, only run on the first num_file suspicious documents,
+    otherwise run on all of them.
     '''
     
     session = fingerprintstorage.Session()
+    source_file_list, suspect_file_list = ExtrinsicUtility().get_training_files(n = num_files, include_txt_extension = False)
+    print suspect_file_list
+    print "Populating first", len(suspect_file_list), "suspect files and first", len(source_file_list), "source documents."
+    fingerprintstorage.populate_db(source_file_list+suspect_file_list, method, n, k, atom_type)
     
-    util = ExtrinsicUtility()
-    num_files = 10
-
-    source_file_list, suspect_file_list = util.get_n_training_files(n=num_files, include_txt_extension=False)
-
-    print 'Testing first', num_files, ' suspect files using a corpus of', len(source_file_list), 'source documents:'
-    print 'Suspect filenames:', suspect_file_list
+    print "Testing first", len(suspect_file_list), "suspect files and first", len(source_file_list), "source documents."
+   
 
     tester = ExtrinsicTester(atom_type, method, n, k, confidence_method, suspect_file_list, source_file_list)
     print tester.plot_ROC_curve(session)
 
 if __name__ == "__main__":
-    evaluate("kth_in_sent", 5, 5, "paragraph", "jaccard")
+    evaluate("kth_in_sent", 5, 5, "paragraph", "jaccard", num_files=10)

@@ -171,63 +171,46 @@ class IntrinsicUtility(BaseUtility):
         return to_return
 
 class ExtrinsicUtility(BaseUtility):
-
-    # TRAINING_SRC_LOC = os.path.join(UTIL_LOC, '..', 'extrinsic_corpus_partition/extrinsic_training_source_files.txt')
-    # TRAINING_SUSPECT_LOC = os.path.join(UTIL_LOC, '..', 'extrinsic_corpus_partition/extrinsic_training_suspect_files.txt')
-    TRAINING_SRC_LOC = os.path.join(UTIL_LOC, '..', 'extrinsic_corpus_partition/small_sample_corpus/sample_source_listing2.txt')
-    TRAINING_SUSPECT_LOC = os.path.join(UTIL_LOC, '..', 'extrinsic_corpus_partition/small_sample_corpus/sample_suspect_listing2.txt')
     
-    # This corpus has 4 docs. One suspect and 3 sources. Plag is from two sources.
-    #TRAINING_SRC_LOC = os.path.join(UTIL_LOC, '..', 'extrinsic_corpus_partition/small_sample_corpus/sample_source_listing3.txt')
-    #TRAINING_SUSPECT_LOC = os.path.join(UTIL_LOC, '..', 'extrinsic_corpus_partition/small_sample_corpus/sample_suspect_listing3.txt')
     CORPUS_SRC_LOC = '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/source-documents'
     CORPUS_SUSPECT_LOC = '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents'
-    
-    # itty bitty corpus created from wikipedia articles
-    #TRAINING_SRC_LOC = "/copyCats/itty-bitty-corpus/source/roster.txt"
-    #TRAINING_SUSPECT_LOC = "/copyCats/itty-bitty-corpus/suspicious/roster.txt"
-    #CORPUS_SRC_LOC = "/copyCats/itty-bitty-corpus/source"
-    #CORPUS_SUSPECT_LOC = "/copyCats/itty-bitty-corpus/suspicious"
 
-    def get_n_training_files(self, n=None, file_type='both', include_txt_extension=True):
+    def get_training_files(self, n="all", path_type="absolute", file_type='both', include_txt_extension=True):
         '''
         Returns first <n> training files, or all of them if <n> is not specified
         <file_type> should be 'source', 'suspect', or 'both'.
         If 'both', return both lists (source files first, suspect files second)
-
-        NOTE that all source documents are returned, regardless of the size
-        of <n>. We always need to know all source documents in order
-        to detect plagiarism in any of the suspicious ones!
-        '''
-        all_src_files = self.read_file_list(ExtrinsicUtility.TRAINING_SRC_LOC,
-                                            ExtrinsicUtility.CORPUS_SRC_LOC,
-                                            include_txt_extension=include_txt_extension)
-
-        all_suspect_files = self.read_file_list(ExtrinsicUtility.TRAINING_SUSPECT_LOC,
-                                                ExtrinsicUtility.CORPUS_SUSPECT_LOC,
-                                                include_txt_extension=include_txt_extension)
         
-        n = len(all_suspect_files) if n is None else n
-
-        if file_type == 'source':
-            return all_src_files
-        elif file_type == 'suspect':
-            return all_suspect_files[:n]
-        elif file_type == 'both':
-            return all_src_files, all_suspect_files[:n]
+        If path_type is "name" then just /part1/suspicious-file-XXXXX is returned.
+        '''
+        loc = os.path.join(os.path.dirname(__file__), "..", "extrinsic_corpus_partition/var_corp.txt")
+        f = open(loc, "r")
+        lines = f.readlines()
+        f.close()
+        suspicious_files = eval(lines[0])
+        source_files = eval(lines[1])
+        source_cutoff = eval(lines[2])
+        
+        if n == "all":
+            n = len(suspicious_files)
+            
+        if path_type == "name":
+            #strip base path
+            for path in suspicious_files:
+                path.replace(CORPUS_SUSPECT_LOC, "")
+            for path in source_files:
+                path.replace(CORPUS_SRC_LOC, "")
+        if include_txt_extension == False:
+            suspicious_files = [s[:-4]for s in suspicious_files]
+            source_files = [s[:-4] for s in source_files]
+                        
+        if file_type == "source":
+            return source_files[:source_cutoff[n-1]]
+        elif file_type == "suspect" or file_type == "suspicious":
+            return suspicious_files[:n]
         else:
-            raise Exception("Argument <file_type> must be 'source', 'suspect' or 'both'")
-
-    def get_sample_source_paths(self):
-        sample_sources = glob.glob(ExtrinsicUtility.SAMPLE_CORPUS_LOC + 'source*txt')
-
-        return sample_sources
-
-    def get_sample_test_paths(self):
-        sample_tests = glob.glob(ExtrinsicUtility.SAMPLE_CORPUS_LOC + 'test*txt')
-
-        return sample_tests
-
+            return source_files[:source_cutoff[n-1]], suspicious_files[:n]
+    
     def get_source_plag(self, suspect_path):
         '''
         <suspect_path> is a full path to an .xml file
@@ -257,22 +240,6 @@ class ExtrinsicUtility(BaseUtility):
             full_path = os.path.join(ExtrinsicUtility.CORPUS_SRC_LOC, candidate, doc_name)
             if os.path.exists(full_path):
                 return full_path
-
-    def get_var_corp(self, n):
-        '''
-        Returns two lists of absolute paths. The first list is the first n suspicious documents
-        and the next is the source documents from which these suspicious documents have
-        plagiarised.
-        '''
-        loc = os.path.join(os.path.dirname(__file__), "..", "extrinsic_corpus_partition/var_corp.txt")
-        f = open(loc, "r")
-        lines = f.readlines()
-        f.close()
-        suspicious_files = eval(lines[0])
-        source_files = eval(lines[1])
-        source_cutoff = eval(lines[2])
-    
-        return suspicious_files[:n], source_files[:source_cutoff[n-1]]
 
 
 
