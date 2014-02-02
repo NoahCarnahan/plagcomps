@@ -11,6 +11,7 @@ import numpy.random
 import xml.etree.ElementTree as ET
 import time
 import codecs
+import itertools
 from os import path as ospath
 
 import sklearn.metrics
@@ -110,7 +111,7 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n, save_roc_figur
     return roc_path, roc_auc
 
 
-def evaluate(features, cluster_type, k, atom_type, docs, save_roc_figure=True, reduced_docs=None, feature_vector_weights=None, metadata={}, **clusterargs):
+def evaluate(features, cluster_type, k, atom_type, docs, save_roc_figure=True, reduced_docs=None, feature_vector_weights=None, feature_confidence_weights=None, metadata={}, **clusterargs):
     '''
     Return the roc curve path and area under the roc curve for the given list of documents parsed
     by atom_type, using the given features, cluster_type, and number of clusters k.
@@ -614,7 +615,7 @@ def _test():
         print r.get_feature_vectors(['punctuation_percentage',
                                      'stopword_percentage',
                                      'average_sentence_length',
-                                     'average_word_length',], session)
+                                     ], session)
     session.close()
     
 def _cluster_auc_test(num_plag, num_noplag, mean_diff, std, dimensions = 1, repetitions = 1):
@@ -664,7 +665,19 @@ def _one_run():
     A general pattern for testing
     '''
     features = FeatureExtractor.get_all_feature_function_names()
-    features = [f for f in features if 'unigram' not in f and 'trigram' not in f]
+
+    cluster_type = 'kmeans'
+    k = 2
+    atom_type = 'nchars'
+    n = 250
+    first_doc_num = 0
+    
+    print evaluate_n_documents(features, cluster_type, k, atom_type, n, first_doc_num=first_doc_num) 
+
+def _try_k_feature_combinations(num_features=4):
+    '''
+    '''
+    features = FeatureExtractor.get_all_feature_function_names()
 
     cluster_type = 'outlier'
     k = 2
@@ -672,11 +685,38 @@ def _one_run():
     n = 200
     first_doc_num = 0
 
-    print evaluate_n_documents(features, cluster_type, k, atom_type, n, first_doc_num=first_doc_num, min_len=35000) 
+    results = {}
+    for feature_set in itertools.combinations(features, num_features):
+        print 'Working on:', feature_set
+        trial = evaluate_n_documents(feature_set, cluster_type, k, atom_type, n, first_doc_num=first_doc_num) 
+        print trial
+        results[tuple(feature_set)] = trial
+    print results
 
+def run_individual_features(features, cluster_type, k, atom_type, n, min_len=None, first_doc_num=0):
+    # List of tuples like (AUC, feature, PDF path)
+    results = []
 
+    for feat in features:
+        trial = evaluate_n_documents([feat], cluster_type, k, atom_type, n, first_doc_num=first_doc_num) 
+        results.append((trial[1], feat, trial[0]))
+        for f, t, _ in results:
+            print f
+            print t
+            print '-'*20
 
+    # Sorts by first element by default -- make [0]th element the 
+    # largest AUC
+    results.sort(reverse=True)
+
+    return results
+    
+# To see our best runs by AUC (according to the attached JSON files),
+# navigate to the figures directory and run:
+# ls -t | grep json | xargs grep auc | awk '{print $1, $3; }' | sort -gk 2 | tail -n 20
+# Replace the 20 with a larger number to see more results
 if __name__ == "__main__":
+    _test()
     features = FeatureExtractor.get_all_feature_function_names()
 
     '''features = ['average_syllables_per_word',
@@ -693,5 +733,3 @@ if __name__ == "__main__":
     feature_confidence_weights = [0.3133352088218083, 0, 0.32789941203855594, 0.4141360568490694, 0.5316419240238804, 0.20903850471513766, 0.6308097636986961, 0.6449053573437312, 0.5102847889547569, 1.0, 0.12476168313980701, 0.03479228140324314, 0.010662381861206207, 0.18238472951117785, 0.08503110467235252, 0.5919942974915029, 0.2152385633524133, 0.1612136526592463, 0.2912606453786549, 0.41367917802047416, 0.49623326327248785, 0.46672911861011784, 0.03161442723024162, 0.2167115609890737, 0.7754173675245822, 0.0870371620746259, 0.5621670080099245, 0.38039872510328704, 0.5099757868273177, 0.42195790248085113, 0.9067135849767293, 0.788655855845511, 0.4615929566046046, 0.5797685915603987, 0.3329528085893599]
     print evaluate_n_documents(features, 'combine_confidences', 2, 'paragraph', 300, feature_confidence_weights=feature_confidence_weights, first_doc_num=0, min_len=35000)
 
-    # # _test()
-    
