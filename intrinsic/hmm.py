@@ -84,7 +84,8 @@ def get_confidences1(stylo_vectors, centroids, cluster_assignments):
 	for vtuple in list_plag_tuples :
 		confidences[vtuple[1]] = vtuple[0] / 2 + 0.5
 	for vectuple in list_nonplag_tuples :
-		confidences[vectuple[1]] = vectuple[0] / 2
+		confidences[vectuple[1]] = 0.1
+		#confidences[vectuple[1]] = vectuple[0] / 2
 	#return a list called confidences where confidences[i] = (normlized_distance of stylo_vectors[i])
 	#print 'confidences are: ', confidences
 	return confidences
@@ -135,7 +136,7 @@ def hmm_cluster(stylo_vectors, k):
 		else:
 			centroids.append(centroid)
 	
-	print trained_path
+	#print trained_path
 	return centroids, trained_path
 	
 def train_parameters(feature_vectors, states, initial_state_probs):

@@ -1,22 +1,20 @@
 from ..intrinsic.featureextraction import FeatureExtractor
 from ..shared.util import IntrinsicUtility
-from ..shared.util import BaseUtility
 from ..dbconstants import username
 from ..dbconstants import password
 from ..dbconstants import dbname
-from plagcomps.intrinsic.cluster import cluster
+from ..intrinsic.cluster import cluster
 
 import datetime
-import numpy.random
 import xml.etree.ElementTree as ET
 import time
-import codecs
 from os import path as ospath
 
 import sklearn.metrics
 import matplotlib
-matplotlib.use('pdf')
+#matplotlib.use('pdf')
 import matplotlib.pyplot as pyplot
+
 
 import sqlalchemy
 from sqlalchemy import Table, Column, Sequence, Integer, String, Float, DateTime, ForeignKey, and_
@@ -31,13 +29,11 @@ import scipy, random
 Base = declarative_base()
 
 DEBUG = True
-DB_VERSION_NUMBER = 5
 
-def populate_EVERYTHING():
+def _populate_EVERYTHING():
     '''
     Populate the database with ReducedDocs for all documents, atom types, and features.
     This takes days.
-    ACTUALY DOES NOT DO WORD ATOMS!!!
     '''
 
     all_test_files = IntrinsicUtility().get_n_training_files()
@@ -45,8 +41,8 @@ def populate_EVERYTHING():
     session = Session()
 
     for doc in all_test_files:
-        for atom_type in ["sentence", "paragraph",]:
-            for feature in ['avg(num_chars)', "std(num_chars)", 'stopword_percentage', 'average_sentence_length', 'punctuation_percentage', "syntactic_complexity", "syntactic_complexity_average", "avg_internal_word_freq_class", "avg_external_word_freq_class", "flesch_reading_ease"]:
+        for atom_type in ["word","sentence", "paragraph"]:
+            for feature in ['punctuation_percentage', 'stopword_percentage', 'average_sentence_length', 'average_word_length',]:
                 d = _get_reduced_docs(atom_type, [doc], session)[0]
                 print "Calculating", feature, "for", str(d), str(datetime.datetime.now())
                 d.get_feature_vectors([feature], session)
@@ -66,44 +62,48 @@ def populate_database(atom_type, num, features=None):
     first_training_files = util.get_n_training_files(num)
 
     if features == None:
-        features = FeatureExtractor.get_all_feature_function_names()
+        features = ['punctuation_percentage',
+                    'stopword_percentage',
+                    'average_sentence_length',
+                    'average_word_length',
+                # Tests haven't been written for these:
+                    #'avg_internal_word_freq_class',
+                    #'avg_external_word_freq_class',
+                # These are broken:
+                    #'pos_percentage_vector',
+                    #'syntactic_complexity',
+                    ]
     
+    count = 0
     for doc in first_training_files:
+        count += 1
+        if DEBUG:
+            print "On document", count
         d = _get_reduced_docs(atom_type, [doc], session)[0]
-        for feature in features:
-            print "Calculating", feature, "for", str(d), str(datetime.datetime.now())
-            d.get_feature_vectors([feature], session)
+        d.get_feature_vectors(features, session)
 
     session.close()
 
-def evaluate_n_documents(features, cluster_type, k, atom_type, n, min_len=None):
+def evaluate_n_documents(features, cluster_type, k, atom_type, n):
     '''
     Return the evaluation (roc curve path, area under the roc curve) of the first n training
     documents parsed by atom_type, using the given features, cluster_type, and number of clusters k.
-
-    <min_len> is the minimum number of characters a document must contain
-    in order to be included. If None, then all documents are considered
     '''
     # Get the first n training files
-    # NOTE (nj) pass keyword arg min_len=35000 (or some length) in order to 
-    # get <n> files which all contain at least 35000 (or some length) characters, like:
-    # first_training_files = IntrinsicUtility().get_n_training_files(n, min_len=35000)
-    # as is done in Stein's paper
-    first_training_files = IntrinsicUtility().get_n_training_files(n, min_len=min_len)
+    first_training_files = IntrinsicUtility().get_n_training_files(n)
     
-    # Also returns reduced_docs from <first_training_files>
-    roc_path, roc_auc, _ = evaluate(features, cluster_type, k, atom_type, first_training_files)
+    roc_path, roc_auc = evaluate(features, cluster_type, k, atom_type, first_training_files)
     
     # Store the figures in the database
-    # session = Session()
-    # f = _Figure(roc_path, "roc", roc_auc, sorted(features), cluster_type, k, atom_type, n)
-    # session.add(f)
-    # session.commit()
-    # session.close()
+    session = Session()
+    f = _Figure(roc_path, "roc", roc_auc, sorted(features), cluster_type, k, atom_type, n)
+    session.add(f)
+    session.commit()
+    session.close()
     
     return roc_path, roc_auc
 
-def evaluate(features, cluster_type, k, atom_type, docs, reduced_docs=None, **clusterargs):
+def evaluate(features, cluster_type, k, atom_type, docs):
     '''
     Return the roc curve path and area under the roc curve for the given list of documents parsed
     by atom_type, using the given features, cluster_type, and number of clusters k.
@@ -118,9 +118,7 @@ def evaluate(features, cluster_type, k, atom_type, docs, reduced_docs=None, **cl
     
     session = Session()
     
-    # If previous call cached <reduced_docs>, don't re-query the DB
-    if not reduced_docs:
-        reduced_docs = _get_reduced_docs(atom_type, docs, session)
+    reduced_docs = _get_reduced_docs(atom_type, docs, session)
     plag_likelihoods = []
     
     count = 0
@@ -128,119 +126,14 @@ def evaluate(features, cluster_type, k, atom_type, docs, reduced_docs=None, **cl
         count += 1
         if DEBUG:
             print "On document", d, ". The", count, "th document."
-
-        feature_vecs = d.get_feature_vectors(features, session)
-        likelihood = cluster(cluster_type, k, feature_vecs, **clusterargs)
+        likelihood = cluster(cluster_type, k, d.get_feature_vectors(features, session))
         plag_likelihoods.append(likelihood)
     
     roc_path, roc_auc = _roc(reduced_docs, plag_likelihoods, features, cluster_type, k, atom_type)
     session.close()
-
-    # Return reduced_docs for caching in case we call <evaluate> multiple times
-    return roc_path, roc_auc, reduced_docs
-    
-def compare_outlier_params(n, features=None, min_len=None):
-    '''
-    Tries a number of combinations of parameters for outlier classification,
-    namely different atom_types, methods of centering distributions, and number
-    of extreme points to ignore.
-
-    Runs on <n> documents using all features unless <features> is a provided
-    argument. 
-
-    Only run on documents of length at least <min_len>, or all documents
-    if <min_len> is not a provided argument
-    '''
-    atom_types = ['paragraph', 'sentence']
-    center_at_mean = [True, False]
-
-    docs = IntrinsicUtility().get_n_training_files(n, min_len=min_len)
-    if not features:
-        features = FeatureExtractor.get_all_feature_function_names()
-
-    results = []
-
-    
-    for atom_type in atom_types:
-        for c in center_at_mean:
-            roc_path, roc_auc, reduced_docs = \
-                evaluate(features, 'outlier', 2, atom_type, docs, center_at_mean=c)
-
-            one_trial = (atom_type, min_len, c, roc_path, roc_auc)
-            results.append(one_trial)
-            print one_trial
-            print '-'*30
-
-    for r in results:
-        print r
-    return results
+    return roc_path, roc_auc
 
 
-
-def compare_cluster_methods(feature, n, cluster_types):
-    '''
-    Generates a plot that displays ROC curves based on the first n documents and the given
-    feature. Creates an ROC curve for each of the cluster methods in cluster_types.
-    cluster_types should be a list of tuples like (function_obj, label, (argument list)).
-    argument list should NOT include the final argument, which is assumed to be feature
-    vectors.
-    So, one might call the function as follows:
-       compare_cluster_methods("average_word_length", 100, [(cluster, "2means", ("kmeans,"2))])
-    '''
-    
-    # Get the reduced_docs
-    docs = IntrinsicUtility().get_n_training_files(n)
-    session = Session()
-    reduced_docs = _get_reduced_docs("paragraph", docs, session)
-    
-    # Prepare to plot
-    pyplot.clf()
-    
-    # plot a curve for each clustering strategy
-    for method in cluster_types:
-        func = method[0]
-        label = method[1]
-        
-        # build confidences and actuals
-        confidences = []
-        actuals = []
-        for d in reduced_docs:
-            # add to confidences
-            args = method[2] + (d.get_feature_vectors([feature], session),)
-            passage_confidences = func(*args)
-            for c in passage_confidences:
-                confidences.append(c)
-            # add to actuals
-            spans = d.get_spans()
-            for i in xrange(len(spans)):
-                span = spans[i]
-                actuals.append(1 if d.span_is_plagiarized(span) else 0)
-        
-        # Calculate the fpr and tpr
-       # Outlier breaks here.
-        print "----"*20
-        print "method: ", method
-        print "fewature", feature       
-        print "----"*20
-        fpr, tpr, thresholds = sklearn.metrics.roc_curve(actuals, confidences, pos_label=1)
-        roc_auc = sklearn.metrics.auc(fpr, tpr)
-        pyplot.plot(fpr, tpr, label='%s (area = %0.2f)' % (label, roc_auc))
-    
-    # plot labels and such
-    pyplot.plot([0, 1], [0, 1], 'k--')
-    pyplot.xlim([0.0, 1.0])
-    pyplot.ylim([0.0, 1.0])
-    pyplot.xlabel('False Positive Rate')
-    pyplot.ylabel('True Positive Rate')
-    pyplot.title(feature + ", " + str(n) + " docs") 
-    pyplot.legend(loc="lower right")
-    
-    path = ospath.join(ospath.dirname(__file__), "../figures/clust_comp_"+feature+"_"+str(time.time())+".pdf")
-    pyplot.savefig(path)
-    
-    session.close()
-    
-    return path
 
 def _stats_evaluate_n_documents(features, atom_type, n):
     '''
@@ -301,6 +194,8 @@ def _feature_stats_evaluate(features, atom_type, docs):
     different_doc_outfile.close()
     session.close() 
 
+
+
 def _get_reduced_docs(atom_type, docs, session, create_new=True):
     '''
     Return ReducedDoc objects for the given atom_type for each of the documents in docs. docs is a
@@ -315,7 +210,7 @@ def _get_reduced_docs(atom_type, docs, session, create_new=True):
     reduced_docs = []
     for doc in docs:
         try:
-            r = session.query(ReducedDoc).filter(and_(ReducedDoc.full_path == doc, ReducedDoc.atom_type == atom_type, ReducedDoc.version_number == DB_VERSION_NUMBER)).one()
+            r = session.query(ReducedDoc).filter(and_(ReducedDoc.full_path == doc, ReducedDoc.atom_type == atom_type, ReducedDoc.version_number == 2)).one()
         except sqlalchemy.orm.exc.NoResultFound, e:
             if create_new:
                 r = ReducedDoc(doc, atom_type)
@@ -359,10 +254,10 @@ def _roc(reduced_docs, plag_likelihoods, features = None, cluster_type = None, k
     # confidences is a list of confidence scores for passages
     # So, if confidences[i] = .3 and actuals[i] = 1 then passage i is plagiarized and
     # we are .3 certain that it is plagiarism (So its in the non-plag cluster).
-    
     fpr, tpr, thresholds = sklearn.metrics.roc_curve(actuals, confidences, pos_label=1)
     roc_auc = sklearn.metrics.auc(fpr, tpr)
     
+
     # The following code is from http://scikit-learn.org/stable/auto_examples/plot_roc.html
     pyplot.clf()
     pyplot.plot(fpr, tpr, label='ROC curve (area = %0.2f)' % roc_auc)
@@ -377,6 +272,7 @@ def _roc(reduced_docs, plag_likelihoods, features = None, cluster_type = None, k
         pyplot.title('Receiver operating characteristic')
     pyplot.legend(loc="lower right")
     
+    #path = "figures/roc"+str(time.time())+".pdf"
     path = ospath.join(ospath.dirname(__file__), "../figures/roc"+str(time.time())+".pdf")
     pyplot.savefig(path)
     return path, roc_auc
@@ -427,7 +323,7 @@ class ReducedDoc(Base):
         
         self.atom_type = atom_type
         self.timestamp = datetime.datetime.now()
-        self.version_number = DB_VERSION_NUMBER
+        self.version_number = 2
         
         # NOTE: I think the note below is outdated/different now.
         #       Now FeatureExtractor.get_feature_vectors() does return a feature for each
@@ -447,7 +343,13 @@ class ReducedDoc(Base):
         self._spans = None
         
         # set self._plagiarized_spans
-        self._plagiarized_spans = IntrinsicUtility().get_plagiarized_spans(self._full_xml_path)
+        self._plagiarized_spans = []
+        tree = ET.parse(self._full_xml_path)
+        for feature in tree.iter("feature"):
+            if feature.get("name") == "artificial-plagiarism": # are there other types?
+                start = int(feature.get("this_offset"))
+                end = start + int(feature.get("this_length"))
+                self._plagiarized_spans.append((start, end))
     
     def __repr__(self):
         return "<ReducedDoc('%s','%s')>" % (self._short_name, self.atom_type)
@@ -472,37 +374,29 @@ class ReducedDoc(Base):
     def span_is_plagiarized(self, span):
         '''
         Returns True if the span was plagiarized (according to the ground truth). Returns
-        False otherwise. A span is considered plagiarized if it overlaps a plagiarised span.
+        False otherwise. A span is considered plagiarized if the first character of the
+        span is in a plagiarized span.
         
         '''
         # TODO: Consider other ways to judge if an atom is plagiarized or not. 
         #       For example, look to see if the WHOLE atom in a plagiarized segment (?)
-        
         for s in self._plagiarized_spans:
-            if BaseUtility().overlap(span, s) > 0:
+            if s[0] <= span[0] < s[1]:
                 return True
         return False
         
-    def _get_feature_values(self, feature, session, populate = True):
+    def _get_feature_values(self, feature, session):
         '''
         Returns the list of feature values for the given feature, instantiating them if
-        need be. If populate is False, feature values will not be instantiatiated.
+        need be.
         '''
         try:
             return self._features[feature]
             
         except KeyError:
-            if populate == False:
-                raise KeyError()
-    
             # Read the file
             f = open(self.full_path, 'r')
             text = f.read()
-            # Corpus docs have a BOM_UTF8 at the start -- let's strip those
-            # 3 characters. Suggestion comes from:
-            # http://stackoverflow.com/questions/12561063/python-extract-data-from-file/12561163#12561163
-            if text.startswith(codecs.BOM_UTF8):
-                text = text[3:]
             f.close()
             
             # Create a FeatureExtractor
@@ -573,7 +467,7 @@ class _Figure(Base):
         
         self.figure_path = figure_path
         self.timestamp = datetime.datetime.now()
-        self.version_number = DB_VERSION_NUMBER
+        self.version_number = 2
         self.figure_type = figure_type
         self.auc = auc
         self.features = features
@@ -581,6 +475,7 @@ class _Figure(Base):
         self.k = k
         self.atom_type = atom_type
         self.n = n
+
     
 # an Engine, which the Session will use for connection resources
 url = "postgresql://%s:%s@%s" % (username, password, dbname)
@@ -604,56 +499,11 @@ def _test():
                                      'average_word_length',], session)
     session.close()
     
-def _cluster_auc_test(num_plag, num_noplag, mean_diff, std, dimensions = 1, repetitions = 1):
-    '''
-    roc area under curve evaluation of various clustering techniques
-    creates two peaks based on normal distributions and tries to cluster them
-    prints out AUC stat for each cluster type
-    '''
-    print "running cluster auc test with", num_plag, num_noplag, mean_diff, std, dimensions, repetitions
-    if repetitions > 1:
-        averages = {}
-
-    for rep in range(repetitions):
-
-        noplag_features = []
-        for i in range(num_noplag):
-            cur = []
-            for j in range(dimensions):
-                cur.append(scipy.random.normal(0, std))
-            noplag_features.append(cur)
-
-        plag_features = []
-        for i in range(num_plag):
-            cur = []
-            for j in range(dimensions):
-                cur.append(scipy.random.normal(mean_diff, std))
-            plag_features.append(cur)
-
-        features = noplag_features + plag_features
-        actuals = [0] * num_noplag + [1] * num_plag
-
-        for clus_type in ["kmeans", "agglom", "hmm"]:
-            confidences = cluster(clus_type, 2, features)
-            fpr, tpr, thresholds = sklearn.metrics.roc_curve(actuals, confidences, pos_label=1)
-            roc_auc = sklearn.metrics.auc(fpr, tpr)
-            if repetitions == 1:
-                print clus_type, roc_auc
-            else:
-                averages[clus_type] = averages.get(clus_type, []) + [roc_auc]
-
-    if repetitions > 1:
-        for key in averages:
-            print key, sum(averages[key])/float(max(1, len(averages[key])))
-
 if __name__ == "__main__":
-    features = ['average_sentence_length', 
-                'syntactic_complexity',
+    features = ['average_sentence_length',
                 'avg_internal_word_freq_class',
                 'avg_external_word_freq_class',
                 'punctuation_percentage',
                 'stopword_percentage',
                 'average_word_length',]
-    print evaluate_n_documents(features, "hmm", 2, "paragraph", 75)
-    _test()
-    
+    print evaluate_n_documents(features, "hmm", 2, "paragraph", 10)
