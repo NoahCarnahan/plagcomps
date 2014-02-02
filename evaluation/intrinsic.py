@@ -679,7 +679,7 @@ def _one_run():
 if __name__ == "__main__":
     features = FeatureExtractor.get_all_feature_function_names()
 
-    features = ['average_syllables_per_word',
+    '''features = ['average_syllables_per_word',
                  'avg_external_word_freq_class',
                  'avg_internal_word_freq_class',
                  'flesch_kincaid_grade',
@@ -687,12 +687,11 @@ if __name__ == "__main__":
                  'punctuation_percentage',
                  'stopword_percentage',
                  'syntactic_complexity',
-                 'syntactic_complexity_average']
+                 'syntactic_complexity_average']'''
     # # feature_vector_weights = [64.21595144098977, 65.03971484167107, 33.085927263656664, 33.09580763716189, 46.37666732352944, 54.613532651311495, 88.27257512993424, 18.298800461449638, 64.76406164909085]
     # # print evaluate_n_documents(features, 'kmeans', 2, 'paragraph', 5, feature_weights=feature_vector_weights, first_doc_num=100)
-
-    feature_confidence_weights = [0.11634266536927457, 0.00001, 0.00001, 0.24057688123990467, 0.9197291859334842, 0.00001, 0.04971611007849723, 0.00001, 0.25485906286808285]
-    print evaluate_n_documents(features, 'combine_confidences', 2, 'nchars', 50, feature_confidence_weights=feature_confidence_weights, first_doc_num=300)
+    feature_confidence_weights = [0.3133352088218083, 0, 0.32789941203855594, 0.4141360568490694, 0.5316419240238804, 0.20903850471513766, 0.6308097636986961, 0.6449053573437312, 0.5102847889547569, 1.0, 0.12476168313980701, 0.03479228140324314, 0.010662381861206207, 0.18238472951117785, 0.08503110467235252, 0.5919942974915029, 0.2152385633524133, 0.1612136526592463, 0.2912606453786549, 0.41367917802047416, 0.49623326327248785, 0.46672911861011784, 0.03161442723024162, 0.2167115609890737, 0.7754173675245822, 0.0870371620746259, 0.5621670080099245, 0.38039872510328704, 0.5099757868273177, 0.42195790248085113, 0.9067135849767293, 0.788655855845511, 0.4615929566046046, 0.5797685915603987, 0.3329528085893599]
+    print evaluate_n_documents(features, 'combine_confidences', 2, 'paragraph', 300, feature_confidence_weights=feature_confidence_weights, first_doc_num=0, min_len=35000)
 
     # # _test()
     

@@ -61,7 +61,10 @@ class FeatureVectorWeightsEvolver:
         path = ospath.join(ospath.dirname(__file__), "evolved_weights/"+str(time.time())+".txt")
         f = open(path, 'w')
         f.write(str(ga.bestIndividual()))
-        f.write(str(self.features))
+        f.write(str(self.features) + "\n")
+        f.write("atom_type: " + str(self.atom_type) + "\n")
+        f.write("cluster type: " + str(self.cluster_type) + "\n")
+        f.write("num_documents: " + str(self.num_documents) + "\n")
         f.close()
         print ga.bestIndividual()
 
@@ -122,15 +125,6 @@ Session = sessionmaker(bind=engine)
 if __name__ == '__main__':
     session = Session()
 
-    # features = ['average_syllables_per_word',
-    #              'avg_external_word_freq_class',
-    #              'avg_internal_word_freq_class',
-    #              'flesch_kincaid_grade',
-    #              'flesch_reading_ease',
-    #              'punctuation_percentage',
-    #              'stopword_percentage',
-    #              'syntactic_complexity',
-    #              'syntactic_complexity_average']
     features = FeatureExtractor.get_all_feature_function_names()
 
     n=100
