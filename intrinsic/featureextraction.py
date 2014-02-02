@@ -106,11 +106,25 @@ class FeatureExtractor:
         return feature_function_names
 
     
-    def __init__(self, text):
+    @staticmethod
+    def get_stein_paper_feature_names():
+        return [
+            'average_word_length',
+            'average_syllables_per_word',
+            'flesch_kincaid_grade',
+            'gunning_fog_index',
+            'honore_r_measure',
+            'yule_k_characteristic',
+            # Unclear whether paper uses internal or external
+            'avg_external_word_freq_class'
+        ]
+
+    def __init__(self, text, char_span_length=5000):
         self.text = text
         self.word_spans = tokenization.tokenize(text, "word")
         self.sentence_spans = tokenization.tokenize(text, "sentence")
         self.paragraph_spans = tokenization.tokenize(text, "paragraph")
+        self.nchar_spans = tokenization.tokenize(text, "nchars", char_span_length)
     
         self.features = {}
 
@@ -129,6 +143,8 @@ class FeatureExtractor:
             return self.sentence_spans
         elif atom_type == "paragraph":
             return self.paragraph_spans
+        elif atom_type == "nchars":
+            return self.nchar_spans
         else:
             raise ValueError("Invalid atom_type")
     

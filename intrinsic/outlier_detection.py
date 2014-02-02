@@ -58,9 +58,8 @@ def density_based(stylo_vectors, center_at_mean=True, num_to_ignore=1, impurity=
         norm_p = _test_normality(row)
         normality_pvals.append(norm_p)
 
-    print 'Normality pvals have min, max, mean:', min(normality_pvals), max(normality_pvals), mean(normality_pvals)
+    #print 'Normality pvals have min, max, mean:', min(normality_pvals), max(normality_pvals), mean(normality_pvals)
     
-
     for i in xrange(len(stylo_vectors)):
         vec = stylo_vectors[i]
         # For current <vec>,
@@ -69,6 +68,7 @@ def density_based(stylo_vectors, center_at_mean=True, num_to_ignore=1, impurity=
         # to real probabilities 
         featurewise_nonplag_prob = []
         featurewise_plag_prob = []
+        featurewise_confs = []
 
         for feat_num in xrange(len(vec)):
             # TODO plag_prob is just constant -- precompute this
@@ -95,8 +95,11 @@ def density_based(stylo_vectors, center_at_mean=True, num_to_ignore=1, impurity=
                     print 'Unif prob was nan or 0: %f. Using MIN_PROB' % cur_unif_prob
 
                 featurewise_plag_prob.append(cur_unif_prob)
+
+                #featurewise_confs.append(_get_confidence(cur_unif_prob, cur_norm_prob))
             # TODO what happens if all points are in uncertainty interval??
 
+        
         
         # Sum up logs and exponentiate as opposed to multiplying lots of
         # small numbers
@@ -107,6 +110,8 @@ def density_based(stylo_vectors, center_at_mean=True, num_to_ignore=1, impurity=
         # TODO: How should we use calculated non_plag_prob or calculated plag_prob?
         # A ratio of the two? i.e. (plag_prob / non_plag_prob)?
         confidences.append(_get_confidence(plag_prob, non_plag_prob))
+
+        #confidences.append(_combine_feature_probs(featurewise_confs))
             
     scaled = _scale_confidences(confidences)
     for s in scaled:
@@ -141,12 +146,19 @@ def _get_confidence(plag_prob, non_plag_prob):
     If we think there's plag., return the Naive Bayes estimated prob of plag
     If not, return the negative of the Naive Bayes estimate prob of NOT plag
 
-    Note that these values are scaled later on to be between 0 and 1
-    '''
+    Other options:
     if plag_prob > non_plag_prob:
         return plag_prob
     else:
         return -non_plag_prob
+    
+    The above is an old notion of confidence, which eventually gets
+    scaled. It worked well at the start, but also doesn't make a ton
+    of sense...
+
+    Note that these values are scaled later on to be between 0 and 1
+    '''
+    return plag_prob / (plag_prob + non_plag_prob) 
 
 def _scale_confidences(confs):
     '''

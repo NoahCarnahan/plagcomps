@@ -2,8 +2,14 @@ import os
 import glob
 import xml
 import xml.etree.ElementTree as ET
+import json
+
 from plagcomps import tokenization
 from plagcomps.shared.passage import PassageWithGroundTruth
+
+import sklearn.metrics
+import matplotlib.pyplot as pyplot
+import time
 
 UTIL_LOC = os.path.abspath(os.path.dirname(__file__))
 
@@ -11,8 +17,49 @@ class BaseUtility:
     '''
     Utility functions common to both extrinsic and intrinsic
     '''
+
     SAMPLE_CORPUS_LOC = os.path.join(UTIL_LOC, '..', 'sample_corpus/')
 
+    @staticmethod
+    def draw_roc(actuals, confidences, save_figure=True, **metadata):
+        '''
+        Draws an ROC curve based on <actuals> and <confidences> and saves
+        the figure to figures/roc<timestamp>
+
+        The optional <metadata> are written in the title of the figure
+
+        The path to the figure, and area under the curve are returned 
+        '''
+        fpr, tpr, thresholds = sklearn.metrics.roc_curve(actuals, confidences, pos_label=1)
+        roc_auc = sklearn.metrics.auc(fpr, tpr)
+        
+        # The following code is from http://scikit-learn.org/stable/auto_examples/plot_roc.html
+        pyplot.clf()
+        pyplot.plot(fpr, tpr, label='ROC curve (area = %0.2f)' % roc_auc)
+        pyplot.plot([0, 1], [0, 1], 'k--')
+        pyplot.xlim([0.0, 1.0])
+        pyplot.ylim([0.0, 1.0])
+        pyplot.xlabel('False Positive Rate')
+        pyplot.ylabel('True Positive Rate')
+
+        title = 'ROC'
+
+        for arg_name, arg_val in metadata.iteritems():
+            title += ', ' + str(arg_val)
+
+        pyplot.title(title)
+        pyplot.legend(loc="lower right")
+        
+        figure_path = os.path.join(os.path.dirname(__file__), "../figures/roc"+str(time.time())+".pdf")
+        json_path = figure_path.replace('pdf', 'json')
+        pyplot.savefig(figure_path)
+
+        # Save a JSON file of metadata about figure
+        metadata['auc'] = roc_auc
+        with open(json_path, 'wb') as f:
+            json.dump(metadata, f, indent=4)
+
+        return figure_path, roc_auc
 
     def read_file_list(self, file_name, base_location_path, include_txt_extension=True, min_len=None):
         '''
@@ -65,35 +112,6 @@ class BaseUtility:
                 if overlap:
                     p.add_plag_span(overlap)
 
-
-    def get_bare_passages_and_plagiarized_spans(self, doc_path, xml_path, atom_type):
-        '''
-        TODO finish this: the idea is to create passage objects that contain information
-        about whether or not each passage contains a plagiarized chunk of text
-        '''
-        f = file(doc_path, 'rb')
-        text = f.read()
-        f.close()
-
-        plag_spans = self.get_plagiarized_spans(xml_path)
-
-        spans = tokenization.tokenize(text, atom_type)
-        all_passages = []
-
-        for span in spans:
-            overlap_plag = None
-
-            start, end = span
-            for pspan in plag_spans:
-                # Note that a passage's <pspan> only holds the last 
-                # plagiarized span that overlaps
-                if self.overlap(pspan, span) > 0:
-                    overlap_plag = pspan
-
-            all_passages.append(PassageWithGroundTruth(start, end, text[start : end], overlap_plag))
-
-        return all_passages
-
     def overlap(self, interval1, interval2, return_length=True):
         '''
         If <return_length>,
@@ -137,42 +155,72 @@ class IntrinsicUtility(BaseUtility):
 
         return text
 
-    def get_n_training_files(self, n=None, include_txt_extension=True, min_len=None, first_doc_num=0):
+    def get_n_training_files(self, n=None, include_txt_extension=True, min_len=None, first_doc_num=0, pct_plag=None):
         '''
         Returns first <n> training files, or all of them if <n> is not specified
+
+        <first_doc_num> defaults to 0, and indicates where the <n> documents should
+        start counting from
 
         If <min_len> is specified, only return files which contain at least <min_len>
         characters. 
 
-        <first_doc_num> defaults to 0, and indicates where the <n> documents should
-        start counting from
+        If <pct_plag> is specified, then <pct_plag> of the <n> returned files will contain plagiarism 
         '''
         all_training_files = self.read_file_list(IntrinsicUtility.TRAINING_LOC, 
                                                  IntrinsicUtility.CORPUS_LOC,
                                                  include_txt_extension=include_txt_extension)
         
-        to_return = []
          # Default to using all training files if <n> isn't specified
         n = len(all_training_files) if n is None else n
 
-        if min_len:
-            # Read through files until finding <n> documents of 
-            # length >= min_len
-            for fname in all_training_files[first_doc_num:]:
-                if len(to_return) >= n:
-                    break
-                else:
-                    f = file(fname, 'rb')
-                    text = f.read()
-                    f.close()
+        # Skip complicated processing if making a simple query
+        if not min_len and not pct_plag:
+            return all_training_files[first_doc_num : first_doc_num + n]
 
-                    if len(text) >= min_len:
-                        to_return.append(fname)
+        # Otherwise, begin processing based on other restrictions
+        if pct_plag:
+            n_plag = n*pct_plag
+            n_no_plag = n - n_plag
 
-        else:
-            to_return = all_training_files[first_doc_num : n + first_doc_num]
+        plag_docs = []
+        no_plag_docs = []
+            
+        for fname in all_training_files[first_doc_num:]:
+            # Accumulated <n> files already
+            if len(plag_docs) + len(no_plag_docs) >= n:
+                break
 
-        return to_return
+            xml_path = fname.replace('txt', 'xml')
+            fvalid = True
+
+            # Check for plag in document
+            plag_spans = self.get_plagiarized_spans(xml_path)
+            contains_plag = len(plag_spans) > 0
+
+            # Filter out short files, if min_len is specified
+            if min_len:
+                f = file(fname, 'rb')
+                text = f.read()
+                f.close()
+
+                if len(text) < min_len:
+                    fvalid = False
+
+            # fname is NOT VALID if
+            # it contains plag but we already have n_plag plagiarized docs OR
+            # it doesn't contain plag, but we already have n_no_plag non-plagiarized docs
+            if pct_plag:
+                if not ((contains_plag and len(plag_docs) < n_plag) or \
+                        (not contains_plag and len(no_plag_docs) < n_no_plag)):
+                    fvalid = False
+
+            if fvalid and contains_plag:
+                plag_docs.append(fname)
+            elif fvalid and not contains_plag:
+                no_plag_docs.append(fname)
+
+        return plag_docs + no_plag_docs
 
 
 class ExtrinsicUtility(BaseUtility):
@@ -254,8 +302,12 @@ class ExtrinsicUtility(BaseUtility):
             if os.path.exists(full_path):
                 return full_path
 
-
-
-
-
-
+if __name__ == '__main__':
+    # To test gen_n_training_files:
+    # python -m plagcomps.shared.util | xargs grep -m 1 "artificial-plagiarism" | wc -l
+    # which should output n*pct_plag 
+    util = IntrinsicUtility()
+    trainers = util.get_n_training_files(n=200, first_doc_num=0, pct_plag=.5)
+    xmls = [x.replace('txt', 'xml') for x in trainers]
+    for x in xmls:
+        print x

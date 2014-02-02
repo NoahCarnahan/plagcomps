@@ -21,7 +21,8 @@ class FingerprintExtractor:
     def _gen_string_hash(self, in_string):
         '''
         Converts the given string <in_string> to an integer which is
-        roughly uniformly distributed over all possible values.
+        roughly uniformly distributed over all possible values. The integer is
+        between 0 and self.hash_span.
 
         This method is used in "Methods for Identifying Versioned and 
         Plagiarized Documents".
@@ -38,7 +39,7 @@ class FingerprintExtractor:
             hash_list.append(res)
         return hash_list[-1] % self.hash_span
 
-    def get_fingerprint(self, document, n, method="full", k=5):
+    def get_fingerprint(self, document, n, method, k):
         '''
         Returns a fingerprint, or list of minutiae, for the given document.
 
@@ -63,6 +64,7 @@ class FingerprintExtractor:
             # Strips all punctuation from <words>
             words_stripped = tokenization.strip_punctuation(words)
             fingerprint = self._get_anchor_fingerprint_by_word(words_stripped, n)
+            
         elif method == "winnow-k":
             fingerprint = self._get_winnow_k(document, n, k)
 
@@ -115,8 +117,7 @@ class FingerprintExtractor:
             print a, anchor_counts[a]
 
         start_index = int(0.15*len(anchors))
-        return anchors[start_index:start_index+num_anchors]
-        
+        return anchors[start_index:start_index+num_anchors] 
 
     def _get_anchor_fingerprint(self, document, n):
         # anchors are start or middle of n-gram?
@@ -160,7 +161,8 @@ class FingerprintExtractor:
 
         for i in xrange(len(document)-k+1):
             document_hash.append(self._gen_string_hash(document[i:i+k]))
-
+        if len(document_hash) == 0:
+            return []
         first_min = document_hash[0]
 
         for i in xrange(len(document_hash)-w+1):
@@ -182,7 +184,7 @@ class FingerprintExtractor:
 
 class FingerprintEvaluator:
 
-    def __init__(self, source_filenames, fingerprint_method="full", n=3, k=5):
+    def __init__(self, source_filenames, fingerprint_method, n, k):
         self.extractor = FingerprintExtractor()
         self.n = n
         self.k = k
