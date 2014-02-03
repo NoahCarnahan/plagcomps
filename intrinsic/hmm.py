@@ -72,6 +72,7 @@ def get_confidences1(stylo_vectors, centroids, cluster_assignments):
 		temp = list_plag_tuples[x]
 		list_plag_tuples[x] = (1 - temp[0] / (maxdisttuple[0] + 0.000001), temp[1])
 	#print 'normalized list_nonplag_tuples is: ', list_plag_tuples
+	
 	maxdisttuple = list_nonplag_tuples[-1]
 	for y in xrange(len(list_nonplag_tuples)) :
 		temp = list_nonplag_tuples[y]
@@ -109,7 +110,8 @@ def hmm_cluster(stylo_vectors, k):
 	for i in xrange(len(means_sum)):
 		means_sum[i] /= float(len(stylo_vectors))
 	
-	variances = [0 for j in xrange(len(stylo_vectors[0]))]
+	variances = [0.0000001 for j in xrange(len(stylo_vectors[0]))]
+	# we occasionally divide by variances so it's good to not initialize to 0
 	for vector in stylo_vectors:
 		for i in xrange(len(vector)):
 			variances[i] += (vector[i] - means_sum[i])**2
@@ -174,7 +176,7 @@ def train_parameters(feature_vectors, states, initial_state_probs):
 		# updates gaussian parameters
 		for i in xrange(len(states)):
 			states[i].ft_list_means = [(x+y)/2 for x, y in zip(means[i], states[i].ft_list_means)]
-			# states[i].ft_list_variances = [(x+y)/2 for x, y in zip(variances[i], states[i].ft_list_variances)]
+			states[i].ft_list_variances = [(x+y)/2 for x, y in zip(variances[i], states[i].ft_list_variances)]
 
 		#update transission probabilities
 		trans_possibilities = {}
@@ -248,3 +250,5 @@ def viterbi(feature_vectors, states, initial_state_probs):
 		vpath.insert(0, prev_state)
 		cur_state = table2[i-1][prev_state]
 	return vpath, cur_max
+#if __name__ == "__main__" :
+	

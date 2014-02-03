@@ -1,5 +1,6 @@
 from ..intrinsic.featureextraction import FeatureExtractor
 from ..shared.util import IntrinsicUtility
+from ..shared.util import BaseUtility
 from ..dbconstants import username
 from ..dbconstants import password
 from ..dbconstants import dbname
@@ -110,8 +111,8 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n, save_roc_figur
         'first_doc_num' : first_doc_num
     }
 
-    roc_path, roc_auc, _ = evaluate(features, cluster_type, k, atom_type, first_training_files, save_roc_figure=save_roc_figure, feature_vector_weights=feature_weights, feature_confidence_weights=feature_confidence_weights, metadata=metadata)
-
+    #roc_path, roc_auc, _ = evaluate(features, cluster_type, k, atom_type, first_training_files, save_roc_figure=save_roc_figure, feature_vector_weights=feature_weights, feature_confidence_weights=feature_confidence_weights, metadata=metadata)
+    roc_path, roc_auc = evaluate(features, cluster_type, k, atom_type, first_training_files, save_roc_figure=save_roc_figure, feature_vector_weights=feature_weights, feature_confidence_weights=feature_confidence_weights, metadata=metadata)
     
     # Store the figures in the database
     session = Session()
@@ -649,5 +650,7 @@ if __name__ == "__main__":
     # # print evaluate_n_documents(features, 'kmeans', 2, 'paragraph', 5, feature_weights=feature_vector_weights, first_doc_num=100)
 
     feature_confidence_weights = [0.11634266536927457, 0.00001, 0.00001, 0.24057688123990467, 0.9197291859334842, 0.00001, 0.04971611007849723, 0.00001, 0.25485906286808285]
-    print evaluate_n_documents(features, 'combine_confidences', 2, 'nchars', 50, feature_confidence_weights=feature_confidence_weights, first_doc_num=300)
+    #print evaluate_n_documents(features, 'combine_confidences', 2, 'nchars', 50, feature_confidence_weights=feature_confidence_weights, first_doc_num=300)
+    print evaluate_n_documents(features, 'hmm', 2, 'sentence',50, feature_confidence_weights=feature_confidence_weights, first_doc_num=240)
+
 
