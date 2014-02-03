@@ -79,9 +79,6 @@ def get_confidences1(stylo_vectors, centroids, cluster_assignments):
 		list_nonplag_tuples[y] = (1 - temp[0] / (maxdisttuple[0] + 0.000001), temp[1])
 	#now the lists have normalized distances from centroid
 	
-	
-	
-	
 	for vtuple in list_plag_tuples :
 		confidences[vtuple[1]] = vtuple[0] / 2 + 0.5
 	for vectuple in list_nonplag_tuples :
@@ -146,7 +143,7 @@ def train_parameters(feature_vectors, states, initial_state_probs):
 	viterbi_path, viterbi_max = viterbi(feature_vectors, states, initial_state_probs)
 	
 	percent_change = 100.0
-	while percent_change > 0.1:
+	while percent_change > 0.01:
 		num_states = [viterbi_path.count(i) for i in xrange(len(states))]
 
 		# calculate means of observed outputs with each state

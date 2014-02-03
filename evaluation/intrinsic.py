@@ -651,6 +651,6 @@ if __name__ == "__main__":
 
     feature_confidence_weights = [0.11634266536927457, 0.00001, 0.00001, 0.24057688123990467, 0.9197291859334842, 0.00001, 0.04971611007849723, 0.00001, 0.25485906286808285]
     #print evaluate_n_documents(features, 'combine_confidences', 2, 'nchars', 50, feature_confidence_weights=feature_confidence_weights, first_doc_num=300)
-    print evaluate_n_documents(features, 'hmm', 2, 'sentence',50, feature_confidence_weights=feature_confidence_weights, first_doc_num=240)
+    print evaluate_n_documents(features, 'hmm', 2, 'sentence',50, feature_confidence_weights=feature_confidence_weights, first_doc_num=150)
 
 
