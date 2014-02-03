@@ -252,7 +252,8 @@ def _get_reduced_docs(atom_type, docs, session, create_new=True):
             r = session.query(ReducedDoc).filter(and_(ReducedDoc.full_path == doc, ReducedDoc.atom_type == atom_type, ReducedDoc.version_number == 2)).one()
         except sqlalchemy.orm.exc.NoResultFound, e:
             if create_new:
-                r = ReducedDoc(doc, atom_type)
+                corpus = IntrinsicUtility.get_corpus_name(doc)
+                r = ReducedDoc(doc, atom_type, corpus)
                 session.add(r)
                 session.commit()
             else:
@@ -319,7 +320,8 @@ class ReducedDoc(Base):
     atom_type = Column(String)
     _spans = Column(ARRAY(Integer))
     _plagiarized_spans = Column(ARRAY(Integer))
-    
+    # 'intrinsic' or 'extrinsic'
+    corpus = Column(String)
 
     # The miracle of features is explained here:
     # http://docs.sqlalchemy.org/en/rel_0_7/orm/extensions/associationproxy.html#proxying-dictionaries
@@ -333,20 +335,17 @@ class ReducedDoc(Base):
     timestamp = Column(DateTime)
     version_number = Column(Integer)
     
-    def __init__(self, path, atom_type):
+    def __init__(self, path, atom_type, corpus):
         '''
         Initializes a ReducedDoc. No feature vectors will be calculated at instantiation time.
         get_feature_vectors triggers the lazy instantiation of these values.
         '''
-        
-       
-        #base_path = "/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents"
-        
         self.full_path = path
         # _short_name example: '/part1/suspicious-document00536'
         self._short_name = "/"+self.full_path.split("/")[-2] +"/"+ self.full_path.split("/")[-1] 
         self._full_xml_path = path[:-3] + "xml"
-        
+        # 'intrinsic' or 'extrinsic'
+        self.corpus = corpus
         
         self.atom_type = atom_type
         self.timestamp = datetime.datetime.now()
@@ -379,7 +378,7 @@ class ReducedDoc(Base):
                 self._plagiarized_spans.append((start, end))
     
     def __repr__(self):
-        return "<ReducedDoc('%s','%s')>" % (self._short_name, self.atom_type)
+        return "<ReducedDoc('%s','%s', '%s')>" % (self._short_name, self.atom_type, self.corpus)
     
     def get_feature_vectors(self, features, session):
         '''

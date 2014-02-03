@@ -100,6 +100,12 @@ def get_feature_sets():
 
     return all_sets
 
+def all_k_sets_of_features(k=2):
+    all_features = FeatureExtractor.get_all_feature_function_names()
+    k_sets = [list(combo) for combo in itertools.combinations(all_features, k)]
+
+    return k_sets
+
 def run_one_trial(feature_set, atom_type, cluster_type, k, first_doc_num, n, min_len):
     '''
     Runs <evaluate_n_documents> and saves trial to DB
