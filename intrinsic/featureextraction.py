@@ -1076,7 +1076,7 @@ class FeatureExtractor:
             
 
 def _test():
-
+    
     text = "The brown fox ate. Believe it. I go to the school." # length = 50. Last valid index is 49
     f = FeatureExtractor(text)
     
@@ -1185,6 +1185,14 @@ def _test():
         print "honore_r_measure test passed"
     else:
         print "honore_r_measure test FAILED"
-    
+
+def _test2():
+    doc = open('/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents/part1/suspicious-document00667.txt', 'r')
+    text = doc.read()
+    #print text
+    f = FeatureExtractor(text)
+    doc.close()
+    f.get_feature_vectors()
+
 if __name__ == "__main__":
     _test()
