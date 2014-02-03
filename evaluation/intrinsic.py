@@ -103,7 +103,6 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n, save_roc_figur
     # first_training_files = IntrinsicUtility().get_n_training_files(n, min_len=35000)
     # as is done in Stein's paper
     first_training_files = IntrinsicUtility().get_n_training_files(n, min_len=min_len, first_doc_num=first_doc_num)
-    
     # Also returns reduced_docs from <first_training_files>
 
     metadata = {
@@ -124,7 +123,8 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n, save_roc_figur
     return roc_path, roc_auc
 
 
-def evaluate(features, cluster_type, k, atom_type, docs, save_roc_figure=True, reduced_docs=None, feature_vector_weights=None, feature_confidence_weights=None, metadata={}, **clusterargs):
+
+def evaluate(features, cluster_type, k, atom_type, docs, save_roc_figure=True, reduced_docs=None, feature_vector_weights=None, metadata={}, **clusterargs):
 
     '''
     Return the roc curve path and area under the roc curve for the given list of documents parsed
@@ -634,7 +634,6 @@ def run_individual_features(features, cluster_type, k, atom_type, n, min_len=Non
 # ls -t | grep json | xargs grep auc | awk '{print $1, $3; }' | sort -gk 2 | tail -n 20
 # Replace the 20 with a larger number to see more results
 if __name__ == "__main__":
-    _test()
     features = FeatureExtractor.get_all_feature_function_names()
 
     features = ['average_syllables_per_word',
@@ -648,9 +647,10 @@ if __name__ == "__main__":
                  'syntactic_complexity_average']
     # # feature_vector_weights = [64.21595144098977, 65.03971484167107, 33.085927263656664, 33.09580763716189, 46.37666732352944, 54.613532651311495, 88.27257512993424, 18.298800461449638, 64.76406164909085]
     # # print evaluate_n_documents(features, 'kmeans', 2, 'paragraph', 5, feature_weights=feature_vector_weights, first_doc_num=100)
+    feature_confidence_weights = [0.6492269039473438, 0.08020730166391861, 1.0, 0.7481609037593294, 0.00001, 0.07811654825143369, 0.272335107617069, 0.06299892339329263, 0.05524606112540992]
+    print evaluate_n_documents(features, 'combine_confidences', 2, 'paragraph', 50, feature_confidence_weights=feature_confidence_weights, first_doc_num=0, min_len=0)
 
-    feature_confidence_weights = [0.11634266536927457, 0.00001, 0.00001, 0.24057688123990467, 0.9197291859334842, 0.00001, 0.04971611007849723, 0.00001, 0.25485906286808285]
+    #feature_confidence_weights = [0.11634266536927457, 0.00001, 0.00001, 0.24057688123990467, 0.9197291859334842, 0.00001, 0.04971611007849723, 0.00001, 0.25485906286808285]
     #print evaluate_n_documents(features, 'combine_confidences', 2, 'nchars', 50, feature_confidence_weights=feature_confidence_weights, first_doc_num=300)
-    print evaluate_n_documents(features, 'hmm', 2, 'sentence',50, feature_confidence_weights=feature_confidence_weights, first_doc_num=150)
-
+    #print evaluate_n_documents(features, 'hmm', 2, 'sentence',50, feature_confidence_weights=feature_confidence_weights, first_doc_num=150)
 
