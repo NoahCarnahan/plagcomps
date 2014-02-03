@@ -61,6 +61,20 @@ class BaseUtility:
 
         return figure_path, roc_auc
 
+    @staticmethod
+    def get_corpus_name(full_path):
+        '''
+        Returns the name of the corpus from which <full_path> came (i.e. intrinsic or
+        extrinsic)
+        '''
+        if 'intrinsic-detection-corpus' in full_path:
+            return 'intrinsic'
+        elif 'external-detection-corpus' in full_path:
+            return 'extrinsic'
+        else:
+            print "%s didn't come from either the intrinsic or extrinsic corpus!" % full_path
+            return 'unknown_corpus'
+
     def read_file_list(self, file_name, base_location_path, include_txt_extension=True, min_len=None):
         '''
         Return list of absolute paths to files in <file_name> whose
@@ -135,7 +149,6 @@ class BaseUtility:
         else:
             # No overlap 
             return None
-
 
 class IntrinsicUtility(BaseUtility):
 
