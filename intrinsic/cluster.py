@@ -179,6 +179,9 @@ def _nn_confidences(items):
     return classifier.nn_confidences(items)
 
 def _combine_confidences(feature_vectors, feature_confidence_weights=None):
+    weights_sum = float(sum(feature_confidence_weights))
+    # "normalize" (I don't know if that's the right word) the weights, and make sure none are equal to 0
+    feature_confidence_weights = [max(0.00001, x/weights_sum) for x in feature_confidence_weights]
     confidence_vectors = []
     for fi in xrange(len(feature_vectors[0])):
         single_feature_vecs = [[x[fi]] for x in feature_vectors]
