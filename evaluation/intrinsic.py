@@ -1,5 +1,5 @@
 from ..intrinsic.featureextraction import FeatureExtractor
-from ..shared.util import IntrinsicUtility
+from ..shared.util import IntrinsicUtility, ExtrinsicUtility
 from ..shared.util import BaseUtility
 from ..dbconstants import username
 from ..dbconstants import password
@@ -53,31 +53,39 @@ def populate_EVERYTHING():
                 d.get_feature_vectors([feature], session)
     session.close()
 
-def populate_database(atom_type, num, features=None):
+def populate_database(atom_types, num, features=None, corpus='intrinsic'):
     '''
-    Populate the database with the first num training files parsed with the given atom_type.
+    Populate the database with the first num training files parsed with the given atom_types.
     Uses the features passed as an optional parameter, or all of them.
     Refer to the code to see which features it populates when no features passed.
     '''
-    
     session = Session()
     
     # Get the first num training files
-    util = IntrinsicUtility()
-    first_training_files = util.get_n_training_files(num)
+    if corpus == 'intrinsic':
+        util = IntrinsicUtility()
+        first_training_files = util.get_n_training_files(num)
+    elif corpus == 'extrinsic':
+        util = ExtrinsicUtility()
+        first_training_files = util.get_n_training_files(n=num, file_type='suspect', include_txt_extension=True)
+    else:
+        raise Exception("Invalid corpus specified: " + str(corpus))
 
     if features == None:
         features = FeatureExtractor.get_all_feature_function_names()
     
+    i = 0
     for doc in first_training_files:
-        d = _get_reduced_docs(atom_type, [doc], session)[0]
-        for feature in features:
-            print "Calculating", feature, "for", str(d), str(datetime.datetime.now())
-            d.get_feature_vectors([feature], session)
+        i += 1
+        for atom_type in atom_types:
+            d = _get_reduced_docs(atom_type, [doc], session, corpus=corpus)[0]
+            for feature in features:
+                print "Doc num " + str(i) + "/" + str(len(first_training_files)) + " Calculating", feature, "for", str(d), str(datetime.datetime.now())
+                d.get_feature_vectors([feature], session)
 
     session.close()
 
-def evaluate_n_documents(features, cluster_type, k, atom_type, n, save_roc_figure=True, min_len=None, first_doc_num=0, feature_weights=None, feature_confidence_weights=None):
+def evaluate_n_documents(features, cluster_type, k, atom_type, n, corpus='intrinsic', save_roc_figure=True, min_len=None, first_doc_num=0, feature_weights=None, feature_confidence_weights=None):
     '''
     Return the evaluation (roc curve path, area under the roc curve) of the first n training
     documents parsed by atom_type, using the given features, cluster_type, and number of clusters k.
@@ -98,7 +106,7 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n, save_roc_figur
         'first_doc_num' : first_doc_num
     }
 
-    roc_path, roc_auc, _ = evaluate(features, cluster_type, k, atom_type, first_training_files, save_roc_figure=save_roc_figure, feature_vector_weights=feature_weights, feature_confidence_weights=feature_confidence_weights, metadata=metadata)
+    roc_path, roc_auc, _ = evaluate(features, cluster_type, k, atom_type, first_training_files, corpus=corpus, save_roc_figure=save_roc_figure, feature_vector_weights=feature_weights, feature_confidence_weights=feature_confidence_weights, metadata=metadata)
     
     # Store the figures in the database
     # session = Session()
@@ -110,7 +118,7 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n, save_roc_figur
     return roc_path, roc_auc
 
 
-def evaluate(features, cluster_type, k, atom_type, docs, save_roc_figure=True, reduced_docs=None, feature_vector_weights=None, metadata={}, **clusterargs):
+def evaluate(features, cluster_type, k, atom_type, docs, corpus='intrinsic', save_roc_figure=True, reduced_docs=None, feature_vector_weights=None, metadata={}, **clusterargs):
     '''
     Return the roc curve path and area under the roc curve for the given list of documents parsed
     by atom_type, using the given features, cluster_type, and number of clusters k.
@@ -126,7 +134,7 @@ def evaluate(features, cluster_type, k, atom_type, docs, save_roc_figure=True, r
     
     # If previous call cached <reduced_docs>, don't re-query the DB
     if not reduced_docs:
-        reduced_docs = _get_reduced_docs(atom_type, docs, session)
+        reduced_docs = _get_reduced_docs(atom_type, docs, session, corpus=corpus)
     plag_likelihoods = []
     
     count = 0
@@ -321,7 +329,7 @@ def _feature_stats_evaluate(features, atom_type, docs):
     different_doc_outfile.close()
     session.close() 
 
-def _get_reduced_docs(atom_type, docs, session, create_new=True):
+def _get_reduced_docs(atom_type, docs, session, corpus='intrinsic', create_new=True):
     '''
     Return ReducedDoc objects for the given atom_type for each of the documents in docs. docs is a
     list of strings like "/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents/part2/suspicious-document02456.txt".
@@ -338,7 +346,6 @@ def _get_reduced_docs(atom_type, docs, session, create_new=True):
             r = session.query(ReducedDoc).filter(and_(ReducedDoc.full_path == doc, ReducedDoc.atom_type == atom_type, ReducedDoc.version_number == DB_VERSION_NUMBER)).one()
         except sqlalchemy.orm.exc.NoResultFound, e:
             if create_new:
-                corpus = IntrinsicUtility.get_corpus_name(doc)
                 r = ReducedDoc(doc, atom_type, corpus)
                 session.add(r)
                 session.commit()
@@ -714,8 +721,10 @@ def run_individual_features(features, cluster_type, k, atom_type, n, min_len=Non
 # ls -t | grep json | xargs grep auc | awk '{print $1, $3; }' | sort -gk 2 | tail -n 20
 # Replace the 20 with a larger number to see more results
 if __name__ == "__main__":
-    _test()
-    features = FeatureExtractor.get_all_feature_function_names()
+    # features = FeatureExtractor.get_all_feature_function_names()
+    # populate_database(['paragraph', 'nchars'], None, features=features, corpus='extrinsic')
+
+    # _test()
 
     features = ['average_syllables_per_word',
                  'avg_external_word_freq_class',
@@ -726,8 +735,6 @@ if __name__ == "__main__":
                  'stopword_percentage',
                  'syntactic_complexity',
                  'syntactic_complexity_average']
-    # # feature_vector_weights = [64.21595144098977, 65.03971484167107, 33.085927263656664, 33.09580763716189, 46.37666732352944, 54.613532651311495, 88.27257512993424, 18.298800461449638, 64.76406164909085]
-    # # print evaluate_n_documents(features, 'kmeans', 2, 'paragraph', 5, feature_weights=feature_vector_weights, first_doc_num=100)
-
+                 
     feature_confidence_weights = [0.6492269039473438, 0.08020730166391861, 1.0, 0.7481609037593294, 0.00001, 0.07811654825143369, 0.272335107617069, 0.06299892339329263, 0.05524606112540992]
     print evaluate_n_documents(features, 'combine_confidences', 2, 'paragraph', 50, feature_confidence_weights=feature_confidence_weights, first_doc_num=0, min_len=0)
