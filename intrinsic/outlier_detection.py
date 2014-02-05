@@ -20,7 +20,7 @@ MIN_PROB = 10**(-30)
 IMPURITY_ASSUMPTION = .2
 
 
-def density_based(stylo_vectors, center_at_mean=True, num_to_ignore=1, impurity=.2):
+def density_based(stylo_vectors, center_at_mean=True, num_to_ignore=1, impurity=.2, feature_confidence_weights=None):
     '''
     Implements the algorithm described in Stein, Lipka, Prettenhofer's
     "Intrinsic Plagiarism Analysis", Section 2.4 "Outlier Detection"
