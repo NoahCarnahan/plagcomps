@@ -138,7 +138,7 @@ def run_one_trial(feature_set, atom_type, cluster_type, k, first_doc_num, n, min
     session.commit()
     session.close()
 
-    return trial
+    return path, auc
 
 
 def run_one_trial_weighted(feature_set, feature_set_weights, feature_weights_filename, atom_type, cluster_type, k, first_doc_num, n, min_len):
