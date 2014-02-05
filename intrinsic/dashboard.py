@@ -6,11 +6,12 @@ from plagcomps.dbconstants import username
 from plagcomps.dbconstants import password
 from plagcomps.dbconstants import dbname
 
-
 import datetime
 import time
 import itertools
 import os.path
+import cPickle
+import glob
 
 import sqlalchemy
 from sqlalchemy import Table, Column, Sequence, Integer, String, Float, DateTime
@@ -19,7 +20,7 @@ from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import sessionmaker
 
 DASHBOARD_VERSION = 1
-DASHBOARD_WEIGHTING_FILE = 'feature_weights.txt'
+DASHBOARD_WEIGHTING_FILENAME = 'weighting_schemes/scheme*.pkl'
 
 Base = declarative_base()
 
@@ -180,7 +181,7 @@ def run_one_trial_weighted(feature_set, feature_set_weights, feature_weights_fil
     return trial
 
 
-def run_all_dashboard():
+def run_all_dashboard(num_files):
     '''
     Runs through all parameter options as listed below, writing results to DB as it goes 
     '''
@@ -206,32 +207,31 @@ def run_all_dashboard():
             'cluster_type' : cluster_type,
             'feature_set' : feature_set,
             'first_doc_num' : 0,
-            'n' : 500,
+            'n' : num_files,
             'min_len' : min_len,
             'k' : 2,
         }
 
         trial = run_one_trial(**params)
 
-    run_all_weighting_schemes(atom_type_options, cluster_type_options, min_len_options)
+    run_all_weighting_schemes(num_files, atom_type_options, cluster_type_options, min_len_options)
 
 
-def run_all_weighting_schemes(atom_types, cluster_types, min_len_options):
+def run_all_weighting_schemes(num_files, atom_types, cluster_types, min_len_options):
     '''
     Reads the weighting schemes from 'feature_weights.txt' and write the results to DB.
     '''
     # weighting_schemes list contains entries like (weighting_type, [feature_set], [feature_weights])
     weighting_schemes = []
 
-    f = open(os.path.join(os.path.dirname(__file__), DASHBOARD_WEIGHTING_FILE), 'r')
-    for line in f:
-        if line.startswith("#") or not len(line.strip()):
-            continue
-        weighting_type, feature_set, weights = line.split('\t')
-        feature_set = [feature.strip() for feature in feature_set.split(";")]
-        weights = [float(weight.strip()) for weight in weights.split(";")]
-        weighting_schemes.append((weighting_type, feature_set, weights))
-    f.close()
+    weighting_scheme_filenames = glob.glob(os.path.join(os.path.dirname(__file__), DASHBOARD_WEIGHTING_FILENAME))
+    weighting_scheme_filenames.sort()
+    for filepath in weighting_scheme_filenames:
+        f = open(filepath, 'rb')
+        scheme = cPickle.load(f)
+        scheme = (scheme[0], scheme[1], scheme[2], filepath.rsplit("/", 1)[1])
+        weighting_schemes.append(scheme)
+        f.close()
 
     for scheme, atom_type, min_len in itertools.product(weighting_schemes, atom_types, min_len_options):
         used_confidence_weights = False
@@ -242,15 +242,15 @@ def run_all_weighting_schemes(atom_types, cluster_types, min_len_options):
                 cluster_type = "combine_confidences"
                 used_confidence_weights = True
 
-            print scheme[1], atom_type, cluster_type, min_len
+            print scheme[1], scheme[2], scheme[3], atom_type, cluster_type, min_len
             params = {
                 'atom_type' : atom_type,
                 'cluster_type' : cluster_type,
                 'feature_set' : scheme[1],
                 'feature_set_weights' : scheme[2],
-                'feature_weights_filename' : DASHBOARD_WEIGHTING_FILE,
+                'feature_weights_filename' : scheme[3],
                 'first_doc_num' : 0,
-                'n' : 500,
+                'n' : num_files,
                 'min_len' : min_len,
                 'k' : 2
             }
@@ -268,4 +268,5 @@ Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 
 if __name__ == '__main__':
-    run_all_dashboard()
+    n = 500
+    run_all_dashboard(n)
