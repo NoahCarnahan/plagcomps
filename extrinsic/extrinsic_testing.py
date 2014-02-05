@@ -86,7 +86,7 @@ class ExtrinsicTester:
         
         path = os.path.join(os.path.dirname(__file__), "../figures/roc_extrinsic_"+str(time.time())+"_"+self.fingerprint_method+".pdf")
         pyplot.savefig(path)
-        return roc_auc
+        return roc_auc, path
 
 def evaluate(method, n, k, atom_type, confidence_method, num_files="all"):
     '''
@@ -97,9 +97,9 @@ def evaluate(method, n, k, atom_type, confidence_method, num_files="all"):
     
     session = fingerprintstorage.Session()
     source_file_list, suspect_file_list = ExtrinsicUtility().get_training_files(n = num_files, include_txt_extension = False)
-    print suspect_file_list
-    print "Populating first", len(suspect_file_list), "suspect files and first", len(source_file_list), "source documents."
-    fingerprintstorage.populate_db(source_file_list+suspect_file_list, method, n, k, atom_type)
+    #print suspect_file_list
+    #print "Populating first", len(suspect_file_list), "suspect files and first", len(source_file_list), "source documents."
+    #fingerprintstorage.populate_db(source_file_list+suspect_file_list, method, n, k, atom_type)
     
     print "Testing first", len(suspect_file_list), "suspect files and first", len(source_file_list), "source documents."
    
@@ -108,4 +108,4 @@ def evaluate(method, n, k, atom_type, confidence_method, num_files="all"):
     print tester.plot_ROC_curve(session)
 
 if __name__ == "__main__":
-    evaluate("kth_in_sent", 5, 5, "paragraph", "jaccard", num_files=10)
+    evaluate("kth_in_sent", 5, 5, "paragraph", "jaccard", num_files=15)

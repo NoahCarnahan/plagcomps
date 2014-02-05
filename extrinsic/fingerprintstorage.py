@@ -266,12 +266,20 @@ def _drop_tables():
 def _create_tables():
     Base.metadata.create_all(engine)
 def main():
-    srs, sus = ExtrinsicUtility().get_training_files(n=15)
-    populate_db(sus+srs, "kth_in_sent", 5, 5, "paragraph")
-    #populate_db(sus+srs, "kth_in_sent", 3, 5, "paragraph")
-    populate_db(sus+srs, "anchor", 5, 5, "paragraph")
-    #populate_db(sus+srs, "anchor", 3, 3, "paragraph")
-    populate_db(sus+srs, "full", 3, 5, "paragraph")
+    srs, sus = ExtrinsicUtility().get_training_files(n=25)
+    
+    #populate_db(sus+srs, "anchor", 5, 0, "paragraph")
+    populate_db(sus+srs, "anchor", 3, 0, "paragraph")
+    populate_db(sus+srs, "full", 5, 0, "paragraph")
+    #populate_db(sus+srs, "full", 3, 0, "paragraph")
+    #populate_db(sus+srs, "kth_in_sent", 5, 5, "paragraph")
+    populate_db(sus+srs, "kth_in_sent", 5, 3, "paragraph")
+    populate_db(sus+srs, "kth_in_sent", 3, 5, "paragraph")
+    populate_db(sus+srs, "kth_in_sent", 3, 3, "paragraph")
+    populate_db(sus+srs, "winnow-k", 5, 5, "paragraph")
+    populate_db(sus+srs, "winnow-k", 5, 3, "paragraph")
+    populate_db(sus+srs, "winnow-k", 3, 5, "paragraph")
+    populate_db(sus+srs, "winnow-k", 3, 3, "paragraph")
 
 url = "postgresql://%s:%s@%s" % (username, password, dbname)
 engine = sqlalchemy.create_engine(url)
