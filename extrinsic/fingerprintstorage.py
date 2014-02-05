@@ -75,15 +75,19 @@ def get_fingerprints_by_hash(hash, method, n, k, atom_type, session):
     hash in its hash_values.
     '''
     
+    if method not in ["winnow-k", "kth_in_sent"]:
+        k = 0
+    
     #q = session.query(HashIndex).filter(HashIndex.hash_value == hash).join(Fingerprint).filter(Fingerprint.id.in_(HashIndex.fingerprint_ids))
     #return q.all()
     
     try:
-        q = session.query(HashIndex).filter(HashIndex.hash_value == hash)
+        q = session.query(HashIndex).filter(HashIndex.hash_value == hash, HashIndex.method == method, HashIndex.n == n, HashIndex.k == k, HashIndex.atom_type == atom_type)
         hi = q.one()
     except sqlalchemy.orm.exc.NoResultFound, e:
         return []
-    q = session.query(Fingerprint).filter(and_(Fingerprint.id.in_(hi.fingerprint_ids), Fingerprint.method == method, Fingerprint.n == n, Fingerprint.k == k, Fingerprint.atom_type == atom_type))
+    #q = session.query(Fingerprint).filter(and_(Fingerprint.id.in_(hi.fingerprint_ids), Fingerprint.method == method, Fingerprint.n == n, Fingerprint.k == k, Fingerprint.atom_type == atom_type))
+    q = session.query(Fingerprint).filter(Fingerprint.id.in_(hi.fingerprint_ids))
     fingerprints = q.all()
     return fingerprints
        
@@ -119,8 +123,8 @@ def populate_db(absolute_paths, method, n, k, atom_type, session = None):
     
 class Fingerprint(Base):
     
-    __tablename__ = "st3_fingerprint"
-    id = Column(Integer, Sequence("st3_fingerprint_id_seq"), primary_key=True, index=True)
+    __tablename__ = "st4_fingerprint"
+    id = Column(Integer, Sequence("st4_fingerprint_id_seq"), primary_key=True, index=True)
     timestamp = Column(DateTime)
        
     doc_name = Column(String, index=True)
@@ -168,14 +172,14 @@ class Fingerprint(Base):
         called immediately after initializing this object!!!
         '''
         if self.hash_indexed == True:
-            for hash in self.hash_values:
+            for hash in set(self.hash_values):
                 try:
-                    query = session.query(HashIndex).filter(HashIndex.hash_value == hash)
+                    query = session.query(HashIndex).filter(HashIndex.hash_value == hash, HashIndex.method == self.method, HashIndex.n == self.n, HashIndex.k == self.k, HashIndex.atom_type == self.atom_type)
                     hi = query.one()
                     hi.fingerprint_ids = hi.fingerprint_ids[:] + [self.id]
                     session.add(hi) #Is this line needed!?
                 except sqlalchemy.orm.exc.NoResultFound, e:
-                    hi = HashIndex(hash, self.id)
+                    hi = HashIndex(hash, self.method, self.n, self.k, self.atom_type, self.id)
                     session.add(hi)
                 if commit:
                     session.commit()
@@ -211,16 +215,27 @@ class Fingerprint(Base):
         return hash_values
 
 class HashIndex(Base):
-    __tablename__ = "st3_hash_index"
-    hash_value = Column(Integer, index=True, primary_key = True)
+    __tablename__ = "st4_hash_index"
+    id = Column(Integer, primary_key = True)
+    hash_value = Column(Integer, index=True)
+    method = Column(String, index = True)
+    n = Column(Integer, index=True)
+    k = Column(Integer, index = True)
+    atom_type = Column(String, index = True)
+    
     fingerprint_ids = Column(ARRAY(Integer))
     
-    def __init__(self, hash_value, fingerprint_id):
+    def __init__(self, hash_value, method, n, k, atom_type, fingerprint_id):
         '''
         Instantiate a new object/row in the database with the given hash_value and the
         given fingerprint_id as the first item in the index for this hash.
         '''
         self.hash_value = hash_value
+        self.method = method
+        self.n = n
+        self.k = k
+        self.atom_type = atom_type
+        
         self.fingerprint_ids = [fingerprint_id]
 
 def _test():
@@ -238,22 +253,24 @@ def _test():
             f.close()
             for i in range(len(tokenize(text, "paragraph"))):
                 fp = get_fingerprint(path, base_path, "kth_in_sent", 5, 5, "paragraph", i, True, session)
+                fp = get_fingerprint(path, base_path, "anchor", 5, 5, "paragraph", i, True, session)
                 print fp.hash_values
         session.commit()
     
     # HashIndex
-    print get_fingerprints_by_hash(fp.hash_values[0], "kth_in_sent", 5, 5, "paragraph", session)
+    print fp.hash_values[0]
+    print get_fingerprints_by_hash(fp.hash_values[0], "anchor", 5, 5, "paragraph", session)
 
 def _drop_tables():
     Base.metadata.drop_all(engine)
 def _create_tables():
     Base.metadata.create_all(engine)
 def main():
-    srs, sus = ExtrinsicUtility().get_training_files(n=200)
+    srs, sus = ExtrinsicUtility().get_training_files(n=15)
     populate_db(sus+srs, "kth_in_sent", 5, 5, "paragraph")
-    populate_db(sus+srs, "kth_in_sent", 3, 5, "paragraph")
+    #populate_db(sus+srs, "kth_in_sent", 3, 5, "paragraph")
     populate_db(sus+srs, "anchor", 5, 5, "paragraph")
-    populate_db(sus+srs, "anchor", 3, 3, "paragraph")
+    #populate_db(sus+srs, "anchor", 3, 3, "paragraph")
     populate_db(sus+srs, "full", 3, 5, "paragraph")
 
 url = "postgresql://%s:%s@%s" % (username, password, dbname)
@@ -262,4 +279,7 @@ Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 
 if __name__ == "__main__":
+    #_drop_tables()
+    #_create_tables()
     main()
+    #_test()
