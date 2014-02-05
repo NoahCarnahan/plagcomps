@@ -29,6 +29,8 @@ def get_fingerprints(doc_name, base_path, method, n, k, atom_type, hash_indexed,
     f.close()
     atom_spans = tokenize(text, atom_type)
     
+    print "atoms =", len(atom_spans)
+    
     fingerprints = []
     for i in range(len(atom_spans)):
         atom_text = text[atom_spans[i][0]:atom_spans[i][1]]
@@ -107,7 +109,7 @@ def populate_db(absolute_paths, method, n, k, atom_type, session = None):
             hash_index = False
             
         filename = abs_path.replace(base_path, "").replace(".txt", "")
-        print "Populating doc", num_populated+1, "of", len(absolute_paths), ":", filename, "-", str(datetime.datetime.now())
+        print "Populating doc", num_populated+1, "of", len(absolute_paths), ":", filename, "-", str(datetime.datetime.now()), "-", "(", method, n, k, atom_type,")"
         num_populated += 1
         get_fingerprints(filename, base_path, method, n, k, atom_type, hash_index, session)
         session.commit()
