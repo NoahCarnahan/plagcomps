@@ -590,6 +590,24 @@ class FeatureExtractor:
 
         return 10000 * (M2 - M1) / max(1, (M1 ** 2))
 
+    def evolved_feature_one(self, sent_spans_index_start, sent_spans_index_end):
+        '''
+        (((((1.5*D)-Y)-(-12.0**10.0))+(((L+10.0)+10.0)+10.0))*(10.0*(((1.5+P)**(-12.0-H))-((X*-12.0)+-1.0))))
+        where D = avg_internal_word_freq_class; H = honore_r_measure; L = syntactic_complexity;
+        P = pos_trigram,NN,NN,VB; X = pos_trigram,NN,NN,NN; Y = pos_trigram,NN,IN,DT
+        '''
+
+        start = self.sentence_spans[sent_spans_index_start][0]
+        if sent_spans_index_end >= len(self.sentence_spans):
+            end = self.sentence_spans[-1][1]
+        else:
+            end = self.sentence_spans[sent_spans_index_end][1]
+    
+        D, H, L, P, X, Y = self._get_feature_vector(["avg_internal_word_freq_class", "honore_r_measure", "syntactic_complexity",
+                        "pos_trigram,NN,NN,VB", "pos_trigram,NN,NN,NN", "pos_trigram,NN,IN,DT"], start, end)
+    
+        return (((((1.5*D)-Y)-(-12.0**10.0))+(((L+10.0)+10.0)+10.0))*(10.0*(((1.5+P)**(-12.0-H))-((X*-12.0)+-1.0))))
+
     def _init_num_complex_words(self):
         '''
         init sum table of number of complex words (3+ syllables)
@@ -1187,4 +1205,7 @@ def _test():
         print "honore_r_measure test FAILED"
     
 if __name__ == "__main__":
-    _test()
+    #_test()
+
+    f = FeatureExtractor("The mad hatter likes tea and the red queen hates alice. Images of the Mandelbrot set display an elaborate boundary that reveals progressively ever-finer recursive detail at increasing magnifications. The style of this repeating detail depends on the region of the set being examined. The set's boundary also incorporates smaller versions of the main shape, so the fractal property of self-similarity applies to the entire set, and not just to its parts.")
+    print f.get_feature_vectors(["evolved_feature_one"], "sentence")
