@@ -221,7 +221,7 @@ def run_all_weighting_schemes(num_files, atom_types, cluster_types, min_len_opti
     '''
     Reads the weighting schemes from 'feature_weights.txt' and write the results to DB.
     '''
-    # weighting_schemes list contains entries like (weighting_type, [feature_set], [feature_weights])
+    # weighting_schemes list contains entries like (weighting_type, [feature_set], [feature_weights]) (weighting_type = {confidence_weights, raw_weights})
     weighting_schemes = []
 
     weighting_scheme_filenames = glob.glob(os.path.join(os.path.dirname(__file__), DASHBOARD_WEIGHTING_FILENAME))
