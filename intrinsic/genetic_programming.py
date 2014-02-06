@@ -39,7 +39,7 @@ session = Session()
 
 features = FeatureExtractor.get_all_feature_function_names()
 num_training = 50 
-num_testing = 200
+num_testing = 0
 starting_doc = 0
 training_files = IntrinsicUtility().get_n_training_files(n=num_training, first_doc_num=starting_doc)
 test_files = IntrinsicUtility().get_n_training_files(n=num_testing, first_doc_num=starting_doc + num_training)
@@ -365,7 +365,7 @@ def feature_test(formula, feature_mapping):
 
     #print "Conf, Actual", confidences, actuals
     # For each document, add (1 - AUC) for our ROC calculation
-    return (1 - BaseUtility.draw_roc(actuals, confidences, save_figure=True)[1])
+    return (1 - BaseUtility.draw_roc(actuals, confidences, save_figure=False)[1])
    
     #except OverflowError:
      #   return 1.0e+255 # infinitely bad
@@ -432,8 +432,8 @@ def confidence_main(nfittest=10, nkids=100):
         outfile.write("Testing: best=" + str(b.fitness(training=False)) + "\n")
 
 if __name__ == '__main__':
-    #print "badness", feature_test("(((((1.5*<D>)-<Y>)-(-12.0**10.0))+(((<L>+10.0)+10.0)+10.0))*(10.0*(((1.5+<P>)**(-12.0-<H>))-((<X>*-12.0)+-1.0))))", {"D":"avg_internal_word_freq_class", "H" : "honore_r_measure", "L":"syntactic_complexity", "P":"pos_trigram,NN,NN,VB", "X":"pos_trigram,NN,NN,NN", "Y":"pos_trigram,NN,IN,DT"})
+    print feature_test("(((((1.5*<D>)-<Y>)-(-12.0**10.0))+(((<L>+10.0)+10.0)+10.0))*(10.0*(((1.5+<P>)**(-12.0-<H>))-((<X>*-12.0)+-1.0))))", {"D":"avg_internal_word_freq_class", "H" : "honore_r_measure", "L":"syntactic_complexity", "P":"pos_trigram,NN,NN,VB", "X":"pos_trigram,NN,NN,NN", "Y":"pos_trigram,NN,IN,DT"})
 
-    for i in range(100):
-        confidence_main()
-        feature_main()
+    #for i in range(100):
+    #    confidence_main()
+    #    feature_main()

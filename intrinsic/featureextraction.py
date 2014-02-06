@@ -603,10 +603,33 @@ class FeatureExtractor:
         else:
             end = self.sentence_spans[sent_spans_index_end][1]
     
+        #for feature in ["x", "y"]:
+            
         D, H, L, P, X, Y = self._get_feature_vector(["avg_internal_word_freq_class", "honore_r_measure", "syntactic_complexity",
                         "pos_trigram,NN,NN,VB", "pos_trigram,NN,NN,NN", "pos_trigram,NN,IN,DT"], start, end)
     
         return (((((1.5*D)-Y)-(-12.0**10.0))+(((L+10.0)+10.0)+10.0))*(10.0*(((1.5+P)**(-12.0-H))-((X*-12.0)+-1.0))))
+
+    def _init_evolved_feature_two(self):
+        '''
+        save the feature vectors for the features we care about for this feature
+        '''
+
+        self.features["evolved_feature_two"] = self.get_feature_vectors(["avg_internal_word_freq_class", "honore_r_measure", "syntactic_complexity", "pos_trigram,NN,NN,VB", "pos_trigram,NN,NN,NN", "pos_trigram,NN,IN,DT"], "paragraph")
+        
+    def evolved_feature_two(self, para_spans_index_start, para_spans_index_end):
+        '''
+        calculate out the evolved formula
+        '''
+        if "evolved_feature_two" not in self.features:
+            self._init_evolved_feature_two()
+
+        feature_vectors = self.features["evolved_feature_two"][para_spans_index_start:para_spans_index_end]
+
+        D, H, L, P, X, Y = [sum([feature_tuple[i] for feature_tuple in feature_vectors]) for i in range(len(feature_vectors[0]))]
+        computed = (((((1.5*D)-Y)-(-12.0**10.0))+(((L+10.0)+10.0)+10.0))*(10.0*(((1.5+P)**(-12.0-H))-((X*-12.0)+-1.0))))
+
+        return computed
 
     def _init_num_complex_words(self):
         '''
@@ -1207,5 +1230,5 @@ def _test():
 if __name__ == "__main__":
     #_test()
 
-    f = FeatureExtractor("The mad hatter likes tea and the red queen hates alice. Images of the Mandelbrot set display an elaborate boundary that reveals progressively ever-finer recursive detail at increasing magnifications. The style of this repeating detail depends on the region of the set being examined. The set's boundary also incorporates smaller versions of the main shape, so the fractal property of self-similarity applies to the entire set, and not just to its parts.")
-    print f.get_feature_vectors(["evolved_feature_one"], "sentence")
+    f = FeatureExtractor("The mad hatter likes tea and the red queen hates alice.\n\n Images of the Mandelbrot set display an elaborate boundary that reveals progressively ever-finer recursive detail at increasing magnifications.\n\n The style of this repeating detail depends on the region of the set being examined.\n\n The set's boundary also incorporates smaller versions of the main shape, so the fractal property of self-similarity applies to the entire set, and not just to its parts.\n\n")
+    print f.get_feature_vectors(["evolved_feature_one", "evolved_feature_two"], "nchars")
