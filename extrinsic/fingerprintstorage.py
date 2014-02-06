@@ -5,17 +5,68 @@ import fingerprint_extraction
 from ..tokenization import tokenize
 from ..dbconstants import username, password, dbname
 
-import sqlalchemy
-from sqlalchemy import Table, Column, Sequence, Integer, Boolean, String, Text, Float, DateTime, ForeignKey, and_
-from sqlalchemy.orm import relationship, backref, sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.ext.orderinglist import ordering_list
-from sqlalchemy.orm.collections import attribute_mapped_collection
+from sqlalchemy import create_engine, Table, Column, Integer, String, MetaData, ForeignKey, DateTime, Sequence, Boolean
 from sqlalchemy.dialects.postgresql import ARRAY
+from sqlalchemy.sql import select, and_
 
-Base = declarative_base()
+url = "postgresql://%s:%s@%s" % (username, password, dbname)
+engine = create_engine(url)
+metadata = MetaData()
 
-def get_fingerprints(doc_name, base_path, method, n, k, atom_type, hash_indexed, session, create=True, commit=False):
+fingerprints_table = Table("stcore_fingerprints", metadata,
+    Column("id", Integer, Sequence("stcore_fingerprint_id_seq"), primary_key=True, index=True),
+    Column("timestamp", DateTime),
+    Column("doc_name", String, index = True),
+    Column("doc_path", String),
+    Column("doc_xml_path", String),
+    Column("method", String), # The fingerprinting method used to create this fingerprint
+    Column("n", Integer),
+    Column("k", Integer),
+    Column("atom_type", String),
+    Column("atom_number", Integer, index = True), # If this is the 1th paragraph in the document, then atom_number = 1
+    Column("hash_indexed", Boolean), # If true, the hash_values of this fingerprint will be put into the hash index table.
+    Column("hash_values", ARRAY(Integer))
+)
+
+hash_index_table = Table("stcore_hash_index", metadata,
+    Column("id", Integer, Sequence("stcore_hash_index_id_seq"), primary_key = True),
+    Column("hash_value", Integer, index=True),
+    Column("method", String),
+    Column("n", Integer),
+    Column("k", Integer),
+    Column("atom_type", String),
+    Column("fingerprint_ids", ARRAY(Integer))    
+)
+
+#metadata.drop_all(engine)
+metadata.create_all(engine)
+
+class Fingerprint:
+    def __init__(self, id, timestamp, doc_name, doc_path, doc_xml_path, method, n, k, atom_type, atom_number, hash_indexed, hash_values):
+        self.id = id
+        self.timestamp = timestamp
+        self.doc_name = doc_name
+        self._doc_path = doc_path
+        self._doc_xml_path = doc_xml_path
+        self.method = method
+        self.n = n
+        self.k = k
+        self.atom_type = atom_type
+        self.atom_number = atom_number
+        self.hash_indexed = hash_indexed
+        self.hash_values = hash_values
+
+class HashIndex:
+    def __init__(self, id, hash_value, method, n, k, atom_type, fingerprint_ids):
+        self.id = id
+        self.hash_value = hash_value
+        self.method = method
+        self.n = n
+        self.k = k
+        self.atom_type = atom_type
+        self.fingerprint_ids = fingerprint_ids  
+
+def get_fingerprints(doc_name, base_path, method, n, k, atom_type, hash_indexed, create = True):
     '''
     Retrieve the Fingerprint objects from the database with the given parameters. This function will
     return a Fingerprint for each atom in this document. They are NOT necessarily in order.
@@ -30,79 +81,147 @@ def get_fingerprints(doc_name, base_path, method, n, k, atom_type, hash_indexed,
     atom_spans = tokenize(text, atom_type)
     
     print "atoms =", len(atom_spans)
-    
+
     fingerprints = []
     for i in range(len(atom_spans)):
         atom_text = text[atom_spans[i][0]:atom_spans[i][1]]
-        fp = get_fingerprint(doc_name, base_path, method, n, k, atom_type, i, hash_indexed, session, create, commit, atom_text)
+        fp = get_fingerprint(doc_name, base_path, method, n, k, atom_type, i, hash_indexed, create, atom_text)
         fingerprints.append(fp)
     return fingerprints
-    
-def get_fingerprint(doc_name, base_path, method, n, k, atom_type, atom_number, hash_indexed, session, create=True, commit=False, atom_text = None):
+
+def get_fingerprint(doc_name, base_path, method, n, k, atom_type, atom_number, hash_indexed, create=True, atom_text = None):
     '''
     Retrieve the Fingerprint object from the database with the given parameters. If create=True,
     then a new Fingerprint will be created and returned in the event that it does not already
     exist in the database.
     '''
     
+    # Sanitize the input
+    if method not in ["kth_in_sent", "winnow-k"]:
+        k = 0
+    
+    conn = engine.connect()
+    
+    # See if the fingerprint is in the database
+    fpt = fingerprints_table
+    s = select([fpt]).where(and_(fpt.c.doc_name == doc_name, fpt.c.method == method, fpt.c.n == n, fpt.c.k == k, fpt.c.atom_type == atom_type, fpt.c.atom_number == atom_number))
+    result = conn.execute(s)
+    row = result.fetchone()
+    if row != None:
+        conn.close()
+        return Fingerprint(*row)
+    else:
+        if create:
+            # Fingerprint is not in the database, so create it!
+            fp_dic = build_fingerprint_row(doc_name, base_path, method, n, k, atom_type, atom_number, hash_indexed, atom_text = atom_text)
+            ins = fingerprints_table.insert().values(fp_dic)
+            result = conn.execute(ins)
+            key = result.inserted_primary_key[0]
+            fp_dic["id"] = key
+            fp = Fingerprint(*fp_dict_to_tup(fp_dic))
+            
+            # UPDATE HASH INDEX!!
+            _update_hash_index(fp)
+            
+            conn.close()
+            return fp
+        else:
+            conn.close()
+            return None
+
+def build_fingerprint_row(doc_name, base_path, method, n, k, atom_type, atom_number, hash_indexed, atom_text = None):
+    '''
+    Given the arguments that would have been passed to a Fingerprint object constructor in previous versions,
+    return a dictionary that can be insrterd into the db.
+    '''
     if method not in ["kth_in_sent", "winnow-k"]:
         k = 0
         
-    fp = None
-    try:
-        query = session.query(Fingerprint).filter(and_(Fingerprint.doc_name == doc_name, Fingerprint.method == method, Fingerprint.n == n, Fingerprint.k == k, Fingerprint.atom_type == atom_type, Fingerprint.atom_number == atom_number))
-        fp = query.one()
-    except sqlalchemy.orm.exc.NoResultFound, e:
-        if create:
-            # A note on creation:
-            # The hash index can't be updated until we have an id for the Fingerprint in
-            # question. Unfortunately the id isn't generated until we have added the object
-            # to the session and flushed it. So, update_hash_index MUST be called immediately
-            # after initialization as it does here. I don't THINK we can flush in the
-            # __init__ function of Fingerprint, otherwise I would.
-            fp = Fingerprint(doc_name, base_path, method, n, k, atom_type, atom_number, hash_indexed, atom_text = atom_text)
-            session.add(fp)
-            session.flush()
-            fp.update_hash_index(session, commit)
-            
-            if commit:
-                session.commit()
-    return fp
-
-def get_fingerprints_by_hash(hash, method, n, k, atom_type, session):
-    '''
-    Return a list of Fingerprint objects such that each Fingerprint contains the given
-    hash in its hash_values.
-    '''
+    dict = {"doc_name":doc_name, "method":method, "n":n, "k":k, "atom_type":atom_type, "atom_number":atom_number, "hash_indexed":hash_indexed, "timestamp":datetime.datetime.now()}
     
+    if base_path in doc_name:
+        doc_path = doc_name + ".txt"
+        doc_xml_path = doc_name + ".xml"
+    else:
+        doc_path = base_path + doc_name + ".txt"
+        doc_xml_path = base_path + doc_name + ".xml"
+        
+    dict["doc_path"] = doc_path
+    dict["doc_xml_path"] = doc_xml_path
+    
+    if atom_text == None:
+        f = open(doc_path, "r")
+        text = f.read()
+        f.close()
+        if atom_type == "full":
+            atom_text = text
+        elif atom_type == "paragraph":
+            paragraph_spans = tokenize(text, atom_type)
+            atom_start, atom_end = paragraph_spans[atom_number]
+            atom_text = text[atom_start:atom_end]
+        else:
+            raise ValueError("Invalid atom_type! Only 'full' and 'paragraph' are allowed.")
+
+    extractor = fingerprint_extraction.FingerprintExtractor()
+    hash_values = extractor.get_fingerprint(atom_text, n, method, k)
+    dict["hash_values"] = hash_values
+    
+    return dict
+
+def fp_dict_to_tup(d):
+    '''
+    Turns a dictionary into a tuple that can be used by the Fingerprint constructor
+    '''
+    return (d["id"], d["timestamp"], d["doc_name"], d["doc_path"], d["doc_xml_path"], d["method"], d["n"], d["k"], d["atom_type"], d["atom_number"], d["hash_indexed"], d["hash_values"])
+    
+def _update_hash_index(fp):
+    if fp.hash_indexed == True:
+        conn = engine.connect()
+        for hash in set(fp.hash_values):
+            s = select([hash_index_table]).where(and_(hash_index_table.c.hash_value == hash, hash_index_table.c.method == fp.method, hash_index_table.c.n == fp.n, hash_index_table.c.k == fp.k, hash_index_table.c.atom_type == fp.atom_type))
+            result = conn.execute(s)
+            hash_index_tup = result.fetchone()
+            if hash_index_tup != None:
+                new_id_list = hash_index_tup[hash_index_table.c.fingerprint_ids]
+                new_id_list.append(fp.id)
+                # UPDATE THE ROW!
+                stmt = hash_index_table.update().where(hash_index_table.c.id == hash_index_tup["id"]).values(fingerprint_ids = new_id_list)
+                #stmt = hash_index_table.update().values(new_tup)
+                conn.execute(stmt)
+            else:
+                stmt = hash_index_table.insert().values({"hash_value":hash, "method":fp.method, "n":fp.n, "k":fp.k, "atom_type":fp.atom_type, "fingerprint_ids":[fp.id]})
+                conn.execute(stmt)
+        conn.close()
+
+def get_fingerprints_by_hash(hash, method, n, k, atom_type):
     if method not in ["winnow-k", "kth_in_sent"]:
         k = 0
-    
-    #q = session.query(HashIndex).filter(HashIndex.hash_value == hash).join(Fingerprint).filter(Fingerprint.id.in_(HashIndex.fingerprint_ids))
-    #return q.all()
-    
-    try:
-        q = session.query(HashIndex).filter(HashIndex.hash_value == hash, HashIndex.method == method, HashIndex.n == n, HashIndex.k == k, HashIndex.atom_type == atom_type)
-        hi = q.one()
-    except sqlalchemy.orm.exc.NoResultFound, e:
+    conn = engine.connect()
+    s = select([hash_index_table]).where(and_(hash_index_table.c.hash_value == hash, hash_index_table.c.method == method, hash_index_table.c.n == n, hash_index_table.c.k == k, hash_index_table.c.atom_type == atom_type))
+    result = conn.execute(s)
+    row = result.fetchone()
+    if row == None:
+        conn.close()
         return []
-    #q = session.query(Fingerprint).filter(and_(Fingerprint.id.in_(hi.fingerprint_ids), Fingerprint.method == method, Fingerprint.n == n, Fingerprint.k == k, Fingerprint.atom_type == atom_type))
-    q = session.query(Fingerprint).filter(Fingerprint.id.in_(hi.fingerprint_ids))
-    fingerprints = q.all()
-    return fingerprints
-       
-def populate_db(absolute_paths, method, n, k, atom_type, session = None):
+    else:
+        fps = []
+        fp_ids = row["fingerprint_ids"]
+        # select them
+        s = select([fingerprints_table]).where(fingerprints_table.c.id.in_(fp_ids))
+        result = conn.execute(s)
+        for row in result:
+            fps.append(Fingerprint(*row))
+        conn.close()
+        return fps
+
+def populate_db(absolute_paths, method, n, k, atom_type):
     '''
     Populate the database with Fingerprints and HashIndexs for each document in the
     absolute_paths list. Use the fingerprint method, n, and k given. If hash_indexed is
     True then the hash index will be populated for these documents as well.
     '''
-    
-    print "Populating db with", method, n, k, atom_type
-    
+        
     num_populated = 0
-    if session == None:
-        session = Session()
     for abs_path in absolute_paths:
         try:
             abs_path.index("source")
@@ -115,135 +234,28 @@ def populate_db(absolute_paths, method, n, k, atom_type, session = None):
         filename = abs_path.replace(base_path, "").replace(".txt", "")
         print "Populating doc", num_populated+1, "of", len(absolute_paths), ":", filename, "-", str(datetime.datetime.now()), "-", "(", method, n, k, atom_type,")"
         num_populated += 1
-        get_fingerprints(filename, base_path, method, n, k, atom_type, hash_index, session)
-        session.commit()
+        get_fingerprints(filename, base_path, method, n, k, atom_type, hash_index)
+
+def main():
+    srs, sus = ExtrinsicUtility().get_training_files(n=10)
     
-    session.commit()
-    session.close()
-    
-class Fingerprint(Base):
-    
-    __tablename__ = "st4_fingerprint"
-    id = Column(Integer, Sequence("st4_fingerprint_id_seq"), primary_key=True, index=True)
-    timestamp = Column(DateTime)
+    populate_db(sus+srs, "anchor", 5, 0, "paragraph")
+    #populate_db(sus+srs, "anchor", 3, 0, "paragraph")
+    #populate_db(sus+srs, "full", 5, 0, "paragraph")
+    #populate_db(sus+srs, "full", 3, 0, "paragraph")
+    #populate_db(sus+srs, "kth_in_sent", 5, 5, "paragraph")
+    #populate_db(sus+srs, "kth_in_sent", 5, 3, "paragraph")
+    #populate_db(sus+srs, "kth_in_sent", 3, 5, "paragraph")
+    #populate_db(sus+srs, "kth_in_sent", 3, 3, "paragraph")
+    #populate_db(sus+srs, "winnow-k", 5, 5, "paragraph")
+    #populate_db(sus+srs, "winnow-k", 5, 3, "paragraph")
+    #populate_db(sus+srs, "winnow-k", 3, 5, "paragraph")
+    #populate_db(sus+srs, "winnow-k", 3, 3, "paragraph")
        
-    doc_name = Column(String, index=True)
-    _doc_path = Column(String)
-    _doc_xml_path = Column(String)
-    method = Column(String, index = True) # The fingerprinting method used to create this fingerprint
-    n = Column(Integer, index=True)
-    k = Column(Integer, index = True)
-    atom_type = Column(String, index = True)
-    atom_number = Column(Integer, index = True) # If this is the 1th paragraph in the document, then atom_number = 1
-    hash_indexed = Column(Boolean) # If true, the hash_values of this fingerprint will be put into the hash index table.
-    
-    hash_values = Column(ARRAY(Integer))
-
-    def __init__(self, doc_name, base_path, method, n, k, atom_type, atom_number, hash_indexed, atom_text = None):
-    
-        self.doc_name = doc_name
-        self.method = method
-        self.n = n
-        self.k = k
-        self.atom_type = atom_type
-        self.atom_number = atom_number
-        self.hash_indexed = hash_indexed
-        self.timestamp = datetime.datetime.now()
-        
-        if method not in ["kth_in_sent", "winnow-k"]:
-            self.k = 0
-        
-        # Construct _doc_path and _doc_xml_path
-        if base_path in self.doc_name:
-            self._doc_path = self.doc_name + ".txt"
-            self._doc_xml_path = self.doc_name + ".xml"
-        else:
-            self._doc_path = base_path + self.doc_name + ".txt"
-            self._doc_xml_path = base_path + self.doc_name + ".xml"
-        
-        # Extract the fingerprint from the text
-        self.hash_values = self._extract_fingerprint(atom_text)
-        
-        # THE HASH INDEX WILL BE UPDATED AFTER CALLING update_hash_index
-    
-    def update_hash_index(self, session, commit=False):
-        '''
-        Update the hash index with the hash values from this object. This method should be
-        called immediately after initializing this object!!!
-        '''
-        if self.hash_indexed == True:
-            for hash in set(self.hash_values):
-                try:
-                    query = session.query(HashIndex).filter(HashIndex.hash_value == hash, HashIndex.method == self.method, HashIndex.n == self.n, HashIndex.k == self.k, HashIndex.atom_type == self.atom_type)
-                    hi = query.one()
-                    hi.fingerprint_ids = hi.fingerprint_ids[:] + [self.id]
-                    session.add(hi) #Is this line needed!?
-                except sqlalchemy.orm.exc.NoResultFound, e:
-                    hi = HashIndex(hash, self.method, self.n, self.k, self.atom_type, self.id)
-                    session.add(hi)
-                if commit:
-                    session.commit()
-    
-    def _extract_fingerprint(self, atom_text = None):
-        '''
-        Fingerprint the text associated with this object. This method should only be called
-        during the initialization of this object.
-        '''
-        
-        # Get the text
-        f = open(self._doc_path, 'r')
-        text = f.read()
-        f.close()
-        
-        # Get the atom
-        if atom_text != None:
-            atom = atom_text
-        else:
-            if self.atom_type == "full":
-                atom = text
-            elif self.atom_type == "paragraph":
-                paragraph_spans = tokenize(text, self.atom_type)
-                atom_start, atom_end = paragraph_spans[self.atom_number]
-                atom = text[atom_start:atom_end]
-            else:
-                raise ValueError("Invalid atom_type! Only 'full' and 'paragraph' are allowed.")
-        
-        # fingerprint the atom
-        extractor = fingerprint_extraction.FingerprintExtractor()
-        hash_values = extractor.get_fingerprint(atom, self.n, self.method, self.k)
-        
-        return hash_values
-
-class HashIndex(Base):
-    __tablename__ = "st4_hash_index"
-    id = Column(Integer, primary_key = True)
-    hash_value = Column(Integer, index=True)
-    method = Column(String, index = True)
-    n = Column(Integer, index=True)
-    k = Column(Integer, index = True)
-    atom_type = Column(String, index = True)
-    
-    fingerprint_ids = Column(ARRAY(Integer))
-    
-    def __init__(self, hash_value, method, n, k, atom_type, fingerprint_id):
-        '''
-        Instantiate a new object/row in the database with the given hash_value and the
-        given fingerprint_id as the first item in the index for this hash.
-        '''
-        self.hash_value = hash_value
-        self.method = method
-        self.n = n
-        self.k = k
-        self.atom_type = atom_type
-        
-        self.fingerprint_ids = [fingerprint_id]
-
 def _test():
     '''
     Retrieve fingerprints from two documents, twice. Then do a hash index look up.
     '''
-    session = Session()
-
     # Fingerprints
     base_path = "/copyCats/itty-bitty-corpus/source"
     for j in range(2): # Do it twice, once where the objects are created, and a second where they are retrieved.
@@ -252,42 +264,15 @@ def _test():
             text = f.read()
             f.close()
             for i in range(len(tokenize(text, "paragraph"))):
-                fp = get_fingerprint(path, base_path, "kth_in_sent", 5, 5, "paragraph", i, True, session)
-                fp = get_fingerprint(path, base_path, "anchor", 5, 5, "paragraph", i, True, session)
+                fp = get_fingerprint(path, base_path, "kth_in_sent", 5, 5, "paragraph", i, True)
+                fp = get_fingerprint(path, base_path, "anchor", 5, 5, "paragraph", i, True)
                 print fp.hash_values
-        session.commit()
     
     # HashIndex
     print fp.hash_values[0]
-    print get_fingerprints_by_hash(fp.hash_values[0], "anchor", 5, 5, "paragraph", session)
+    print get_fingerprints_by_hash(fp.hash_values[0], "anchor", 5, 5, "paragraph")
 
-def _drop_tables():
-    Base.metadata.drop_all(engine)
-def _create_tables():
-    Base.metadata.create_all(engine)
-def main():
-    srs, sus = ExtrinsicUtility().get_training_files(n=25)
-    
-    #populate_db(sus+srs, "anchor", 5, 0, "paragraph")
-    populate_db(sus+srs, "anchor", 3, 0, "paragraph")
-    populate_db(sus+srs, "full", 5, 0, "paragraph")
-    #populate_db(sus+srs, "full", 3, 0, "paragraph")
-    #populate_db(sus+srs, "kth_in_sent", 5, 5, "paragraph")
-    populate_db(sus+srs, "kth_in_sent", 5, 3, "paragraph")
-    populate_db(sus+srs, "kth_in_sent", 3, 5, "paragraph")
-    populate_db(sus+srs, "kth_in_sent", 3, 3, "paragraph")
-    populate_db(sus+srs, "winnow-k", 5, 5, "paragraph")
-    populate_db(sus+srs, "winnow-k", 5, 3, "paragraph")
-    populate_db(sus+srs, "winnow-k", 3, 5, "paragraph")
-    populate_db(sus+srs, "winnow-k", 3, 3, "paragraph")
 
-url = "postgresql://%s:%s@%s" % (username, password, dbname)
-engine = sqlalchemy.create_engine(url)
-Base.metadata.create_all(engine)
-Session = sessionmaker(bind=engine)
 
 if __name__ == "__main__":
-    #_drop_tables()
-    #_create_tables()
     main()
-    #_test()
