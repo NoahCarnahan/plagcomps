@@ -5,6 +5,7 @@ from ..dbconstants import username
 from ..dbconstants import password
 from ..dbconstants import dbname
 from plagcomps.intrinsic.cluster import cluster
+from ..tokenization import tokenize
 
 import datetime
 import numpy.random
@@ -136,6 +137,7 @@ def evaluate(features, cluster_type, k, atom_type, docs, corpus='intrinsic', sav
     if not reduced_docs:
         reduced_docs = _get_reduced_docs(atom_type, docs, session, corpus=corpus)
     plag_likelihoods = []
+    doc_plag_assignments = {}
     
     count = 0
     for d in reduced_docs:
@@ -154,7 +156,10 @@ def evaluate(features, cluster_type, k, atom_type, docs, corpus='intrinsic', sav
             feature_vecs = weighted_vecs
 
         likelihood = cluster(cluster_type, k, feature_vecs, **clusterargs)
+        doc_plag_assignments[doc] = likelihood
         plag_likelihoods.append(likelihood)
+
+    _output_to_file(doc_plag_assignments, atom_type, cluster_type)
     
     metadata['features'] = features
     metadata['cluster_type'] = cluster_type
@@ -167,6 +172,52 @@ def evaluate(features, cluster_type, k, atom_type, docs, corpus='intrinsic', sav
     # Return reduced_docs for caching in case we call <evaluate> multiple times
     return roc_path, roc_auc, reduced_docs
     
+def _output_to_file(assignment_dict, atom_type, cluster_type):
+
+    for document in assignment_dict.keys():
+	output_file = open("plagcomps/intrinsic/TextAnalysis/" + str(time.time()) + ".txt")
+        plag_atoms = []
+        non_plag_atoms = []
+        for i in xrange(len(assignment_dict[document])):
+            if assignment_dict[document][i] == 0:
+                non_plag_atoms.append(i)
+            else:
+                plag_atoms.append(i)
+
+        reader = open(document.full_path)
+        text = reader.read()
+        reader.close()
+
+	total_atoms = len(non_plag_atoms) + len(plag_atoms)
+        atom_spans = tokenize(text, atom_type)
+
+	output_file.write("Document Name: " +  document._short_name + "\n")
+	output_file.write("Atom_Type: " + atom_type + "\n")
+	output_file.write("Cluster_Method: " + cluster_type + "\n")
+	output_file.write("Plagiarized Atoms Count: " + str(len(plag_atoms)) + "/" + str(total_atoms) + "\n")
+	output_file.write("Non-Plagiarized Atoms Count: " + str(len(non_plag_atoms)) + "/" + str(total_atoms) + "\n\n")
+	output_file.write("---"*25 + "\n")
+	output_file.write("NON-PLAGIARIZED ATOMS\n")
+	output_file.write("---"*25 + "\n")
+
+	for index in non_plag_atoms:
+		atom_text = text[atom_spans[index][0]:atom_spans[index][1]]
+		output_file.write("This is an atom: \n")
+		output_file.write(atom_text + "\n\n")
+
+	output_file.write("---"*25 + "\n")
+	output_file.write("PLAGIARIZED ATOMS\n")
+	output_file.write("---"*25 + "\n")
+
+	for index in plag_atoms:
+		atom_text = text[atom_spans[index][0]:atom_spans[index][1]]
+		output_file.write("This is an atom: \n")
+		output_file.write(atom_text + "\n\n")
+
+	output_file.write("***"*25)
+	output_file.close()
+		
+
 def compare_outlier_params(n, features=None, min_len=None):
     '''
     Tries a number of combinations of parameters for outlier classification,
@@ -202,8 +253,6 @@ def compare_outlier_params(n, features=None, min_len=None):
     for r in results:
         print r
     return results
-
-
 
 def compare_cluster_methods(feature, n, cluster_types):
     '''
@@ -411,6 +460,7 @@ class ReducedDoc(Base):
     atom_type = Column(String)
     _spans = Column(ARRAY(Integer))
     _plagiarized_spans = Column(ARRAY(Integer))
+
     # 'intrinsic' or 'extrinsic'
     corpus = Column(String)
 
