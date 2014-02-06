@@ -481,6 +481,15 @@ class ReducedDoc(Base):
             raise Exception("See note in ReducedDoc.__init__")
         else:
             return self._spans
+
+    def cheating_excludes_span(self, span):
+        overlap_amount = 0
+        for s in self._plagiarized_spans:
+            overlap_amount += BaseUtility().overlap(span, s)
+            
+        if overlap < (span[1] - span[0])/2.0 and overlap > 0:
+            return True
+        return False
     
     def span_is_plagiarized(self, span):
         '''
@@ -736,5 +745,7 @@ if __name__ == "__main__":
                  'syntactic_complexity',
                  'syntactic_complexity_average']
                  
-    feature_confidence_weights = [0.6492269039473438, 0.08020730166391861, 1.0, 0.7481609037593294, 0.00001, 0.07811654825143369, 0.272335107617069, 0.06299892339329263, 0.05524606112540992]
-    print evaluate_n_documents(features, 'combine_confidences', 2, 'paragraph', 50, feature_confidence_weights=feature_confidence_weights, first_doc_num=0, min_len=0)
+    #feature_confidence_weights = [0.6492269039473438, 0.08020730166391861, 1.0, 0.7481609037593294, 0.00001, 0.07811654825143369, 0.272335107617069, 0.06299892339329263, 0.05524606112540992]
+    #print evaluate_n_documents(features, 'combine_confidences', 2, 'paragraph', 50, feature_confidence_weights=feature_confidence_weights, first_doc_num=0, min_len=0)
+
+    print evaluate_n_documents(["evolved_feature_two"], "kmeans", 2, "paragraph", 50)
