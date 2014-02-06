@@ -11,7 +11,7 @@ from plagcomps.shared.util import IntrinsicUtility
 from ..dbconstants import username
 from ..dbconstants import password
 from ..dbconstants import dbname
-
+'''
 from pybrain.structure import FeedForwardNetwork, LinearLayer, SigmoidLayer, FullConnection, TanhLayer
 from pybrain.tools.shortcuts import buildNetwork
 from pybrain.datasets            import SupervisedDataSet
@@ -22,7 +22,7 @@ from pybrain.structure.modules   import SoftmaxLayer
 from pybrain.tools.customxml.networkwriter import NetworkWriter
 from pybrain.tools.customxml.networkreader import NetworkReader
 from pybrain.structure.modules import BiasUnit
-
+'''
 import scipy
 import sklearn
 import sklearn.metrics

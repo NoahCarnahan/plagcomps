@@ -20,7 +20,7 @@ MIN_PROB = 10**(-30)
 IMPURITY_ASSUMPTION = .2
 
 
-def density_based(stylo_vectors, center_at_mean=True, num_to_ignore=1, impurity=.2):
+def density_based(stylo_vectors, center_at_mean=True, num_to_ignore=1, impurity=.2, feature_confidence_weights=None):
     '''
     Implements the algorithm described in Stein, Lipka, Prettenhofer's
     "Intrinsic Plagiarism Analysis", Section 2.4 "Outlier Detection"
@@ -85,7 +85,7 @@ def density_based(stylo_vectors, center_at_mean=True, num_to_ignore=1, impurity=
                 cur_norm_prob = _get_norm_prob(cur_val, cur_center, cur_std)
                 if math.isnan(cur_norm_prob) or cur_norm_prob == 0.0:
                     cur_norm_prob = MIN_PROB
-                    print 'Norm prob was nan or 0: %f. Using MIN_PROB' % cur_norm_prob
+                    #print 'Norm prob was nan or 0: %f. Using MIN_PROB' % cur_norm_prob
 
                 featurewise_nonplag_prob.append(cur_norm_prob)
 

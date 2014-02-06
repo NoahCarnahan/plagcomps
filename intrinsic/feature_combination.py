@@ -6,6 +6,7 @@ from plagcomps.evaluation.intrinsic import ReducedDoc, _get_reduced_docs, run_in
 from plagcomps.intrinsic.cluster import cluster
 from plagcomps.corpus_partition.metadata import five_num_summary
 from plagcomps.intrinsic.featureextraction import FeatureExtractor
+from plagcomps.intrinsic.dashboard import run_one_trial
 
 import numpy as np
 from sklearn.linear_model import LogisticRegression
@@ -220,34 +221,38 @@ def stepwise_feature_selection(features, cluster_type, k, atom_type, n, min_len=
 
     
     '''
-    # Returns list of tuples like (AUC, feature, PDF path)
-    one_feature_results = run_individual_features(features, cluster_type, k, atom_type, n, min_len=min_len, first_doc_num=first_doc_num)
-    ranked_features = [t[1] for t in one_feature_results]
-
     # Tuple like (AUC, feature_list, PDF path)
     combination_results = []
+    remaining_features = features[:]
+    last_best_feature_set = []
 
-    for first_feat_num in xrange(len(ranked_features) - 1):
-        for last_feat_num in xrange(1, len(ranked_features)):
-            feature_set = ranked_features[first_feat_num : last_feat_num]
-            print 'Using features:', feature_set
+    while len(remaining_features) > 0:
+        # For a given round of attempting to add a new feature, keep track
+        # of the best AUC, its path, the full feature set used, and the
+        # most recently added feature (<cur_added_feature>)
+        cur_best_auc = 0
+        cur_best_path = ''
+        cur_best_feature_set = []
+        cur_added_feature = None
 
-            pdf_path, auc = evaluate_n_documents(feature_set, cluster_type, k, atom_type, n, min_len=min_len, first_doc_num=first_doc_num) 
-            combination_results.append((auc, feature_set, pdf_path))
+        for next_feat in remaining_features:
+            cand_feature_set = last_best_feature_set + [next_feat]
+            cand_path, cand_auc = run_one_trial(cand_feature_set, atom_type, cluster_type, k, first_doc_num,
+                                                       n, min_len=min_len)
 
-            print 'Current results:'
-            f = file('temp_selection_output.txt', 'wb')
-            for cur_auc, cur_feats, _ in sorted(combination_results, reverse=True):
-                print cur_auc, cur_feats
-                f.write('%f, %s\n' % (cur_auc, str(cur_feats)))
-            f.close()
-
-    combination_results.sort()
-    for auc, feats, path in combination_results:
-        print auc
-        print feats
-        print path
-        print '-'*20
+            if cand_auc > cur_best_auc:
+                cur_best_auc = cand_auc
+                cur_best_path = cand_path
+                cur_best_feature_set = cand_feature_set
+                cur_added_feature = next_feat
+            print 'One attempt:', cand_feature_set, cand_auc
+            print 'Current best:', cur_best_feature_set, cur_best_auc
+            
+        # Keep track of the best set from this round
+        last_best_feature_set = cur_best_feature_set
+        # Add the latest best feature set, move on to next round
+        print 'Added set %s with AUC %f' % (str(cur_best_feature_set), cur_best_auc)
+        combination_results.append((cur_best_auc, cur_best_path, cur_best_feature_set))
 
     return combination_results
 
@@ -256,13 +261,14 @@ def _default_stepwise_params():
 
     cluster_type = 'outlier'
     k = 2
-    atom_type = 'paragraph'
-    n = 350
+    atom_type = 'nchars'
+    n = 400
     first_doc_num = 0
     
     results = stepwise_feature_selection(features, cluster_type, k, atom_type, n, first_doc_num=first_doc_num)
     print results
+    return results
 
 
 if __name__ == '__main__':
-    _test()
+    print _default_stepwise_params()
