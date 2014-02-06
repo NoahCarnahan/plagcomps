@@ -8,6 +8,7 @@ import string
 import math
 import cPickle
 import os.path
+from itertools import groupby
 
 from nltk.corpus import cmudict
 
@@ -105,17 +106,32 @@ class FeatureExtractor:
         return feature_function_names
 
     
-    def __init__(self, text):
+    @staticmethod
+    def get_stein_paper_feature_names():
+        return [
+            'average_word_length',
+            'average_syllables_per_word',
+            'flesch_kincaid_grade',
+            'gunning_fog_index',
+            'honore_r_measure',
+            'yule_k_characteristic',
+            # Unclear whether paper uses internal or external
+            'avg_external_word_freq_class'
+        ]
+
+    def __init__(self, text, char_span_length=5000):
         self.text = text
         self.word_spans = tokenization.tokenize(text, "word")
         self.sentence_spans = tokenization.tokenize(text, "sentence")
         self.paragraph_spans = tokenization.tokenize(text, "paragraph")
+        self.nchar_spans = tokenization.tokenize(text, "nchars", char_span_length)
     
         self.features = {}
 
         self._cmud = None # initialized by self._syl()
         self.pos_tags = None
         self.pos_tagged = False
+        self.lancaster_stemmer = None
 
         #TODO evaluate whether we want to keep this?
         self.pos_frequency_count_table_initialized = False
@@ -127,6 +143,8 @@ class FeatureExtractor:
             return self.sentence_spans
         elif atom_type == "paragraph":
             return self.paragraph_spans
+        elif atom_type == "nchars":
+            return self.nchar_spans
         else:
             raise ValueError("Invalid atom_type")
     
@@ -538,7 +556,119 @@ class FeatureExtractor:
     
         x = square_sum - 2 * u * (sum_x[char_end] - sum_x[char_start]) + (char_end - char_start) * u * u
         return math.sqrt(x / float(char_end - char_start))
+
+    def _init_lancaster_stemmer(self):
+        '''
+        Initialize the sum table for yule's K characteristic
+        '''
+        from nltk.stem.lancaster import LancasterStemmer
+        self.lancaster_stemmer = LancasterStemmer()
+
+    def yule_k_characteristic(self, sent_spans_index_start, sent_spans_index_end):
+        '''
+        query the yule k characteristic
+        '''
+        # TODO figure out a way to make this constant time?
+        # right now we are very slow
+
+        if not self.lancaster_stemmer:
+            self._init_lancaster_stemmer()
     
+        spans = self.sentence_spans[sent_spans_index_start:sent_spans_index_end]
+        start, end = spans[0][0], spans[-1][1]
+        text = self.text[start:end]
+
+        freqs = {}
+        tokens = tokenization.tokenize(text, 'word', return_spans=False)
+        for token in tokens:
+            stem = self.lancaster_stemmer.stem(token.strip())
+            freqs[stem] = freqs.get(stem, 0) + 1
+
+        # Do Yule's calculations
+        M1 = float(len(freqs))
+        M2 = sum([len(list(g)) * (freq ** 2) for freq, g in groupby(sorted(freqs.values()))])
+
+        return 10000 * (M2 - M1) / max(1, (M1 ** 2))
+
+    def evolved_feature_one(self, sent_spans_index_start, sent_spans_index_end):
+        '''
+        (((((1.5*D)-Y)-(-12.0**10.0))+(((L+10.0)+10.0)+10.0))*(10.0*(((1.5+P)**(-12.0-H))-((X*-12.0)+-1.0))))
+        where D = avg_internal_word_freq_class; H = honore_r_measure; L = syntactic_complexity;
+        P = pos_trigram,NN,NN,VB; X = pos_trigram,NN,NN,NN; Y = pos_trigram,NN,IN,DT
+        '''
+
+        start = self.sentence_spans[sent_spans_index_start][0]
+        if sent_spans_index_end >= len(self.sentence_spans):
+            end = self.sentence_spans[-1][1]
+        else:
+            end = self.sentence_spans[sent_spans_index_end][1]
+    
+        D, H, L, P, X, Y = self._get_feature_vector(["avg_internal_word_freq_class", "honore_r_measure", "syntactic_complexity",
+                        "pos_trigram,NN,NN,VB", "pos_trigram,NN,NN,NN", "pos_trigram,NN,IN,DT"], start, end)
+    
+        return (((((1.5*D)-Y)-(-12.0**10.0))+(((L+10.0)+10.0)+10.0))*(10.0*(((1.5+P)**(-12.0-H))-((X*-12.0)+-1.0))))
+
+    def _init_num_complex_words(self):
+        '''
+        init sum table of number of complex words (3+ syllables)
+        '''
+
+        sum_table = [0]
+        for start, end in self.word_spans:
+            num = sum_table[-1]
+            num_syl = self._syl(start, end)
+            if num_syl > 2:
+                num += 1
+            sum_table.append(num)
+
+        self.features["num_complex_words"] = sum_table
+    
+    def gunning_fog_index(self, sent_spans_index_start, sent_spans_index_end):
+        '''
+        A measure of sentence complexity
+        definition off http://en.wikipedia.org/wiki/Gunning_fog_index
+        '''
+
+        average_sentence_length = self.average_sentence_length(sent_spans_index_start, sent_spans_index_end)
+ 
+        spans = self.sentence_spans[sent_spans_index_start:sent_spans_index_end]
+        start, end = spans[0][0], spans[-1][1]
+        word_start, word_end = spanutils.slice(self.word_spans, start, end, True)
+
+        if "num_complex_words" not in self.features:
+            self._init_num_complex_words()
+        complex_words_table = self.features["num_complex_words"]
+        percent_complex_words = (complex_words_table[word_end] - complex_words_table[word_start]) / float(max(1, word_end - word_start))
+
+        return .4 * (average_sentence_length + 100 * percent_complex_words)
+
+    def honore_r_measure(self, sent_spans_index_start, sent_spans_index_end):
+        '''
+        R = 100 logN / (1 - V_1 / V)
+        where V_1 = # words appearing only once, V = total vocab size,
+        N = number of words
+        '''
+        if not self.lancaster_stemmer:
+            self._init_lancaster_stemmer()
+
+        spans = self.sentence_spans[sent_spans_index_start:sent_spans_index_end]
+        start, end = spans[0][0], spans[-1][1]
+        word_start, word_end = spanutils.slice(self.word_spans, start, end, True)
+
+        words = {}
+        for start, end in self.word_spans[word_start:word_end]:
+            word = self.lancaster_stemmer.stem(self.text[start:end])
+            if word in words:
+                words[word] = 0
+            else:
+                words[word] = 1
+
+        V = float(len(words)) + 1
+        V1 = float(sum(words.values()))
+        N = word_end - word_start
+
+        return 100 * math.log(N) / (1 - (V1 / V))
+
     def _init_average_syllables_per_word(self):
         '''
         Initializes the average syllables sum table. sum_table[i] is the sum of the number
@@ -703,26 +833,38 @@ class FeatureExtractor:
         if not self.pos_frequency_count_table_initialized:
             self._init_pos_frequency_table()
         #print "querying syntactic complexity of", word_spans_index_start, "to", word_spans_index_end    
-        conjunctions_table = self.pos_frequency_count_table.get("SUB", None)
-        if conjunctions_table != None:
-            #print "conjunctions", conjunctions_table[word_spans_index_start:word_spans_index_end+1]
-            num_conjunctions = conjunctions_table[word_spans_index_end] - conjunctions_table[word_spans_index_start]
-        else:
-            num_conjunctions = 0
 
-        wh_table = self.pos_frequency_count_table.get("WH", None)
-        if wh_table != None:
-            #print "wh", wh_table[word_spans_index_start:word_spans_index_end+1]
-            num_wh_pronouns = wh_table[word_spans_index_end] - wh_table[word_spans_index_start]
-        else:
-            num_wh_pronouns = 0
+        try:
 
-        verb_table = self.pos_frequency_count_table.get("VERBS", None)
-        if verb_table != None:
-            #print "verbs", verb_table[word_spans_index_start:word_spans_index_end+1]
-            num_verb_forms = verb_table[word_spans_index_end] - verb_table[word_spans_index_start]
-        else:
-            num_verb_forms = 0
+            conjunctions_table = self.pos_frequency_count_table.get("SUB", None)
+            if conjunctions_table != None:
+                #print "conjunctions", conjunctions_table[word_spans_index_start:word_spans_index_end+1]
+                num_conjunctions = conjunctions_table[word_spans_index_end] - conjunctions_table[word_spans_index_start]
+            else:
+                num_conjunctions = 0
+
+            wh_table = self.pos_frequency_count_table.get("WH", None)
+            if wh_table != None:
+                #print "wh", wh_table[word_spans_index_start:word_spans_index_end+1]
+                num_wh_pronouns = wh_table[word_spans_index_end] - wh_table[word_spans_index_start]
+            else:
+                num_wh_pronouns = 0
+
+            verb_table = self.pos_frequency_count_table.get("VERBS", None)
+            if verb_table != None:
+                #print "verbs", verb_table[word_spans_index_start:word_spans_index_end+1]
+                num_verb_forms = verb_table[word_spans_index_end] - verb_table[word_spans_index_start]
+            else:
+                num_verb_forms = 0
+
+        except IndexError:
+            with open("SyntacticCompliexityError.txt", "w") as error_file:
+                error_file.write(str(self.text[self.word_spans[word_spans_index_start][0]:]))
+                error_file.write("-------")
+                error_file.write(self.word_spans[word_spans_index_start:])
+                error_file.write("-------")
+                error_file.write(self.pos_frequency_count_table)
+            raise IndexError("There appears to be an indexing problem with POS tags! Alert Zach!")
         
         return 2 * num_conjunctions + 2 * num_wh_pronouns + num_verb_forms
 
@@ -1037,6 +1179,33 @@ def _test():
         print "vowelness_trigram,C,V,C test passed"
     else:
         print "vowelness_trigram,C,V,C test FAILED"
+
+    f = FeatureExtractor("The mad hatter likes tea and the red queen hates alice. Images of the Mandelbrot set display an elaborate boundary that reveals progressively ever-finer recursive detail at increasing magnifications. The style of this repeating detail depends on the region of the set being examined. The set's boundary also incorporates smaller versions of the main shape, so the fractal property of self-similarity applies to the entire set, and not just to its parts.")
+    #print "yule_k_characteristic", f.get_feature_vectors(["yule_k_characteristic"], "paragraph")
+    vectors =  f.get_feature_vectors(["yule_k_characteristic"], "paragraph")
+    if [round(x[0], 4) for x in vectors] == [555.3578]:
+        print "yule_k_characteristic test passed"
+    else:
+        print "yule_k_characteristic test FAILED"
+
+    f = FeatureExtractor("The mad hatter likes tea and the red queen hates alice. Images of the Mandelbrot set display an elaborate boundary that reveals progressively ever-finer recursive detail at increasing magnifications. The style of this repeating detail depends on the region of the set being examined. The set's boundary also incorporates smaller versions of the main shape, so the fractal property of self-similarity applies to the entire set, and not just to its parts.")
+    #print f.get_feature_vectors(["gunning_fog_index"], "sentence")
+    vectors =  f.get_feature_vectors(["gunning_fog_index"], "sentence")
+    if [round(x[0], 4) for x in vectors] == [4.4, 20.5333, 11.3333, 17.5613]:
+        print "gunning_fog_index test passed"
+    else:
+        print "gunning_fog_index test FAILED"
+
+    f = FeatureExtractor("The mad hatter likes tea and the red queen hates alice. Images of the Mandelbrot set display an elaborate boundary that reveals progressively ever-finer recursive detail at increasing magnifications. The style of this repeating detail depends on the region of the set being examined. The set's boundary also incorporates smaller versions of the main shape, so the fractal property of self-similarity applies to the entire set, and not just to its parts.")
+    #print "honore_r_measure", f.get_feature_vectors(["honore_r_measure"], "paragraph")
+    vectors =  f.get_feature_vectors(["honore_r_measure"], "paragraph")
+    if [round(x[0], 4) for x in vectors] == [2331.4436]:
+        print "honore_r_measure test passed"
+    else:
+        print "honore_r_measure test FAILED"
     
 if __name__ == "__main__":
-    _test()
+    #_test()
+
+    f = FeatureExtractor("The mad hatter likes tea and the red queen hates alice. Images of the Mandelbrot set display an elaborate boundary that reveals progressively ever-finer recursive detail at increasing magnifications. The style of this repeating detail depends on the region of the set being examined. The set's boundary also incorporates smaller versions of the main shape, so the fractal property of self-similarity applies to the entire set, and not just to its parts.")
+    print f.get_feature_vectors(["evolved_feature_one"], "sentence")
