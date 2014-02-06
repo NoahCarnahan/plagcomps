@@ -1,0 +1,151 @@
+Document Name: /part3/suspicious-document05340.txt
+Atom_Type: paragraph
+Cluster_Method: kmeans
+Plagiarized Atoms Count: 0/23
+Non-Plagiarized Atoms Count: 23/23
+
+---------------------------------------------------------------------------
+NON-PLAGIARIZED ATOMS
+---------------------------------------------------------------------------
+This is an atom: 
+﻿"You shall give me one thing though, if you will, sweet lady, that I may think of you often,
+and have something to remind me of you; nay, you shall give me two things--one is a lock of
+your soft brown hair, the other is a kiss."
+
+This is an atom: 
+Agatha undid the braid which held up her rich tresses, and severing from her head a lock of
+the full length to which her hair grew, tied it in a portion of the braid, and put it into
+the old woman's hand; then she stooped down and kissed her skinny lips, and having blessed
+her, and bid her cherish the memory of her son with a holy love, as she herself did and always
+would, Agatha. Larochejaquelin left the cabin, and returned to her father.
+
+This is an atom: 
+CHAPTER VIII
+
+This is an atom: 
+"WHAT GOOD HAS THE WAR DONE?"
+
+This is an atom: 
+The raft which Chapeau had made was by degrees enlarged and improved, and the great mass of
+the Vendeans passed the river slowly, but safely. As soon as the bulk of the people was over,
+Henri Larochejaquelin left the southern shore, and crossed over to marshal the heterogeneous
+troops on their route towards Laval, leaving Chapeau and Arthur Mondyon to superintend and
+complete the transit of those who remained.
+
+This is an atom: 
+It was a beautiful October evening, and as the sun was setting, the two were standing close
+to the edge of the water, congratulating themselves that their dirty and disagreeable toil
+was well nigh over. From time to time stragglers were still coming down to the river-side,
+begging for a passage, and imploring that they might not be abandoned to the cruelty of the
+blues, and as they came they were shipped off on the raft. There were now, however, no more
+than would make one fair load, and Chapeau and Arthur were determined that it was full time
+for them both to leave the Anjou side of the river, and follow the main body of the army towards
+Laval.
+
+This is an atom: 
+"We might remain here for ever, Chapeau, if we stayed for the very last of all," said the Chevalier,
+as he jumped on the raft. "Come, man, get on, we've our number now, and we couldn't take more,
+if they come. There's some one hallooing up there, and we'll leave the little boat for them.
+Come, I want to get over and have a run on dry land, for I'm as cold as a stone. This living
+like a duck, half in the water and half out, don't suit me at all. The next river we cross
+over, I'll make Henri get another ferryman."
+
+This is an atom: 
+Chapeau still lingered on the shore, and putting his hand up to his ear, listened to the voice
+of some one who was calling from a distance. It was too dark for him to distinguish any one,
+but the voice of a woman hallooing loudly, but with difficulty, as though she were out of breath
+with running, was plainly audible.
+
+This is an atom: 
+"If you mean to wait here all night, I don't," said the Chevalier, "so good night to you, and
+if you don't get on, I'll push off without you."
+
+This is an atom: 
+"Stop a moment, M. Arthur, there's a woman there."
+
+This is an atom: 
+"I've no doubt there is--there are fifty women there--fifty hundred women, I dare say; but
+we can't wait while they all drop in one by one. Don't be a fool, Jacques; is not there the
+small boat left for them?"
+
+This is an atom: 
+Chapeau still listened. "Stop a moment, M. Arthur, for heaven's sake stop one moment," and
+then jumping on to the raft, he clung hold of the rope, and moored it fast to the shore. "They're
+friends of my own, M. Arthur; most particular friends, or I wouldn't ask to keep you. Don't
+go now; after all we've gone through together, you won't leave my friends behind, if I go on
+shore, will you, M. Arthur?"
+
+This is an atom: 
+"Oh, I'm a good comrade; if they're private friends, I'll wait all night. Only I hope there
+ain't a great many of them."
+
+This is an atom: 
+"Only two; I think there are only two," and Chapeau once more jumped on shore, and ran to meet
+his friends. He had not far to go, for the party was now close to the water's edge. As he had
+supposed, it consisted only of two, an old man and a girl: Michael Stein and his daughter Annot.
+Annot had been running; and dragging her father by the hand, had hallooed with all her breath,
+for she had heard from some of those who still dared to trust themselves to the blues, that
+the last boat was on the point of leaving the shore. The old man had disdained to halloo, and
+had almost disdained to run; but he had suffered himself to be hurried into a shambling kind
+of gait, and when he was met by Chapeau, he was almost as much out of breath as his daughter.
+
+This is an atom: 
+"Oh, oh! for mercy's sake--for heaven's sake--kind Sir, dear Sir," sobbed Annot, as she saw
+a man approaching her; and then when he was near enough to her to be distinguished through
+the evening gloom, she exclaimed:
+
+This is an atom: 
+"Mercy on us, mercy on us, its Jacques Chapeau!" and sank to the ground, as though she had
+no further power to take care of herself now that she had found one who was bound to take care
+of her.
+
+This is an atom: 
+"You're just in time, Michael Stein; thank God, you're just in time! Annot, come on, its only
+a dozen yards to the raft, and we'll be off at once. Well, this is the luckiest chance: come
+on, before a whole crowd are down upon us, and swamp us all."
+
+This is an atom: 
+"Oh me! oh me!" sobbed Annot, still sitting on the ground, as though she had not the slightest
+intention of stirring another step that night: "to be left and deserted in this way by one's
+friends--and one's brothers--and--and--one's--" she didn't finish the list, for she felt sure
+that she had said enough to cut Chapeau to the inmost heart, if he still had a heart.
+
+This is an atom: 
+"Come, dearest girl, come; I'll explain it all by-and-bye. We have not a moment to spare. Come,
+I'll lift you," and he stooped to raise her from the ground.
+
+This is an atom: 
+"Thank you, M. Chapeau, thank you, Sir; but pray leave me. I shall be better tomorrow morning;
+that is, if I'm not dead, or killed, or worse. The blues are close behind us; ain't they, father?"
+
+This is an atom: 
+"Get up, Annot; get up, thou little fool, and don't trouble the man to carry thee," said Michael.
+"If there be still a boat to take us, in God's name let us cross the river; for the blues are
+truly in St. Florent, and after flying from them so far, it would be sore ill luck to be taken
+now."
+
+This is an atom: 
+Chapeau, however, would not leave her to herself, but took her up bodily in his arms, and carrying
+her down to the water's edge, put her on the raft. He and Michael soon followed, and the frail
+vessel was hauled for the last time over into the island. The news that the enemy was already
+in St. Florent soon passed from month to mouth, and each wretched emigrant congratulated himself
+in silence that he had so far escaped from republican revenge. Many of them had still to sojourn
+on the island for the night, but there they were comparatively safe; and Arthur, Chapeau, and
+his friends, succeeded in gaining the opposite shore.
+
+This is an atom: 
+Poor Annot was truly in a bad state. When they heard that the ladies had left Chatillon, she
+and. her father, and, indeed, all the inhabitants of Echanbroignes, felt that they could no
+longer be safe in the village; and they had started off to follow the royalist army on foot
+through the country. From place to place they had heard tidings, sometimes of one party, and
+sometimes of another. The old man had borne the fatigue and dangers of the journey well; for,
+though now old, he had been a hard-working man all his life, and was tough and seasoned in
+his old age; but poor Annot had suffered dreadfully. The clothes she had brought with her were
+nearly falling off her back; her feet were all but bare, and were cut and blistered with walking.
+Grief and despair had taken the colour and roundness from her cheek, and she had lacked time
+on her mournful journey to comb the pretty locks of which she was generally so proud.
+
+---------------------------------------------------------------------------
+PLAGIARIZED ATOMS
+---------------------------------------------------------------------------
+***************************************************************************

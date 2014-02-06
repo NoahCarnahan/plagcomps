@@ -1,0 +1,1958 @@
+Document Name: /part1/suspicious-document01256.txt
+Atom_Type: paragraph
+Cluster_Method: kmeans
+Plagiarized Atoms Count: 0/400
+Non-Plagiarized Atoms Count: 400/400
+
+---------------------------------------------------------------------------
+NON-PLAGIARIZED ATOMS
+---------------------------------------------------------------------------
+This is an atom: 
+﻿"
+
+This is an atom: 
+Then he told Lane of his encounter with Jabe.
+
+This is an atom: 
+"Now," continued he, "I'll tell you why I've been up into the woods
+every afternoon with that sweater of rockweed. I made it into a tight
+bundle and hung it on a springy limb to use for a punching-bag. It
+wasn't very ornamental, but it served the purpose. I've been training
+for this fight ever since the Fourth; had a feeling I'd get another
+chance at him. It's over now, and I hope everybody's satisfied. I am, at
+any rate."
+
+This is an atom: 
+"So that's the reason of your daily pilgrimages," laughed Lane. "You
+certainly have been faithful enough to deserve to win. But what if you'd
+never run across Jabe again? Wouldn't you have felt that you'd thrown
+away your time?"
+
+This is an atom: 
+"Not a bit of it! That bout every afternoon has kept me in first-class
+shape. But now the great event has come off, I'm going to break training
+and give the rockweed a rest."
+
+This is an atom: 
+The _Barracouta_ was back at Tarpaulin before three o'clock. A remark
+dropped by Budge roused the curiosity of the others, and Percy was
+obliged once more to recount the story of his fight with Jabe.
+
+This is an atom: 
+"Well," said Jim, when he had finished, "they say a patient waiter is no
+loser; but I guess it depends a good deal on how you spend your time
+while you're waiting--eh, Perce?"
+
+This is an atom: 
+That night, after dark, when the boys were preparing to turn in, Filippo
+stepped out to the fish-house for some kindling. He came back on the
+run.
+
+This is an atom: 
+"_Fuoco!_" he panted.
+
+This is an atom: 
+The others trooped out hastily. On the southern horizon flamed a ruddy
+light. Spurling gave a cry of alarm.
+
+This is an atom: 
+"Boys, it's a vessel on fire!"
+
+This is an atom: 
+XXI
+
+This is an atom: 
+OLD FRIENDS
+
+This is an atom: 
+Touched by the live wire of human sympathy, Camp Spurling came wide
+awake in an instant. Out there, four miles to the south, men were
+perhaps battling for their lives. Jim issued his orders like bullets.
+
+This is an atom: 
+"Come on, boys! We'll take the _Barracouta_. Fetch a five-gallon can of
+gas from the fish-house, Perce! Budge and Throppy, launch that dory!"
+
+This is an atom: 
+Dashing into the cabin, he quickly reappeared.
+
+This is an atom: 
+"Thought I'd better get one of those first-aid packets! Somebody may be
+burnt bad. Now, fellows! Lively!"
+
+This is an atom: 
+The dory was barely afloat when Percy came staggering down the beach
+with the heavy can. Spurling swung it aboard, and all but Filippo jumped
+in.
+
+This is an atom: 
+"Start your fire again!" shouted back Jim to the Italian. "Make some
+coffee! And be sure to have plenty of hot water! We may need it."
+
+This is an atom: 
+Soon the sloop was under way and heading out of the cove.
+
+This is an atom: 
+"Lucky you thought of that fresh can of gas, Jim," said Budge. "The
+tank's pretty near empty. We'd have been in a nice fix if the engine had
+stopped about a mile south of the island."
+
+This is an atom: 
+"Take the tiller, Perce!" ordered Spurling.
+
+This is an atom: 
+Vaulting up out of the standing-room, he grasped the port shroud and
+fastened his eyes on the fiercely blazing vessel. The flames had run up
+her masts and rigging, and she stood out a lurid silhouette against the
+black horizon. It was evident that she was doomed.
+
+This is an atom: 
+"She's gone!" was Jim's comment as he dropped back into the
+standing-room. "Hope her crew got off all right. There isn't much we can
+do to help; but at any rate we ought to go out and tow in her boats."
+
+This is an atom: 
+"What is she? Fisherman?" asked Throppy.
+
+This is an atom: 
+"Most likely! And not a very big one. Shouldn't wonder if she'd had a
+gas explosion in her cabin; I've heard of a good many such cases. Hope
+nobody's been burnt bad!"
+
+This is an atom: 
+There were a few minutes of silence as they gazed on the spectacle of
+destruction. The _Barracouta_, driven to her utmost, steadily lessened
+the distance. Brighter and larger grew the fire; every detail on the
+fated craft stood sharply out against the pitchy background.
+
+This is an atom: 
+"Here come two boats!" exclaimed Lane.
+
+This is an atom: 
+Sure enough, they were clearly visible, more than two miles off, rising
+and falling on the swell, their oars flashing in the light from the
+conflagration. The crew had abandoned the hopeless fight and were saving
+themselves.
+
+This is an atom: 
+"Keep her straight for 'em, Perce!" directed Jim.
+
+This is an atom: 
+Whittington obeyed. Soon the _Barracouta_ was within hailing distance of
+the dories. In the now diminishing light from the distant fire the boys
+could see that both were crowded with dark figures.
+
+This is an atom: 
+"Must be at least twenty-five aboard the two," commented Stevens.
+
+This is an atom: 
+"Yes," returned Spurling. "These fishermen carry big crews. Ahoy there!
+What's the name of your vessel?"
+
+This is an atom: 
+"The _Clementine Briggs_, of Gloucester," replied a man in the bow of
+the foremost dory. "Running in to Boothbay from Cashe's with a load of
+herring. The gas exploded and set her on fire. We tried to put it out,
+but it was no use. Just got clear with our lives and what we stood in."
+
+This is an atom: 
+"Anybody hurt?"
+
+This is an atom: 
+"Couple of men got their faces burnt, but not very bad. Lucky it was no
+worse. But the old schooner's gone. Pretty tough on Captain Sykes, here,
+for he owned most of her and didn't have much insurance. Fisherman's
+luck!"
+
+This is an atom: 
+"Want a tow in to the island?"
+
+This is an atom: 
+"Sure!"
+
+This is an atom: 
+"Well, toss us your painter, and tell the other boat to make fast to
+your stern."
+
+This is an atom: 
+In a very short time the _Barracouta_ was headed back for Tarpaulin,
+with the two heavily loaded dories trailing behind her. Delayed by her
+tow, she moved considerably slower than when coming out. A strange
+silence hung over the two dories. For fishermen, their crews were
+unusually quiet, sobered, evidently, by the catastrophe that had
+overtaken their schooner.
+
+This is an atom: 
+"Wouldn't those men who were burnt like to come aboard the sloop?"
+inquired Spurling. "Perhaps I can give 'em first aid."
+
+This is an atom: 
+"No," returned the spokesman. "One of 'em's Captain Sykes, here in this
+dory with the handkerchief over his face. He isn't suffering much, but
+his cheeks got scorched, so I'm talking for him. The other man is in the
+next boat. The only thing for 'em to do is to grin and bear it; but just
+now they're not grinning much, 'specially the captain."
+
+This is an atom: 
+Silence again. The sullen, red blaze on the distant vessel was dying
+down against the horizon. The flames had stripped her to a skeleton. Her
+hempen running rigging had been consumed; sails, gaffs, and booms lay
+smoldering on her decks; above the hull only her masts and bowsprit were
+outlined in fire against the blackness behind.
+
+This is an atom: 
+Lacking anything better to do, Jim began counting the men in the dories.
+He made thirteen in each. Most of them sat like graven images, neither
+speaking nor stirring. They had not even turned their heads to look at
+the perishing schooner. He could not understand such indifference to the
+fate of the craft that had been their home.
+
+This is an atom: 
+Sprowl's Cove was right ahead. Filippo opened the cabin door and stood
+framed within it, the light behind him casting a cheery glow down the
+beach. Louder and louder the bank behind the lagoon flung back the
+staccato of the exhaust. Presently the sloop nosed into the haven, the
+engine stopped, and Throppy went forward to gaff the mooring.
+
+This is an atom: 
+The dories were cast off and rowed to the beach. By the time the boys
+got ashore all the men had landed. Jim, who had been watching them
+quietly, noted that most of them disembarked clumsily, more like
+landlubbers than sailors. They separated into two groups of very unequal
+size. One, numbering six, including the men with handkerchiefs over
+their burnt faces, withdrew from the others and began to talk in low
+tones, with earnest, excited gestures. The remaining twenty clotted
+loosely together, awkward and ill at ease, still preserving their
+mysterious silence.
+
+This is an atom: 
+Before Jim had time to offer his unexpected guests anything to eat or
+drink, Filippo bustled hospitably down the beach to the larger group.
+
+This is an atom: 
+"Will you have _caffè_? It is hot and _eccellente_."
+
+This is an atom: 
+They stared at him without replying. By the light from the open door Jim
+could see that they were dressed like landsmen and that their clothes
+did not fit well. Their faces were darkish, they had flat noses, and
+their close-cropped hair was straight and black.
+
+This is an atom: 
+Before Filippo could repeat his question a man from the smaller group
+hurried up and pushed himself abruptly between the silent score and
+their questioner.
+
+This is an atom: 
+"No!" said he, brusquely. "We don't want anything. We had supper just
+before the fire."
+
+This is an atom: 
+His tone and attitude forbade further questioning. Filippo, abashed by
+the rebuff, returned rather shamefacedly to the cabin. The speaker
+remained with the group, as if to protect them from further approaches.
+To Jim his attitude seemed to be almost that of a guard. It deepened the
+mystery that already hung about the party.
+
+This is an atom: 
+It was now past eight o'clock, and naturally some provision would soon
+have to be made for passing the night. Jim pondered. Twenty-six guests
+would prove a severe tax on their already cramped accommodations.
+Still, the thing could be arranged; it must be. The smaller group of six
+could be taken into the camp. Six of the silent twenty could be stowed
+away aboard the sloop; while the remaining fourteen must make what shift
+they could in the fish-house. Jim proposed this plan to the sentinel.
+
+This is an atom: 
+The man disapproved flatly.
+
+This is an atom: 
+"No!" was his decided reply. "We've got to get away to-night."
+
+This is an atom: 
+"To-night?" echoed Jim in amazement. "Why, man alive, you can't do that!
+It's fifteen miles to Matinicus, and you're loaded so deep it'd take you
+almost until morning to row there. And even if you made it all right,
+you wouldn't gain anything, for the boat for Rockland doesn't leave
+until the first of the afternoon. Besides, this wind's liable to blow up
+a storm. Of course you could row ten miles north to Head Harbor on Isle
+au Haut, walk up the island, and catch the morning boat for Stonington;
+but you'd have to pull most of the way against the ebb, and when this
+wind gets a little stronger it's going to be pretty choppy. _I_ wouldn't
+want to risk it. Better stop with us to-night and let us make you as
+comfortable as we can; and to-morrow you can start for any place you
+please."
+
+This is an atom: 
+The man shook his head stubbornly.
+
+This is an atom: 
+"How far is it to the mainland?" he asked.
+
+This is an atom: 
+Jim could hardly believe his ears.
+
+This is an atom: 
+"The mainland!" he exclaimed. "A good twenty-five miles."
+
+This is an atom: 
+"Well, we've got to be there before morning."
+
+This is an atom: 
+"You're crazy, man! Twenty-five miles across these waters in the night,
+with thirteen men in each dory! You'd never make it in the world. You
+can't do it."
+
+This is an atom: 
+"Well, maybe we can't," retorted the other, impatiently, "but we're
+going to. There's more ways to kill a cat than by choking her to death
+with cream."
+
+This is an atom: 
+He walked back to the smaller group, and soon they were in heated, but
+indistinct, argument. Jim noted that the men with handkerchiefs over
+their faces seemed now to have no difficulty in bearing their share of
+the conversation. Captain Sykes, in especial, was almost violent in his
+gestures.
+
+This is an atom: 
+Presently they seemed to have reached an agreement. The spokesman walked
+back to Jim and came directly to the point.
+
+This is an atom: 
+It was evoked, during the discussion, that the published despatch of Lord
+Palmerston did not contain certain words used by the noble foreign
+secretary, which gave to the ambassador a discretion as to the
+propriety of making the communication dependent upon the tone of
+public opinion in Spain, and the nature of events.
+
+This is an atom: 
+It was generally considered by the lords, that any indiscretion
+which had taken place was at the embassy in Madrid, and not in the
+Foreign-office.
+
+This is an atom: 
+The ambassador at the court of Madrid had been appointed by the Earl
+of Aberdeen, whose management of the Foreign-office was in every direction
+disastrous. The Peel foreign policy required men of a certain stamp,
+whose agency little suited the policy or character of Lord
+Palmerston's foreign-office administration.
+
+This is an atom: 
+Mr. Bankes withdrew his motion, and Mr. Urquhart was clamoured down in a
+subsequent attempt to address the house upon the subject.
+
+This is an atom: 
+That gentleman seized every opportunity, in and out of the house,
+to vituperate Lord Palmerston, and persisted in reiterating as
+facts, fallacies which had been many times exposed.
+
+This is an atom: 
+The house and the country became utterly weary of his absurd
+harangues, hence the extraordinary ebullition of feeling among
+honourable members on that occasion.
+
+This is an atom: 
+CLOSE OF THE SESSION.
+
+This is an atom: 
+On the 30th of August, Mr. Disraeli reviewed the labours of the session
+after the manner so effectively observed by Lord Lyndhurst in the other
+house. The oration was ingenious, and eloquently amusing; it entertained
+honourable members very much, but it neither instructed nor edified
+the commons or the country.
+
+This is an atom: 
+Some curiosity was entertained as to how he would notice the measure
+for removing Jewish disabilities; he declared that he "personally
+approved of that measure, but condemned the policy of government
+in bringing it forward without the hope of carrying it, for by that
+means the cause lost ground."
+
+This is an atom: 
+This was mere pretence on the part of the honourable and rhetorical leader
+of the opposition; he knew well that, assured of the support of
+the commons, the government acted justly to the country and to those
+aggrieved by bringing the measure through the lower house, and
+throwing the responsibility of rejecting it upon the lords.
+
+This is an atom: 
+Besides, the election of Baron Rothschild for the city of London constrained
+the government to adopt some course, and that which they chose was the
+most dignified and constitutional. Mr.
+
+This is an atom: 
+Hume made some able strictures on the speech of "the reviewer of
+the session," and Lord John Russell replied to it at length with
+skill and dignity.
+
+This is an atom: 
+Nevertheless, the brilliant periods of "the oriental orator" had
+their effect on both sides of the house; and Mr.
+
+This is an atom: 
+Disraeli was on the whole a more popular man, so far as admiration
+of his genius was concerned.
+
+This is an atom: 
+Thus were the exclusion laws of the United States set at naught.
+
+This is an atom: 
+The destruction of the schooner had made it necessary for her passengers
+to be landed somewhere as secretly and as quickly as possible. Twenty
+men at three hundred dollars a head meant six thousand dollars. That
+explained the anxiety of the six white men to reach the mainland that
+night. They were criminals, breaking their country's laws for money.
+
+This is an atom: 
+Jim decided that they should never make use of the _Barracouta_.
+
+This is an atom: 
+The spokesman dropped his conciliatory mask and turned away defiantly.
+
+This is an atom: 
+"All right, young fellow! You've had your say; now we'll have ours."
+
+This is an atom: 
+"Throppy," said Jim in a low tone to Stevens, who was standing with Lane
+beside him, "these men are smugglers. Call the cutter!"
+
+This is an atom: 
+He had time for nothing more. As Stevens slipped quietly back into the
+cabin there was an angry outburst among the group on the beach.
+
+This is an atom: 
+"I've done my best, Cap," protested a voice. "He won't listen to reason.
+Now take that rag off your face and handle this thing yourself. It's up
+to you."
+
+This is an atom: 
+There was a sudden rush of enraged men toward Lane and Spurling. As they
+came, two wrenched the handkerchiefs from their faces, revealing to the
+astounded boys the features of the would-be sheep-thieves of the first
+of the summer, Dolph and Captain Bart Brittler!
+
+This is an atom: 
+The latter was white with rage. His voice rose almost to a screech.
+
+This is an atom: 
+"No more fooling! We need that sloop and we're going to have her! Will
+you sell her?"
+
+This is an atom: 
+"No."
+
+This is an atom: 
+"Then we'll take her!"
+
+This is an atom: 
+Brittler's hand shot into his pocket as if for a revolver.
+
+This is an atom: 
+"Stop there, Cap!" warned Dolph's voice. "No gun-play! 'Tisn't
+necessary. We can handle 'em."
+
+This is an atom: 
+He flung himself suddenly on Spurling; another man leaped upon Lane.
+Though taken completely by surprise and almost hurled backward, Jim
+quickly recovered his balance. A sledge-hammer blow from Dolph's fist
+grazed his jaw as he sprang aside. He returned it with interest, his
+right going true to its mark; down went Dolph, as if hit by a
+pile-driver. He lay for a moment, stunned.
+
+This is an atom: 
+Strong and active though Jim was, he could not bear the brunt of the
+entire battle. Lane's assailant had proved too much for him; they were
+struggling together on the gravel, the older man on top. Percy and
+Filippo came running; but their aid counted for little. A stocky
+smuggler turned toward them. A single blow from his fist sent the
+Italian reeling. Percy lasted longer; but his skill was no match for the
+brute strength of his foe. His lighter blows only stung his
+antagonist to fiercer efforts. Little by little the boy's strength
+failed and his breath came harder. He slipped on a smooth stone; with a
+sudden rush his foe pinioned his arms and held him struggling.
+
+This is an atom: 
+[Illustration: "WE NEED THAT SLOOP AND WE'RE GOING TO HAVE HER!"]
+
+This is an atom: 
+Dolph recovered, staggered to his feet, and entered the fray again. It
+was four to one against Jim; he fought manfully, but it was no use.
+Presently he lay flat on his back on the gravel, bruised and panting,
+one man kneeling on each arm, and a third on his chest.
+
+This is an atom: 
+"Take him up to the camp, boys!" puffed Brittler.
+
+This is an atom: 
+The doughty captain had not escaped unscathed. A swollen black eye and a
+bleeding nose bore eloquent testimony to the force and accuracy of Jim's
+blows. A guard on each side and another behind were soon propelling
+Spurling toward the open door. From within came the ceaseless click of a
+telegraph instrument. Throppy was still calling the cutter. Jim heard
+the quick patter of the continental code; Brittler heard it, too, and
+understood. He sprang forward with a shout of alarm.
+
+This is an atom: 
+"They've got a wireless! Smash it!"
+
+This is an atom: 
+A buffet on the side of the head knocked Stevens off his soap-box and
+sent him rolling on the floor. Five seconds later a crashing blow from a
+stick of firewood put the instrument out of commission. Brittler poised
+his club threateningly over the prostrate Stevens.
+
+This is an atom: 
+"Wish I knew if you've been able to get a message through to anybody! If
+I thought you had--"
+
+This is an atom: 
+He did not finish, but half-raised the stick, then dropped it again and
+turned away. One by one the remaining members of Spurling & Company
+were bundled unceremoniously into the cabin. Then the door was slammed
+shut and two men with automatics were stationed on guard outside.
+
+This is an atom: 
+"Don't shoot unless you have to," instructed Brittler's voice, purposely
+raised. "And remember a bullet in the leg'll stop a man just as quick as
+one through the body."
+
+This is an atom: 
+And then in a tone lower, but perfectly audible to those inside:
+
+This is an atom: 
+"But don't stand any fooling! Stop 'em anyway! You know as well as I do
+how much we've got at stake."
+
+This is an atom: 
+XXII
+
+This is an atom: 
+PERCY SCORES
+
+This is an atom: 
+Defeated and imprisoned in their own camp, the boys faced one another
+dazedly. Though none of the five had suffered serious injury in the
+scuffle, all were more or less bruised. Lane had a slight cut where the
+back of his head had come in contact with a sharp stone on the beach;
+and a swelling on Jim's right cheek told where the hard fist of one of
+his assailants had landed.
+
+This is an atom: 
+Outside, the two guards conversed in low tones; but for a few minutes no
+one spoke or moved in the cabin. The boys sat on the boxes or had thrown
+themselves into their bunks. Elbow on table, chin resting in palm, Jim
+was buried in thought. In a short time, he knew, Brittler and his gang
+would sail away in the _Barracouta_. They would land their human cargo
+and probably scuttle the sloop. Somehow they must be thwarted; but how?
+
+This is an atom: 
+The boys had no weapons to match those of their armed guard. Without
+ammunition, the shot-gun was but a bar of iron. How could they cope with
+the bullets in the automatics? Undoubtedly every smuggler carried a
+revolver, and would use it in a pinch; possibly some might not wait
+until the pinch came. It was a knotty problem. The drops oozed out on
+Jim's forehead as he wrestled for its solution.
+
+This is an atom: 
+A low whistle fell on his ear. He glanced toward Percy's bunk and saw
+the latter's hand raised in warning; he was taking off his shoes,
+quickly and noiselessly. Why? Jim and the others watched.
+
+This is an atom: 
+Soon Percy stood in his stocking feet. He pulled out his knife and
+opened the large blade. Stooping low, he stole toward the farther end of
+the cabin. The window there was open and covered with mosquito netting.
+
+This is an atom: 
+Steps grated on the pebbles outside. One of the guards was making a
+circuit of the camp. Percy flattened himself on the floor directly
+beneath the window. The others, hardly daring to breathe, looked away.
+The man paused for a moment; Jim knew that he was peering in. Apparently
+satisfied that all was well, he resumed his patrol.
+
+This is an atom: 
+Without delay Percy rose. He drew his knife along the netting near the
+sill, then cut it from top to bottom on each side, close to the frame.
+So skilfully did the keen blade do its work that the screen hung
+apparently undisturbed.
+
+This is an atom: 
+The guards began talking again. Placing one of the boxes silently under
+the window, and stepping upon it, Percy slipped through the opening. His
+light build enabled him to drop to the ground without making any noise.
+The netting fell back and hung as before.
+
+This is an atom: 
+Outside, it was thick fog; a slight drizzle was beginning. It was
+impossible to see further than a few feet. But the last two months had
+familiarized Percy with every square yard of the beach, and he could
+have found his way along it blindfold. Cat-footed, he stole down toward
+the water.
+
+This is an atom: 
+Steps approached, voices; he halted, ready for a hasty retreat. But the
+feet receded toward the cabin, and he had no difficulty in recognizing
+the tones of Dolph and Brittler. The latter was in a bad humor.
+
+This is an atom: 
+"Now," he growled, "we've got a long way to go, and none too much time.
+Every minute we waste here means just so much off the other end. Granted
+we reach the mainland all right, we'll have to hustle to slip those
+Chinks under cover before daylight. You'd better round 'em up in that
+fish-house, so none of 'em'll stray away and keep us from starting the
+second the sloop's ready. We've got to make sure there's plenty of gas
+aboard, as well as a compass and chart. I'll see if I can scare up a
+couple of lanterns."
+
+This is an atom: 
+The two separated, Dolph evidently going to look after the Chinese,
+while Brittler kept on toward the cabin. Percy stood stock-still, his
+heart thumping. Would the captain discover his absence?
+
+This is an atom: 
+"How's everything here, boys?" hailed Brittler.
+
+This is an atom: 
+"All quiet," replied one of the sentries.
+
+This is an atom: 
+"Come inside with me, Herb, so these fellows won't try any funny
+business."
+
+This is an atom: 
+The door opened. Percy felt a thrill of fear. How could they fail to
+notice there were only four prisoners in the camp?
+
+This is an atom: 
+But their captors evidently had not the least suspicion that he had
+escaped. Probably they thought he was lying in one of the bunks. He
+could hear the voices of Brittler and Jim, the one questioning, angry,
+and menacing, the other tantalizingly deliberate as he grudgingly gave
+the information demanded. Percy delayed no longer. He had his own work
+to do, and it demanded all his energy.
+
+This is an atom: 
+Down he stole to the water's edge, then followed it west until he
+reached a sloping rock. The _Barracouta_, he knew, was moored not fifty
+feet out in the black fog.
+
+This is an atom: 
+Without hesitating a second Percy waded in, and soon was swimming
+quietly toward the sloop. He had not dared to take one of the boats, for
+fear the grating of her keel on the beach or the sound of her oars might
+betray him. He cleft the water noiselessly, and it was not long before
+he grasped the _Barracouta's_ bobstay and hoisted himself aboard.
+
+This is an atom: 
+Dropping down the companionway, he groped forward through the cabin to
+the little door leading into the bow, and crept in on hands and knees.
+His fingers found what he wanted, an opening between two planks, where a
+leak had been freshly calked with oakum. He dug this out with his
+knife-point, and the water began spurting in.
+
+This is an atom: 
+Backing out and closing the door, he found a wrench in the tool-box and
+began fumbling about the engine. Soon the spark-plugs were unscrewed and
+in his pocket.
+
+This is an atom: 
+"And there's a good job done!" he thought, triumphantly. "Guess that
+gang of blacklegs won't get very far in the _Barracouta_ to-night!"
+
+This is an atom: 
+Voices on the shore. Dolph and Brittler were coming with a lantern; a
+blur of light brightened through the fog.
+
+This is an atom: 
+"The compass and chart are aboard," came the captain's voice, "and this
+can of gas'll be enough to make us sure of striking the mainland.
+Launch that dory!"
+
+This is an atom: 
+The dip of oars and an increasing brightness told that the boat was
+approaching. It would not do for Percy to be detected. Lowering himself
+from the port bow into the water, he clung to the bobstay.
+
+This is an atom: 
+"They won't see me here!"
+
+This is an atom: 
+Bump! The dory struck the sloop and grated along her side. Dolph and
+Brittler clambered aboard and descended into the cabin.
+
+This is an atom: 
+"Here's the chart!" exclaimed the captain. "And the compass, too! He
+told the truth about them, at any rate."
+
+This is an atom: 
+"Lucky for him!" rejoined Dolph. "I don't like that big fellow worth a
+cent."
+
+This is an atom: 
+"Good reason!" was the captain's rather sarcastic comment.
+
+This is an atom: 
+"You haven't any license to joke me about that knockdown, Bart Brittler!
+I noticed you weren't in any hurry to mix it with him."
+
+This is an atom: 
+There was a moment of silence.
+
+This is an atom: 
+"What's that?" cried the captain, suddenly. "Sounds like water running
+in! Hope the old scow isn't leaking. Let's have that lantern!"
+
+This is an atom: 
+Through the thin planking Percy could hear him open the little door and
+crawl up into the bow. Then his faint, muffled voice reached the eagerly
+listening boy.
+
+This is an atom: 
+"There's a bad leak here! Come in a minute!"
+
+This is an atom: 
+Into Percy's brain flashed a sudden idea that left him trembling with
+excitement. Could he do it? If he tried, he must not fail. An instant
+resolution set him dragging himself toward the stern.
+
+This is an atom: 
+Clutching the rim of the wash-board, he flung up one leg, caught his
+toe, and raised himself, dripping. A moment later he was in the
+standing-room.
+
+This is an atom: 
+He looked down into the cabin. The light of the lantern, shining round a
+body that almost filled the little door to the bow, showed a pair of
+legs backing out.
+
+This is an atom: 
+The die was cast. It was too late now for Percy to withdraw. His only
+safety lay in action.
+
+This is an atom: 
+Like lightning he slammed and hooked the double doors of the
+companionway, pulled the slide over, and snapped the padlock. Dolph and
+Brittler were prisoners on board the _Barracouta!_
+
+This is an atom: 
+There was a moment of surprised silence. Then bedlam broke out below, a
+confused, smothered shouting, a violent thumping on the closed doors and
+slide. But Percy gave it no heed. Thus far his plan had succeeded, even
+beyond his expectations. But his work was only begun. Before it should
+be finished, four men on shore must be overcome.
+
+This is an atom: 
+Aquiver with excitement, he sprang into the dory and quickly rowed to
+the beach, some distance from the camp. Then he leaped out with the oars
+and carried them well up on the shingle.
+
+This is an atom: 
+The other dory of the smugglers was, he remembered, almost exactly in
+front of the cabin. Skirting the water, he soon came plump upon the
+boat. He felt inside, found the oars, and gave one after the other a
+shove out into the cove. Barely had he done this when hurrying steps
+approached. One of the guards from the camp was coming to investigate
+the tumult on the _Barracouta_.
+
+This is an atom: 
+He passed so close to the dory beside which Percy was crouching that
+the boy could almost have touched him. Luckily he had no lantern. Percy
+hardly dared to breathe until the man was twenty feet past.
+
+This is an atom: 
+"What's the trouble out there?" he shouted.
+
+This is an atom: 
+If the two on the sloop heard him at all, they made no intelligible
+reply. The tumult and thumping kept on. Not waiting to see whether or
+not the sentinel would succeed in establishing communication with his
+marooned companions, Percy ran silently up the beach. Making a broad
+circuit, he approached the cabin from behind.
+
+This is an atom: 
+Through the open window he could see his mates, listening with parted
+lips to the hubbub outside. He attracted Jim's attention by tossing in a
+pebble. Spurling sauntered leisurely toward the rear of the cabin. His
+precautions were needless; the remaining sentry had concentrated his
+whole attention on the uproar in the cove.
+
+This is an atom: 
+"Jim," whispered Percy, hurriedly, "I'm going to jump that guard. You
+and Budge stand close to the door. The second you hear any fracas rush
+out and take hold with me. Stop him from shouting, if you can."
+
+This is an atom: 
+Jim nodded and stepped back from the window. Percy crept stealthily
+round the camp toward the fish-house. He rightly inferred that the
+smuggler would be gazing down the beach toward the invisible sloop.
+
+This is an atom: 
+A well-oiled clock could not have worked more smoothly. The sentry's
+thoughts were focused on what was taking place out there in the fog, and
+he was all unconscious of the peril that menaced him in the rear.
+
+This is an atom: 
+Suddenly out of the blackness behind him a lithe figure shot like a
+wildcat. One arm encircled the neck of the astounded guard, the hand
+pressing tightly over his mouth. The other hand caught his right wrist
+and twisted it backward, causing him to drop his revolver. The force of
+the attack flung him flat on his face.
+
+This is an atom: 
+Before he could even struggle the door was wrenched open and two figures
+darted out and joined in the mêlée. It was soon over. Three to one are
+heavy odds. The sentry, gagged and securely bound, was hustled inside
+the cabin. His hat, overcoat, and automatic were appropriated for Jim
+Spurling, who took his place. So skilfully had the coup been conducted
+under cover of the disturbance in the cove that none of the other
+smugglers had taken the slightest alarm.
+
+This is an atom: 
+Spurling assumed his post none too soon. Hardly had the door been
+closed, with Lane, Stevens, and Percy on the alert just inside, when the
+other guard came hurrying anxiously back. He had been unable to fathom
+the meaning of the tumult on the _Barracouta_.
+
+This is an atom: 
+"I don't like this at all, Herb," growled he as he drew near Jim. "Dolph
+and the skipper have gotten into some kind of a scrape, but what the
+trouble is I can't figure. I'd have gone out to them in the other dory,
+but I couldn't find any oars. We'd better call Shane and Parsons away
+from guarding those Chinks and decide what it's best to do. We don't
+know the lay of the land here, and any mistake's liable to be
+expensive."
+
+This is an atom: 
+By the time he had finished his remarks he was close to Spurling. The
+latter's silence apparently roused his suspicions. He stopped short.
+
+This is an atom: 
+"What--"
+
+This is an atom: 
+He got no further. Jim's left hand was over his mouth and Jim's right
+grasped his right wrist. Out burst reinforcements from the camp. It was
+a repetition of the case of the first sentinel, only more so. Presently
+Number Two lay on the cabin floor beside his comrade, unable to speak or
+move. Jim was a good hand at tying knots.
+
+This is an atom: 
+The five boys gathered in a corner and took account of stock. Two of the
+six white men prisoners; two others marooned on the sloop and _hors du
+combat_, at least temporarily; two still at large and in a condition to
+do mischief, but at present entirely ignorant of the plight of their
+comrades. Two automatics captured, and the dories of the foe useless
+from lack of oars. Best of all, the boys themselves free and practically
+masters of the situation. Matters showed a decided improvement over what
+they had been a half-hour before.
+
+This is an atom: 
+But the victory was as yet incomplete and Jim was too good a general to
+lose the battle from over-confidence. At any minute Dolph and Brittler
+might burst their way out through the double doors of the _Barracouta_
+and establish communication with the two men guarding the Chinese. So
+once more the trap was set and baited. Roger put on the hat and coat of
+the second sentry and joined Jim on guard.
+
+This is an atom: 
+Crash! Crash! Crash! A succession of heavy, splintering blows, echoing
+over the cove, announced that the pair imprisoned on the sloop had at
+last discovered some means of battering their way to freedom.
+
+This is an atom: 
+_Crash-sh!_
+
+This is an atom: 
+Speech, low but intense, came floating over the water. The smugglers
+were out and evidently looking for their dory. Baffled in their search,
+they began shouting.
+
+This is an atom: 
+"Hilloo-oo! On shore! Shane! Parsons! Herb! Terry! Are you all dead?
+Come out and take us off! Somebody's scuttled the sloop and locked us
+down in the cabin! Just wait till we get ashore! We'll fix those boys!
+Ahoy there! Our boat's gone! Come and get us!"
+
+This is an atom: 
+Jim pressed Roger's arm.
+
+This is an atom: 
+"Ready! Here comes one of 'em!"
+
+This is an atom: 
+Somebody was running toward them from the fish-house. A black figure
+suddenly loomed up, close at hand.
+
+This is an atom: 
+"What's the trouble out there, Herb? Dolph and the cap are yelling like
+stuck pigs! Hear 'em! Guess I'd better go out to 'em in the other dory,
+don't you think? Shane can handle the Chinos--"
+
+This is an atom: 
+His voice shut off in a terrified gurgle. A strong hand forcibly sealed
+his lips and two pairs of muscular arms held him powerless, while Percy,
+darting from the cabin with a coil of rope, relieved him of his
+automatic and tied him firmly under Jim's whispered directions. Soon he,
+too, lay beside his comrades.
+
+This is an atom: 
+"Shut the door a minute, Filippo!" ordered Jim. "Now," he continued,
+briskly, "I guess we've got 'em coppered. We'll do up that man in the
+fish-house in short order. By the way, Throppy, did you raise the
+cutter before the captain smashed your instrument?"
+
+This is an atom: 
+"Don't know," answered Stevens. "I was so busy calling for help that I
+didn't wait for any reply."
+
+This is an atom: 
+"We'll know before midnight," said Jim. "Take Parsons's automatic,
+Perce, and come along with Budge and myself. Throppy, you stay here with
+Filippo and help guard these fellows."
+
+This is an atom: 
+He glanced at the sullen three lying bound on the floor.
+
+This is an atom: 
+"Don't look as if they could make much trouble. Still, it's better for
+somebody to keep an eye on 'em."
+
+This is an atom: 
+Jim, Budge, and Percy stepped out and closed the door. The shouting from
+the _Barracouta_ kept on with undiminished vigor. Appeals and threats
+jostled one another in the verbal torrent.
+
+This is an atom: 
+"Let 'em yell themselves hoarse," whispered Jim. "It won't do 'em any
+good."
+
+This is an atom: 
+The fish-house was near. A lighted lantern hung just inside the open
+door. Near it stood the fourth smuggler, peering anxiously out; behind
+him huddled the Chinamen. He gave an exclamation of relief as he saw
+Jim's figure approaching through the fog.
+
+This is an atom: 
+"I'm glad--"
+
+This is an atom: 
+He stopped short, frozen with surprise, at the sight of the three boys.
+Swiftly his hand darted toward his left coat pocket.
+
+This is an atom: 
+"None of that, Shane!" commanded Jim, sharply. "Put 'em up!"
+
+This is an atom: 
+The three automatics in the boys' hands showed the guard that
+resistance was useless. He obeyed sulkily.
+
+This is an atom: 
+"Feel in his pocket, Perce, and take his revolver! No, the other side!
+He's left-handed."
+
+This is an atom: 
+Percy secured the weapon. Escorting Shane to the camp, they soon had him
+safely trussed. Brittler was bellowing like a mad bull.
+
+This is an atom: 
+"Now for Dolph and the skipper! Guess the three of us are good for 'em!"
+
+This is an atom: 
+Leaving the four smugglers in the custody of Throppy and Filippo, the
+other boys proceeded down to the water. The shouting suddenly ceased. A
+rope splashed.
+
+This is an atom: 
+"They've cast off the mooring!" exclaimed Jim.
+
+This is an atom: 
+Another unmistakable sound.
+
+This is an atom: 
+"Now they're rocking the wheel to start her!"
+
+This is an atom: 
+Percy felt for the spark-plugs in his pocket.
+
+This is an atom: 
+"They'll rock it some time!"
+
+This is an atom: 
+They did. At last they stopped. There was a muttered consultation,
+inaudible to the listening ears on shore.
+
+This is an atom: 
+"Might as well wind the thing up now!" observed Jim in an undertone.
+
+This is an atom: 
+"On board the sloop!" he hailed. "It's all off, Captain! We've got your
+four men tied up, and we've got their revolvers. You and Dolph might as
+well give it up. Throw your guns in on the beach, and we'll come out and
+get you, one at a time!"
+
+This is an atom: 
+A tremendous surprise was voiced by the absolute silence that followed.
+It was broken by Brittler's sneering voice:
+
+This is an atom: 
+"So we might as well give up, had we, eh? Guess you don't know Bart
+Brittler, sonny! Let 'em have it, Dolph!"
+
+This is an atom: 
+_Spang--spang--spang--spang!_
+
+This is an atom: 
+A fusillade of revolver-shots woke the echoes. The bullets spattered in
+the water and thudded on the beach. Fortunately no one was hit.
+
+This is an atom: 
+"Scatter, fellows!" shouted Jim. And in a lower voice he added, "Don't
+fire back!"
+
+This is an atom: 
+Silence again. The two on the sloop were evidently reloading. Then came
+a regular splashing. The men on the _Barracouta_ were paddling her
+ashore. Armed and desperate, now fully aware that the only things
+between themselves and a term in a Federal prison were the bullets in
+their automatics, they would go to almost any length to escape, even to
+the taking of life itself. Plainly there was trouble ahead.
+
+This is an atom: 
+The boys came together again at the foot of the sea-wall. Should they
+fight or run? It was one or the other. Whatever else they might be,
+Dolph and Brittler clearly were not cowards. If there was a fight, it
+was certain somebody would be shot, very likely killed. Was the risk
+worth taking? Would it not be better to hurry back to the cabin, warn
+Filippo and Throppy, and escape up the bank into the woods? The
+smugglers, with but two automatics against four, would hardly dare to
+follow them.
+
+This is an atom: 
+"Way enough, Dolph!" growled Brittler's voice.
+
+This is an atom: 
+The sloop had grounded. Splash! Splash! Her two passengers had leaped
+out into the water and were making their way to the beach.
+
+This is an atom: 
+Jim came to an instant decision. He opened his lips, but the words he
+had planned to speak were never uttered. The strong, rhythmical dip of
+oars suddenly beat through the fog.
+
+This is an atom: 
+"What's the trouble here?" demanded a stern voice.
+
+This is an atom: 
+A great surge of thankfulness almost took away Jim's power of speech.
+
+This is an atom: 
+"It's the cutter!" he ejaculated, chokingly. "Throppy got her, after
+all!"
+
+This is an atom: 
+XXIII
+
+This is an atom: 
+WHITTINGTON GRIT
+
+This is an atom: 
+So far as the smugglers were concerned the game was up. It was one thing
+to attempt to overpower a group of boys and appropriate their sloop, but
+it was quite another to offer armed resistance to the officers of the
+United States revenue service.
+
+This is an atom: 
+Dolph and Brittler realized that; they realized, too, that they had
+absolutely no chance of escaping from the island, so they stood sullenly
+by while Jim told his story to the lieutenant commanding the boat. At
+the close of his recital the officer turned to them.
+
+This is an atom: 
+"You hear the statements of this young man. What have you to say for
+yourselves?"
+
+This is an atom: 
+"Nothing now," replied Brittler.
+
+This is an atom: 
+"You may hand over your guns."
+
+This is an atom: 
+The two surrendered their automatics and were placed under arrest.
+Following Jim's guidance, the lieutenant inspected the captured
+smugglers in Camp Spurling and the Chinese in the fish-house. Leaving a
+guard on shore and taking Jim with him, he went off to make his report
+to the captain.
+
+This is an atom: 
+"It's a case for the United States commissioner at Portland," decided
+the latter. "We'll have to take the whole party there. Guess you boys
+had better come along as witnesses. The _Pollux_ was bound east when we
+picked up your wireless; but this matter is so important that I'm going
+to postpone that trip for a couple of days. I can bring you and the rest
+of your party back here early day after to-morrow."
+
+This is an atom: 
+It meant to the boys a loss of only two days at the outside. That was a
+little thing in comparison with what might have happened if the cutter
+had not come.
+
+This is an atom: 
+"We'll start without waste of time," resumed the captain. "Lieutenant
+Stevenson, you may bring the prisoners aboard."
+
+This is an atom: 
+Jim went ashore with the officer to notify his companions and prepare
+for this unforeseen journey. Eleven o'clock found the _Pollux_ steaming
+west with her thirty-one additional passengers. The passage was
+uneventful and they were alongside the wharf in Portland early the next
+forenoon.
+
+This is an atom: 
+Promptly at two came the hearing before the commissioner. It did not
+take long. Brittler and his accomplices were held for trial at the next
+term of court, and the Chinese were taken in charge by the immigration
+inspector. Before six that night the boys were passing out by Portland
+Head in the _Pollux_, bound east. The next morning they landed once more
+in Sprowl's Cove, and a few hours later they had fallen back into their
+customary routine, as if smugglers were a thing unknown. The leak in the
+_Barracouta's_ bow was calked, making her as tight as before.
+
+This is an atom: 
+The following day dawned fiery red and it was evident that a fall storm
+was brewing. Jim and Percy had to battle with a high sea when they set
+and pulled their trawl; and they were glad enough to get back to
+Tarpaulin with their catch. By noon a heavy surf was bombarding the
+southern shore.
+
+This is an atom: 
+Five o'clock found the gale in full blast. A terrific wind whipped the
+rain in level sheets over cove and beach and against the low cabin squat
+on the sea-wall. Great, white-maned surges came rolling in from the
+ocean to boom thunderously on the ledges round Brimstone. The flying
+scud made it impossible to see far to windward. It was the worst storm
+the boys had experienced since they came to the island.
+
+This is an atom: 
+At half past five, after everything had been made snug for the night,
+they assembled for supper. On the table smoked a heaping platter of
+fresh tongues and cheeks, rolled in meal and fried brown with slices of
+salt pork. Another spiderful of the same viands sputtered on the stove.
+Hot biscuits and canned peaches crowned the repast. Filippo had done
+himself proud.
+
+This is an atom: 
+A long-drawn blast howled about the cabin.
+
+This is an atom: 
+"Gee!" exclaimed Percy, "but wasn't that a screamer! This is one of the
+nights you read about. 'The midnight tempest was shrieking furiously
+round the battlements of the old baronial castle!'"
+
+This is an atom: 
+"Cut it out, Perce, cut it out!" remonstrated Lane. "You make me feel
+ashamed of myself. It's really unkind in you to air your knowledge of
+the English classics before such dubs as the rest of us."
+
+This is an atom: 
+"Well, at any rate, I'm glad we're under cover. Wonder if the men who
+used to go to sea in this cabin enjoyed it anywhere near as much as we
+have!"
+
+This is an atom: 
+"Not half bad, is it?" said Jim. "Remember how delighted you were when
+you got your first sight of it, three months ago?"
+
+This is an atom: 
+Percy grinned.
+
+This is an atom: 
+"I've changed some since then," he admitted. "Forget that, Jim! It's
+ancient history now."
+
+This is an atom: 
+As he drew up his soap-box his eye dwelt appreciatively on the
+delicacies in the platter.
+
+This is an atom: 
+"Aren't you other fellows going to eat anything?" he inquired, with mock
+concern. "I don't see any more than enough for myself on that platter.
+Don't be so narrow about the food, Filippo!"
+
+This is an atom: 
+The Italian pointed to a pan rounded up with uncooked titbits.
+
+This is an atom: 
+"Plenty more!"
+
+This is an atom: 
+"Good!" said Percy. "I was afraid somebody else might have to go
+hungry."
+
+This is an atom: 
+All devoted themselves to the contents of their plates. They kept
+Filippo busy frying until their appetites were satisfied.
+
+This is an atom: 
+Supper was over at last, and the dishes washed and put away. Outside,
+the storm raged worse than ever. Stevens sat down to his instrument,
+repaired after its damage by Brittler, and put the receivers over his
+ears.
+
+This is an atom: 
+"Come on, Throppy!" exhorted Lane. "Don't go calling to-night! Get out
+of the ether and give some other wireless sharps a look-in! Pull off
+that harness and take down your violin. Let's make an evening of it! We
+sha'n't have many more."
+
+This is an atom: 
+Stevens lifted his hands to remove the headpiece. Suddenly a change came
+over his face and his arms dropped slowly. He gave his mates a warning
+look. There fell a silence in the cabin. Anxiously the others watched
+the operator's tense features. Minutes passed.
+
+This is an atom: 
+On a sudden he sprang up and tore off the receivers.
+
+This is an atom: 
+"There's a steamer in trouble outside. Name sounded like _Barona_. Her
+engine's disabled and she's drifting. Can't be very far off!"
+
+This is an atom: 
+The boys felt sober.
+
+This is an atom: 
+"It's a hard night for a craft without steerage-way," said Jim. "What's
+that? Thunder?"
+
+This is an atom: 
+A long, low rumble made itself heard above the storm. It came again, and
+yet again. The gloom was lighted for a second by a sudden blaze.
+
+This is an atom: 
+"What's that!" exclaimed Jim once more.
+
+This is an atom: 
+Between the thunder-peals his ears had caught a single whip-like crack.
+A stunning crash followed a lurid glare, lighting up sky and sea. Again
+came the sharp detonation, but little louder than a fire-cracker. This
+time all heard it.
+
+This is an atom: 
+"A signal-gun!"
+
+This is an atom: 
+Lane's voice was full of excitement. He sprang to the door and the
+others followed. The gale was blowing squarely against the end of the
+cabin. So great was its force that Roger had all he could do to push the
+door open. Presently the five stood outside, exposed to the full fury of
+the blast. For a few seconds all was black.
+
+This is an atom: 
+"Look! A rocket!"
+
+This is an atom: 
+Up from the pitchy sea southwest of Brimstone shot a line of fire,
+curving into an arc and bursting aloft in a shower of many-colored
+balls. At its base were dimly visible two slender masts and a white
+hull. Almost instantly they vanished; but the boys had seen enough.
+
+This is an atom: 
+"A steam-yacht!" cried Jim. "Not more than a half-mile off Brimstone and
+drifting straight on the ledges. Looks as if she was a goner!"
+
+This is an atom: 
+"Can't we help her somehow?" asked Percy.
+
+This is an atom: 
+"I'm afraid not. We couldn't drive the sloop against this gale and sea;
+besides, those rollers would swamp a life-boat. All we can do is to get
+out on the point and try to save anybody who comes ashore. Put on your
+oil-clothes, fellows! Light both the lanterns, Percy! Budge, you and
+Throppy each take one of those spare coils of rope! I'll carry another
+and the Coston lights. Now I can see why Uncle Tom always insisted on
+having a couple of 'em in the cabin. Filippo, you'd better stay here,
+keep up a good fire, and make plenty of coffee. There goes another
+rocket! The gun, too! I don't blame 'em. Men couldn't be in a worse
+fix!"
+
+This is an atom: 
+Leaning sidewise against the gale, the little lantern-guided procession
+trudged along the sea-wall and stumblingly ascended the slippery path to
+the beacon on Brimstone. Sheltering the oil-soaked kindlings with his
+body, Jim scratched a match; and in a twinkling long tongues of smoky
+flame were streaming wildly to leeward.
+
+This is an atom: 
+"Ah! They see us!"
+
+This is an atom: 
+Three rockets in quick succession rose from the yacht, now barely a
+quarter-mile away. The thunder and lightning were almost continuous.
+Every flash told that the imperiled craft was steadily drifting nearer
+the dangerous promontory.
+
+This is an atom: 
+"She'll strike the Grumblers!" muttered Jim. "And that means she's done
+for! If only she was a thousand feet farther east she'd float by into
+the cove. Hard luck!"
+
+This is an atom: 
+The Grumblers were a collection of jagged rocks, exposed at low tide.
+Under the incessant flashes their black heads appeared and disappeared
+in a welter of frothy white. It was an ominous spectacle for the men on
+the yacht.
+
+This is an atom: 
+Taking one of the Coston lights, Jim clambered down on the ledges. Soon
+the warning red glare of the torch, held high above his head, was
+illumining the rocks and breakers. He held the light aloft until it went
+out, then rejoined the others.
+
+This is an atom: 
+"They're getting a boat over!" cried Stevens.
+
+This is an atom: 
+Half a dozen men, working with frantic haste, were swinging a tender out
+to leeward.
+
+This is an atom: 
+"No use!" said Jim, despondently. "She won't live a minute in this sea."
+
+This is an atom: 
+Ten seconds confirmed his prediction. The yacht rolled. As the boat
+struck the water a giant sea filled her. Then came darkness. The next
+flash showed the boat drifting bottom up beside the larger craft.
+Another tender was launched; it survived one sea, but the next
+overturned it. Still a third boat met with the same fate.
+
+This is an atom: 
+Every surge was heaving the yacht nearer the breakers with dismaying
+speed. A group of figures gathered amidships. Silently, with pale faces,
+the boys watched the progress of the doomed craft. She was going to her
+death. How could any of those on board escape?
+
+This is an atom: 
+Jim threw off his despondency.
+
+This is an atom: 
+"Now, fellows," he cried, "the minute she strikes she'll begin to pound
+to pieces! Their only chance'll be to run a line ashore. We must get out
+as far as we can to catch it."
+
+This is an atom: 
+Every billow buried the base of the point in snowy foam and sent the
+spray flying far up its rugged front. Using the utmost caution, the boys
+descended to the limit of safety. At the next flash they peered eagerly
+seaward.
+
+This is an atom: 
+The yacht was almost on the Grumblers! Up she heaved on a high surge,
+dropped. They caught their breaths. No! Not that time. She rose again.
+
+This is an atom: 
+Down ... down ...
+
+This is an atom: 
+Suddenly she stopped. A grinding crash reached their ears.
+
+This is an atom: 
+"She's struck!" screamed Lane.
+
+This is an atom: 
+A blaze of sheet lightning showed her, careened landward, lying
+broadside toward them about one hundred feet distant. It was the
+beginning of the end. Jim, clinging to a boulder far out on the
+streaming ledges, now showered with spray, now buried waist-deep, was
+watching every movement of the crew.
+
+This is an atom: 
+"They've made a line fast round the foremast!" he shouted back. "They're
+going to send its end ashore on a barrel! Watch out!"
+
+This is an atom: 
+Presently the tossing cask was visible, drifting rapidly landward. For
+the first twenty-five yards its progress was unhindered; then a
+half-tide ledge barred its way. It hung on this in the trough of a sea;
+but the next billow swept it over. Before long it was bumping on the
+rocks almost within Jim's reach.
+
+This is an atom: 
+Watching his chance, he lunged forward and caught it. A crashing surge
+flung him down heavily and rolled him over and over; but he stuck
+stoutly to his prize. When the water ran back he came crawling up on his
+hands and knees, sliding the cask before him.
+
+This is an atom: 
+"Can't stand!" he explained, briefly. "Ankle hurt! Now muckle onto this
+line, everybody, and haul in! They've got a hawser bent on the other
+end."
+
+This is an atom: 
+A glance toward the yacht told that he was right. It also told that the
+peril of her human freight was greater than ever. Each sea, raising her
+slightly, dropped her back with her decks at a sharper angle toward the
+land. The grinding of the rocks through her steel side could be
+distinctly heard.
+
+This is an atom: 
+"All together! In she comes! Now ... heave! Now ... heave! Now ...
+_heave!_"
+
+This is an atom: 
+Their strength doubled by the realization that life hung on their
+efforts, the boys swayed at the line until at last they grasped the end
+of the hawser. To it was attached another smaller rope for pulling in a
+boatswain's chair.
+
+This is an atom: 
+Working rapidly, they made the hawser fast round an upright boulder. The
+lightning flashes were now less frequent, but lanterns on the ship and
+ashore enabled each group to note the other's progress. At last the
+slender cableway was rigged. Jim swung a lantern. Another lantern on the
+yacht answered.
+
+This is an atom: 
+"The smaller line, boys! Pull in! Careful!"
+
+This is an atom: 
+As the boys hauled, a figure dangled away from the vessel's side.
+Shoreward it swayed, now high above the wave-troughs, now dipping
+through a lofty crest. It dragged safely over the inside ledge, while
+the boys held their breaths; and presently they were unlashing a man
+from the boatswain's chair.
+
+This is an atom: 
+"Yes," he said in response to Jim's question, "she's the steam-yacht
+_Barona_. Belongs to Churchill Sadler of New York. One of his
+millionaire friends chartered her for a short trip to the Maine coast.
+Fifteen men aboard. I'm the mate. Came ashore first to see if this rig
+would work all right."
+
+This is an atom: 
+The chair was already half-way back to the vessel.
+
+This is an atom: 
+"They'll send Mr. Whittington next," continued the mate.
+
+This is an atom: 
+Percy started with surprise.
+
+This is an atom: 
+"What's that? Whittington?"
+
+This is an atom: 
+"Yes. John P., the millionaire! He's the man who hired the yacht."
+
+This is an atom: 
+"He's my father!" gasped Percy.
+
+This is an atom: 
+The mate gave an exclamation of astonishment.
+
+This is an atom: 
+"Lucky we got this chair to working or soon you wouldn't have had any
+father!"
+
+This is an atom: 
+The swinging seat had now reached the yacht. Two men lashed into it a
+stout, squarely built figure. The lantern signaled that all was ready
+and the shoreward journey began. Percy was shaking so violently that he
+could hardly pull. The mate reassured him.
+
+This is an atom: 
+"Don't be frightened, young fellow! We'll land him all right!"
+
+This is an atom: 
+He added his strength to that of the others, and John P. Whittington
+came in faster. He reached the ledge, only twenty-five feet from shore.
+Then came disaster!
+
+This is an atom: 
+Something gave way on the yacht, and the hawser suddenly slackened,
+letting the boatswain's chair drag on the ledge. The end of a swinging
+rope caught in a crack. The millionaire stopped short!
+
+This is an atom: 
+"Harder!" shouted the mate, setting the example.
+
+This is an atom: 
+The boys surged on the rope, but to no avail; they could not budge the
+chair. Percy stood motionless with horror.
+
+This is an atom: 
+Up curled a huge wave, high over the struggling figure. A thundering
+deluge hid him from view. It looked bad for John P. Whittington. Two or
+three seas more and it would matter little to him whether he was pulled
+in or not.
+
+This is an atom: 
+Guttering and rumbling, the water flowed back. Down over the ledges
+after it leaped a slim, wiry figure. It was Percy Whittington!
+
+This is an atom: 
+He had thrown off his oil-clothes to give his limbs greater freedom. His
+head was bare and his light hair stood straight up from his forehead.
+Grasping the hawser, he plunged into the sea and dragged himself toward
+the rock to which his father was fastened.
+
+This is an atom: 
+The group on the point stood silent, watching him struggle yard by yard
+through the black water until he gained the ridge. On it lay the figure
+in the boatswain's chair, struggling feebly. Percy planted his feet on
+the slippery rock. But before he could reach his father another liquid
+avalanche buried them both.
+
+This is an atom: 
+It seemed to the anxious watchers as if it would never run back. When it
+did, the older man sagged from the chair, motionless; the lad still
+clung to the hawser. The future of the house of Whittington hung
+trembling in the balance.
+
+This is an atom: 
+The mate gave a groan.
+
+This is an atom: 
+"He can't do it!"
+
+This is an atom: 
+At that very instant Percy roused to activity. Even before the ledge was
+entirely clear he was leaning over his father, knife in hand. It was
+useless to attempt to extricate the rope-end from the crack in which it
+was caught; the only thing to do was to cut it. Percy stooped quickly.
+Already the next sea was curling over his head. He made a savage assault
+upon the rope.
+
+This is an atom: 
+Slash! Slash! Twice his arm rose and fell. The billow was breaking down
+over him when he leaped erect and flung up his hand.
+
+This is an atom: 
+"Pull!" yelled Jim.
+
+This is an atom: 
+Just as the flood boiled over the ledge the chair and its senseless
+burden jerked away. Percy grasped the lashings and was towed along
+behind his father. Dread overcame him as he felt the limpness of the
+older man's body.
+
+This is an atom: 
+Through the eddying tide ... up over the slippery rocks ... and
+presently Jim and the mate were unfastening the bonds that held the
+insensible millionaire in the boatswain's chair. They carried him up
+near the beacon and laid him down on Percy's oil-clothes.
+
+This is an atom: 
+"He's breathing!" said the mate. "He'll come round all right. You'll
+know what to do for him. I'll go back and help get the other men off.
+Their lives mean just as much to their people as his does to you."
+
+This is an atom: 
+Working with Budge and Throppy, he took in the slack of the hawser, and
+soon the chair was dancing back to the yacht. Meanwhile Jim and Percy
+were working over Mr. Whittington, and before long he recovered his
+senses. With a groan he half raised himself.
+
+This is an atom: 
+"Where am I?"
+
+This is an atom: 
+"You're all right, Dad!"
+
+This is an atom: 
+"Percy!"
+
+This is an atom: 
+Both father and son showed a depth of feeling Jim would hardly have
+credited them with possessing.
+
+This is an atom: 
+"You don't need me here any longer," he said. "I'll go down and help
+pull the others ashore. Throw these oil-clothes of mine over your
+father, Percy, and make him comfortable, and as soon as the rest are
+safe we'll carry him to camp."
+
+This is an atom: 
+"What's that?" growled the millionaire. "Carry me? I guess you don't
+know the Whittingtons, young man!"
+
+This is an atom: 
+His jaw set and he rose somewhat unsteadily to his feet.
+
+This is an atom: 
+"Come on, Percy! Where's that camp?"
+
+This is an atom: 
+Walking slowly, the father leaning on his son's shoulder, the two
+disappeared in the darkness. Jim watched them for a few seconds, then
+started down over the ledges. The last half-hour had raised his
+estimation of the Whittington stock considerably above par.
+
+This is an atom: 
+Then for a time, engrossed in life-saving, he forgot everything else. At
+last all the men were landed safely. It was none too soon, for the yacht
+was now almost down on her side; and it was plain she would pound to
+pieces before very long.
+
+This is an atom: 
+Rescuers and rescued sought the cabin, where a good fire and hot coffee
+awaited them. Whittington, senior, clad in dry clothing, lay in Percy's
+bunk. Filippo was bustling to and fro to supply the wants of his
+numerous guests. His eyes fell upon a dark-haired, olive-skinned young
+man in the rear of the shipwrecked group, and the cup he was carrying
+clattered on the floor.
+
+This is an atom: 
+"Frank!" he cried. "_Fratello mio!_"
+
+This is an atom: 
+The brothers flung themselves into each other's arms. The Whittington
+family was not the only happy one in Camp Spurling that night.
+
+This is an atom: 
+XXIV
+
+This is an atom: 
+CROSSING THE TAPE
+
+This is an atom: 
+There was little sleep on Tarpaulin, either for rescuers or rescued,
+until the small hours of the morning. The cabin was crowded to its
+utmost capacity, as the fish-house was too cold for the drenched,
+wearied men. Filippo kept a hot fire going until long after midnight,
+and served out coffee galore. During his intervals of leisure he and
+Frank conversed in liquid Sicilian.
+
+This is an atom: 
+Outside, the storm roared and the surf boomed on the ledges about
+Brimstone; beyond in the blackness lay the wrecked _Barona_, hammering
+to pieces.
+
+This is an atom: 
+Gradually conversation ceased and the camp grew quiet. The boys and
+their unexpected guests, sandwiched closely together on the floor and in
+the bunks, drifted off into fitful slumber. But John P. Whittington's
+eyes remained wide open.
+
+This is an atom: 
+He was outstretched in Percy's bunk. His clothes hung drying before the
+stove, and he had on an old suit of Jim's, as nothing that Percy wore
+was large enough to fit his father's square, bulky figure. Beside him
+lay his son, sound asleep. John P. marveled at his regular breathing.
+Occasionally he touched the lad with his hand.
+
+This is an atom: 
+All his thoughts centered about Percy. He could not but feel that this
+brown, wiry fellow who had saved his life was a stranger to him. He
+could see with half an eye that a great change had come over the boy
+during the summer; he had grown quieter, stronger, far more manly.
+
+This is an atom: 
+Yes, Percy had stuck. John Whittington had only half believed that he
+could or would; and he had spent a good many valuable hours worrying
+over what he should do with his son if he didn't stick. The result
+showed that all those hours had been thrown away; but somehow the
+millionaire couldn't feel very bad about the waste.
+
+This is an atom: 
+He began to wonder if Percy might not have done better in the past if
+his father had put in a little more time with him personally and spent
+less in mere money-making. He had tried to shift his responsibility off
+on somebody else, had hired others to do what he should have taken pains
+to do himself. That was a big mistake; John P. Whittington could see it
+plainly now. And it had come near being a pretty costly error for him,
+for Percy. Well, those days were over. Percy had turned squarely about
+and was doing better. Whittington, senior, determined to do better, too.
+
+This is an atom: 
+Little by little the gale blew itself out. By daybreak the sky was clear
+and the wind had gone down, but the high rollers still wreaked their
+wrath on the shattered yacht and thundered on the point. A fiery sun
+shot its red rays over the slumberers in the crowded cabin. Filippo
+roused yawningly, built the fire, and busied himself about breakfast.
+
+This is an atom: 
+Soon everybody was astir. The millionaire's clothes were now dry, and
+he dressed with the others. Save for a slight stiffness and a few
+bruises, he was all right.
+
+This is an atom: 
+After breakfast he went up on Brimstone with Percy and the others to
+take a look at the _Barona_. The steel hull lay on its side on the
+foaming reef, a battered, crumpled shape, sadly different from the trim
+yacht that had left New York so short a time before. A miscellaneous lot
+of wreckage was swashing in the surf at the base of the point, and Jim
+and some of the crew were salvaging what they could; but it was not very
+much.
+
+This is an atom: 
+Standing in safety on the promontory in the sunlight of the pleasant
+morning, John P. Whittington gazed long at the wreck.
+
+This is an atom: 
+"Well," he remarked at last to the captain, who stood beside him, "I
+guess I see where I'm out fifty or seventy-five thousand dollars. Might
+as well take my medicine without a whimper. It was all my fault. You
+wanted to run into Portland when the storm was making up, but I thought
+we'd better try for some port nearer the island. I've gotten so into the
+habit of having men do as I want them to that I thought the wind and sea
+would do the same. But I've learned they won't. It's been an expensive
+mistake, and it came altogether too near being more expensive still.
+It's up to me to foot the bills. I'll make it all right with you and the
+crew and Sadler."
+
+This is an atom: 
+The sea was going down rapidly. A council was held. The Rockland boat
+would leave Matinicus at half past one, and, as Jim felt that the
+_Barracouta_ could easily make the run to the island, it was decided to
+send the crew back to New York that very day. The captain and the mate
+arranged to remain on Tarpaulin until a wrecking-tug from Boston should
+arrive.
+
+This is an atom: 
+Mr. Whittington, yielding to the persuasions of Percy and the invitation
+of the other boys, consented to take the first vacation of his life and
+stop with them a week or ten days, when their season on the island would
+close.
+
+This is an atom: 
+While the crew were preparing to embark, Filippo approached Jim with his
+newly found brother.
+
+This is an atom: 
+"I like to go with Frank," he said.
+
+This is an atom: 
+"Sorry to have you leave, Filippo," returned Jim. "But I know just how
+you feel, and I don't blame you a bit."
+
+This is an atom: 
+He called Stevens and Lane aside. Presently the latter went into the
+cabin and reappeared with a roll of bills. Jim handed them to the
+Italian.
+
+This is an atom: 
+"Here's one hundred dollars, Filippo, your share for your summer's work.
+You've earned it fairly. If there's anything more coming to you, after
+we figure up, I'll send it on. What will your address be? We hope to see
+you again some time."
+
+This is an atom: 
+Filippo was overcome. Tears of gratitude filled his eyes as he stammered
+his thanks. It was arranged that letters in the care of the Italian
+consul at Boston would always be forwarded to him.
+
+This is an atom: 
+Jim and Throppy took the departing party over to Matinicus on the
+_Barracouta_, getting them there in ample time for the Rockland steamer.
+The sloop was back at Tarpaulin by four o'clock.
+
+This is an atom: 
+Meanwhile John P. Whittington had started on his vacation. Though his
+time ran into thousands of dollars a week, he felt he could profitably
+spend a little of it in getting acquainted with his boy. One of the
+first things his keen eyes noted was the absence of the cigarettes.
+
+This is an atom: 
+"Knocked off, eh, Percy? For how long?"
+
+This is an atom: 
+"For good, Dad!"
+
+This is an atom: 
+The millionaire suppressed a whistle; something had certainly struck
+Percy.
+
+This is an atom: 
+The next morning, his sturdy figure garbed in oilskins, he started out
+with his son and Jim for Clay Bank. He had to acknowledge that rising at
+midnight was a little early, even for a man accustomed to work as hard
+as he had always done.
+
+This is an atom: 
+Out on the shoal he was a silent but interested spectator while the
+trawl was being pulled and the fish taken aboard. An old swell was
+running, and he speedily discovered that seasickness was another thing
+his will could not master. That afternoon he watched Percy skilfully
+handle the splitting-knife and later do his part in baiting the trawl.
+
+This is an atom: 
+On the morning following he went out lobstering, and found as much to
+interest him as on the day before. This is how, in the scale of
+things superior and inferior, the affection of Love proceeds, as the
+intellect or sentiment proceeds from these intelligible or knowable
+objects, to those, or from those to these.
+
+This is an atom: 
+CIC. Thus the greater number of sages believe that Nature delights in
+this changeful circulation which is seen in the whirling of her
+wheel.
+
+This is an atom: 
+=Fifth Dialogue.=
+
+This is an atom: 
+I.
+CIC. Now show me how I may be able for myself to consider the
+conditions of these enthusiasts, through that which appears in the
+order of the warfare here described.Percy appreciated his father's acceptance of the proffered courtesy.
+
+This is an atom: 
+"It's the first time my money ever bought anything for you."
+
+This is an atom: 
+The experience was a novel one for them both.
+
+This is an atom: 
+Just after light one morning the wrecking-tug from Boston appeared. A
+brief examination of the _Barona's_ hull by a diver showed that the
+havoc wrought by the sea and rocks had been so great that but little of
+value could be saved. So the tug started back that very afternoon, and
+the captain and the mate of the yacht went with her.
+
+This is an atom: 
+The weather was now much cooler, and the boys were glad that their stay
+was to be short. Wild geese were honking overhead in V-shaped lines on
+their way south. Mr. Whittington accompanied the others on a gunning
+trip to Window Ledge, and came back with a dozen coots. He smacked his
+lips over the coot stew and dumplings prepared by Jim. Throppy
+dismantled his wireless and packed up his outfit to send away.
+
+This is an atom: 
+On their last Thursday at Tarpaulin Uncle Tom Sprowl came in on the
+smack with Captain Higgins. He had boarded the _Calista_ at York Island.
+Everybody, including Nemo and Oso, was glad to see Uncle Tom. His
+rheumatism was fully cured and he was spry and chipper. He was more than
+satisfied with what the boys had accomplished during the summer, and he
+planned to continue lobstering after their departure.
+
+This is an atom: 
+He noted the change in Percy.
+
+This is an atom: 
+"Told Jim your son needed salting," he confided to Mr. Whittington.
+"He's all right now."
+
+This is an atom: 
+The afternoon before they were to leave the island Roger reckoned up his
+accounts. They showed that after Uncle Tom's share had been deducted,
+Spurling & Company had a thousand dollars to divide. Of this, one
+hundred dollars had already been paid to Filippo.
+
+This is an atom: 
+Lane handed Percy one hundred and fifty dollars.
+
+This is an atom: 
+"I don't want him to take that," objected Mr. Whittington.
+
+This is an atom: 
+"We shouldn't feel right if he didn't," said Jim.
+
+This is an atom: 
+"Dad," spoke up Percy, "I want it. I've earned it. Look at those hands
+and arms. It's the first money I ever had that you didn't give to me.
+I'm going to have one of the bills framed behind glass."
+
+This is an atom: 
+"He's earned it, fast enough," corroborated Jim. "Let him take it, Mr.
+Whittington. We'll all feel better about it if you will."
+
+This is an atom: 
+So the millionaire gave his consent, with the mental reservation that in
+some way he would make it up to the others later.
+
+This is an atom: 
+"What are you going to do with all that wealth, Percy?" he asked. "It
+won't keep you very long in gasolene."
+
+This is an atom: 
+"Send half of it to Filippo for his brother Frank," replied Percy,
+promptly. "He lost about all he had when the _Barona_ was wrecked."
+
+This is an atom: 
+Later that afternoon Mr. Whittington took Jim aside out of Percy's
+hearing.
+
+This is an atom: 
+"Honestly, between us, how has the boy done this summer?"
+
+This is an atom: 
+"I wouldn't ask to have anybody take hold any better than he has since
+the middle of July."
+
+This is an atom: 
+The millionaire looked gratified.
+
+This is an atom: 
+"I'm more than pleased at the way things have turned out, and I don't
+know how I can ever repay you. Can't I help you somehow in money
+matters?"
+
+This is an atom: 
+Jim shook his head decidedly.
+
+This is an atom: 
+"No, thank you, Mr. Whittington. As I told you at the beginning of the
+summer, we're making our own way. Percy is entitled to every cent we've
+paid him, and I can honestly say we're glad he's been with us."
+
+This is an atom: 
+A half-hour afterward Mr. Whittington found his son alone.
+
+This is an atom: 
+"How about those college conditions, Percy?" he asked.
+
+This is an atom: 
+"Just finished my work on 'em before the wreck, Dad. I'm ready to take
+my exams the minute I strike college. It's been a hard pull, harder even
+than the fishing and lobstering, and it's kept me hustling; but I
+believe I've won out. Studying isn't so bad. All you've got to do is to
+make up your mind to get your lessons, and then get 'em."
+
+This is an atom: 
+"That's so in other things besides studying, Percy. You'll find it out
+later on."
+
+This is an atom: 
+"I guess I don't need to tell you," continued his son, "how much I owe
+to Jim Spurling and the others. They're the whitest bunch I ever ran
+with, and I wouldn't have missed my summer with them for anything."
+
+This is an atom: 
+"Something different from what you felt three months ago, eh, Percy?
+Remember our talk at Graffam Academy, Commencement night?"
+
+This is an atom: 
+"Rather guess I do! And, believe me, I sha'n't forget it in a hurry. By
+the way, there's one fellow I owe a good deal to that I haven't told
+you about yet."
+
+This is an atom: 
+He related to his father the story of his two encounters with Jabe. The
+older man listened with grim but satisfied attention.
+
+This is an atom: 
+"Licked him at last, did you? If you hadn't, I should want you to look
+him up and do it now. It's a Whittington habit to carry through what you
+begin. Well, Percy, you've certainly made good."
+
+This is an atom: 
+A glimmer of pride, the first he had ever shown in his son, crossed his
+face.
+
+This is an atom: 
+"I blamed you for junking your auto. Now I've gone and junked a yacht
+that'll cost me more than fifty times as much. Well, there's no fool
+like the old fool! But it's been worth it."
+
+This is an atom: 
+He gave his son a look in which affection mingled with pride.
+
+This is an atom: 
+"It was quicksilver, kill or cure; and I'm mighty glad it's been cure."
+
+---------------------------------------------------------------------------
+PLAGIARIZED ATOMS
+---------------------------------------------------------------------------
+***************************************************************************

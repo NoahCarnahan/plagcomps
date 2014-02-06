@@ -1,0 +1,310 @@
+Document Name: /part2/suspicious-document02157.txt
+Atom_Type: paragraph
+Cluster_Method: kmeans
+Plagiarized Atoms Count: 0/55
+Non-Plagiarized Atoms Count: 55/55
+
+---------------------------------------------------------------------------
+NON-PLAGIARIZED ATOMS
+---------------------------------------------------------------------------
+This is an atom: 
+﻿TOM SAWYER, DETECTIVE
+
+This is an atom: 
+CHAPTER I.  AN INVITATION FOR TOM AND HUCK
+
+This is an atom: 
+[Footnote: Strange as the incidents of this story are, they are not
+inventions, but facts--even to the public confession of the accused.  I
+take them from an old-time Swedish criminal trial, change the actors, and
+transfer the scenes to America.  I have added some details, but only a
+couple of them are important ones. -- M. T.]
+
+This is an atom: 
+WELL, it was the next spring after me and Tom Sawyer set our old nigger
+Jim free, the time he was chained up for a runaway slave down there on
+Tom's uncle Silas's farm in Arkansaw.  The frost was working out of the
+ground, and out of the air, too, and it was getting closer and closer
+onto barefoot time every day; and next it would be marble time, and next
+mumbletypeg, and next tops and hoops, and next kites, and then right away
+it would be summer and going in a-swimming. It just makes a boy homesick
+to look ahead like that and see how far off summer is. Yes, and it sets
+him to sighing and saddening around, and there's something the matter
+with him, he don't know what. But anyway, he gets out by himself and
+mopes and thinks; and mostly he hunts for a lonesome place high up on the
+hill in the edge of the woods, and sets there and looks away off on the
+big Mississippi down there a-reaching miles and miles around the points
+where the timber looks smoky and dim it's so far off and still, and
+everything's so solemn it seems like everybody you've loved is dead and
+gone, and you 'most wish you was dead and gone too, and done with it all.
+
+This is an atom: 
+Don't you know what that is? It's spring fever. That is what the name of
+it is.  And when you've got it, you want--oh, you don't quite know what
+it is you DO want, but it just fairly makes your heart ache, you want it
+so! It seems to you that mainly what you want is to get away; get away
+from the same old tedious things you're so used to seeing and so tired
+of, and set something new. That is the idea; you want to go and be a
+wanderer; you want to go wandering far away to strange countries where
+everything is mysterious and wonderful and romantic. And if you can't do
+that, you'll put up with considerable less; you'll go anywhere you CAN
+go, just so as to get away, and be thankful of the chance, too.
+
+This is an atom: 
+Well, me and Tom Sawyer had the spring fever, and had it bad, too; but it
+warn't any use to think about Tom trying to get away, because, as he
+said, his Aunt Polly wouldn't let him quit school and go traipsing off
+somers wasting time; so we was pretty blue.  We was setting on the front
+steps one day about sundown talking this way, when out comes his aunt
+Polly with a letter in her hand and says:
+
+This is an atom: 
+"Tom, I reckon you've got to pack up and go down to Arkansaw--your aunt
+Sally wants you."
+
+This is an atom: 
+I 'most jumped out of my skin for joy.  I reckoned Tom would fly at his
+aunt and hug her head off; but if you believe me he set there like a
+rock, and never said a word. It made me fit to cry to see him act so
+foolish, with such a noble chance as this opening up.  Why, we might lose
+it if he didn't speak up and show he was thankful and grateful. But he
+set there and studied and studied till I was that distressed I didn't
+know what to do; then he says, very ca'm, and I could a shot him for it:
+
+This is an atom: 
+"Well," he says, "I'm right down sorry, Aunt Polly, but I reckon I got to
+be excused--for the present."
+
+This is an atom: 
+His aunt Polly was knocked so stupid and so mad at the cold impudence of
+it that she couldn't say a word for as much as a half a minute, and this
+gave me a chance to nudge Tom and whisper:
+
+This is an atom: 
+"Ain't you got any sense? Sp'iling such a noble chance as this and
+throwing it away?"
+
+This is an atom: 
+But he warn't disturbed.  He mumbled back:
+
+This is an atom: 
+"Huck Finn, do you want me to let her SEE how bad I want to go? Why,
+she'd begin to doubt, right away, and imagine a lot of sicknesses and
+dangers and objections, and first you know she'd take it all back.  You
+lemme alone; I reckon I know how to work her."
+
+This is an atom: 
+Now I never would 'a' thought of that.  But he was right. Tom Sawyer was
+always right--the levelest head I ever see, and always AT himself and
+ready for anything you might spring on him.  By this time his aunt Polly
+was all straight again, and she let fly.  She says:
+
+This is an atom: 
+"You'll be excused! YOU will! Well, I never heard the like of it in all
+my days! The idea of you talking like that to ME! Now take yourself off
+and pack your traps; and if I hear another word out of you about what
+you'll be excused from and what you won't, I lay I'LL excuse you--with a
+hickory!"
+
+This is an atom: 
+She hit his head a thump with her thimble as we dodged by, and he let on
+to be whimpering as we struck for the stairs. Up in his room he hugged
+me, he was so out of his head for gladness because he was going
+traveling.  And he says:
+
+This is an atom: 
+"Before we get away she'll wish she hadn't let me go, but she won't know
+any way to get around it now. After what she's said, her pride won't let
+her take it back."
+
+This is an atom: 
+Tom was packed in ten minutes, all except what his aunt and Mary would
+finish up for him; then we waited ten more for her to get cooled down and
+sweet and gentle again; for Tom said it took her ten minutes to unruffle
+in times when half of her feathers was up, but twenty when they was all
+up, and this was one of the times when they was all up.  Then we went
+down, being in a sweat to know what the letter said.
+
+This is an atom: 
+She was setting there in a brown study, with it laying in her lap.  We
+set down, and she says:
+
+This is an atom: 
+"They're in considerable trouble down there, and they think you and
+Huck'll be a kind of diversion for them--'comfort,' they say.  Much of
+that they'll get out of you and Huck Finn, I reckon.  There's a neighbor
+named Brace Dunlap that's been wanting to marry their Benny for three
+months, and at last they told him point blank and once for all, he
+COULDN'T; so he has soured on them, and they're worried about it. I
+reckon he's somebody they think they better be on the good side of, for
+they've tried to please him by hiring his no-account brother to help on
+the farm when they can't hardly afford it, and don't want him around
+anyhow. Who are the Dunlaps?"
+
+This is an atom: 
+"They live about a mile from Uncle Silas's place, Aunt Polly--all the
+farmers live about a mile apart down there--and Brace Dunlap is a long
+sight richer than any of the others, and owns a whole grist of niggers.
+He's a widower, thirty-six years old, without any children, and is proud
+of his money and overbearing, and everybody is a little afraid of him.  I
+judge he thought he could have any girl he wanted, just for the asking,
+and it must have set him back a good deal when he found he couldn't get
+Benny.  Why, Benny's only half as old as he is, and just as sweet and
+lovely as--well, you've seen her. Poor old Uncle Silas--why, it's
+pitiful, him trying to curry favor that way--so hard pushed and poor, and
+yet hiring that useless Jubiter Dunlap to please his ornery brother."
+
+This is an atom: 
+"What a name--Jubiter! Where'd he get it?"
+
+This is an atom: 
+"It's only just a nickname.  I reckon they've forgot his real name long
+before this.  He's twenty-seven, now, and has had it ever since the first
+time he ever went in swimming.  The school teacher seen a round brown
+mole the size of a dime on his left leg above his knee, and four little
+bits of moles around it, when he was naked, and he said it minded him of
+Jubiter and his moons; and the children thought it was funny, and so they
+got to calling him Jubiter, and he's Jubiter yet.  He's tall, and lazy,
+and sly, and sneaky, and ruther cowardly, too, but kind of good-natured,
+and wears long brown hair and no beard, and hasn't got a cent, and Brace
+boards him for nothing, and gives him his old clothes to wear, and
+despises him. Jubiter is a twin."
+
+This is an atom: 
+"What's t'other twin like?"
+
+This is an atom: 
+"Just exactly like Jubiter--so they say; used to was, anyway, but he
+hain't been seen for seven years. He got to robbing when he was nineteen
+or twenty, and they jailed him; but he broke jail and got away--up North
+here, somers.  They used to hear about him robbing and burglaring now and
+then, but that was years ago. He's dead, now.  At least that's what they
+say. They don't hear about him any more."
+
+This is an atom: 
+"What was his name?"
+
+This is an atom: 
+"Jake."
+
+This is an atom: 
+There wasn't anything more said for a considerable while; the old lady
+was thinking.  At last she says:
+
+This is an atom: 
+"The thing that is mostly worrying your aunt Sally is the tempers that
+that man Jubiter gets your uncle into."
+
+This is an atom: 
+Tom was astonished, and so was I. Tom says:
+
+This is an atom: 
+"Tempers? Uncle Silas? Land, you must be joking! I didn't know he HAD any
+temper."
+
+This is an atom: 
+"Works him up into perfect rages, your aunt Sally says; says he acts as
+if he would really hit the man, sometimes."
+
+This is an atom: 
+"Aunt Polly, it beats anything I ever heard of. Why, he's just as gentle
+as mush."
+
+This is an atom: 
+"Well, she's worried, anyway.  Says your uncle Silas is like a changed
+man, on account of all this quarreling. And the neighbors talk about it,
+and lay all the blame on your uncle, of course, because he's a preacher
+and hain't got any business to quarrel.  Your aunt Sally says he hates to
+go into the pulpit he's so ashamed; and the people have begun to cool
+toward him, and he ain't as popular now as he used to was."
+
+This is an atom: 
+"Well, ain't it strange? Why, Aunt Polly, he was always so good and kind
+and moony and absent-minded and chuckle-headed and lovable--why, he was
+just an angel! What CAN be the matter of him, do you reckon?"
+
+This is an atom: 
+CHAPTER II.  JAKE DUNLAP
+
+This is an atom: 
+WE had powerful good luck; because we got a chance in a stern-wheeler
+from away North which was bound for one of them bayous or one-horse
+rivers away down Louisiana way, and so we could go all the way down the
+Upper Mississippi and all the way down the Lower Mississippi to that farm
+in Arkansaw without having to change steamboats at St. Louis; not so very
+much short of a thousand miles at one pull.
+
+This is an atom: 
+A pretty lonesome boat; there warn't but few passengers, and all old
+folks, that set around, wide apart, dozing, and was very quiet.  We was
+four days getting out of the "upper river," because we got aground so
+much. But it warn't dull--couldn't be for boys that was traveling, of
+course.
+
+This is an atom: 
+From the very start me and Tom allowed that there was somebody sick in
+the stateroom next to ourn, because the meals was always toted in there
+by the waiters. By and by we asked about it--Tom did and the waiter said
+it was a man, but he didn't look sick.
+
+This is an atom: 
+"Well, but AIN'T he sick?"
+
+This is an atom: 
+"I don't know; maybe he is, but 'pears to me he's just letting on."
+
+This is an atom: 
+"What makes you think that?"
+
+This is an atom: 
+"Because if he was sick he would pull his clothes off SOME time or
+other--don't you reckon he would? Well, this one don't. At least he don't
+ever pull off his boots, anyway."
+
+This is an atom: 
+"The mischief he don't! Not even when he goes to bed?"
+
+This is an atom: 
+"No."
+
+This is an atom: 
+It was always nuts for Tom Sawyer--a mystery was.  If you'd lay out a
+mystery and a pie before me and him, you wouldn't have to say take your
+choice; it was a thing that would regulate itself.  Because in my nature
+I have always run to pie, whilst in his nature he has always run to
+mystery. People are made different.  And it is the best way. Tom says to
+the waiter:
+
+This is an atom: 
+"What's the man's name?"
+
+This is an atom: 
+"Phillips."
+
+This is an atom: 
+"Where'd he come aboard?"
+
+This is an atom: 
+"I think he got aboard at Elexandria, up on the Iowa line."
+
+This is an atom: 
+"What do you reckon he's a-playing?"
+
+This is an atom: 
+"I hain't any notion--I never thought of it."
+
+This is an atom: 
+I says to myself, here's another one that runs to pie.
+
+This is an atom: 
+"Anything peculiar about him?--the way he acts or talks?"
+
+This is an atom: 
+"No--nothing, except he seems so scary, and keeps his doors locked night
+and day both, and when you knock he won't let you in till he opens the
+door a crack and sees who it is."
+
+---------------------------------------------------------------------------
+PLAGIARIZED ATOMS
+---------------------------------------------------------------------------
+***************************************************************************

@@ -179,7 +179,7 @@ def _output_to_file(assignment_dict, atom_type, cluster_type):
         plag_atoms = []
         non_plag_atoms = []
         for i in xrange(len(assignment_dict[document])):
-            if assignment_dict[document][i] == 0:
+            if assignment_dict[document][i] <= 50:
                 non_plag_atoms.append(i)
             else:
                 plag_atoms.append(i)

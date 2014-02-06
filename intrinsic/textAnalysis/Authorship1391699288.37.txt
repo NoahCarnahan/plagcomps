@@ -1,0 +1,258 @@
+Document Name: /part1/suspicious-document01846.txt
+Atom_Type: paragraph
+Cluster_Method: kmeans
+Plagiarized Atoms Count: 0/12
+Non-Plagiarized Atoms Count: 12/12
+
+---------------------------------------------------------------------------
+NON-PLAGIARIZED ATOMS
+---------------------------------------------------------------------------
+This is an atom: 
+﻿Few persons come to middle life without some conception of these relative
+values. It is in the heat and struggle that we fail to appreciate what in
+the attainment will be most satisfactory to us. After it is over we are
+apt to see that our possessions do not bring the happiness we expected;
+or that we have neglected to cultivate the powers and tastes that can
+make life enjoyable. We come to know, to use a truism, that a person's
+highest satisfaction depends not upon his exterior acquisitions, but upon
+what he himself is. There is no escape from this conclusion. The physical
+satisfactions are limited and fallacious, the intellectual and moral
+satisfactions are unlimited. In the last analysis, a man has to live with
+himself, to be his own companion, and in the last resort the question is,
+what can he get out of himself. In the end, his life is worth just what
+he has become. And I need not say that the mistake commonly made is as to
+relative values,--that the things of sense are as important as the things
+of the mind. You make that mistake when you devote your best energies to
+your possession of material substance, and neglect the enlargement, the
+training, the enrichment of the mind. You make the same mistake in a less
+degree, when you bend to the popular ignorance and conceit so far as to
+direct your college education to sordid ends. The certain end of yielding
+to this so-called practical spirit was expressed by a member of a
+Northern State legislature who said, "We don't want colleges, we want
+workshops." It was expressed in another way by a representative of the
+lower house in Washington who said, "The average ignorance of the country
+has a right to be represented here." It is not for me to say whether it
+is represented there. Naturally, I say, we ought by the time of middle
+life to come to a conception of what sort of things are of most value. By
+analogy, in the continual growth of the Republic, we ought to have a
+perception of what we have accomplished and acquired, and some clear view
+of our tendencies. We take justifiable pride in the glittering figures of
+our extension of territory, our numerical growth, in the increase of
+wealth, and in our rise to the potential position of almost the first
+nation in the world. A more pertinent inquiry is, what sort of people
+have we become? What are we intellectually and morally? For after all the
+man is the thing, the production of the right sort of men and women is
+all that gives a nation value. When I read of the establishment of a
+great industrial centre in which twenty thousand people are employed in
+the increase of the amount of steel in the world, before I decide whether
+it would be a good thing for the Republic to create another industrial
+city of the same sort, I want to know what sort of people the twenty
+thousand are, how they live, what their morals are, what intellectual
+life they have, what their enjoyment of life is, what they talk about and
+think about, and what chance they have of getting into any higher life.
+It does not seem to me a sufficient gain in this situation that we are
+immensely increasing the amount of steel in the world, or that twenty
+more people are enabled on account of this to indulge in an unexampled,
+unintellectual luxury. We want more steel, no doubt, but haven't we wit
+enough to get that and at the same time to increase among the producers
+of it the number of men and women whose horizons are extended, who are
+companionable, intelligent beings, adding something to the intellectual
+and moral force upon which the real progress of the Republic depends?
+
+This is an atom: 
+There is no place where I would choose to speak more plainly of our
+national situation today than in the South, and at the University of the
+South; in the South, because it is more plainly in a transition state,
+and at the University of the South, because it is here and in similar
+institutions that the question of the higher or lower plane of life in
+the South is to be determined.
+
+This is an atom: 
+To a philosophical observer of the Republic, at the end of the hundred
+years, I should say that the important facts are not its industrial
+energy, its wealth, or its population, but the stability of the federal
+power, and the integrity of the individual States. That is to say, that
+stress and trial have welded us into an indestructible nation; and not of
+less consequence is the fact that the life of the Union is in the life of
+the States. The next most encouraging augury for a great future is the
+marvelous diversity among the members of this republican body. If nothing
+would be more speedily fatal to our plan of government than increasing
+centralization, nothing would be more hopeless in our development than
+increasing monotony, the certain end of which is mediocrity.
+
+This is an atom: 
+Speaking as one whose highest pride it is to be a citizen of a great and
+invincible Republic to those whose minds kindle with a like patriotism, I
+can say that I am glad there are East and North and South, and West,
+Middle, Northwest, and Southwest, with as many diversities of climate,
+temperament, habits, idiosyncrasies, genius, as these names imply. Thank
+Heaven we are not all alike; and so long as we have a common purpose in
+the Union, and mutual toleration, respect, and sympathy, the greater will
+be our achievement and the nobler our total development, if every section
+is true to the evolution of its local traits. The superficial foreign
+observer finds sameness in our different States, tiresome family likeness
+in our cities, hideous monotony in our villages, and a certain common
+atmosphere of life, which increasing facility of communication tends to
+increase. This is a view from a railway train. But as soon as you observe
+closely, you find in each city a peculiar physiognomy, and a peculiar
+spirit remarkable considering the freedom of movement and intercourse,
+and you find the organized action of each State sui generis to a degree
+surprising considering the general similarity of our laws and
+institutions. In each section differences of speech, of habits of
+thought, of temperament prevail. Massachusetts is unlike Louisiana,
+Florida unlike Tennessee, Georgia is unlike California, Pennsylvania is
+unlike Minnesota, and so on, and the unlikeness is not alone or chiefly
+in physical features. By the different style of living I can tell when I
+cross the line between Connecticut and New York as certainly as when I
+cross the line between Vermont and Canada. The Virginian expanded in
+Kentucky is not the same man he was at home, and the New England Yankee
+let loose in the West takes on proportions that would astonish his
+grandfather. Everywhere there is a variety in local sentiment, action,
+and development. Sit down in the seats of the State governments and study
+the methods of treatment of essentially the common institutions of
+government, of charity and discipline, and you will be impressed with the
+variety of local spirit and performance in the Union. And this, diversity
+is so important, this contribution of diverse elements is so necessary to
+the complex strength and prosperity of the whole, that one must view with
+alarm all federal interference and tendency to greater centralization.
+
+This is an atom: 
+And not less to be dreaded than monotony from the governmental point of
+view, is the obliteration of variety in social life and in literary
+development. It is not enough for a nation to be great and strong, it
+must be interesting, and interesting it cannot be without cultivation of
+local variety. Better obtrusive peculiarities than universal sameness. It
+is out of variety as well as complexity in American life, and not in
+homogeneity and imitation, that we are to expect a civilization
+noteworthy in the progress of the human race.
+
+This is an atom: 
+Let us come a little closer to our subject in details. For a hundred
+years the South was developed on its own lines, with astonishingly little
+exterior bias. This comparative isolation was due partly to the
+institution of slavery, partly to devotion to the production of two or
+three great staples. While its commercial connection with the North was
+intimate and vital, its literary relation with the North was slight. With
+few exceptions Northern authors were not read in the South, and the
+literary movement of its neighbors, such as it was, from 1820 to 1860,
+scarcely affected it. With the exception of Louisiana, which was
+absolutely ignorant of American literature and drew its inspiration and
+assumed its critical point of view almost wholly from the French, the
+South was English, but mainly English of the time of Walter Scott and
+George the Third. While Scott was read at the North for his knowledge of
+human nature, as he always will be read, the chivalric age which moves in
+his pages was taken more seriously at the South, as if it were of
+continuing importance in life. In any of its rich private libraries you
+find yourself in the age of Pope and Dryden, and the classics were
+pursued in the spirit of Oxford and Cambridge in the time of Johnson. It
+was little disturbed by the intellectual and ethical agitation of modern
+England or of modern New England. During this period, while the South
+excelled in the production of statesmen, orators, trained politicians,
+great judges, and brilliant lawyers, it produced almost no literature,
+that is, no indigenous literature, except a few poems and--a few humorous
+character-sketches; its general writing was ornately classic, and its
+fiction romantic on the lines of the foreign romances.
+
+This is an atom: 
+From this isolation one thing was developed, and another thing might in
+due time be expected. The thing developed was a social life, in the
+favored class, which has an almost unique charm, a power of being
+agreeable, a sympathetic cordiality, an impulsive warmth, a frankness in
+the expression of emotion, and that delightful quality of manner which
+puts the world at ease and makes life pleasant. The Southerners are no
+more sincere than the Northerners, but they have less reserve, and in the
+social traits that charm all who come in contact with them, they have an
+element of immense value in the variety of American life.
+
+This is an atom: 
+The thing that might have been expected in due time, and when the call
+came--and it is curious to note that the call and cause of any
+renaissance are always from the outside--was a literary expression fresh
+and indigenous. This expectation, in a brief period since the war, has
+been realized by a remarkable performance and is now stimulated by a
+remarkable promise. The acclaim with which the Southern literature has
+been received is partly due to its novelty, the new life it exhibited,
+but more to the recognition in it of a fresh flavor, a literary quality
+distinctly original and of permanent importance. This production, the
+first fruits of which are so engaging in quality, cannot grow and broaden
+into a stable, varied literature without scholarship and hard work, and
+without a sympathetic local audience. But the momentary concern is that
+it should develop on its own lines and in its own spirit, and not under
+the influence of London or Boston or New York. I do not mean by this that
+it should continue to attract attention by peculiarities of dialect-which
+is only an incidental, temporary phenomenon, that speedily becomes
+wearisome, whether "cracker" or negro or Yankee--but by being true to the
+essential spirit and temperament of Southern life.
+
+This is an atom: 
+During this period there was at the North, and especially in the East,
+great intellectual activity and agitation, and agitation ethical and
+moral as well as intellectual. There was awakening, investigation,
+questioning, doubt. There was a great deal of froth thrown to the
+surface. In the free action of individual thought and expression grew
+eccentricities of belief and of practice, and a crop of so-called "isms,"
+more or less temporary, unprofitable, and pernicious. Public opinion
+attained an astonishing degree of freedom,--I never heard of any
+community that was altogether free of its tyranny. At least extraordinary
+latitude was permitted in the development of extreme ideas, new,
+fantastic, radical, or conservative. For instance, slavery was attacked
+and slavery was defended on the same platform, with almost equal freedom.
+Indeed, for many years, if there was any exception to the general
+toleration it was in the social ostracism of those who held and expressed
+extreme opinions in regard to immediate emancipation, and were
+stigmatized as abolitionists. There was a general ferment of new ideas,
+not always fruitful in the direction taken, but hopeful in view of the
+fact that growth and movement are better than stagnation and decay. You
+can do something with a ship that has headway; it will drift upon the
+rocks if it has not. With much foam and froth, sure to attend agitation,
+there was immense vital energy, intense life.
+
+This is an atom: 
+Out of this stir and agitation came the aggressive, conquering spirit
+that carried civilization straight across the continent, that built up
+cities and States, that developed wealth, and by invention, ingenuity,
+and energy performed miracles in the way of the subjugation of nature and
+the assimilation of societies. Out of this free agitation sprang a
+literary product, great in quantity and to some degree distinguished in
+quality, groups of historians, poets, novelists, essayists, biographers,
+scientific writers. A conspicuous agency of the period was the lecture
+platform, which did something in the spread and popularization of
+information, but much more in the stimulation of independent thought and
+the awakening of the mind to use its own powers.
+
+This is an atom: 
+Along with this and out of this went on the movement of popular education
+and of the high and specialized education. More remarkable than the
+achievements of the common schools has been the development of the
+colleges, both in the departments of the humanities and of science. If I
+were writing of education generally, I might have something to say of the
+measurable disappointment of the results of the common schools as at
+present conducted, both as to the diffusion of information and as to the
+discipline of the mind and the inculcation of ethical principles; which
+simply means that they need improvement. But the higher education has
+been transformed, and mainly by the application of scientific methods,
+and of the philosophic spirit, to the study of history, economics, and
+the classics. When we are called to defend the pursuit of metaphysics or
+the study of the classics, either as indispensable to the discipline or
+to the enlargement of the mind, we are not called on to defend the
+methods of a generation ago. The study of Greek is no longer an exercise
+in the study of linguistics or the inspection of specimens of an obsolete
+literature, but the acquaintance with historic thought, habits, and
+polity, with a portion of the continuous history of the human mind, which
+has a vital relation to our own life.
+
+This is an atom: 
+However much or little there may be of permanent value in the vast
+production of northern literature, judged by continental or even English
+standards, the time has came when American scholarship in science, in
+language, in occidental or oriental letters, in philosophic and
+historical methods, can court comparison with any other. In some branches
+of research the peers of our scholars must be sought not in England but
+in Germany. So that in one of the best fruits of a period of intellectual
+agitation, scholarship, the restless movement has thoroughly vindicated
+itself.
+
+---------------------------------------------------------------------------
+PLAGIARIZED ATOMS
+---------------------------------------------------------------------------
+***************************************************************************

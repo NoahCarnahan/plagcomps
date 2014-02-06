@@ -1,0 +1,449 @@
+Document Name: /part2/suspicious-document03297.txt
+Atom_Type: paragraph
+Cluster_Method: kmeans
+Plagiarized Atoms Count: 0/65
+Non-Plagiarized Atoms Count: 65/65
+
+---------------------------------------------------------------------------
+NON-PLAGIARIZED ATOMS
+---------------------------------------------------------------------------
+This is an atom: 
+﻿THE NATURE FAKER
+
+This is an atom: 
+By Richard Harding Davis
+
+This is an atom: 
+Richard Herrick was a young man with a gentle disposition, much money, and no sense of humor.
+His object in life was to marry Miss Catherweight. For three years she had tried to persuade
+him this could not be, and finally, in order to convince him, married some one else. When the
+woman he loves marries another man, the rejected one is popularly supposed to take to drink
+or to foreign travel. Statistics show that, instead, he instantly falls in love with the best
+friend of the girl who refused him. But, as Herrick truly loved Miss Catherweight, he could
+not worship any other woman, and so he became a lover of nature. Nature, he assured his men
+friends, does not disappoint you. The more thought, care, affection you give to nature, the
+more she gives you in return, and while, so he admitted, in wooing nature there are no great
+moments, there are no heart-aches. Jackson, one of the men friends, and of a frivolous disposition,
+said that he also could admire a landscape, but he would rather look at the beautiful eyes
+of a girl he knew than at the Lakes of Killarney, with a full moon, a setting sun, and the
+aurora borealis for a background. Herrick suggested that, while the beautiful eyes might seek
+those of another man, the Lakes of Killarney would always remain where you could find them.
+Herrick pursued his new love in Connecticut on an abandoned farm which he converted into a
+"model" one. On it he established model dairies and model incubators. He laid out old-fashioned
+gardens, sunken gardens, Italian gardens, landscape gardens, and a game preserve.
+
+This is an atom: 
+The game preserve was his own especial care and pleasure. It consisted of two hundred acres
+of dense forest and hills and ridges of rock. It was filled with mysterious caves, deep chasms,
+tiny gurgling streams, nestling springs, and wild laurel. It was barricaded with fallen tree-trunks
+and moss-covered rocks that had never felt the foot of man since that foot had worn a moccasin.
+Around the preserve was a high fence stout enough to keep poachers on the outside and to persuade
+the wild animals that inhabited it to linger on the inside. These wild animals were squirrels,
+rabbits, and raccoons. Every day, in sunshine or in rain, entering through a private gate,
+Herrick would explore this holy of holies. For such vermin as would destroy the gentler animals
+he carried a gun. But it was turned only on those that preyed upon his favorites. For hours
+he would climb through this wilderness, or, seated on a rock, watch a bluebird building her
+nest or a squirrel laying in rations against the coming of the snow. In time he grew to think
+he knew and understood the inhabitants of this wild place of which he was the overlord. He
+looked upon them not as his tenants but as his guests. And when they fled from him in terror
+to caves and hollow tree-trunks, he wished he might call them back and explain he was their
+friend, that it was due to him they lived in peace. He was glad they were happy. He was glad
+it was through him that, undisturbed, they could live the simple life.
+
+This is an atom: 
+His fall came through ambition. Herrick himself attributed it to his too great devotion to
+nature and nature's children. Jackson, he of the frivolous mind, attributed it to the fact
+that any man is sure to come to grief who turns from the worship of God's noblest handiwork,
+by which Jackson meant woman, to worship chipmunks and Plymouth Rock hens. One night Jackson
+lured Herrick into New York to a dinner and a music hall. He invited also one Kelly, a mutual
+friend of a cynical and combative disposition. Jackson liked to hear him and Herrick abuse
+each other, and always introduced subjects he knew would cause each to lose his temper.
+
+This is an atom: 
+But, on this night, Herrick needed no goading. He was in an ungrateful mood. Accustomed to
+food fresh from the soil and the farmyard, he sneered at hothouse asparagus, hothouse grapes,
+and cold-storage quail. At the music hall he was even more difficult. In front of him sat a
+stout lady who when she shook with laughter shed patchouli and a man who smoked American cigarettes.
+At these and the steam heat, the nostrils of Herrick, trained to the odor of balsam and the
+smoke of open wood fires, took offense. He refused to be amused. The monologue artist, in whom
+Jackson found delight, caused Herrick only to groan; the knockabout comedians he hoped would
+break their collar-bones; the lady who danced Salome, and who fascinated Kelly, Herrick prayed
+would catch pneumonia and die of it. And when the drop rose upon the Countess Zichy's bears,
+his dissatisfaction reached a climax.
+
+This is an atom: 
+There were three bears--a large papa bear, a mamma bear, and the baby bear. On the programme
+they were described as Bruno, Clara, and Ikey. They were of a dusty brown, with long, curling
+noses tipped with white, and fat, tan-colored bellies. When father Bruno, on his hind legs
+and bare feet, waddled down the stage, he resembled a Hebrew gentleman in a brown bathing suit
+who had lost his waist-line. As he tripped doubtfully forward, with mincing steps, he continually
+and mournfully wagged his head. He seemed to be saying: "This water is much too cold for me."
+The mamma bear was dressed in a poke bonnet and white apron, and resembled the wolf who frightened
+Little Red Riding-Hood, and Ikey, the baby bear, wore rakishly over one eye the pointed cap
+of a clown. To those who knew their vaudeville, this was indisputable evidence that Ikey would
+furnish the comic relief. Nor did Ikey disappoint them. He was a wayward son. When his parents
+were laboriously engaged in a boxing-match, or dancing to the "Merry Widow Waltz," or balancing
+on step-ladders, Ikey, on all fours, would scamper to the foot-lights and, leaning over, make
+a swift grab at the head of the first trombone. And when the Countess Zichy, apprised by the
+shouts of the audience of Ikey's misconduct, waved a toy whip, Ikey would gallop back to his
+pedestal and howl at her. To every one, except Herrick and the first trombone, this playfulness
+on the part of Ikey furnished great delight.
+
+This is an atom: 
+The performances of the bears ended with Bruno and Clara dancing heavily to the refrain of
+the "Merry Widow Waltz," while Ikey pretended to conduct the music of the orchestra. On the
+final call, Madame Zichy threw to each of the animals a beer bottle filled with milk; and the
+gusto with which the savage-looking beasts uncorked the bottles and drank from them greatly
+amused the audience. Ikey, standing on his hind legs, his head thrown back, with both paws
+clasping the base of the bottle, shoved the neck far down his throat, and then, hurling it
+from him, and cocking his clown's hat over his eyes, gave a masterful imitation of a very intoxicated
+bear.
+
+This is an atom: 
+"That," exclaimed Herrick hotly, "is a degrading spectacle. It degrades the bear and degrades
+me and you."
+
+This is an atom: 
+"No, it bores me," said Kelly.
+
+This is an atom: 
+"If you understood nature," retorted Herrick, "and nature's children, it would infuriate you."
+
+This is an atom: 
+"I don't go to a music hall to get infuriated," said Kelly.
+
+This is an atom: 
+"Trained dogs I don't mind," exclaimed Herrick. "Dogs are not wild animals. The things they're
+trained to do are of USE. They can guard the house, or herd sheep. But a bear is a wild beast.
+Always will be a wild beast. You can't train him to be of use. It's degrading to make him ride
+a bicycle. I hate it! If I'd known there were to be performing bears to-night, I wouldn't have
+come!"
+
+This is an atom: 
+"And if I'd known you were to be here to-night, I wouldn't have come!" said Kelly. "Where do
+we go to next?"
+
+This is an atom: 
+They went next to a restaurant in a gayly decorated cellar. Into this young men like themselves
+and beautiful ladies were so anxious to hurl themselves that to restrain them a rope was swung
+across the entrance and page boys stood on guard. When a young man became too anxious to spend
+his money, the page boys pushed in his shirt front. After they had fought their way to a table,
+Herrick ungraciously remarked he would prefer to sup in a subway station. The people, he pointed
+out, would be more human, the decorations were much of the same Turkish-bath school of art,
+and the air was no worse.
+
+This is an atom: 
+"Cheer up, Clarence!" begged Jackson, "you'll soon be dead. To-morrow you'll be back among
+your tree-toads and sunsets. And, let us hope," he sighed, "no one will try to stop you!"
+
+This is an atom: 
+"What worries me is this," explained Herrick. "I can't help thinking that, if one night of
+this artificial life is so hard upon me, what must it be to those bears!"
+
+This is an atom: 
+Kelly exclaimed, with exasperation: "Confound the bears!" he cried. "If you must spoil my supper
+weeping over animals, weep over cart-horses. They work. Those bears are loafers. They're as
+well fed as pet canaries. They're aristocrats."
+
+This is an atom: 
+"But it's not a free life!" protested Herrick. "It's not the life they love."
+
+This is an atom: 
+"It's a darned sight better," declared Kelly, "than sleeping in a damp wood, eating raw blackberries----"
+
+This is an atom: 
+"The more you say," retorted Herrick, "the more you show you know nothing whatsoever of nature's
+children and their habits."
+
+This is an atom: 
+"And all you know of them," returned Kelly, "is that a cat has nine lives, and a barking dog
+won't bite. You're a nature faker." Herrick refused to be diverted.
+
+This is an atom: 
+"It hurt me," he said. "They were so big, and good-natured, and helpless. I'll bet that woman
+beats them! I kept thinking of them as they were in the woods, tramping over the clean pine
+needles, eating nuts, and--and honey, and----"
+
+This is an atom: 
+"Buns!" suggested Jackson.
+
+This is an atom: 
+"I can't forget them," said Herrick. "It's going to haunt me, to-morrow, when I'm back in the
+woods; I'll think of those poor beasts capering in a hot theatre, when they ought to be out
+in the open as God meant they----"
+
+This is an atom: 
+"Well, then," protested Kelly, "take 'em to the open. And turn 'em loose! And I hope they bite
+YOU!"
+
+This is an atom: 
+At this Herrick frowned so deeply that Kelly feared he had gone too far. Inwardly, he reproved
+himself for not remembering that his friend lacked a sense of humor. But Herrick undeceived him.
+
+This is an atom: 
+"You are right!" he exclaimed. "To-morrow I will buy those bears, take them to the farm, and
+turn them loose!"
+
+This is an atom: 
+No objections his friend could offer could divert him from his purpose. When they urged that
+to spend so much money in such a manner was criminally wasteful, he pointed out that he was
+sufficiently rich to indulge any extravagant fancy, whether in polo ponies or bears; when they
+warned him that if he did not look out the bears would catch him alone in the woods, and eat
+him, he retorted that the bears were now educated to a different diet; when they said he should
+consider the peace of mind of his neighbors, he assured them the fence around his game preserve
+would restrain an elephant.
+
+This is an atom: 
+"Besides," protested Kelly, "what you propose to do is not only impracticable, but it's cruelty
+to animals. A domesticated animal can't return to a state of nature, and live."
+
+This is an atom: 
+"Can't it?" jeered Herrick. "Did you ever read 'The Call of the Wild'?"
+
+This is an atom: 
+"Did you ever read," retorted Kelly, "what happened at the siege of Ladysmith when the oats
+ran low and they drove the artillery horses out to grass? They starved, that's all. And if
+you don't feed your bears on milk out of a bottle they'll starve too."
+
+This is an atom: 
+"That's what will happen," cried Jackson; "those bears have forgotten what a pine forest smells
+like. Maybe it's a pity, but it's the fact. I'll bet if you could ask them whether they'd rather
+sleep in a cave on your farm or be headliners in vaudeville, they'd tell you they were 'devoted
+to their art.'"
+
+This is an atom: 
+"Why!" exclaimed Kelly, "they're so far from nature that if they didn't have that colored boy
+to comb and brush them twice a day they'd be ashamed to look each other in the eyes."
+
+This is an atom: 
+"And another thing," continued Jackson, "trained animals love to 'show off.' They're children.
+Those bears ENJOY doing those tricks. They ENJOY the applause. They enjoy dancing to the 'Merry
+Widow Waltz.' And if you lock them up in your jungle, they'll get so homesick that they'll
+give a performance twice a day to the squirrels and woodpeckers."
+
+This is an atom: 
+"It's just as hard to unlearn a thing as to learn it," said Kelly sententiously. "You can't
+make a man who has learned to wear shoes enjoy going around in his bare feet."
+
+This is an atom: 
+"Rot!" cried Herrick. "Look at me. Didn't I love New York? I loved it so I never went to bed
+for fear I'd miss something. But when I went 'Back to the Land,' did it take me long to fall
+in love with the forests and the green fields? It took me a week. I go to bed now the same
+day I get up, and I've passed on my high hat and frock coat to a scarecrow. And I'll bet you
+when those bears once scent the wild woods they'll stampede for them like Croker going to a
+third alarm."
+
+This is an atom: 
+"And I repeat," cried Kelly, "you are a nature faker. And I'll leave it to the bears to prove it."
+
+This is an atom: 
+"We have done our best," sighed Jackson. "We have tried to save him money and trouble. And
+now all he can do for us in return is to give us seats for the opening performance."
+
+This is an atom: 
+What the bears cost Herrick he never told. But it was a very large sum. As the Countess Zichy
+pointed out, bears as bears, in a state of nature, are cheap. If it were just a bear he wanted,
+he himself could go to Pike County, Pennsylvania, and trap one. What he was paying for, she
+explained, was the time she had spent in educating the Bruno family, and added to that the
+time during which she must now remain idle while she educated another family.
+
+This is an atom: 
+Herrick knew for what he was paying. It was the pleasure of rescuing unwilling slaves from
+bondage. As to their expensive education, if they returned to a state of ignorance as rapidly
+as did most college graduates he knew, he would be satisfied. Two days later, when her engagement
+at the music hall closed, Madame Zichy reluctantly turned over her pets to their new manager.
+With Ikey she was especially loath to part.
+
+This is an atom: 
+"I'll never get one like him," she wailed, "Ikey is the funniest four-legged clown in America.
+He's a natural-born comedian. Folks think I learn him those tricks, but it's all his own stuff.
+Only last week we was playing Paoli's in Bridgeport, and when I was putting Bruno through the
+hoops, Ikey runs to the stage-box and grabs a pound of caramels out of a girl's lap-and swallows
+the box. And in St. Paul, if the trombone hadn't worn a wig, Ikey would have scalped him. Say,
+it was a scream! When the audience see the trombone snatched bald-headed, and him trying to
+get back his wig, and Ikey chewing it, they went crazy. You can't learn a bear tricks like
+that. It's just genius. Some folks think I taught him to act like he was intoxicated, but he
+picked that up, too, all by himself, through watching my husband. And Ikey's very fond of beer
+on his own account. If I don't stop them, the stage hands would be always slipping him drinks.
+I hope you won't give him none."
+
+This is an atom: 
+"I will not!" said Herrick.
+
+This is an atom: 
+The bears, Ikey in one cage and Bruno and Clara in another, travelled by express to the station
+nearest the Herrick estate. There they were transferred to a farm wagon, and grumbling and
+growling, and with Ikey howling like an unspanked child, they were conveyed to the game preserve.
+At the only gate that entered it, Kelly and Jackson and a specially invited house party of
+youths and maidens were gathered to receive them. At a greater distance stood all of the servants
+and farm hands, and as the wagon backed against the gate, with the door of Ikey's cage opening
+against it, the entire audience, with one accord, moved solidly to the rear. Herrick, with
+a pleased but somewhat nervous smile, mounted the wagon. But before he could unlock the cage
+Kelly demanded to be heard. He insisted that, following the custom of all great artists, the
+bears should give a farewell performance.
+
+This is an atom: 
+He begged that Bruno and Clara might be permitted to dance together. He pointed out that this
+would be the last time they could listen to the strains of the "Merry Widow Waltz." He called
+upon everybody present to whistle it.
+
+This is an atom: 
+The suggestion of an open-air performance was received coldly. At the moment no one seemed
+able to pucker his lips into a whistle, and some even explained that with that famous waltz
+they were unfamiliar.
+
+This is an atom: 
+One girl attained an instant popularity by pointing out that the bears could waltz just as
+well on one side of the fence as the other. Kelly, cheated of his free performance, then begged
+that before Herrick condemned the bears to starve on acorns, he should give them a farewell
+drink, and Herrick, who was slightly rattled, replied excitedly that he had not ransomed the
+animals only to degrade them. The argument was interrupted by the French chef falling out of
+a tree. He had climbed it, he explained, in order to obtain a better view.
+
+This is an atom: 
+When, in turn, it was explained to him that a bear also could climb a tree, he remembered he
+had left his oven door open. His departure reminded other servants of duties they had neglected,
+and one of the guests, also, on remembering he had put in a long-distance call, hastened to
+the house. Jackson suggested that perhaps they had better all return with him, as the presence
+of so many people might frighten the bears. At the moment he spoke, Ikey emitted a hideous
+howl, whether of joy or rage no one knew, and few remained to find out. It was not until Herrick
+had investigated and reported that Ikey was still behind the bars that the house party cautiously
+returned. The house party then filed a vigorous protest. Its members, with Jackson as spokesman,
+complained that Herrick was relying entirely too much on his supposition that the bears would
+be anxious to enter the forest. Jackson pointed out that, should they not care to do so, there
+was nothing to prevent them from doubling back under the wagon; in which case the house party
+and all of the United States lay before them. It was not until a lawn-tennis net and much chicken
+wire was stretched in intricate thicknesses across the lower half of the gate that Herrick
+was allowed to proceed. Unassisted, he slid back the cage door, and without a moment's hesitation
+Ikey leaped from the wagon through the gate and into the preserve. For an instant, dazed by
+the sudden sunlight, he remained motionless, and then, after sniffing delightedly at the air,
+stuck his nose deep into the autumn leaves. Turning on his back, he luxuriously and joyfully
+kicked his legs, and rolled from side to side.
+
+This is an atom: 
+Herrick gave a shout of joy and triumph. "What did I tell you!" he called. "See how he loves
+it! See how happy he is."
+
+This is an atom: 
+"Not at all," protested Kelly. "He thought you gave him the sign to 'roll over.' Tell him to
+'play dead,' and he'll do that." "Tell ALL the bears to 'play dead,'" begged Jackson, "until
+I'm back in the billiard-room."
+
+This is an atom: 
+Flushed with happiness, Herrick tossed Ikey's cage out of the wagon, and opened the door of
+the one that held Bruno and Clara. On their part, there was a moment of doubt. As though suspecting
+a trap, they moved to the edge of the cage, and gazed critically at the screen of trees and
+tangled vines that rose before them.
+
+This is an atom: 
+"They think it's a new backdrop," explained Kelly.
+
+This is an atom: 
+But the delight with which Ikey was enjoying his bath in the autumn leaves was not lost upon
+his parents. Slowly and clumsily they dropped to the ground. As though they expected to be
+recalled, each turned to look at the group of people who had now run to peer through the wire
+meshes of the fence. But, as no one spoke and no one signalled, the three bears, in single
+file, started toward the edge of the forest. They had of cleared space to cover only a little
+distance, and at each step, as though fearful they would be stopped and punished, one or the
+other turned his head. But no one halted them. With quickening footsteps the bears, now almost
+at a gallop, plunged forward. The next instant they were lost to sight, and only the crackling
+of the underbrush told that they had come into their own.
+
+This is an atom: 
+Herrick dropped to the ground and locked himself inside the preserve.
+
+This is an atom: 
+"I'm going after them," he called, "to see what they'll do."
+
+This is an atom: 
+There was a frantic chorus of entreaties.
+
+This is an atom: 
+"Don't be an ass!" begged Jackson. "They'll eat you." Herrick waved his hand reassuringly.
+
+This is an atom: 
+"They won't even see me," he explained. "I can find my way about this place better than they
+can. And I'll keep to windward of them, and watch them. Go to the house," he commanded. "I'll
+be with you in an hour, and report."
+
+This is an atom: 
+It was with real relief that, on assembling for dinner, the house party found Herrick, in high
+spirits, with the usual number of limbs, and awaiting them. The experiment had proved a great
+success. He told how, unheeded by the bears, he had, without difficulty, followed in their
+tracks. For an hour he had watched them. No happy school-children, let loose at recess, could
+have embraced their freedom with more obvious delight. They drank from the running streams,
+for honey they explored the hollow tree-trunks, they sharpened their claws on moss-grown rocks,
+and among the fallen oak leaves scratched violently for acorns. So satisfied was Herrick with
+what he had seen, with the success of his experiment, and so genuine and unselfish was he in
+the thought of the happiness he had brought to the beasts of the forests, that for him no dinner
+ever passed more pleasantly. Miss Waring, who sat next to her host, thought she had seldom
+met a man with so kind and simple a nature. She rather resented the fact, and she was inwardly
+indignant that so much right feeling and affection could be wasted on farmyard fowls, and four-footed
+animals. She felt sure that some nice girl, seated at the other end of the table, smiling through
+the light of the wax candles upon Herrick, would soon make him forget his love of "Nature and
+Nature's children." She even saw herself there, and this may have made her exhibit more interest
+in Herrick's experiment than she really felt. In any event, Herrick found her most sympathetic'
+and when dinner was over carried her off to a corner of the terrace. It was a warm night in
+early October, and the great woods of the game preserve that stretched below them were lit
+with a full moon.
+
+This is an atom: 
+On his way to the lake for a moonlight row with one of the house party who belonged to that
+sex that does not row, but looks well in the moon-light, Kelly halted, and jeered mockingly.
+
+This is an atom: 
+"How can you sit there," he demanded, "while those poor beasts are freezing in a cave, with
+not even a silk coverlet or a pillow-sham. You and your valet ought to be down there now carrying
+them pajamas."
+
+This is an atom: 
+"Kelly," declared Herrick, unruffled in his moment of triumph, "I hate to say, 'I told you
+so,' but you force me. Go away," he commanded. "You have neither imagination nor soul."
+
+This is an atom: 
+"And that's true," he assured Miss Waring, as Kelly and his companion left them. "Now, I see
+nothing in what I accomplished that is ridiculous. Had you watched those bears as I did, you
+would have felt that sympathy that exists between all who love the out-of-door life. A dog
+loves to see his master pick up his stick and his hat to take him for a walk, and the man enjoys
+seeing the dog leaping and quartering the fields before him. They are both the happier. At
+least I am happier to-night, knowing those bears are at peace and at home, than I would be
+if I thought of them being whipped through their tricks in a dirty theatre." Herrick pointed
+to the great forest trees of the preserve, their tops showing dimly in the mist of moonlight.
+"Somewhere, down in that valley," he murmured, "are three happy animals. They are no longer
+slaves and puppets--they are their own masters. For the rest of their lives they can sleep
+on pine needles and dine on nuts and honey. No one shall molest them, no one shall force them
+through degrading tricks. Hereafter they can choose their life, and their own home among the
+rocks, and the----" Herrick's words were frozen on his tongue. From the other end of the terrace
+came a scream so fierce, so long, so full of human suffering, that at the sound the blood of
+all that heard it turned to water. It was so appalling that for an instant no one moved, and
+then from every part of the house, along the garden walks, from the servants' quarters, came
+the sound of pounding feet. Herrick, with Miss Waring clutching at his sleeve, raced toward
+the other end of the terrace. They had not far to go. Directly in front of them they saw what
+had dragged from the very soul of the woman the scream of terror.
+
+This is an atom: 
+The drawing-room opened upon the terrace, and, seated at the piano, Jackson had been playing
+for those in the room to dance. The windows to the terrace were open. The terrace itself was
+flooded with moonlight. Seeking the fresh air, one of the dancers stepped from the drawing-room
+to the flags outside. She had then raised the cry of terror and fallen in a faint. What she
+had seen, Herrick a moment later also saw. On the terrace in the moon-light, Bruno and Clara,
+on their hind legs, were solemnly waltzing. Neither the scream nor the cessation of the music
+disturbed them. Contentedly, proudly, they continued to revolve in hops and leaps. From their
+happy expression, it was evident they not only were enjoying themselves, but that they felt
+they were greatly affording immeasurable delight to others. Sick at heart, furious, bitterly
+hurt, with roars of mocking laughter in his ears, Herrick ran toward the stables for help.
+At the farther end of the terrace the butler had placed a tray of liqueurs, whiskeys, and soda
+bottles. His back had been turned for only a few moments, but the time had sufficed.
+
+This is an atom: 
+Lolling with his legs out, stretched in a wicker chair, Herrick beheld the form of Ikey. Between
+his uplifted paws he held aloof the base of a decanter; between his teeth, and well jammed
+down his throat, was the long neck of the bottle. From it issued the sound of gentle gurgling.
+Herrick seized the decanter and hurled it crashing upon the terrace. With difficulty Ikey rose.
+Swaying and shaking his head reproachfully, he gave Herrick a perfectly accurate imitation
+of an intoxicated bear.
+
+---------------------------------------------------------------------------
+PLAGIARIZED ATOMS
+---------------------------------------------------------------------------
+***************************************************************************

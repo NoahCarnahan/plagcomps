@@ -1,0 +1,682 @@
+Document Name: /part1/suspicious-document00038.txt
+Atom_Type: paragraph
+Cluster_Method: kmeans
+Plagiarized Atoms Count: 0/134
+Non-Plagiarized Atoms Count: 134/134
+
+---------------------------------------------------------------------------
+NON-PLAGIARIZED ATOMS
+---------------------------------------------------------------------------
+This is an atom: 
+﻿"I shouldn't try, Spennie, if I were you. It's not the form of indoor
+game at which you'd shine. Better stick to picquet."
+
+This is an atom: 
+"If you think I can't pay you your rotten money----"
+
+This is an atom: 
+"I do. But if you can, so much the better. Money is always useful."
+
+This is an atom: 
+"I may be a fool in some ways----"
+
+This is an atom: 
+"You understate it, my dear Spennie."
+
+This is an atom: 
+"But I'm not a cad."
+
+This is an atom: 
+"You're getting quite rosy, Spennie. Wrath is good for the
+complexion."
+
+This is an atom: 
+"And if you think you can bribe me to do your dirty work, you never
+made a bigger mistake in your life."
+
+This is an atom: 
+"Yes, I did," said Wesson, "when I thought you had some glimmerings of
+intelligence. But if it gives you any pleasure to behave like the
+juvenile lead in a melodrama, by all means do. Personally, I shouldn't
+have thought the game would be worth the candle. Your keen sense of
+honor, I understand you to say, will force you to pay your debt. It's
+an expensive luxury nowadays, Spennie. You mentioned the end of the
+week, I believe? That will suit me admirably. But if you change your
+mind, my offer is still open. Good night, Galahad."
+
+This is an atom: 
+CHAPTER XV.
+
+This is an atom: 
+For pure discomfort there are few things in the world that can compete
+with the final rehearsals of an amateur theatrical performance at a
+country house. Every day the atmosphere becomes more and more heavily
+charged with restlessness and irritability. The producer of the piece,
+especially if he is also the author of it, develops a sort of
+intermittent insanity. He plucks at his mustache, if he has one; at
+his hair, if he has not. He mutters to himself. He gives vent to
+occasional despairing cries. The soothing suavity which marked his
+demeanor in the earlier rehearsals disappears. He no longer says with
+a winning smile: "Splendid, old man; splendid. Couldn't be better. But
+I think we'll take that over just once more, if you don't mind. You
+missed out a few rather good lines, and you forgot to give Miss
+Robinson her cue for upsetting the flowerpot." Instead, he rolls his
+eyes and snaps out: "Once more, please. This'll never do. At this rate
+we might just as well cut out the show altogether. For Heaven's sake,
+Brown, do try and remember your lines. It's no good having the best
+part in the piece if you go and forget everything you've got to say.
+What's that? All right on the night? No, it _won't_ be all right on
+the night. And another thing. You _must_ remember to say, 'How calm
+and peaceful the morning is', or how on earth do you think Miss Robinson
+is going to know when to upset that flowerpot? Now, then, once more; and
+do pull yourself together this time." After which the scene is sulkily
+resumed by the now thoroughly irritated actors; and conversation, when
+the parties concerned meet subsequently, is cold and strained.
+
+This is an atom: 
+Matters had reached this stage at the abbey. Everybody was thoroughly
+tired of the piece, and, but for the thought of the disappointment
+which--presumably--would rack the neighboring nobility and gentry
+if it were not to be produced, would have resigned without a twinge
+of regret. People who had schemed to get the best and longest parts
+were wishing now that they had been content with _First Footman_ or
+_Giles, a villager_.
+
+This is an atom: 
+"I'll never run an amateur show again as long as I live," confided
+Charteris to Jimmy, almost tearfully the night before the production.
+"It's not good enough. Most of them aren't word-perfect yet. And we've
+just had the dress rehearsal!"
+
+This is an atom: 
+"It'll be all right on----"
+
+This is an atom: 
+"Oh, don't say it'll be all right on the night."
+
+This is an atom: 
+"I wasn't going to," said Jimmy. "I was going to say it'll be all
+right after the night. People will soon forget how badly the thing
+went."
+
+This is an atom: 
+"You're a nice, comforting sort of man, aren't you?" said Charteris.
+
+This is an atom: 
+"Why worry?" said Jimmy. "If you go on like this, it'll be Westminster
+Abbey for you in your prime. You'll be getting brain fever."
+
+This is an atom: 
+Jimmy himself was feeling particularly cheerful. He was deriving a
+keen amusement at present from the manoeuvres of Mr. Samuel Galer, of
+New York. This lynx-eyed man, having been instructed by Mr. McEachern
+to watch Jimmy, was doing so with a pertinacity which would have made
+a man with the snowiest of consciences suspicious. If Jimmy went to
+the billiard room after dinner, Mr. Galer was there to keep him
+company. If, during the course of the day, he had occasion to fetch a
+handkerchief or a cigarette case from his bedroom, he was sure, on
+emerging, to stumble upon Mr. Galer in the corridor. The employees of
+Wragge's Detective Agency, Ltd., believed in earning their salaries.
+Occasionally, after these encounters, Jimmy would come upon Sir Thomas
+Blunt's valet, the other man in whom Spike's trained eye had discerned
+the distinguishing trait of the detective. He was usually somewhere
+round the corner at these moments, and, when collided with, apologized
+with great politeness. It tickled Jimmy to think that both these giant
+brains should be so greatly exercised on his account.
+
+This is an atom: 
+Spennie, meanwhile, had been doing quite an unprecedented amount of
+thinking. Quite an intellectual pallor had begun to appear on his
+normally pink cheeks. He had discovered the profound truth that it is
+one thing to talk about paying one's debts, another actually to do it,
+and that this is more particularly the case when we owe twenty pounds
+and possess but six pounds seven shillings and fourpence. Spennie was
+acutely conscious of the fact that, if he could not follow up his
+words to Wesson with actual coin, the result would be something of an
+anticlimax. Somehow or other he would have to get the money--and at
+once. The difficulty was that no one seemed at all inclined to lend it
+to him.
+
+This is an atom: 
+There is a good deal to be said against stealing as a habit; but it
+cannot he denied that, in certain circumstances, it offers an
+admirable solution of a difficulty, and if the penalties were not so
+exceedingly unpleasant, it is probable that it would become far more
+fashionable than it is.
+
+This is an atom: 
+Spennie's mind did not turn immediately to this outlet from his
+embarrassment. He had never stolen before, and it did not occur to him
+directly to do so now. There is a conservative strain in all of us.
+But gradually, as it was borne in upon him that it was the only course
+possible, unless he applied to his stepfather--a task for which his
+courage was not sufficient--he found himself contemplating the
+possibility of having to secure the money by unlawful means. By lunch
+time, on the morning of the day fixed for the theatricals, he had
+decided definitely to do so. By dinner time he had fixed upon the
+object of his attentions.
+
+This is an atom: 
+With a vague idea of keeping the thing in the family, he had resolved
+to make his raid upon Sir Thomas Blunt. Somehow it did not seem so bad
+robbing one's relatives.
+
+This is an atom: 
+A man's first crime is, as a rule, a shockingly amateurish affair. Now
+and then, it is true, we find beginners forging with the accuracy of
+old hands or breaking into houses with the finish of experts. But
+these are isolated cases. The average tyro lacks generalship
+altogether. Spennie may be cited as a typical novice. It did not
+strike him that inquiries might be instituted by Sir Thomas, when he
+found his money gone, and that Wesson, finding a man whom he knew to
+be impecunious suddenly in possession of twenty pounds, might have
+suspicions. His mind was entirely filled with the thought of getting
+the money. There was no room in it for any other reflection.
+
+This is an atom: 
+His plan was simple. Sir Thomas, he knew, always carried a good deal
+of money with him. It was unlikely that he kept this on his person in
+the evening. A man to whom the set of his clothes is as important as
+it was to Sir Thomas, does not carry a pocket-book full of banknotes
+when he is dressed for dinner. He would leave it somewhere, reasoned
+Spennie. Where, he asked himself. The answer was easy. In his dressing
+room. Spennie's plan of campaign was complete.
+
+This is an atom: 
+The theatricals began at half-past eight. The audience had been
+hustled into their seats, happier than is usual in such circumstances
+from the rumor that the proceedings were to terminate with an informal
+dance. The abbey was singularly well constructed for such a purpose.
+There was plenty of room, and a sufficiency of retreat for those who
+sat out, in addition to a conservatory large enough to have married
+off half the couples in the county. The audience was in an excellent
+humor, and the monologue, the first item of the programme, was
+received with a warmth which gave Charteris, whom rehearsals had
+turned into a pessimist, a faint hope that the main item on the
+programme might not be the complete failure it had promised to be.
+
+This is an atom: 
+Spennie's idea had been to get through his burglarious specialty
+during the monologue, when his absence would not be noticed. It might
+be that if he disappeared later in the evening people would wonder
+what had become of him.
+
+This is an atom: 
+He lurked apart till the last of the audience had taken their seats.
+As he was passing through the hall, a hand fell on his shoulder.
+Conscience makes cowards of us all. Spennie bit his tongue and leaped
+three inches into the air.
+
+This is an atom: 
+"Hello, Charteris!" he said gaspingly.
+
+This is an atom: 
+"Spennie, my boyhood's only friend," said Charteris, "where are you
+off to?"
+
+This is an atom: 
+"What--what do you mean? I was just going upstairs."
+
+This is an atom: 
+"Then don't. You're wanted. Our prompter can't be found. I want you to
+take his place till he blows in. Come along."
+
+This is an atom: 
+The official prompter arrived at the end of the monologue with the
+remark that he had been having a bit of a smoke in the garden and his
+watch had gone wrong. Leaving him to discuss the point with Charteris,
+Spennie slipped quietly away, and flitted up the stairs toward Sir
+Thomas' dressing room. At the door, he stopped and listened. There was
+no sound. The house might have been deserted. He opened the door, and
+switched on the electric light.
+
+This is an atom: 
+Fortune was with him. On the dressing table, together with a bunch of
+keys and some small change, lay a brown leather pocketbook. Evidently
+Sir Thomas did not share Lady Blunt's impression that the world was
+waiting for a chance to rob him as soon as his back was turned.
+
+This is an atom: 
+Spennie opened the pocketbook, and counted the contents. There were
+two ten-pound notes, and four of five pounds.
+
+This is an atom: 
+He took a specimen of each variety, replaced the pocketbook, and crept
+out of the door.
+
+This is an atom: 
+Then he walked rapidly down the corridor to his own room.
+
+This is an atom: 
+Just as he reached it, he received a shock only less severe than the
+former one from the fact that this time no hand was placed on his
+shoulder.
+
+This is an atom: 
+"Spennie!" cried a voice.
+
+This is an atom: 
+He turned, to see Molly. She wore the costume of the stage milkmaid.
+Coming out of her room after dressing for her part, she had been in
+time to see Spennie emerge through Sir Thomas' door with a look on his
+face furtive enough to have made any jury bring in a verdict of guilty
+on any count without further evidence. She did not know what he had
+been doing; but she was very certain that it was something which he
+ought to have left undone.
+
+This is an atom: 
+"Er--hullo, Molly!" said Spennie bonelessly.
+
+This is an atom: 
+"What were you doing in Uncle Thomas' room, Spennie?"
+
+This is an atom: 
+"Nothing. I was just looking round."
+
+This is an atom: 
+"Just looking round?"
+
+This is an atom: 
+"That's all."
+
+This is an atom: 
+Molly was puzzled.
+
+This is an atom: 
+"Why did you look like that when you came out?"
+
+This is an atom: 
+"Like what?"
+
+This is an atom: 
+"So guilty."
+
+This is an atom: 
+"Guilty! What _are_ you talking about?"
+
+This is an atom: 
+Molly suddenly saw light.
+
+This is an atom: 
+"Spennie," she said, "what were you putting in your pocket as you came
+out?"
+
+This is an atom: 
+"Putting in my pocket!" said Spennie, rallying with the desperation of
+one fighting a lost cause. "What do you mean?"
+
+This is an atom: 
+"You were putting something."
+
+This is an atom: 
+Another denial was hovering on Spennie's lips, when, in a flash, he
+saw what he had not seen before, the cloud of suspicion which must
+hang over him when the loss of the notes was discovered. Sir Thomas
+would remember that he had tried to borrow money from him. Wesson
+would wonder how he had become possessed of twenty pounds. And Molly
+had actually seen him coming out of the room, putting something in his
+pocket.
+
+This is an atom: 
+He threw himself at the mercy of the court.
+
+This is an atom: 
+"It's like this, Molly," he said. And, having prefaced his narrative
+with the sound remark that he had been a fool, he gave her a summary
+of recent events.
+
+This is an atom: 
+"I see," said Molly. "And you must pay him at once?"
+
+This is an atom: 
+"By the end of the week. We had--we had a bit of a row."
+
+This is an atom: 
+"What about?"
+
+This is an atom: 
+"Oh, nothing," said Spennie. "Anyhow, I told him I'd pay him by
+Saturday, and I don't want to have to climb down."
+
+This is an atom: 
+"Of course not. Jimmy shall lend you the money."
+
+This is an atom: 
+"Who? Jimmy Pitt?"
+
+This is an atom: 
+"Yes."
+
+This is an atom: 
+"But, I say, look here, Molly. I mean, I've been to him, already. He
+lent me a fiver. He might kick if I tried to touch him again so soon."
+
+This is an atom: 
+"I'll ask him for it."
+
+This is an atom: 
+"But, look here, Molly----"
+
+This is an atom: 
+"Jimmy and I are engaged, Spennie."
+
+This is an atom: 
+"What! Not really? I say, I'm frightfully pleased. He's one of the
+best. I'm fearfully glad. Why, that's absolutely topping. It'll be all
+right. I'll sweat to pay him back. I'll save out of my allowance. I
+can easily do it if I cut out a few things and don't go about so much.
+You're a frightfully good sort, Molly. I say, will you ask him
+to-night? I want to pay Wesson first thing to-morrow morning."
+
+This is an atom: 
+"Very well. You'd better give me those notes, Spennie. I'll put them
+back."
+
+This is an atom: 
+The amateur cracksman handed over his loot, and retired toward the
+stairs. Molly could hear him going down them three at a time, in a
+whirl of relief and good resolutions. She went to Sir Thomas' room,
+and replaced the notes. Having done this, she could not resist the
+temptation to examine herself in the glass for a few moments. Then she
+turned away, switched off the light, and was just about to leave the
+room when a soft footstep in the passage outside came to her ears.
+
+This is an atom: 
+She shrank back. She felt a curiously guilty sensation, as if she had
+been in the room with criminal rather than benevolent intentions. Her
+motives in being where she was were excellent--but she would wait till
+this person had passed before coming out into the passage.
+
+This is an atom: 
+Then it came to her with a shock that the person was not going to
+pass. The footsteps halted outside the door.
+
+This is an atom: 
+There was a curtain at her side, behind which hung certain suits of
+Sir Thomas'. She stepped noiselessly behind this.
+
+This is an atom: 
+The footsteps passed on into the room.
+
+This is an atom: 
+CHAPTER XVI.
+
+This is an atom: 
+Jimmy had gone up to his room to put on the costume he was to wear in
+the first act at about the time when Spennie was being seized upon by
+Charteris to act as prompter. As he moved toward the stairs, a
+square-cut figure appeared.
+
+This is an atom: 
+It was the faithful Galer.
+
+This is an atom: 
+There was nothing in his appearance to betray the detective to the
+unskilled eye, but years of practice had left Spike with a sort of
+sixth sense as regarded the force. He could pierce the subtlest
+disguise. Jimmy had this gift in an almost equal degree, and it had
+not needed Mr. Galer's constant shadowing of himself to prove to Jimmy
+the correctness of Spike's judgment. He looked at the representative
+of Wragge's Detective Agency, Ltd., as he stood before him now, taking
+in his every detail: the square, unintelligent face; the badly cut
+clothes; the clumsy heels; the enormous feet.
+
+This is an atom: 
+"And this," he said to himself, "is the man McEachern thinks capable
+of tying my hands!" There were moments when the spectacle of Mr. Galer
+filled Jimmy with an odd sort of fury, a kind of hurt professional
+pride. The feeling that this espionage was a direct challenge enraged
+him. Behind this clumsy watcher he saw always the self-satisfied
+figure of Mr. McEachern. He seemed to hear him chuckling to himself.
+
+This is an atom: 
+"If it wasn't for Molly," he said to himself, "I'd teach McEachern a
+lesson. I'm trying to hold myself in, and he sets these fool
+detectives onto me. I shouldn't mind if he'd chosen somebody who knew
+the rudiments of the game, but Galer! Galer!
+
+This is an atom: 
+"Well, Mr. Galer," he said, aloud, "you aren't trying to escape, are
+you? You're coming in to see the show, aren't you?"
+
+This is an atom: 
+"Oh, yes," said the detective. "Jest wanted to go upstairs for 'alf a
+minute. You coming, too?"
+
+This is an atom: 
+"I was going to dress," said Jimmy, as they went up. "See you later,"
+he added, at the door. "Hope you'll like the show."
+
+This is an atom: 
+He went into his room. Mr. Galer passed on.
+
+This is an atom: 
+*       *       *       *       *
+
+This is an atom: 
+Jimmy had finished dressing, and had picked up a book to occupy the
+ten minutes before he would be needed downstairs, when there burst
+into the room Spike Mullins, in a state of obvious excitement.
+
+This is an atom: 
+"Gee, Mr. Chames!"
+
+This is an atom: 
+"Hello, Spike."
+
+This is an atom: 
+Spike went to the door, opened it, and looked up and down the passage.
+
+This is an atom: 
+"Mr. Chames," he said, in a whisper, shutting the door, "there's bin
+doin's to-night for fair. Me coco's still buzzin'. Say, I was to Sir
+Thomas' dressin' room----"
+
+This is an atom: 
+"What! What were you doing there?"
+
+This is an atom: 
+Spike looked somewhat embarrassed. He grinned apologetically, and
+shuffled his feet.
+
+This is an atom: 
+"I've got dem, Mr. Chames," he said.
+
+This is an atom: 
+"Got them? Got what?"
+
+This is an atom: 
+"Dese."
+
+This is an atom: 
+He plunged his hand in his pocket, and drew forth a glittering mass.
+Jimmy's jaw dropped as he gazed at Lady Blunt's rope of pearls.
+
+This is an atom: 
+"Two hundred t'ousand plunks," murmured Spike, gazing lovingly at
+them. "I says to myself, Mr. Chames ain't got no time to be getting'
+after dem himself. He's too busy dese days wit' jollyin' along the
+swells. So it's up to me, I says, 'cos Mr. Chames'll be tickled to
+deat', all right, all right, if we can git away wit' dem. So I----"
+
+This is an atom: 
+Jimmy gave tongue with an energy which amazed his faithful follower.
+
+This is an atom: 
+"Spike! You lunatic! Didn't I tell you there was nothing doing when
+you wanted to take those things the other day?"
+
+This is an atom: 
+"Sure, Mr. Chames. But dose was little dinky t'ings. Dese poils is
+boids, for fair."
+
+This is an atom: 
+"Good heavens, Spike, you must be mad. Can't you see--Oh, Lord!
+Directly the loss of those pearls is discovered, we shall have those
+detectives after us in a minute. Didn't you know they had been
+watching us?"
+
+This is an atom: 
+An involuntary chuckle escaped Spike.
+
+This is an atom: 
+"'Scuse me, Mr. Chames, but dat's funny about dem sleut's. Listen.
+Dey's bin an' arrest each other."
+
+This is an atom: 
+"What!"
+
+This is an atom: 
+"Dat's right. Dey had a scrap in de dark, each finking de odder was
+after de jools, an' not knowin' dey was bote sleut's, an' now one of
+dem's bin an' taken de odder off, an' locked him in de cellar."
+
+This is an atom: 
+"What on earth do you mean?"
+
+This is an atom: 
+Spike giggled at the recollection.
+
+This is an atom: 
+"Listen, Mr. Chames, it's dis way. I'm in de dressin' room, chasin'
+around wit' dis lantern here for de jool box"--he produced from his
+other pocket a small bicycle lamp--"and just as I gets a line on it,
+gee! I hears a footstep comin' down de passage straight for de door.
+Was to de bad? Dat's right. Gee, I says to m'self, here's one of de
+sleut' guys what's bin an' got wise to me, and he's comin' in to put
+de grip on me. So I gets up, an' I blows out de lantern, and I stands
+dere in de dark, waitin' for him to come in. And den I'm going to get
+busy before he can see who I am, and jolt him one on de point, and
+den, while he's down and out, chase meself for de soivants' hall."
+
+This is an atom: 
+"Yes?" said Jimmy.
+
+This is an atom: 
+"Well, dis guy, he gets to de door, and opens it, and I'm just goin'
+to butt in, when dere suddenly jumps out from de room on de odder side
+de passage anodder guy, and gets de rapid strangleholt on dis foist
+mug. Say, wouldn't dat make you wonder was you on your feet or your
+coco?"
+
+This is an atom: 
+"Go on. What happened, then?"
+
+This is an atom: 
+"Dey begins to scrap good and hard in de dark. Dey couldn't see me,
+and I couldn't see dem, but I could hear dem bumpin' about an'
+sluggin' each odder, all right, all right. And by an' by one of dem
+puts de odder to de bad, so dat he goes down and takes de count; an'
+den I hears a click. And I know what dat is. One of de guys has put de
+irons on de odder guy. Den I hears him strike a light--I'd turned de
+switch what lights up de passage before I got into de room--and den he
+says, 'Ah', he says, 'got youse, have I? Not the boid I expected, but
+you'll do.' I knew his voice. It was dat mug what calls himself
+Galer."
+
+This is an atom: 
+"I suppose I'm the bird he expected," said Jimmy. "Well?"
+
+This is an atom: 
+"De odder mug was too busy catchin' up wit' his breat' to shoot it
+back swift, but after he's bin doin' de deep breathin' stunt for a
+while, he says, 'You mutt', he says, 'youse to de bad. You've made a
+break, you have.' He put it different, but dat's what he meant. Den he
+says that he's a sleut', too. Does de Galer mug give him de glad eye?
+Not on your life. He says dat dat's de woist tale that's ever bin
+handed to him. De odder mug says, 'I'm Sir Tummas' vally', he says.
+'Aw, cut it out', says Galer. 'Sure youse ain't Sir Tummas himself?'
+'Show me to him', says de foist guy, 'den you'll see.' 'Not on your
+life', says Galer. 'What! Butt in among de swells what's enjoyin'
+themselves and spoil deir evenin' by showin' dem a face like yours? To
+de woods! It's youse for de coal cellar, me man, and we'll see what
+youse has got to say afterward. G'wan!' And off dey went. And I lit me
+lantern again, got de jools, and chased meself here."
+
+This is an atom: 
+Jimmy stretched out his hand.
+
+This is an atom: 
+"All very exciting," he said. "And now you'll just hand me those
+pearls, and I'll seize the opportunity while the coast is clear to put
+them back where they belong."
+
+This is an atom: 
+Only for a moment did Spike hesitate. Then he pulled out the jewels,
+and placed them in Jimmy's hand. Mr. Chames was Mr. Chames, and what
+he said went. But his demeanor was tragic, telling eloquently of hopes
+blighted.
+
+This is an atom: 
+Jimmy took the necklace with a thrill. He was an expert in jewels, and
+a fine gem affected him much as a fine picture affects the artistic.
+He went to the light, and inspected them gloatingly.
+
+This is an atom: 
+As he did so, he uttered a surprised exclamation. He ran the jewels
+through his fingers. He scrutinized them again, more closely this
+time.
+
+This is an atom: 
+Then he turned to Spike, with a curious smile.
+
+This is an atom: 
+"You'd better be going downstairs," he said. "I'll just run along and
+replace them. Where is the box?"
+
+This is an atom: 
+"It's on de floor against de wall, near de window, Mr. Chames."
+
+This is an atom: 
+"Good. Better give me that lamp."
+
+This is an atom: 
+There was no one in the passage. He raced softly along it to Sir
+Thomas Blunt's dressing room.
+
+This is an atom: 
+He lit his lamp, and found the box without difficulty. Dropping the
+necklace in, he closed down the lid.
+
+This is an atom: 
+"They'll want a new lock, I'm afraid," he said. "However!"
+
+This is an atom: 
+He rose to his feet.
+
+This is an atom: 
+"Jimmy!" said a startled voice.
+
+This is an atom: 
+He whipped round. The light of the lamp fell on Molly, standing, pale
+and open-eyed, beside the curtain by the door.
+
+This is an atom: 
+CHAPTER XVII.
+
+This is an atom: 
+Pressed, rigid, against the wall behind her curtain, Molly had
+listened in utter bewilderment to the sounds of strife in the passage
+outside. The half-heard conversation between the detectives had done
+nothing toward a solution of the mystery. Galer's voice she thought
+she recognized as one that she had heard before; but she could not
+identify it.
+
+This is an atom: 
+When the detectives had passed away together down the corridor, she
+had imagined that the adventure was at an end and that she was at
+liberty to emerge--cautiously--from her hiding place and follow them
+downstairs. She had stretched out a hand, to draw the curtain aside,
+when she caught sight of the yellow ray of the lamp on the floor, and
+shrank back again. As she did so, she heard the sound of breathing.
+Somebody was still in the room.
+
+This is an atom: 
+Her mystification deepened. She had supposed that the tale of visitors
+to the dressing room was complete with the two who had striven in the
+passage. Yet here was another.
+
+---------------------------------------------------------------------------
+PLAGIARIZED ATOMS
+---------------------------------------------------------------------------
+***************************************************************************

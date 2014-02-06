@@ -1,0 +1,96 @@
+Document Name: /part1/suspicious-document00203.txt
+Atom_Type: paragraph
+Cluster_Method: kmeans
+Plagiarized Atoms Count: 0/11
+Non-Plagiarized Atoms Count: 11/11
+
+---------------------------------------------------------------------------
+NON-PLAGIARIZED ATOMS
+---------------------------------------------------------------------------
+This is an atom: 
+﻿Produced by David Widger
+
+This is an atom: 
+THE ADVENTURES OF TOM SAWYER
+                                BY
+                            MARK TWAIN
+                     (Samuel Langhorne Clemens)
+
+This is an atom: 
+Part 4
+
+This is an atom: 
+CHAPTER XIII
+
+This is an atom: 
+TOM'S mind was made up now. He was gloomy and desperate. He was a
+forsaken, friendless boy, he said; nobody loved him; when they found
+out what they had driven him to, perhaps they would be sorry; he had
+tried to do right and get along, but they would not let him; since
+nothing would do them but to be rid of him, let it be so; and let them
+blame HIM for the consequences--why shouldn't they? What right had the
+friendless to complain? Yes, they had forced him to it at last: he
+would lead a life of crime. There was no choice.
+
+This is an atom: 
+By this time he was far down Meadow Lane, and the bell for school to
+"take up" tinkled faintly upon his ear. He sobbed, now, to think he
+should never, never hear that old familiar sound any more--it was very
+hard, but it was forced on him; since he was driven out into the cold
+world, he must submit--but he forgave them. Then the sobs came thick
+and fast.
+
+This is an atom: 
+Just at this point he met his soul's sworn comrade, Joe Harper
+--hard-eyed, and with evidently a great and dismal purpose in his heart.
+Plainly here were "two souls with but a single thought." Tom, wiping
+his eyes with his sleeve, began to blubber out something about a
+resolution to escape from hard usage and lack of sympathy at home by
+roaming abroad into the great world never to return; and ended by
+hoping that Joe would not forget him.
+
+This is an atom: 
+But it transpired that this was a request which Joe had just been
+going to make of Tom, and had come to hunt him up for that purpose. The
+Sun is one of these powers. It comes from the mighty power above;
+therefore it has great strength.
+
+This is an atom: 
+Mother Earth is another power. She is very near to man. From her we get
+food; upon her we lie down. We live and walk on her.
+
+This is an atom: 
+We could not exist without Mother Earth, without Sun, and without
+the Winds.
+Water is another lesser power. Water is necessary to mankind.
+Fire made by rubbing two sticks together is sacred. It comes direct
+from the power granted Toharu, vegetation, in answer to man's prayer
+as he rubs the sticks.Then they began to lay their plans.
+Joe was for being a hermit, and living on crusts in a remote cave, and
+dying, some time, of cold and want and grief; but after listening to
+Tom, he conceded that there were some conspicuous advantages about a
+life of crime, and so he consented to be a pirate.
+
+This is an atom: 
+Three miles below St. Petersburg, at a point where the Mississippi
+River was a trifle over a mile wide, there was a long, narrow, wooded
+island, with a shallow bar at the head of it, and this offered well as
+a rendezvous. It was not inhabited; it lay far over toward the further
+shore, abreast a dense and almost wholly unpeopled forest. So Jackson's
+Island was chosen. Who were to be the subjects of their piracies was a
+matter that did not occur to them. Then they hunted up Huckleberry
+Finn, and he joined them promptly, for all careers were one to him; he
+was indifferent. They presently separated to meet at a lonely spot on
+the river-bank two miles above the village at the favorite hour--which
+was midnight. There was a small log raft there which they meant to
+capture. Each would bring hooks and lines, and such provision as he
+could steal in the most dark and mysterious way--as became outlaws. And
+before the afternoon was done, they had all managed to enjoy the sweet
+glory of spreading the fact that pretty soon the town would "hear
+something." All who got this vague hint were cautioned to "be mum and
+wait."
+
+---------------------------------------------------------------------------
+PLAGIARIZED ATOMS
+---------------------------------------------------------------------------
+***************************************************************************

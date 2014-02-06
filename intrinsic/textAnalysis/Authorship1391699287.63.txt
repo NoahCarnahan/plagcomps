@@ -1,0 +1,1167 @@
+Document Name: /part3/suspicious-document04185.txt
+Atom_Type: paragraph
+Cluster_Method: kmeans
+Plagiarized Atoms Count: 0/116
+Non-Plagiarized Atoms Count: 116/116
+
+---------------------------------------------------------------------------
+NON-PLAGIARIZED ATOMS
+---------------------------------------------------------------------------
+This is an atom: 
+﻿
+                 THE DIARY OF SAMUEL PEPYS M.A.   F.R.S.
+
+This is an atom: 
+CLERK OF THE ACTS AND SECRETARY TO THE ADMIRALTY
+
+This is an atom: 
+TRANSCRIBED FROM THE SHORTHAND MANUSCRIPT IN THE PEPYSIAN LIBRARY
+ MAGDALENE COLLEGE CAMBRIDGE BY THE REV. MYNORS BRIGHT M.A.  LATE FELLOW
+                      AND PRESIDENT OF THE COLLEGE
+
+This is an atom: 
+(Unabridged)
+
+This is an atom: 
+WITH LORD BRAYBROOKE'S NOTES
+
+This is an atom: 
+EDITED WITH ADDITIONS BY
+
+This is an atom: 
+HENRY B. WHEATLEY F.S.A.
+
+This is an atom: 
+DIARY OF SAMUEL PEPYS
+                            1660 N.S. COMPLETE
+
+This is an atom: 
+JANUARY
+                                1659-60
+
+This is an atom: 
+[The year did not legally begin in England before the 25th March
+     until the act for altering the style fixed the 1st of January as the
+     first day of the year, and previous to 1752 the year extended from
+     March 25th to the following March 24th.  Thus since 1752 we have
+     been in the habit of putting the two dates for the months of January
+     and February and March 1 to 24--in all years previous to 1752.
+     Practically, however, many persons considered the year to commence
+     with January 1st, as it will be seen Pepys did.  The 1st of January
+     was considered as New Year's day long before Pepys's time.  The
+     fiscal year has not been altered; and the national accounts are
+     still reckoned from old Lady Day, which falls on the 6th of April.]
+
+This is an atom: 
+Blessed be God, at the end of the last year I was in very good health, without any sense of
+my old pain, but upon taking of cold.
+
+This is an atom: 
+[Pepys was successfully cut for the stone on March 26th, 1658.  See
+     March 26th below.  Although not suffering from this cause again
+     until the end of his life, there are frequent references in the
+     Diary to pain whenever he caught cold.  In a letter from Pepys to
+     his nephew Jackson, April 8th, 1700, there is a reference to the
+     breaking out three years before his death of the wound caused by the
+     cutting for the stone: "It has been my calamity for much the
+     greatest part of this time to have been kept bedrid, under an evil
+     so rarely known as to have had it matter of universal surprise and
+     with little less general opinion of its dangerousness; namely, that
+     the cicatrice of a wound occasioned upon my cutting for the stone,
+     without hearing anything of it in all this time, should after more
+     than 40 years' perfect cure, break out again."  At the post-mortem
+     examination a nest of seven stones, weighing four and a half ounces,
+     was found in the left kidney, which was entirely ulcerated.]
+
+This is an atom: 
+I lived in Axe Yard,
+
+This is an atom: 
+[Pepys's house was on the south side of King Street, Westminster;
+     it is singular that when he removed to a residence in the city, he
+     should have settled close to another Axe Yard.  Fludyer Street
+     stands on the site of Axe Yard, which derived its name from a great
+     messuage or brewhouse on the west side of King Street, called "The
+     Axe," and referred to in a document of the 23rd of Henry VIII--B.]
+
+This is an atom: 
+having my wife, and servant Jane, and no more in family than us three. My wife .  .  .  . gave
+me hopes of her being with child, but on the last day of the year .  .  .  .[the hope was belied.]
+
+This is an atom: 
+[Ed. note: . . .  . are used to denote censored passages]
+
+This is an atom: 
+The condition of the State was thus; viz. the Rump, after being disturbed by my Lord Lambert,
+
+This is an atom: 
+[John Lambert, major-general in the Parliamentary army.  The title
+     Lord was not his by right, but it was frequently given to the
+     republican officers.  He was born in 1619, at Calton Hall, in the
+     parish of Kirkby-in-Malham-Dale, in the West Riding of Yorkshire.
+     In 1642 he was appointed captain of horse under Fairfax, and acted
+     as major-general to Cromwell in 1650 during the war in Scotland.
+     After this Parliament conferred on him a grant of lands in Scotland
+     worth L1000 per annum.  He refused to take the oath of allegiance to
+     Cromwell, for which the Protector deprived him of his commission.
+     After Cromwell's death he tried to set up a military government.
+     The Commons cashiered Lambert, Desborough, and other officers,
+     October 12th, 1659, but Lambert retaliated by thrusting out the
+     Commons, and set out to meet Monk.  His men fell away from him, and
+     he was sent to the Tower, March 3rd, 1660, but escaped.  In 1662 he
+     was tried on a charge of high treason and condemned, but his life
+     was spared.  It is generally stated that he passed the remainder of
+     his life in the island of Guernsey, but this is proved to be
+     incorrect by a MS. in the Plymouth Athenaeum, entitled "Plimmouth
+     Memoirs collected by James Yonge, 1684" This will be seen from the
+     following extracts quoted by Mr. R. J. King, in "Notes and Queries,"
+     "1667 Lambert the arch-rebel brought to this island [St. Nicholas,
+     at the entrance of Plymouth harbour]."  "1683 Easter day Lambert
+     that olde rebell dyed this winter on Plimmouth Island where he had
+     been prisoner 15 years and more."]
+
+This is an atom: 
+was lately returned to sit again.  The officers of the Army all forced to yield.  Lawson
+
+This is an atom: 
+[Sir John Lawson, the son of a poor man at Hull, entered the navy as
+     a common sailor, rose to the rank of admiral, and distinguished
+     himself during the Protectorate.  Though a republican, he readily
+     closed with the design of restoring the King.  He was vice-admiral
+     under the Earl of Sandwich, and commanded the "London" in the
+     squadron which conveyed Charles II. to England.  He was mortally
+     wounded in the action with the Dutch off Harwich, June, 1665.  He
+     must not be confounded with another John Lawson, the Royalist, of
+     Brough Hall, in Yorkshire, who was created a Baronet by Charles II,
+     July 6th, 1665.]
+
+This is an atom: 
+lies still in the river, and Monk--[George Monk, born 1608, created Duke of Albemarle, 1660,
+married Ann Clarges, March, 1654, died January 3rd, 1676.]--is with his army in Scotland. 
+Only my Lord Lambert is not yet come into the Parliament, nor is it expected that he will without
+being forced to it.  The new Common Council of the City do speak very high; and had sent to
+Monk their sword-bearer, to acquaint him with their desires for a free and full Parliament,
+which is at present the desires, and the hopes, and expectation of all.  Twenty-two of the
+old secluded members
+
+This is an atom: 
+["The City sent and invited him [Monk] to dine the next day at
+     Guildhall, and there he declared for the members whom the army had
+     forced away in year forty-seven and forty-eight, who were known by
+     the names of secluded members."--Burnet's Hist. of his Own Time,
+     book i.]
+
+This is an atom: 
+having been at the House-door the last week to demand entrance, but it was denied them; and
+it is believed that [neither] they nor the people will be satisfied till the House be filled.
+My own private condition very handsome, and esteemed rich, but indeed very poor; besides my
+goods of my house, and my office, which at present is somewhat uncertain.  Mr. Downing master
+of my office.
+
+This is an atom: 
+[George Downing was one of the Four Tellers of the Receipt of the
+     Exchequer, and in his office Pepys was a clerk.  He was the son of
+     Emmanuel Downing of the Inner Temple, afterwards of Salem,
+     Massachusetts, and of Lucy, sister of Governor John Winthrop.  He is
+     supposed to have been born in August, 1623.  He and his parents went
+     to New England in 1638, and he was the second graduate of Harvard
+     College.  He returned to England about 1645, and acted as Colonel
+     Okey's chaplain before he entered into political life.  Anthony a
+     Wood (who incorrectly describes him as the son of Dr. Calybute
+     Downing, vicar of Hackney) calls Downing a sider with all times and
+     changes: skilled in the common cant, and a preacher occasionally.
+     He was sent by Cromwell to Holland in 1657, as resident there.  At
+     the Restoration, he espoused the King's cause, and was knighted and
+     elected M.P. for Morpeth, in 1661.  Afterwards, becoming
+     Secretary to the Treasury and Commissioner of the Customs, he was in
+     1663 created a Baronet of East Hatley, in Cambridgeshire, and was
+     again sent Ambassador to Holland.  His grandson of the same name,
+     who died in 1749, was the founder of Downing College, Cambridge.
+     The title became extinct in 1764, upon the decease of Sir John
+     Gerrard Downing, the last heir-male of the family.  Sir George
+     Downing's character will be found in Lord Clarendon's "Life," vol.
+     iii.  p. 4.  Pepys's opinion seems to be somewhat of a mixed kind.
+     He died in July, 1684.]
+
+This is an atom: 
+Jan. 1st (Lord's day).  This morning (we living lately in the garret,) I rose, put on my suit
+with great skirts, having not lately worn any other, clothes but them.  Went to Mr. Gunning's
+
+This is an atom: 
+[Peter Gunning, afterwards Master of St. John's College, Cambridge,
+     and successively Bishop of Chichester and Ely.  He had continued to
+     read the Liturgy at the chapel at Exeter House when the Parliament
+     was most predominant, for which Cromwell often rebuked him.  Evelyn
+     relates that on Christmas Day, 1657, the chapel was surrounded with
+     soldiers, and the congregation taken prisoners, he and his wife
+     being among them.  There are several notices of Dr. Gunning in
+     Evelyn's Diary.  When he obtained the mastership of St. John's
+     College upon the ejection of Dr. Tuckney, he allowed that
+     Nonconformist divine a handsome annuity during his life.  He was a
+     great controversialist, and a man of great reading.  Burnet says he
+     "was a very honest sincere man, but of no sound judgment, and of no
+     prudence in affairs" ("Hist. of his Own.  Time").  He died July 6th,
+     1684, aged seventy-one.]
+
+This is an atom: 
+chapel at Exeter House, where he made a very good sermon upon these words:--"That in the fulness
+of time God sent his Son, made of a woman," &c.; showing, that, by "made under the law," is
+meant his circumcision, which is solemnized this day.  Dined at home in the garret, where my
+wife dressed the remains of a turkey, and in the doing of it she burned her hand.  I staid
+at home all the afternoon, looking over my accounts; then went with my wife to my father's,
+and in going observed the great posts which the City have set up at the Conduit in Fleet-street.
+Supt at my, father's, where in came Mrs. The. Turner--[Theophila Turner, daughter of Sergeant
+John and Jane Turner, who married Sir Arthur Harris, Bart.  She died 1686.]--and Madam Morrice,
+and supt with us.  After that my wife and I went home with them, and so to our own home.
+
+This is an atom: 
+2nd.  In the morning before I went forth old East brought me a dozen of bottles of sack, and
+I gave him a shilling for his pains.  Then I went to Mr. Sheply,--[Shepley was a servant of
+Admiral Sir Edward Montagu]--who was drawing of sack in the wine cellar to send to other places
+as a gift from my Lord, and told me that my Lord had given him order to give me the dozen of
+bottles.  Thence I went to the Temple to speak with Mr. Calthropp about the L60 due to my Lord,
+
+This is an atom: 
+[Sir Edward Montagu, born 1625, son of Sir Sidney Montagu, by
+     Paulina, daughter of John Pepys of Cottenham, married Jemima,
+     daughter of John Crew of Stene.  He died in action against the Dutch
+     in Southwold Bay, May 28th, 1672.  The title of "My Lord" here
+     applied to Montagu before he was created Earl of Sandwich is of the
+     same character as that given to General Lambert.]
+
+This is an atom: 
+but missed of him, he being abroad.  Then I went to Mr. Crew's
+
+This is an atom: 
+[John Crew, born 1598, eldest son of Sir Thomas Crew, Sergeant-at-
+     Law and Speaker of the House of Commons.  He sat for Brackley in the
+     Long Parliament.  Created Baron Crew of Stene, in the county of
+     Northampton, at the coronation of Charles II.  He married Jemima,
+     daughter and co-heir of Edward Walgrave (or Waldegrave) of Lawford,
+     Essex.  His house was in Lincoln's Inn Fields.  He died December
+     12th, 1679.]
+
+This is an atom: 
+and borrowed L10 of Mr. Andrewes for my own use, and so went to my office, where there was
+nothing to do.  Then I walked a great while in Westminster Hall, where I heard that Lambert
+was coming up to London; that my Lord Fairfax
+
+This is an atom: 
+[Thomas, Lord Fairfax, Generalissimo of the Parliament forces.
+     After the Restoration, he retired to his country seat, where he
+     lived in private till his death, 1671.  In a volume (autograph) of
+     Lord Fairfax's Poems, preserved in the British Museum, 11744, f. 42,
+     the following lines occur upon the 30th of January, on which day the
+     King was beheaded.  It is believed that they have never been
+     printed.
+
+This is an atom: 
+"O let that day from time be bloted quitt,
+               And beleef of 't in next age be waved,
+               In depest silence that act concealed might,
+               That so the creadet of our nation might be saved;
+               But if the powre devine hath ordered this,
+               His will's the law, and our must aquiess."
+
+This is an atom: 
+These wretched verses have obviously no merit; but they are curious
+     as showing that Fairfax, who had refused to act as one of Charles
+     I's judges; continued long afterwards to entertain a proper horror
+     for that unfortunate monarch's fate.  It has recently been pointed
+     out to me, that the lines were not originally composed by Fairfax,
+     being only a poor translation of the spirited lines of Statius
+     (Sylvarum lib. v.  cap. ii.  l. 88)
+
+This is an atom: 
+"Excidat illa dies aevo, ne postera credant
+               Secula, nos certe taceamus; et obruta multa
+               Nocte tegi propria patiamur crimina gentis."
+
+This is an atom: 
+These verses were first applied by the President de Thou to the
+     massacre of St. Bartholomew, 1572; and in our day, by Mr. Pitt, in
+     his memorable speech in the House of Commons, January, 1793, after
+     the murder of Louis XVI.--B.]
+
+This is an atom: 
+was in the head of the Irish brigade, but it was not certain what he would declare for.  The
+House was to-day upon finishing the act for the Council of State, which they did; and for the
+indemnity to the soldiers; and were to sit again thereupon in the afternoon.  Great talk that
+many places have declared for a free Parliament; and it is believed that they will be forced
+to fill up the House with the old members.  From the Hall I called at home, and so went to
+Mr. Crew's (my wife she was to go to her father's), thinking to have dined, but I came too
+late, so Mr. Moore and I and another gentleman went out and drank a cup of ale together in
+the new market, and there I eat some bread and cheese for my dinner.  After that Mr. Moore
+and I went as far as Fleet-street together and parted, he going into the City, I to find Mr.
+Calthrop, but failed again of finding him, so returned to Mr. Crew's again, and from thence
+went along with Mrs. Jemimah
+
+This is an atom: 
+[Mrs. Jemimah, or Mrs. Jem, was Jemima, eldest daughter of Sir
+     Edward Montagu.  At this time she and her sister, Mrs. Ann, seem to
+     have been living alone with their maids in London, and Pepys's duty
+     was to look after them.]
+
+This is an atom: 
+home, and there she taught me how to play at cribbage.  Then I went home, and finding my wife
+gone to see Mrs. Hunt, I went to Will's,
+
+This is an atom: 
+[Pepys constantly visited "Will's" about this time; but this could
+     not be the famous coffee-house in Covent Garden, because he mentions
+     visiting there for the first time, February 3rd, 1663-64.  It was
+     most probably the house of William Joyce, who kept a place of
+     entertainment at Westminster (see Jan. 29th).]
+
+This is an atom: 
+and there sat with Mr. Ashwell talking and singing till nine o'clock, and so home, there, having
+not eaten anything but bread and cheese, my wife cut me a slice of brawn which.  I received
+from my Lady;--[Jemima, wife of Sir Edward Montagu, daughter of John Crew of Stene, afterwards
+Lord Crew.]--which proves as good as ever I had any.  So to bed, and my wife had a very bad
+night of it through wind and cold.
+
+This is an atom: 
+3rd.  I went out in the morning, it being a great frost, and walked to Mrs. Turner's
+
+This is an atom: 
+[Jane, daughter of John Pepys of South Creake, Norfolk, married to
+     John Turner, Sergeant-at-law, Recorder of York; their only child,
+     Theophila, frequently mentioned as The.  or Theoph., became the wife
+     of Sir Arthur Harris, Bart., of Stowford, Devon, and died 1686,
+     s.p.]
+
+This is an atom: 
+to stop her from coming to see me to-day, because of Mrs. Jem's corning, thence I went to the
+Temple to speak with Mr. Calthrop, and walked in his chamber an hour, but could not see him,
+so went to Westminster, where I found soldiers in my office to receive money, and paid it them.
+At noon went home, where Mrs. Jem, her maid, Mr. Sheply, Hawly, and Moore dined with me on
+a piece of beef and cabbage, and a collar of brawn.  We then fell to cards till dark, and then
+I went home with Mrs. Jem, and meeting Mr. Hawly got him to bear me company to Chancery Lane,
+where I spoke with Mr. Calthrop, he told me that Sir James Calthrop was lately dead, but that
+he would write to his Lady, that the money may be speedily paid. Thence back to White Hall,
+where I understood that the Parliament had passed the act for indemnity to the soldiers and
+officers that would come in, in so many days, and that my Lord Lambert should have benefit
+of the said act. They had also voted that all vacancies in the House, by the death of any of
+the old members, shall be filled up; but those that are living shall not be called in.  Thence
+I went home, and there found Mr. Hunt and his wife, and Mr. Hawly, who sat with me till ten
+at night at cards, and so broke up and to bed.
+
+This is an atom: 
+4th.  Early came Mr. Vanly--[Mr Vanley appears to have been Pepys's landlord; he is mentioned
+again in the Diary on September 20th, 1660.]--to me for his half-year's rent, which I had not
+in the house, but took his man to the office and there paid him.  Then I went down into the
+Hall and to Will's, where Hawly brought a piece of his Cheshire cheese, and we were merry with
+it.  Then into the Hall again, where I met with the Clerk and Quarter Master of my Lord's troop,
+and took them to the Swan' and gave them their morning's draft,
+
+This is an atom: 
+[It was not usual at this time to sit down to breakfast, but instead
+     a morning draught was taken at a tavern.]
+
+This is an atom: 
+they being just come to town.  Mr. Jenkins shewed me two bills of exchange for money to receive
+upon my Lord's and my pay.  It snowed hard all this morning, and was very cold, and my nose
+was much swelled with cold. Strange the difference of men's talk!  Some say that Lambert must
+of necessity yield up; others, that he is very strong, and that the Fifth-monarchy-men [will]
+stick to him, if he declares for a free Parliament.  Chillington was sent yesterday to him
+with the vote of pardon and indemnity from the Parliament.  From the Hall I came home, where
+I found letters from Hinchinbroke
+
+This is an atom: 
+[Hinchinbroke was Sir Edward Montagu's seat, from which he
+     afterwards took his second title.  Hinchinbroke House, so often
+     mentioned in the Diary, stood about half a mile to the westward of
+     the town of Huntingdon.  It was erected late in the reign of
+     Elizabeth, by Sir Henry Cromwell, on the site of a Benedictine
+     nunnery, granted at the Dissolution, with all its appurtenances, to
+     his father, Richard Williams, who had assumed the name of Cromwell,
+     and whose grandson, Sir Oliver, was the uncle and godfather of the
+     Protector.  The knight, who was renowned for, his hospitality, had
+     the honour of entertaining King James at Hinchinbroke, but, getting
+     into pecuniary difficulties, was obliged to sell his estates, which
+     were conveyed, July 28th, 1627, to Sir Sidney Montagu of Barnwell,
+     father of the first Earl of Sandwich, in whose descendant they are
+     still vested.  On the morning of the 22nd January, 1830, during the
+     minority of the seventh Earl, Hinchinbroke was almost entirely
+     destroyed by fire, but the pictures and furniture were mostly saved,
+     and the house has been rebuilt in the Elizabethan style, and the
+     interior greatly improved, under the direction of Edward Blore,
+     Esq., R.A.--B.]
+
+This is an atom: 
+and news of Mr. Sheply's going thither the next week.  I dined at home, and from thence went
+to Will's to Shaw, who promised me to go along with me to Atkinson's about some money, but
+I found him at cards with Spicer and D. Vines, and could not get him along with me.  I was
+vext at this, and went and walked in the Hall, where I heard that the Parliament spent this
+day in fasting and prayer; and in the afternoon came letters from the North, that brought certain
+news that my Lord Lambent his forces were all forsaking him, and that he was left with only
+fifty horse, and that he did now declare for the Parliament himself; and that my Lord Fairfax
+did also rest satisfied, and had laid down his arms, and that what he had done was only to
+secure the country against my Lord Lambert his raising of money, and free quarter.  I went
+to Will's again, where I found them still at cards, and Spicer had won 14s. of Shaw and Vines.
+Then I spent a little time with G. Vines and Maylard at Vines's at our viols.
+
+This is an atom: 
+[It was usual to have a "chest of viols," which consisted of six,
+     viz., two trebles, two tenors, and two basses (see note in North's
+     "Memoirs of Musick," ed.  Rimbault, p. 70).  The bass viol was also
+     called the 'viola da gamba', because it was held between the legs.]
+
+This is an atom: 
+So home, and from thence to Mr. Hunt's, and sat with them and Mr. Hawly at cards till ten at
+night, and was much made of by them.  Home and so to bed, but much troubled with my nose, which
+was much swelled.
+
+This is an atom: 
+5th.  I went to my office, where the money was again expected from the Excise office, but none
+brought, but was promised to be sent this afternoon.  I dined with Mr. Sheply, at my Lord's
+lodgings, upon his turkey-pie.  And so to my office again; where the Excise money was brought,
+and some of it told to soldiers till it was dark.  Then I went home, and after writing a letter
+to my Lord and told him the news that the Parliament hath this night voted that the members
+that were discharged from sitting in the years 1648 and 49, were duly discharged; and that
+there should be writs issued presently for the calling of others in their places, and that
+Monk and Fairfax were commanded up to town, and that the Prince's lodgings were to be provided
+for Monk at Whitehall. Then my wife and I, it being a great frost, went to Mrs. Jem's, in expectation
+to eat a sack-posset, but Mr. Edward--[Edward Montage, son of Sir Edward, and afterwards Lord
+Hinchinbroke.]--not coming it was put off; and so I left my wife playing at cards with her,
+and went myself with my lanthorn to Mr. Fage, to consult concerning my nose, who told me it
+was nothing but cold, and after that we did discourse concerning public business; and he told
+me it is true the City had not time enough to do much, but they are resolved to shake off the
+soldiers; and that unless there be a free Parliament chosen, he did believe there are half
+the Common Council will not levy any money by order of this Parliament. From thence I went
+to my father's, where I found Mrs. Ramsey and her grandchild, a pretty girl, and staid a while
+and talked with them and my mother, and then took my leave, only heard of an invitation to
+go to dinner to-morrow to my cosen Thomas Pepys.--[Thomas Pepys, probably the son of Thomas
+Pepys of London (born, 1595), brother of Samuel's father, John Pepys.]--I went back to Mrs.
+Jem, and took my wife and Mrs. Sheply, and went home.
+
+This is an atom: 
+6th.  This morning Mr. Sheply and I did eat our breakfast at Mrs. Harper's, (my brother John'
+being with me,)
+
+This is an atom: 
+[John Pepys was born in 1641, and his brother Samuel took great
+     interest in his welfare, but he did not do any great credit to his
+     elder.]
+
+This is an atom: 
+upon a cold turkey-pie and a goose.  From thence I went to my office, where we paid money to
+the soldiers till one o'clock, at which time we made an end, and I went home and took my wife
+and went to my cosen, Thomas Pepys, and found them just sat down to dinner, which was very
+good; only the venison pasty was palpable beef, which was not handsome. After dinner I took
+my leave, leaving my wife with my cozen Stradwick,--[Elizabeth, daughter of Richard Pepys,
+Lord Chief Justice of Ireland, and wife of Thomas Stradwick.]--and went to Westminster to Mr.
+Vines, where George and I fiddled a good while, Dick and his wife (who was lately brought to
+bed) and her sister being there, but Mr. Hudson not coming according to his promise, I went
+away, and calling at my house on the wench, I took her and the lanthorn with me to my cosen
+Stradwick, where, after a good supper, there being there my father, mother, brothers, and sister,
+my cosen Scott and his wife, Mr. Drawwater and his wife, and her brother, Mr. Stradwick, we
+had a brave cake brought us, and in the choosing, Pall was Queen and Mr. Stradwick was King.
+After that my wife and I bid adieu and came home, it being still a great frost.
+
+This is an atom: 
+7th.  At my office as I was receiving money of the probate of wills, in came Mrs. Turner, Theoph.,
+Madame Morrice, and Joyce, and after I had done I took them home to my house and Mr. Hawly
+came after, and I got a dish of steaks and a rabbit for them, while they were playing a game
+or two at cards.  In the middle of our dinner a messenger from Mr. Downing came to fetch me
+to him, so leaving Mr. Hawly there, I went and was forced to stay till night in expectation
+of the French Embassador, who at last came, and I had a great deal of good discourse with one
+of his gentlemen concerning the reason of the difference between the zeal of the French and
+the Spaniard.  After he was gone I went home, and found my friends still at cards, and after
+that I went along with them to Dr. Whores (sending my wife to Mrs. Jem's to a sack-posset),
+where I heard some symphony and songs of his own making, performed by Mr. May, Harding, and
+Mallard. Afterwards I put my friends into a coach, and went to Mrs. Jem's, where I wrote a
+letter to my Lord by the post, and had my part of the posset which was saved for me, and so
+we went home, and put in at my Lord's lodgings, where we staid late, eating of part of his
+turkey-pie, and reading of Quarles' Emblems. So home and to bed.
+
+This is an atom: 
+8th (Sunday).  In the morning I went to Mr. Gunning's, where a good sermon, wherein he showed
+the life of Christ, and told us good authority for us to believe that Christ did follow his
+father's trade, and was a carpenter till thirty years of age.  From thence to my father's to
+dinner, where I found my wife, who was forced to dine there, we not having one coal of fire
+in the house, and it being very hard frosty weather.  In the afternoon my father, he going
+to a man's to demand some money due to my Aunt Bells my wife and I went to Mr. Mossum's, where
+a strange doctor made a very good sermon.  From thence sending my wife to my father's, I went
+to Mrs. Turner's, and staid a little while, and then to my father's, where I found Mr. Sheply,
+and after supper went home together.  Here I heard of the death of Mr. Palmer, and that he
+was to be buried at Westminster tomorrow.
+
+This is an atom: 
+9th.  For these two or three days I have been much troubled with thoughts how to get money
+to pay them that I have borrowed money of, by reason of my money being in my uncle's hands.
+I rose early this morning, and looked over and corrected my brother John's speech, which he
+is to make the next apposition,--[Declamations at St. Paul's School, in which there were opponents
+and respondents.]--and after that I went towards my office, and in my way met with W. Simons,
+Muddiman, and Jack Price, and went with them to Harper's and in many sorts of talk I staid
+till two of the clock in the afternoon.  I found Muddiman a good scholar, an arch rogue; and
+owns that though he writes new books for the Parliament, yet he did declare that he did it
+only to get money; and did talk very basely of many of them.  Among other things, W. Simons
+told me how his uncle Scobel was on Saturday last called to the bar, for entering in the journal
+of the House, for the year 1653, these words: "This day his Excellence the Lord General Cromwell
+dissolved this House;" which words the Parliament voted a forgery, and demanded of him how
+they came to be entered.  He answered that they were his own handwriting, and that he did it
+by virtue of his office, and the practice of his predecessor; and that the intent of the practice
+was to--let posterity know how such and such a Parliament was dissolved, whether by the command
+of the King, or by their own neglect, as the last House of Lords was; and that to this end,
+he had said and writ that it was dissolved by his Excellence the Lord G[eneral]; and that for
+the word dissolved, he never at the time did hear of any other term; and desired pardon if
+he would not dare to make a word himself when it was six years after, before they came themselves
+to call it an interruption; but they were so little satisfied with this answer, that they did
+chuse a committee to report to the House, whether this crime of Mr. Scobell's did come within
+the act of indemnity or no. Thence I went with Muddiman to the Coffee-House, and gave 18d.
+to be entered of the Club.  Thence into the Hall, where I heard for certain that Monk was coming
+to London, and that Bradshaw's 2 lodgings were preparing for him.  Thence to Mrs. Jem's, and
+found her in bed, and she was afraid that it would prove the small-pox. Thence back to Westminster
+Hall, where I heard how Sir H. Vane--[Sir Harry Vane the younger, an inflexible republican.
+He was executed in 1662, on a charge of conspiring the death of Charles I.]--was this day voted
+out of the House, and to sit no more there; and that he would retire himself to his house at
+Raby, as also all the rest of the nine officers that had their commissions formerly taken away
+from them, were commanded to their farthest houses from London during the pleasure of the Parliament.
+Here I met with the Quarter Master of my Lord's troop, and his clerk Mr. Jenings, and took
+them home, and gave them a bottle of wine, and the remainder of my collar of brawn; and so
+good night.  After that came in Mr. Hawly, who told me that I was mist this day at my office,
+and that to-morrow I must pay all the money that I have, at which I was put to a great loss
+how I should get money to make up my cash, and so went to bed in great trouble.
+
+This is an atom: 
+10th.  Went out early, and in my way met with Greatorex,--[Ralph Greatorex, the well-known
+mathematical instrument maker of his day.  He is frequently mentioned by Pepys.]--and at an
+alehouse he showed me the first sphere of wire that ever he made, and indeed it was very pleasant;
+thence to Mr. Crew's, and borrowed L10, and so to my office, and was able to pay my money.
+Thence into the Hall, and meeting the Quarter Master, Jenings, and Captain Rider, we four went
+to a cook's to dinner.  Thence Jenings and I into London (it being through heat of the sun
+a great thaw and dirty) to show our bills of return, and coming back drank a pint of wine at
+the Star in Cheapside.  So to Westminster, overtaking Captain Okeshott in his silk cloak, whose
+sword got hold of many people in walking.  Thence to the Coffee-house, where were a great confluence
+of gentlemen; viz.  Mr. Harrington, Poultny, chairman, Gold, Dr, Petty; &c., where admirable
+discourse till at night.  Thence with Doling to Mother Lams, who told me how this day Scott
+
+This is an atom: 
+[Thomas Scott, M.P., was made Secretary of State to the Commonwealth
+     on the 17th of this same January.  He signed the death warrant of
+     Charles I., for which he was executed at Charing Cross, October
+     16th, 1660.  He gloried in his offence, and desired to have written
+     on his tombstone, "Thomas Scott who adjudged to death the late
+     king."]
+
+This is an atom: 
+was made Intelligencer, and that the rest of the members that were objected against last night,
+their business was to be heard this day se'nnight.  Thence I went home and wrote a letter,
+and went to Harper's, and staid there till Tom carried it to the postboy at Whitehall.  So
+home to bed.
+
+This is an atom: 
+11th.  Being at Will's with Captain Barker, who hath paid me L300 this morning at my office,
+in comes my father, and with him I walked, and leave him at W. Joyce's, and went myself to
+Mr. Crew's, but came too late to dine, and therefore after a game at shittle-cocks--[The game
+of battledore and shuttlecock was formerly much played even in tennis courts, and was a very
+violent game.]--with Mr. Walgrave and Mr. Edward, I returned to my father, and taking him from
+W. Joyce's, who was not abroad himself, we inquired of a porter, and by his direction went
+to an alehouse, where after a cup or two we parted.  I went towards London, and in my way went
+in to see Crowly, who was now grown a very great loon and very tame. Thence to Mr. Steven's
+with a pair of silver snuffers, and bought a pair of shears to cut silver, and so homeward
+again.  From home I went to see Mrs. Jem, who was in bed, and now granted to have the small-pox.
+Back again, and went to the Coffee-house, but tarried not, and so home.
+
+This is an atom: 
+12th.  I drink my morning at Harper's with Mr. Sheply and a seaman, and so to my office, where
+Captain Holland  came to see me, and appointed a meeting in the afternoon.  Then wrote letters
+to Hinchinbroke and sealed them at Will's, and after that went home, and thence to the Half
+Moon, where I found the Captain and Mr. Billingsly and Newman, a barber, where we were very
+merry, and had the young man that plays so well on the Welsh harp.  Billingsly paid for all.
+Thence home, and finding my letters this day not gone by the carrier I new sealed them, but
+my brother Tom coming we fell into discourse about my intention to feast the Joyces.  I sent
+for a bit of meat for him from the cook's, and forgot to send my letters this night.  So I
+went to bed, and in discourse broke to my wife what my thoughts were concerning my design of
+getting money by, &c.
+
+This is an atom: 
+13th.  Coming in the morning to my office, I met with Mr. Fage and took him to the Swan?  He
+told me how high Haselrigge, and Morly, the last night began at my Lord Mayor's to exclaim
+against the City of London, saying that they had forfeited their charter.  And how the Chamberlain
+of the City did take them down, letting them know how much they were formerly beholding to
+the City, &c.  He also told me that Monk's letter that came to them by the sword-bearer was
+a cunning piece, and that which they did not much trust to; but they were resolved to make
+no more applications to the Parliament, nor to pay any money, unless the secluded members be
+brought in, or a free Parliament chosen.  Thence to my office, where nothing to do.  So to
+Will's with Mr. Pinkney, who invited me to their feast at his Hall the next Monday.  Thence
+I went home and took my wife and dined at Mr. Wades, and after that we went and visited Catan.
+From thence home again, and my wife was very unwilling to let me go forth, but with some discontent
+would go out if I did, and I going forth towards Whitehall, I saw she followed me, and so I
+staid and took her round through Whitehall, and so carried her home angry.  Thence I went to
+Mrs. Jem, and found her up and merry, and that it did not prove the small-pox, but only the
+swine-pox; so I played a game or two at cards with her.  And so to Mr. Vines, where he and
+I and Mr. Hudson played half-a-dozen things, there being there Dick's wife and her sister.
+After that I went home and found my wife gone abroad to Mr. Hunt's, and came in a little after
+me.--So to bed.
+
+This is an atom: 
+14th.  Nothing to do at our office.  Thence into the Hall, and just as I was going to dinner
+from Westminster Hall with Mr. Moore (with whom I had been in the lobby to hear news, and had
+spoke with Sir Anthony Ashley Cooper about my Lord's lodgings) to his house, I met with Captain
+Holland, who told me that he hath brought his wife to my house, so I posted home and got a
+dish of meat for them.  They staid with me all the afternoon, and went hence in the evening.
+Then I went with my wife, and left her at market, and went myself to the Coffee-house, and
+heard exceeding good argument against Mr. Harrington's assertion, that overbalance of propriety
+[i.e., property] was the foundation of government.  Home, and wrote to Hinchinbroke, and sent
+that and my other letter that missed of going on Thursday last.  So to bed.
+
+This is an atom: 
+15th.  Having been exceedingly disturbed in the night with the barking of a dog of one of our
+neighbours that I could not sleep for an hour or two, I slept late, and then in the morning
+took physic, and so staid within all day.  At noon my brother John came to me, and I corrected
+as well as I could his Greek speech to say the Apposition, though I believe he himself was
+as well able to do it as myself.  After that we went to read in the great Officiale about the
+blessing of bells in the Church of Rome. After that my wife and I in pleasant discourse till
+night, then I went to supper, and after that to make an end of this week's notes in this book,
+and so to bed.  It being a cold day and a great snow my physic did not work so well as it should
+have done.
+
+This is an atom: 
+16th.  In the morning I went up to Mr. Crew's, and at his bedside he gave me direction to go
+to-morrow with Mr. Edward to Twickenham, and likewise did talk to me concerning things of state;
+and expressed his mind how just it was that the secluded members should come to sit again.
+I went from thence, and in my way went into an alehouse and drank my morning draft with Matthew
+Andrews and two or three more of his friends, coachmen.  And of one of them I did hire a coach
+to carry us to-morrow to Twickenham. From thence to my office, where nothing to do; but Mr.
+Downing he came and found me all alone; and did mention to me his going back into Holland,
+and did ask me whether I would go or no, but gave me little encouragement, but bid me consider
+of it; and asked me whether I did not think that Mr. Hawly could perform the work of my office
+alone or no.  I confess I was at a great loss, all the day after, to bethink myself how to
+carry this business.  At noon, Harry Ethall came to me and went along with Mr. Maylard by coach
+as far as Salsbury Court, and there we set him down, and we went to the Clerks, where we came
+a little too late, but in a closet we had a very good dinner by Mr. Pinkny's courtesy, and
+after dinner we had pretty good singing, and one, Hazard, sung alone after the old fashion,
+which was very much cried up, but I did not like it.  Thence we went to the Green Dragon, on
+Lambeth Hill, both the Mr. Pinkney's, Smith, Harrison, Morrice, that sang the bass, Sheply
+and I, and there we sang of all sorts of things, and I ventured with good success upon things
+at first sight, and after that I played on my flageolet, and staid there till nine o'clock,
+very merry and drawn on with one song after another till it came to be so late.  After that
+Sheply, Harrison and myself, we went towards Westminster on foot, and at the Golden Lion, near
+Charing Cross, we went in and drank a pint of wine, and so parted, and thence home, where I
+found my wife and maid a-washing. I staid up till the bell-man came by with his bell just under
+my window as I was writing of this very line, and cried, "Past one of the clock, and a cold,
+frosty, windy morning."  I then went to bed, and left my wife and the maid a-washing still.
+
+This is an atom: 
+17th.  Early I went to Mr. Crew's, and having given Mr. Edward money to give the servants,
+I took him into the coach that waited for us and carried him to my house, where the coach waited
+for me while I and the child went to Westminster Hall, and bought him some pictures.  In the
+Hall I met Mr. Woodfine, and took him to Will's and drank with him. Thence the child and I
+to the coach, where my wife was ready, and so we went towards Twickenham.  In our way, at Kensington
+we understood how that my Lord Chesterfield had killed another gentleman about half an hour
+before, and was fled.
+
+This is an atom: 
+[Philip Stanhope, second Earl of Chesterfield, ob. 1713, act. suae
+     80.  We learn, from the memoir prefixed to his "Printed
+     Correspondence," that he fought three duels, disarming and wounding
+     his first and second antagonists, and killing the third.  The name
+     of the unfortunate gentleman who fell on this occasion was Woolly.
+     Lord Chesterfield, absconding, went to Breda, where he obtained the
+     royal pardon from Charles II.  He acted a busy part in the eventful
+     times in which he lived, and was remarkable for his steady adherence
+     to the Stuarts.  Lord Chesterfield's letter to Charles II., and the
+     King's answer granting the royal pardon, occur in the Correspondence
+     published by General Sir John Murray, in 1829.
+
+This is an atom: 
+"Jan. 17th, 1659.  The Earl of Chesterfield and Dr. Woolly's son of
+     Hammersmith, had a quarrel about a mare of eighteen pounds price;
+     the quarrel would not be reconciled, insomuch that a challenge
+     passed between them.  They fought a duel on the backside of Mr.
+     Colby's house at Kensington, where the Earl and he had several
+     passes.  The Earl wounded him in two places, and would fain have
+     then ended, but the stubbornness and pride of heart of Mr. Woolly
+     would not give over, and the next pass [he] was killed on the spot.
+     The Earl fled to Chelsea, and there took water and escaped.  The
+     jury found it chance-medley."--Rugge's "Diurnal," Addit  MSS.,
+     British Museum.--B.]
+
+This is an atom: 
+We went forward and came about one of the clock to Mr. Fuller's, but he was out of town, so
+we had a dinner there, and I gave the child 40s. to give to the two ushers.  After that we
+parted and went homewards, it being market day at Brainford [Brentford].  I set my wife down
+and went with the coach to Mr. Crew's, thinking to have spoke with Mr. Moore and Mrs. Jem,
+he having told me the reason of his melancholy was some unkindness from her after so great
+expressions of love, and how he had spoke to her friends and had their consent, and that he
+would desire me to take an occasion of speaking with her, but by no means not to heighten her
+discontent or distaste whatever it be, but to make it up if I can. But he being out of doors,
+I went away and went to see Mrs. Jem, who was now very well again, and after a game or two
+at cards, I left her.  So I went to the Coffee Club, and heard very good discourse; it was
+in answer to Mr. Harrington's answer, who said that the state of the Roman government was not
+a settled government, and so it was no wonder that the balance of propriety [i.e., property]
+was in one hand, and the command in another, it being therefore always in a posture of war;
+but it was carried by ballot, that it was a steady government, though it is true by the voices
+it had been carried before that it was an unsteady government; so to-morrow it is to be proved
+by the opponents that the balance lay in one hand, and the government in another.  Thence I
+went to Westminster, and met Shaw and Washington,  who told me how this day Sydenham
+
+This is an atom: 
+[Colonel William Sydenham had been an active officer during the
+     Civil Wars, on the Parliament side; M.P. for Dorsetshire, Governor
+     of Melcombe, and one of the Committee of Safety.  He was the elder
+     brother of the celebrated physician of that name.--B.]
+
+This is an atom: 
+was voted out of the House for sitting any more this Parliament, and that Salloway was voted
+out likewise and sent to the Tower, during the pleasure of the House.  Home and wrote by the
+Post, and carried to Whitehall, and coming back turned in at Harper-'s, where Jack Price was,
+and I drank with him and he told me, among other, things, how much the Protector
+
+This is an atom: 
+[Richard Cromwell, third son of Oliver Cromwell, born October 4th,
+     1626, admitted a member of Lincoln's Inn, May 27th, 1647, fell into
+     debt and devoted himself to hunting and field sports.  His
+     succession to his father as Protector was universally accepted at
+     first, but the army soon began to murmur because he was not a
+     general.  Between the dissensions of various parties he fell, and
+     the country was left in a state of anarchy: He went abroad early in
+     the summer of 1660, and lived abroad for some years, returning to
+     England in 1680.  After his fall he bore the name of John Clarke.
+     Died at Cheshunt, July 12th, 1712.]
+
+This is an atom: 
+is altered, though he would seem to bear out his trouble very well, yet he is scarce able to
+talk sense with a man; and how he will say that "Who should a man trust, if he may not trust
+to a brother and an uncle;" and "how much those men have to answer before God Almighty, for
+their playing the knave with him as they did."  He told me also, that there was; L100,000 offered,
+and would have been taken for his restitution, had not the Parliament come in as they did again;
+and that he do believe that the Protector will live to give a testimony of his valour and revenge
+yet before he dies, and that the Protector will say so himself sometimes. Thence I went home,
+it being late and my wife in bed.
+
+This is an atom: 
+18th.  To my office and from thence to Will's, and there Mr. Sheply brought me letters from
+the carrier and so I went home.  After that to Wilkinson's, where we had a dinner for Mr. Talbot,
+Adams, Pinkny and his son, but his son did not come.  Here we were very merry, and while I
+was here Mr. Fuller came thither and staid a little, while.
+
+This is an atom: 
+After that we all went to my Lord's, whither came afterwards Mr. Harrison, and by chance seeing
+Mr. Butler--[Mr. Butler is usually styled by Pepys Mons. l'Impertinent.]--coming by I called
+him in and so we sat drinking a bottle of wine till night.  At which time Mistress Ann--[Probably
+Mrs. (afterwards Lady) Anne Montagu, daughter of Sir Edward Montagu, and sister to Mrs. Jem.]--came
+with the key of my Lord's study for some things, and so we all broke up and after I had gone
+to my house and interpreted my Lord's letter by his character--[The making of ciphers was a
+popular amusement about this time.  Pepys made several for Montagu, Downing, and others.]--I
+came to her again and went with her to her lodging and from thence to Mr. Crew's, where I advised
+with him what to do about my Lord's lodgings and what answer to give to Sir Ant. Cooper and
+so I came home and to bed.  All the world is at a loss to think what Monk will do: the City
+saying that he will be for them, and the Parliament saying he will be for them.
+
+This is an atom: 
+19th.  This morning I was sent for to Mr. Downing, and at his bed side he told me, that he
+had a kindness for me, and that he thought that he had done me one; and that was, that he had
+got me to be one of the Clerks of the Council; at which I was a little stumbled, and could
+not tell what to do, whether to thank him or no; but by and by I did; but not very heartily,
+for I feared that his doing of it was but only to ease himself of the salary which he gives
+me.  After that Mr. Sheply staying below all this time for me we went thence and met Mr. Pierce,
+
+This is an atom: 
+[Pepys had two friends named Pierce, one the surgeon and the other
+     the purser; he usually (but not always) distinguishes them.  The one
+     here alluded to was probably the surgeon, and husband of pretty Mrs.
+     Pierce.  After the Restoration James Pearse or Pierce became Surgeon
+     to the Duke of York, and he was also Surgeon-General of the Fleet.]
+
+This is an atom: 
+so at the Harp and Ball drank our morning draft and so to Whitehall where I met with Sir Ant.
+Cooper and did give him some answer from my Lord and he did give us leave to keep the lodgings
+still.  And so we did determine thereupon that Mr. Sheply might now go into the country and
+would do so to-morrow.  Back I went by Mr. Downing's order and staid there till twelve o'clock
+in expectation of one to come to read some writings, but he came not, so I staid all alone
+reading the answer of the Dutch Ambassador to our State, in answer to the reasons of my Lord's
+coming home, which he gave for his coming, and did labour herein to contradict my Lord's arguments
+for his coming home.  Thence to my office and so with Mr. Sheply and Moore, to dine upon a
+turkey with Mrs. Jem, and after that Mr. Moore and I went to the French Ordinary, where Mr.
+Downing this day feasted Sir Arth. Haselrigge, and a great many more of the Parliament, and
+did stay to put him in mind of me.  Here he gave me a note to go and invite some other members
+to dinner tomorrow.  So I went to White Hall, and did stay at Marsh's, with Simons, Luellin,
+and all the rest of the Clerks of the Council, who I hear are all turned out, only the two
+Leighs, and they do all tell me that my name was mentioned the last night, but that nothing
+was done in it.  Hence I went and did leave some of my notes at the lodgings of the members
+and so home.  To bed.
+
+This is an atom: 
+20th.  In the morning I went to Mr. Downing's bedside and gave him an account what I had done
+as to his guests, land I went thence to my Lord Widdrington who I met in the street, going
+to seal the patents for the judges to-day, and so could not come to dinner.  I called upon
+Mr. Calthrop about the money due to my Lord.  Here I met with Mr. Woodfine and drank with him
+at the Sun in Chancery Lane and so to Westminster Hall, where at the lobby I spoke with the
+rest of my guests and so to my office. At noon went by water with Mr. Maylard and Hales to
+the Swan in Fish Street at our Goal Feast, where we were very merry at our Jole of Ling, and
+from thence after a great and good dinner Mr. Falconberge would go drink a cup of ale at a
+place where I had like to have shot at a scholar that lay over the house of office.  Thence
+calling on Mr. Stephens and Wootton (with whom I drank) about business of my Lord's I went
+to the Coffee Club where there was nothing done but choosing of a Committee for orders.  Thence
+to Westminster Hall where Mrs. Lane and the rest of the maids had their white scarfs, all having
+been at the burial of a young bookseller in the Hall.
+
+This is an atom: 
+[These stationers and booksellers, whose shops disfigured
+     Westminster Hall down to a late period, were a privileged class.
+     In the statutes for appointing licensers and regulating the press,
+     there is a clause exempting them from the pains and penalties of
+     these obnoxious laws.]
+
+This is an atom: 
+Thence to Mr. Sheply's and took him to my house and drank with him in order to his going to-morrow.
+So parted and I sat up late making up my accounts before he go.  This day three citizens of
+London went to meet Monk from the Common Council!
+
+This is an atom: 
+"Jan. 20th.  Then there went out of the City, by desire of the Lord
+     Mayor and Court of Aldermen, Alderman Fowke and Alderman Vincett,
+     alias Vincent, and Mr. Broomfield, to compliment General Monk, who
+     lay at Harborough Town, in Leicestershire."
+
+This is an atom: 
+"Jan. 21st.  Because the Speaker was sick, and Lord General Monk so
+     near London, and everybody thought that the City would suffer for
+     their affronts to the soldiery, and because they had sent the sword-
+     bearer to, the General without the Parliament's consent, and the
+     three Aldermen were gone to give him the welcome to town, these four
+     lines were in almost everybody's mouth:
+
+This is an atom: 
+"Monk under a hood, not well understood,
+                    The City pull in their horns;
+                    The Speaker is out, and sick of the gout,
+                    And the Parliament sit upon thorns."
+                    --Rugge's 'Diurnal.'--B."
+
+This is an atom: 
+21st.  Up early in finishing my accounts and writing to my Lord and from thence to my Lord's
+and took leave of Mr. Sheply and possession of all the keys and the house.  Thence to my office
+for some money to pay Mr. Sheply and sent it him by the old man.  I then went to Mr. Downing
+who chid me because I did not give him notice of some of his guests failed him but I told him
+that I sent our porter to tell him and he was not within, but he told me that he was within
+till past twelve o'clock.  So the porter or he lied.  Thence to my office where nothing to
+do.  Then with Mr. Hawly, he and I went to Mr. Crew's and dined there.  Thence into London,
+to Mr. Vernon's and I received my L25 due by bill for my troopers' pay.  Then back again to
+Steadman's.  At the Mitre, in Fleet street, in our way calling on Mr. Fage, who told me how
+the City have some hopes of Monk. Thence to the Mitre, where I drank a pint of wine, the house
+being in fitting for Banister to come hither from Paget's. Thence to Mrs. Jem and gave her
+L5.  So home and left my money and to Whitehall where Luellin and I drank and talked together
+an hour at Marsh's and so up to the clerks' room, where poor Mr. Cook, a black man, that is
+like to be put out of his clerk's place, came and railed at me for endeavouring to put him
+out and get myself in, when I was already in a good condition.  But I satisfied him and after
+I had wrote a letter there to my Lord, wherein I gave him an account how this day Lenthall
+took his chair again, and [the House] resolved a declaration to be brought in on Monday next
+to satisfy the world what they intend to do. So home and to bed.
+
+This is an atom: 
+22nd.  I went in the morning to Mr. Messum's, where I met with W. Thurburn and sat with him
+in his pew.  A very eloquent sermon about the duty of all to give good example in our lives
+and conversation, which I fear he himself was most guilty of not doing.  After sermon, at the
+door by appointment my wife met me, and so to my father's to dinner, where we had not been
+to my shame in a fortnight before.  After dinner my father shewed me a letter from Mr. Widdrington,
+of Christ's College, in Cambridge, wherein he do express very great kindness for my brother,
+and my father intends that my brother shall go to him.  To church in the afternoon to Mr. Herring,
+where a lazy poor sermon.  And so home with Mrs. Turner and sitting with her a while we went
+to my father's where we supt very merry, and so home.  This day I began to put on buckles to
+my shoes, which I have bought yesterday of Mr. Wotton.
+
+This is an atom: 
+23rd.  In the morning called out to carry L20 to Mr. Downing, which I did and came back, and
+finding Mr. Pierce, the surgeon, I took him to the Axe and gave him his morning draft.  Thence
+to my office and there did nothing but make up my balance.  Came home and found my wife dressing
+of the girl's head, by which she was made to look very pretty.  I went out and paid Wilkinson
+what I did owe him, and brought a piece of beef home for dinner.  Thence I went out and paid
+Waters, the vintner, and went to see Mrs. Jem, where I found my Lady Wright, but Scott was
+so drunk that he could not be seen.  Here I staid and made up Mrs. Ann's bills, and played
+a game or two at cards, and thence to Westminster Hall, it being very dark.  I paid Mrs. Michell,
+my bookseller, and back to Whitehall, and in the garden, going through to the Stone Gallery--[The
+Stone Gallery was a long passage between the Privy Garden and the river.  It led from the Bowling
+Green to the Court of the Palace]--I fell into a ditch, it being very dark.  At the Clerk's
+chamber I met with Simons and Luellin, and went with them to Mr. Mount's chamber at the Cock
+Pit, where we had some rare pot venison, and ale to abundance till almost twelve at night,
+and after a song round we went home.  This day the Parliament sat late, and resolved of the
+declaration to be printed for the people's satisfaction, promising them a great many good things.
+
+This is an atom: 
+24th.  In the morning to my office, where, after I had drank my morning draft at Will's with
+Ethell and Mr. Stevens, I went and told part of the excise money till twelve o'clock, and then
+called on my wife and took her to Mr. Pierces, she in the way being exceedingly troubled with
+a pair of new pattens, and I vexed to go so slow, it being late.  There when we came we found
+Mrs. Carrick very fine, and one Mr. Lucy, who called one another husband and wife, and after
+dinner a great deal of mad stir. There was pulling off Mrs. bride's and Mr. bridegroom's ribbons;
+
+This is an atom: 
+[The scramble for ribbons, here mentioned by Pepys in connection
+     with weddings (see also January 26th, 1660-61, and February 8th,
+     1662-3), doubtless formed part of the ceremony of undressing the
+     bridegroom, which, as the age became more refined, fell into disuse.
+     All the old plays are silent on the custom; the earliest notice of
+     which occurs in the old ballad of the wedding of Arthur O'Bradley,
+     printed in the Appendix to "Robin Hood," 1795, where we read--
+
+This is an atom: 
+"Then got they his points and his garters,
+                    And cut them in pieces like martyrs;
+                    And then they all did play
+                    For the honour of Arthur O'Bradley."
+
+This is an atom: 
+Sir Winston Churchill also observes ("Divi Britannici," p. 340) that
+     James I. was no more troubled at his querulous countrymen robbing
+     him than a bridegroom at the losing of his points and garters.  Lady
+     Fanshawe, in her "Memoirs," says, that at the nuptials of Charles
+     II. and the Infanta, "the Bishop of London declared them married in
+     the name of the Father, the Son, and the Holy Ghost; and then they
+     caused the ribbons her Majesty wore to be cut in little pieces; and
+     as far as they would go, every one had some."  The practice still
+     survives in the form of wedding favours.
+
+This is an atom: 
+A similar custom is still of every day's occurrence at Dieppe.  Upon
+     the morrow after their marriage, the bride and bridegroom
+     perambulate the streets, followed by a numerous cortege, the guests
+     at the wedding festival, two and two; each individual wearing two
+     bits of narrow ribbon, about two inches in length, of different
+     colours, which are pinned crossways upon the breast.  These morsels
+     of ribbons originally formed the garters of the bride and
+     bridegroom, which had been divided amidst boisterous mirth among the
+     assembled company, the moment the happy pair had been formally
+     installed in the bridal bed.--Ex. inf.  Mr. William .Hughes,
+     Belvedere, Jersey.--B.]
+
+This is an atom: 
+with a great deal of fooling among them that I and my wife did not like. Mr. Lucy and several
+other gentlemen coming in after dinner, swearing and singing as if they were mad, only he singing
+very handsomely.  There came in afterwards Mr. Southerne, clerk to Mr. Blackburne, and with
+him Lambert, lieutenant of my Lord's ship, and brought with them the declaration that came
+out to-day from the Parliament, wherein they declare for law and gospel, and for tythes; but
+I do not find people apt to believe them.  After this taking leave I went to my father's, and
+my wife staying there, he and I went to speak with Mr. Crumlum (in the meantime, while it was
+five o'clock, he being in the school, we went to my cozen Tom Pepys' shop, the turner in Paul's
+Churchyard, and drank with him a pot of ale); he gave my father directions what to do about
+getting my brother an exhibition, and spoke very well of my brother.  Thence back with my father
+home, where he and I spoke privately in the little room to my sister Pall about stealing of
+things as my wife's scissars and my maid's book, at which my father was much troubled.  Hence
+home with my wife and so to Whitehall, where I met with Mr. Hunt and Luellin, and drank with
+them at Marsh's, and afterwards went up and wrote to my Lord by the post.  This day the Parliament
+gave order that the late Committee of Safety should come before them this day se'nnight, and
+all their papers, and their model of Government that they had made, to be brought in with them.
+So home and talked with my wife about our dinner on Thursday.
+
+This is an atom: 
+25th.  Called up early to Mr. Downing; he gave me a Character, such a one as my Lord's, to
+make perfect, and likewise gave me his order for L500 to carry to Mr. Frost, which I did and
+so to my office, where I did do something about the character till twelve o'clock.  Then home
+find found my wife and the maid at my Lord's getting things ready against to-morrow. I went
+by water to my Uncle White's' to dinner, where I met my father, where we alone had a fine jole
+of Ling to dinner.  After dinner I took leave, and coming home heard that in Cheapside there
+had been but a little before a gibbet set up, and the picture of Huson
+
+This is an atom: 
+[John Hewson, who, from a low origin, became a colonel in the
+     Parliament army, and sat in judgment on the King: he escaped hanging
+     by flight, and died in 1662, at Amsterdam.  A curious notice of
+     Hewson occurs in Rugge's "Diurnal," December 5th, 1659, which states
+     that "he was a cobbler by trade, but a very stout man, and a very
+     good commander; but in regard of his former employment, they [the
+     city apprentices] threw at him old shoes, and slippers, and
+     turniptops, and brick-bats, stones, and tiles."  .  .  .  "At this
+     time [January, 1659-60] there came forth, almost every day, jeering
+     books: one was called 'Colonel Hewson's Confession; or, a Parley
+     with Pluto,' about his going into London, and taking down the gates
+     of Temple-Bar."  He had but one eye, which did not escape the notice
+     of his enemies.--B.]
+
+This is an atom: 
+hung upon it in the middle of the street.  I called at Paul's Churchyard, where I bought Buxtorf's
+Hebrew Grammar; and read a declaration of the gentlemen of Northampton which came out this
+afternoon.  Thence to my father's, where I staid with my mother a while and then to Mr. Crew's
+about a picture to be sent into the country, of Mr. Thomas Crew, to my Lord.  So [to] my Lady
+Wright to speak with her, but she was abroad, so Mr. Evans, her butler, had me into his buttery,
+and gave me sack and a lesson on his lute, which he played very well.  Thence I went to my
+Lord's and got most things ready against tomorrow, as fires and laying the cloth, and my wife
+was making of her tarts and larding of her pullets till eleven o'clock.  This evening Mr. Downing
+sent for me, and gave me order to go to Mr. Jessop for his papers concerning his dispatch to
+Holland which were not ready, only his order for a ship to transport him he gave me.  To my
+Lord's again and so home with my wife, tired with this day's work.
+
+This is an atom: 
+26th.  To my office for L20 to carry to Mr. Downing, which I did and back again.  Then came
+Mr. Frost to pay Mr. Downing his L500, and I went to him for the warrant and brought it Mr.
+Frost.  Called for some papers at Whitehall for Mr. Downing, one of which was an Order of the
+Council for L1800 per annum, to be paid monthly; and the other two, Orders to the Commissioners
+of Customs, to let his goods pass free.  Home from my office to my Lord's lodgings where my
+wife had got ready a very fine dinner--viz. a dish of marrow bones; a leg of mutton; a loin
+of veal; a dish of fowl, three pullets, and two dozen of larks all in a dish; a great tart,
+a neat's tongue, a dish of anchovies; a dish of prawns and cheese.  My company was my father,
+my uncle Fenner, his two sons, Mr. Pierce, and all their wives, and my brother Tom.  We were
+as merry as I could frame myself to be in the company, W. Joyce talking after the old rate
+and drinking hard, vexed his father and mother and wife.  And I did perceive that Mrs. Pierce
+her coming so gallant, that it put the two young women quite out of courage.  When it became
+dark they all went away but Mr. Pierce, and W. Joyce, and their wives and Tom, and drank a
+bottle of wine afterwards, so that Will did heartily vex his father and mother by staying.
+At which I and my wife were much pleased.  Then they all went and I fell to writing of two
+characters for Mr. Downing, and carried them to him at nine o'clock at night, and he did not
+like them but corrected them, so that to-morrow I am to do them anew.  To my Lord's lodging
+again and sat by the great log, it being now a very good fire, with my wife, and ate a bit
+and so home. The news this day is a letter that speaks absolutely Monk's concurrence with this
+Parliament, and nothing else, which yet I hardly believe.  After dinner to-day my father showed
+me a letter from my Uncle Robert,  in answer to my last, concerning my money which I would
+have out of my Coz. Beck's' hand, wherein Beck desires it four months longer, which I know
+not how to spare.
+
+This is an atom: 
+27th.  Going to my office I met with Tom Newton, my old comrade, and took him to the Crown
+in the Palace, and gave him his morning draft.  And as he always did, did talk very high what
+he would do with the Parliament, that he would have what place he would, and that he might
+be one of the Clerks to the Council if he would.  Here I staid talking with him till the offices
+were all shut, and then I looked in the Hall, and was told by my bookseller, Mrs. Michell,
+that Mr. G. Montagu had inquired there for me. So I went to his house, and was forced by him
+to dine with him, and had a plenteous brave dinner and the greatest civility that ever I had
+from any man.  Thence home and so to Mrs. Jem, and played with her at cards, and coming home
+again my wife told me that Mr. Hawly had been there to speak with me, and seemed angry that
+I had not been at the office that day, and she told me she was afraid that Mr. Downing may
+have a mind to pick some hole in my coat.  So I made haste to him, but found no such thing
+from him, but he sent me to Mr. Sherwin's about getting Mr. Squib to come to him tomorrow,
+and I carried him an answer.  So home and fell a writing the characters for Mr. Downing, and
+about nine at night Mr. Hawly came, and after he was gone I sat up till almost twelve writing,
+and--wrote two of them.  In the morning up early and wrote another, my wife lying in bed and
+reading to me.
+
+This is an atom: 
+28th.  I went to Mr. Downing and carried him three characters, and then to my office and wrote
+another, while Mr. Frost staid telling money.  And after I had done it Mr. Hawly came into
+the office and I left him and carried it to Mr. Downing, who then told me that he was resolved
+to be gone for Holland this morning.  So I to my office again, and dispatch my business there,
+and came with Mr. Hawly to Mr. Downing's lodging, and took Mr. Squib from White Hall in a coach
+thither with me, and there we waited in his chamber a great while, till he came in; and in
+the mean time, sent all his things to the barge that lay at Charing-Cross Stairs. Then came
+he in, and took a very civil leave of me, beyond my expectation, for I was afraid that he would
+have told me something of removing me from my office; but he did not, but that he would do
+me any service that lay in his power. So I went down and sent a porter to my house for my best
+fur cap, but he coming too late with it I did not present it to him.  Thence I went to Westminster
+Hall, and bound up my cap at Mrs. Michell's, who was much taken with my cap, and endeavoured
+to overtake the coach at the Exchange and to give it him there, but I met with one that told
+me that he was gone, and so I returned and went to Heaven,
+
+This is an atom: 
+[A place of entertainment within or adjoining Westminster Hall.  It
+     is called in "Hudibras," "False Heaven, at the end of the Hall."
+     There were two other alehouses near Westminster Hall, called Hell
+     and Purgatory.
+
+This is an atom: 
+"Nor break his fast
+                    In Heaven and Hell."
+
+This is an atom: 
+Ben Jonson's Alchemist, act v.  SC. 2.]
+
+This is an atom: 
+where Luellin and I dined on a breast of mutton all alone, discoursing of the changes that
+we have seen and the happiness of them that have estates of their own, and so parted, and I
+went by appointment to my office and paid young Mr. Walton L500; it being very dark he took
+L300 by content. He gave me half a piece and carried me in his coach to St. Clement's, from
+whence I went to Mr. Crew's and made even with Mr. Andrews, and took in all my notes and gave
+him one for all.  Then to my Lady Wright and gave her my Lord's letter which he bade me give
+her privately.  So home and then to Will's for a little news, then came home again and wrote
+to my Lord, and so to Whitehall and gave them to the post-boy.  Back again home and to bed.
+
+This is an atom: 
+29th.  In the morning I went to Mr. Gunning's, where he made an excellent sermon upon the 2d
+of the Galatians, about the difference that fell between St. Paul and St. Peter (the feast
+day of St. Paul being a day or two ago), whereby he did prove, that, contrary to the doctrine
+of the Roman Church, St. Paul did never own any dependance, or that he was inferior to St.
+Peter, but that they were equal, only one a particular charge of preaching to the Jews, and
+the other to the Gentiles.  Here I met with Mr. Moore, and went home with him to dinner to
+Mr. Crew's, where Mr. Spurrier being in town did dine with us.  From thence I went home and
+spent the afternoon in casting up my accounts, and do find myself to be worth L40 and more,
+which I did not think, but am afraid that I have forgot something.  To my father's to supper,
+where I heard by my brother Tom how W. Joyce would the other day have Mr. Pierce and his wife
+to the tavern after they were gone from my house, and that he had so little manners as to make
+Tom pay his share notwithstanding that he went upon his account, and by my father I understand
+that my uncle Fenner and my aunt were much pleased with our entertaining them.  After supper
+home without going to see Mrs. Turner.
+
+This is an atom: 
+30th.  This morning, before I was up, I fell a-singing of my song, "Great, good, and just," &c.
+
+This is an atom: 
+[This is the beginning of the Marquis of Montrose's verses on the
+     execution of Charles I., which Pepys had set to music:
+
+This is an atom: 
+"Great, good, and just, could I but rate
+          My grief and thy too rigid fate,
+          I'd weep the world to such a strain
+          That it should deluge once again.
+          But since thy loud-tongued blood demands supplies
+          More from Briareus' hands, than Argus eyes,
+          I'll sing thy obsequies with trumpet sounds,
+          And write thy epitaph with blood and wounds."]
+
+This is an atom: 
+and put myself thereby in mind that this was the fatal day, now ten years since, his Majesty
+died.  Scull the waterman came and brought me a note from the Hope from Mr. Hawly with direction,
+about his money, he tarrying there till his master be gone.  To my office, where I received
+money of the excise of Mr. Ruddyer, and after we had done went to Will's and staid there till
+3 o'clock and then I taking my L12 10s. 0d. due to me for my last quarter's salary, I went
+with them by water to London to the house where Signr. Torriano  used to be and staid there
+a while with Mr. Ashwell, Spicer and Ruddier.  Then I went and paid L12 17s. 6d. due from me
+to Captn. Dick Matthews according to his direction the last week in a letter.  After that I
+came back by water playing on my flageolette and not finding my wife come home again from her
+father's I went and sat awhile and played at cards with Mrs. Jam, whose maid had newly got
+an ague and was ill thereupon.  So homewards again, having great need to do my business, and
+so pretending to meet Mr. Shott the wood monger of Whitehall I went and eased myself at the
+Harp and Ball, and thence home where I sat writing till bed-time and so to bed.  There seems
+now to be a general cease of talk, it being taken for granted that Monk do resolve to stand
+to the Parliament, and nothing else.  Spent a little time this night in knocking up nails for
+my hat and cloaks in my chamber.
+
+This is an atom: 
+31st.  In the morning I fell to my lute till 9 o'clock.  Then to my Lord's lodgings and set
+out a barrel of soap to be carried to Mrs. Ann. Here I met with Nick Bartlet, one that had
+been a servant of my Lord's at sea and at Harper's gave him his morning draft.  So to my office
+where I paid; L1200 to Mr. Frost and at noon went to Will's to give one of the Excise office
+a pot of ale that came to-day to tell over a bag of his that wanted; L7 in it, which he found
+over in another bag.  Then home and dined with my wife when in came Mr. Hawly newly come from
+shipboard from his master, and brought me a letter of direction what to do in his lawsuit with
+Squib about his house and office.  After dinner to Westminster Hall, where all we clerks had
+orders to wait upon the Committee, at the Star Chamber that is to try Colonel Jones,
+
+This is an atom: 
+[Colonel John Jones, impeached, with General Ludlow and Miles
+     Corbet, for treasonable practices in Ireland.]
+
+This is an atom: 
+and were to give an account what money we had paid him; but the Committee did not sit to-day.
+Hence to Will's, where I sat an hour or two with Mr. Godfrey Austin, a scrivener in King Street.
+Here I met and afterwards bought the answer to General Monk's letter, which is a very good
+one, and I keep it by me.  Thence to Mrs. Jem, where I found her maid in bed in a fit of the
+ague, and Mrs. Jem among the people below at work and by and by she came up hot and merry,
+as if they had given her wine, at which I was troubled, but said nothing; after a game at cards,
+I went home and wrote by the post and coming back called in at Harper's and drank with Mr.
+Pulford, servant to Mr. Waterhouse, who tells me, that whereas my Lord Fleetwood should have
+answered to the Parliament to-day, he wrote a letter and desired a little more time, he being
+a great way out of town. And how that he is quite ashamed of himself, and confesses how he
+had deserved this, for his baseness to his brother.  And that he is like to pay part of the
+money, paid out of the Exchequer during the Committee of Safety, out of his own purse again,
+which I am glad of.  Home and to bed, leaving my wife reading in Polixandre.
+
+This is an atom: 
+["Polexandre," by Louis Le Roy de Gomberville, was first published
+     in 1632.  "The History of Polexander" was "done into English by W.
+     Browne," and published in folio, London, 1647.  It was the earliest
+     of the French heroic romances, and it appears to have been the model
+     for the works of Calprenede and Mdlle. de Scuderi; see Dunlop's
+     "History of Fiction" for the plot of the romance.]
+
+This is an atom: 
+I could find nothing in Mr. Downing's letter, which Hawly brought me, concerning my office;
+but I could discern that Hawly had a mind that I would get to be Clerk of the Council, I suppose
+that he might have the greater salary; but I think it not safe yet to change this for a public
+employment.
+
+---------------------------------------------------------------------------
+PLAGIARIZED ATOMS
+---------------------------------------------------------------------------
+***************************************************************************

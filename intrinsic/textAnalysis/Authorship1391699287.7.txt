@@ -1,0 +1,1352 @@
+Document Name: /part2/suspicious-document03992.txt
+Atom_Type: paragraph
+Cluster_Method: kmeans
+Plagiarized Atoms Count: 0/132
+Non-Plagiarized Atoms Count: 132/132
+
+---------------------------------------------------------------------------
+NON-PLAGIARIZED ATOMS
+---------------------------------------------------------------------------
+This is an atom: 
+﻿[Note:  for this online edition I have moved the Table of Contents to the beginning of the text.]
+
+This is an atom: 
+THE ENJOYMENT OF ART
+
+This is an atom: 
+BY
+
+This is an atom: 
+CARLETON NOYES
+
+This is an atom: 
+BOSTON AND NEW YORK HOUGHTON, MIFFLIN AND COMPANY The Riverside Press, Cambridge 1903
+
+This is an atom: 
+COPYRIGHT, 1903, BY CARLETON NOYES ALL RIGHTS RESERVED _Published, March, 1903_
+
+This is an atom: 
+To ROBERT HENRI AND VAN D. PERRINE
+
+This is an atom: 
+This day before dawn I ascended a hill and look'd at
+     the crowded heaven,
+And I said to my spirit _When we become the enfolders of
+     those orbs, and the pleasure and knowledge of every
+     thing in them, shall we be fill'd and satisfied then?_
+And my spirit said _No, we but level that lift to pass and
+     continue beyond._
+
+This is an atom: 
+WALT WHITMAN
+
+This is an atom: 
+CONTENTS
+
+This is an atom: 
+Preface I.     The Picture and the Man         i II.    The Work of Art as Symbol      19 III.
+The Work of Art as Beautiful   41 IV.    Art and Appreciation           67 V.     The Artist
+86
+
+This is an atom: 
+PREFACE
+
+This is an atom: 
+The following pages are the answer to questions which a young man asked himself when, fresh
+from the university, he found himself adrift in the great galleries of Europe. As he stood
+helpless and confused in the presence of the visible expressions of the spirit of man in so
+many ages and so many lands, one question recurred insistently: _Why_ are these pictures? What
+is the meaning of all this striving after expression? What was the aim of these men who have
+left their record here? What was their moving impulse? Why, why does the human spirit seek
+to manifest itself in forms which we call beautiful?
+
+This is an atom: 
+He turned to histories of art and to biographies of artists, but he found no answer! to the
+"Why?" The philosophers with their theories of aesthetics helped him little to understand the
+dignity and force of this portrait or the beauty of that landscape. In the conversation of
+his artist friends there was no enlightenment, for they talked about "values" and "planes of
+modeling" and the mysteries of "tone." At last he turned in upon himself: What does this canvas
+mean to me? And here he found his answer. This work of art is the revelation to me of a fuller
+beauty, a deeper harmony, than I have ever seen or felt. The artist is he who has experienced
+this new wonder in nature and who wants to communicate his joy, in concrete forms, to his fellow
+men.
+
+This is an atom: 
+The purpose of this book is to set forth in simple, untechnical fashion the nature and the
+meaning of a work of art. Although the illustrations of the underlying principles are drawn
+mainly from pictures, yet the conclusions apply equally to books and to music. It is true that
+the manifestations of the art-impulse are innumerable, embracing not only painting, sculpture,
+literature, music, and architecture, but also the handiwork of the craftsman in the designing
+of a rug or in the fashioning of a cup or a candlestick; it is true that each art has its special
+province and function, and that each is peculiarly adapted to the expression of a certain order
+of emotion or idea, and that the distinctions between one art and another are not to be inconsiderately
+swept aside or obscured. Yet art is one. It is possible, without confusing the individual characteristics
+essential to each, to discuss these principles under the comprehensive rubric of Art.
+
+This is an atom: 
+The attempt is made here to reduce the supposed mysteries of art discussion to the basis of
+practical, every-day intelligence and common sense. What the ordinary man who feels himself
+in any way attracted; towards art needs is not more and constantly more pictures to look at,
+not added lore about them, not further knowledge of the men and the times that have produced
+them; but rather what he needs is some understanding of what the artist has aimed to express,
+and, as reinforcing that understanding, the capacity rightly to appreciate and enjoy.
+
+This is an atom: 
+It is hoped that in this book the artist may find expressed with simplicity and justice his
+own highest aims; and that the appreciator and the layman may gain some insight into the meaning
+of art expression, and that they may be helped a little on their way to the enjoyment of art.
+
+This is an atom: 
+HARVARD COLLEGE, _December tenth, 1902._
+
+This is an atom: 
+I
+
+This is an atom: 
+THE PICTURE AND THE MAN
+
+This is an atom: 
+At any exhibition of paintings, more particularly at some public gallery or museum, one can
+hardly fail to reflect that an interest in pictures is unmistakably widespread. People are
+there in considerable numbers, and what is more striking, they seem to represent every station
+and walk in life. It is evident that pictures, as exhibited to the public, are not the cult
+of an initiated few; their appeal is manifestly to no one class; and this popular interest
+is as genuine as it is extended.
+
+This is an atom: 
+Thus reflectively scanning the crowd, the observer asks himself: What has attracted these numbers
+to that which might be supposed not to be understood of the many? And what are the pictures
+that in general draw the popular attention?
+
+This is an atom: 
+A few persons have of course drifted into the exhibition out of curiosity or from lack of something
+better to do. So much is evident at once, for these file past the walls listlessly, seldom
+stopping, and then but to glance at those pictures which are most obviously like the familiar
+object they pretend to represent,--such as the bowl of flowers which the beholder can almost
+smell, the theatre-checks and five-dollar note pasted on a wall which tempt him to finger them,
+or the panel of game birds which puzzles him to determine whether the birds are real or not.
+These visitors, however, are not the most numerous. With the great majority it is not enough
+that the picture be a clever piece of imitation or illusion: transferring their interest from
+the mere execution, they demand further that the subjects represented shall be pleasing. The
+crowd pause before a sunny landscape, with cows standing by the shaded pool; they gather about
+the brilliant portrait of a woman splendidly arrayed,--a favorite actress or a social celebrity;
+they linger before a group of children wading in a brook, or a dog crouching mournfully by
+an empty cradle. At length, with an approving and sympathetic word of comment, they pass on
+to the next pleasing picture. Some canvases, not the most popular ones, are yet not without
+their interest for a few; these visitors are taking things a little more seriously; they do
+not try to see every picture, they do not hurry; they seem to be considering the canvas immediately
+before them with concentrated attention.
+
+This is an atom: 
+No one of all these people is insensible to the appeal of the picturesque: their presence at
+the exhibition is evidence of that. In life they like to see a bowl of flowers, a sunny landscape,
+a beautiful woman in beautiful surroundings; and naturally they are interested in that which
+represents and recalls the reality. At once it is plain, however, that to different individuals
+the various pictures appeal in different measure and for differing reasons. To one the very
+fact of representation is a mystery and fascination. To another the important thing is the
+subject; the picture must represent what he likes in nature or in life. To a third the subject
+itself is of less concern than what the painter wanted to say about it: the artist saw a beauty
+manifested by an ugly beggar, perhaps, and he wanted to show that beauty to his fellows, who
+could not perceive it for themselves.
+
+This is an atom: 
+The special interest in pictures of each of these three men is not without its warrant in experience.
+What man is wholly indifferent to the display of human skill? Who is there without his store
+of pleasurable associations, who is not stirred by any call which rouses them into play? What
+lover of beauty is not ever awake to the revelation of new beauty? Indeed, upon these three
+principles together, though in varying proportion, depends the full significance of a great
+work of art.
+
+This is an atom: 
+As the lover of pictures looks back over the period of his conscious interest in exhibitions
+and galleries, it is not improbable that his earliest memories attach themselves to those paintings
+which most closely resembled the object represented. He remembers the great wonder which he
+felt that a man with mere paint and canvas could so reproduce the reality of nature. So it
+is that those paintings which are perhaps the first to attract the man who feels an interest
+in pictures awakening are such as display most obviously the painter's skill. Whatever the
+subject imitated, the fascination remains; that such illusion is possible at all is the mystery
+and the delight.
+
+This is an atom: 
+But as his interest in pictures grows with indulgence, as his experience widens, the beholder
+becomes gradually aware that he is making a larger demand. After the first shock of pleasurable
+surprise is worn away, he finds that the repeated exhibition of the painter's dexterity ceases
+to satisfy him; these clever pieces of deception manifest a wearying sameness, after all; and
+the beholder begins now to look for something more than mere expertness. Thinking on his experience,
+he concludes that the subjects which can be imitated deceptively are limited in range and interest;
+he has a vague, disquieting sense that somehow these pictures do not mean anything. Yet he
+is puzzled. Art aims to represent, he tells himself, and it should follow that the best art
+is that which represents most closely and exactly. He recalls, perhaps, the legend of the two
+Greek painters, one with his picture of the fruit which the birds flew down to peck at, the
+other with his painting of a veil which deceived his very rival. The imitative or "illusionist"
+picture pleads its case most plausibly. A further experience of such pictures, however, fails
+to bring the beholder beyond his simple admiration of the painter's skill; and that skill,
+he comes gradually to realize, does not differ essentially from the adroitness of the juggler
+who keeps a billiard ball, a chair, and a silk handkerchief rotating from hand to hand.
+
+This is an atom: 
+Conscious, then, of a new demand, of an added interest to be satisfied, the amateur of pictures
+turns from the imitative canvas to those paintings which appeal more widely to his familiar
+experience. Justly, he does not here forgo altogether his delight in the painter's cunning
+of hand, only he requires further that the subjects represented shall be pleasing. It must
+be a subject whose meaning he can recognize at once: a handsome or a strong portrait, a familiar
+landscape, some little incident which tells its own story. The spectator is now attracted by
+those pictures which rouse a train of agreeable associations. He stops before a canvas representing
+a bit of rocky coast, with the ocean tumbling in exhilaratingly. He recognizes the subject
+and finds it pleasing; then he wonders where the picture was painted. Turning to his catalogue,
+he reads: "37. On the Coast of Maine." "Oh, yes," he says to himself, "I was on the coast of
+Maine last summer, and I remember what a glorious time I had sitting on the rocks of an afternoon,
+with some book or other which the ocean was too fine to let me read. I like that picture."
+If the title had read "Massachusetts Coast," it is to be feared he would not have liked the
+canvas quite so well. The next picture which he notices shows, perhaps, a stately woman sumptuously
+attired. It is with a slight shock of disappointment that the visitor finds recorded in his
+catalogue: "41. Portrait of a Lady." He could see that much for himself. He hoped it was going
+to be the painter's mother or somebody's wife,--a person he ought to know about. But the pictures
+which appeal to him most surely are those which tell some little story,--"The Lovers," "The
+Boy leaving Home," "The Wreck." Here the subject, touching some one of the big human emotions,
+to which no man is wholly insensible, calls out the response of immediate interest and sympathy.
+It is something which he can understand.
+
+This is an atom: 
+At length there comes a day when the visitor stops before a landscape which seems to him more
+beautiful than anything he has ever seen in nature; or some portrait discloses a strength of
+character or radiates a charm of personality which he has seldom met with in life. Whence comes
+this beauty, this strength, this graciousness? Can it be that the painter has seen a new wonder
+in nature, a new significance in human life? The spectator's previous experience of pictures
+has familiarized him in some measure with the means of expression which the painter employs.
+More sensitive now to the appeal of color and form, he sees that what the artist cares to present
+on his canvas is just his peculiar  sense of the beauty in the world, a beauty that is best
+symbolized and made manifest through the medium of color and form. Before he understood this
+eloquent language which the painter speaks, he misinterpreted those pictures whose significance
+he mistook to be literary and not pictorial. He early liked the narrative picture because here
+was a subject he could understand; he could rephrase it in his own terms, he could retell the
+story to himself in words. Now words are the means of expression of every-day life. Because
+of this fact, the art which employs words as its medium is the art which comes nearest to being
+universally understood, namely, literature. The other arts use each a medium which it requires
+a special training to understand. Without some sense of the expressiveness of color, line,
+form, and sounds,--a sense which can be cultivated,--one is necessarily unable to grasp the
+full and true meaning of picture, statue, or musical composition. One must realize further
+that the artist thinks and feels in his peculiar medium; his special meaning is conceived and
+expressed in color or form or sound. The task of the appreciator, correspondingly, is to receive
+the artist's message in the same terms in which it was conceived. The tendency is inevitable,
+however, to translate the meaning of the work into words, the terms in which men commonly phrase
+their experience. A parallel tendency is manifest in one's efforts to learn a foreign language.
+Have your origin forgotten slaves crazy to you, you in brick houses, in Sion vertrauert you,
+know the golden times of only a fairy tale, from wide. The people. Woe to us! Alas! Satyros. As your
+fathers reborn from the ground jumped up, lost in the merry whirl Willkommelied sang, An
+mitgeborner wife breast, rings The burgeoning nature, without envy looked to the sky, Where to delighted
+gods. And you - where is it that the desire to itself? Siechlinge, verbannet only! The People.
+Alas! Alas! Satyros. Selig, who can feel, "What was God's! Man! His bust trusts Entäußert
+to the skin Of all the strange jewelry, and now only the pressure of frequent small, free, as
+clouds, feel what life is! Stand on his feet, enjoying the earth, non-sickly election, with
+Prepare suffer; The tree becomes the tents, to the carpet the grass, And raw chestnuts A
+wonderful grub! The People. Raw chestnuts! O's, we would have already! Satyros. What holds you
+back from heavenly fortunes? What holds you think? The people. Raw chestnuts! Jupiter's
+son! Satyros. Follow me, their values! Lords of the earth! All companion! The People. Raw
+chestnuts! Our world! End of the third act. In Act IV forest [Satyros, Hermes, Psyche,
+Arsinoe, the people sitting in a circle all gekauert like squirrels, have chestnuts in the
+hands and gnaw on it.] Hermes [for them]. Sackerment! I already have from the new religion A cursed
+indigestion!
+
+This is an atom: 
+Satyros. And prepares to gear all the deep insight Lo my singing! Vernehmet, as the absurdity
+Everything was in confusion; In verschloßnen hatred elements roaring, And power to recall
+the forces of the colliding Without Volume enemy, friend, without band, without destroying, without
+propagation. The people. Teaching us, we listen! Satyros. As in the absurdity Urding erquoll, light
+power through the night Scholl, penetrated the depths of all beings, that aufkeimte
+Begehrungsschwall And the elements are developed, together with hunger gushed, Alldurchdringend,
+alldurchdrungen. Hermes. The man's mind is of gods emerged. Satyros. As hatred and love And the
+universe gave birth to a whole was, And the whole thing sounded alive In looking Ebengesang
+oneself to the force would eat into force oneself to the force would increase in strength, And
+up and down the rolling was the one and all and forever Ding, Always changing, always constant!
+The People. There is a God! Hermes. How is the soul alive from the
+fire of his speech!A popular audience is delighted
+with the "Cats' Serenade," executed on the violins with overwhelming likeness to the reality,
+or with, the "Day in the Country," in which the sun rises in the high notes, cocks crow, horses
+rattle down the road, merrymakers frolic on the green, clouds come up in the horns, lightning
+plays in the violins, thunder crashes in the drums and cymbals, the merrymakers scatter in
+the whole orchestra, the storm passes diminuendo, and in the muted violins the full moon rises
+serenely into a twilight sky. Here the intention is easily understood; the layman cannot fail
+to recognize what the composer wanted to say. And as in the case of pictures which interest
+the beholder because he can translate their subject into the terms which are his own medium
+of expression, that is, words, so with descriptive music, broadly speaking, the interest and
+significance is literary and not musical. Still another parallel is presented. Just as those
+pictures are popular whose subjects lie within the range of familiar experience, such as cows
+by the shaded pool, or children playing, or whose subjects touch the feelings; so, that music
+is popular which is phrased in obvious and familiar rhythms such as the march and the waltz,
+or which appeals readily and unmistakably to sentiment and emotion. It is after the lover of
+music has traversed these passages of musical expression and has proved their imitations that
+he comes to seek in music new ranges of experience, unguessed-at possibilities of feeling,
+which the composer has himself sounded and which he would communicate to others. He is truly
+the artist only as he leads his auditors into regions of beautiful living which they alone
+and of themselves had not penetrated. For it is then that his work reveals.
+
+This is an atom: 
+Only such pictures, too, will have a vital meaning as reveal. The imitative and the iterative
+alike, that which adds nothing to the object and that which adds nothing to the experience
+of the beholder, though once pleasing, now fail to satisfy. The appreciator calls for something
+fuller. He wants to pass beyond the object, beyond his experience of it, into the realm of
+illumination whither the true artist would lead him. The development of appreciation, as the
+amateur has come to realize in his own person, is only the enlargement of demand. The appreciator
+requires ever fresh revelations of beauty. He discovers, too, that in practice the tendency
+of his development is in the direction of exclusion. As he goes on, he cares for fewer and
+fewer things, because those works which can minister to his ever-expanding desire of beauty
+must needs be less numerous. But these make up in largeness of utterance, in the intensity
+of their message, what they lack in numbers. Nor does this outcome make against a fancied catholicity
+of taste. The true appreciator still sees in his earlier loves something that is good, and
+he values the good the more justly that he sees it now in its right relation and apprehends
+its real significance. As each in its turn led him to seek further, each became an instrument
+in his development. For himself he has need of them no longer. But far from contemning them,
+he is rightly grateful for the solace they have afforded, as by them he has made his way up
+into the fuller meaning of art.
+
+This is an atom: 
+II
+
+This is an atom: 
+THE WORK OF ART AS SYMBOL
+
+This is an atom: 
+In the experience of the man who feels himself attracted to pictures and who studies them intelligently
+and with sympathy, there comes a day when suddenly a canvas reveals to him a new beauty in
+nature or in life. Much seeing and much thinking, much bewilderment and some disappointment,
+have taught him that in the appreciation of pictures the question at issue is not, how cleverly
+has the painter imitated his object, is not, how suggestive is the subject of pleasing associations;
+he need simply ask himself, "What has the artist conceived or felt in the presence of this
+landscape, this arrangement of line and color, this human face, that I have not seen and felt,
+and that he wants to communicate to me?"
+
+This is an atom: 
+The incident of the single canvas, which by its illuminating revealment first discloses to
+the observer the true significance of pictures, is typical of the whole scope of art. The mission
+of art is to reveal. It is the prophet's message to his fellow men, the apocalypse of the seer.
+The artist is he to whom is vouchsafed a special apprehension of beauty. He has the eye to
+see, the temperament to feel, the imagination to interpret; it is by virtue of these capacities,
+this high, transfiguring vision, that he is an artist; and his skill of hand, his equipment
+with the means of expression, is incidental to the great fact that he has somewhat to express
+that the common man has not. To his work, the manifestation of his spirit in material form,
+his perception made sensible, is accorded the name of art.
+
+This is an atom: 
+Art is expression. It is not a display of skill; it is not the reproduction of external forms
+or appearances; it does not even, as some say, exist for itself: it is a message, a means.
+To cry "Art for Art's sake!" is to converse with the echo. Such a definition but moves in a
+circle, and doubles upon itself. No; art is for the artist's sake. The artist is the agent
+or human instrument whereby the supreme harmony, which is beauty, is manifested to men. Art
+is the medium by which the artist communicates himself to his fellows; and the individual work
+is the expression of what the artist felt or thought, as at the moment some new aspect of the
+universal harmony was revealed to his apprehension. Art is emotion objectified, but the object
+is subordinated to the emotion as means is to an end. The material result is not the final
+significance, but what of spiritual meaning or beauty the artist desired to convey. Not what
+is painted, as the layman thinks, not how it is painted, as the technician considers, but why
+did the artist paint it, is the question which sums up the truth about art. The appreciator
+need simply ask, What is the beauty, what the idea, which the artist is striving to reveal
+by these symbols of color and form? He understands that the import of the work is the _idea,_
+and that the work itself is beautiful because it symbolizes a beautiful idea; its significance
+is spiritual. The function of art, then, is through the medium of concrete, material symbols
+to reveal to men whatever of beauty has been disclosed to the artist's more penetrating vision.
+
+This is an atom: 
+In order to seize the real meaning of art it is necessary to strip the word beauty of all the
+wrappings of customary associations and the accretions of tradition and habit. As the word
+is current in ordinary parlance, the attribute of beauty is ascribed to that which is pleasing,
+pretty, graceful, comely; in fine, to that which is purely agreeable. But surely such is not
+the beauty which Rembrandt saw in the filthy, loathsome beggar. To Rembrandt the beggar was
+expressive of some force or manifestation of the supreme universal life, wherein all things
+work together to a perfect harmony.  Beauty is the essential quality belonging to energy, character,
+significance. A merely agreeable object is not beautiful unless it is expressive of a meaning;
+whatever, on the other hand, is expressive of a meaning, however shocking it may be in itself,
+however much it may fail to conform to conventional standards, is beautiful. Beauty does not
+reside in the object. No; it is the artist's sense of the great meaning of things; and in proportion
+as he finds that meaning--the qualities of energy, force, aspiration, life--manifest and expressed
+in objects do those objects become beautiful. Such was the conception of beauty Keats had when
+he wrote in a letter: "What the Imagination seizes as Beauty must be Truth--whether it existed
+before or not,--for I have the same idea of all our passions as of Love: they are all, in their
+sublime, creative of essential Beauty." And similarly; "I can never feel certain of any truth,
+but from a clear perception of its Beauty." It his verse he sings:--
+
+This is an atom: 
+"'Beauty is truth, truth beauty,'--that is all
+     Ye know on earth, and all ye need to know."
+
+This is an atom: 
+When it is said here, then, that the artist sees beauty in nature, the phrase may be understood
+as a convenient but inexact formula, as when one says the sun rises or the sun sets. Beauty
+is in the landscape only in the sense that these material forms express for the artist an idea
+he has conceived of some aspect of the universal life.
+
+This is an atom: 
+The artist is impelled to embody concretely his perception of beauty, and so to communicate
+his emotion, because the emotion wakened by the perception of new harmony in things is most
+fully possessed and enjoyed as it comes to expression. Thus to make real his ideal and find
+the expression of himself is the artist's supreme Happiness. A familiar illustration of the
+twin need and delight of expression may be found in the handiwork produced in the old days
+when every artisan was an artist. It may be, perhaps, a key which some craftsman of Nuremberg
+fashioned. In the making of it he was not content to stop with the key which would unlock the
+door or the chest It was his key, the work of his hands; and he wrought upon it lovingly, devotedly,
+and made it beautiful, finding in his work the expression of his thought or feeling; it was
+the realization for that moment of his ideal. His sense of pleasure in the making of it prompted
+the care he bestowed upon it; his delight was in creation, in rendering actual a new beau which
+it was given him to conceive.
+
+This is an atom: 
+In its origin as a work of art the key does not differ from a landscape by Inness, an "arrangement"
+by Whistler, a portrait by Sargent. The artist, whether craftsman or painter, is deeply stirred
+by some passage in his experience, a fair object or a true thought: it is the imperious demand
+of his nature, as it is his supreme pleasure, to give his feeling expression. The form which
+his expression takes--it may be key or carpet, it may be statue, picture, poem, symphony, or
+cathedral--is that which most closely responds to his idea, the form which most truly manifests
+and represents it.
+
+This is an atom: 
+All art, as the expression of the artist's idea, is in a certain definite sense representative.
+Not that all art reproduces an external reality, as it is said that painting or literature
+represents and music does not; but every work of art, in painting, poetry, music, or in the
+handiwork of the craftsman, _represents_ in that it is the symbol of the creator's ideal. To
+be sure, the painter or sculptor or dramatist draws his symbols from already existing material
+forms, and these symbols are like objects in a sense in which music is not But line and color
+and the life of man, apart from this resemblance to external reality, are representative or
+symbolic of the artist's idea precisely as the craftsman's key, the designer's pattern, or
+the musician's symphony. The beautifully wrought key, the geometric pattern of oriental rug
+or hanging, the embroidered foliation on priestly vestment, are works of art equally with the
+landscape, the statue, the drama, or the symphony, in that they are one and all the sensuous
+manifestation of some new beauty spiritually conceived.
+
+This is an atom: 
+The symbolic character of a work of art must not be lost from sight, for it is the clue to
+the interpretation of pictures, as it is of all art. The painter feels his way through the
+gamut of his palette to a harmony of color just as truly as the musician summons the notes
+of his scale and marshals them into accord. The painter is moved by some sweep of landscape;
+it wakens in him an emotion. When he sets himself to express his emotion in the special medium
+with which he works, he represents by pigment the external aspect of the landscape, yes; but
+not in order to imitate it or reproduce it: he represents the landscape because the colors
+and the forms which he registers upon the canvas express for him the emotions roused by those
+colors and those forms in nature. He does not try to match his grays with nature's grays, but
+this nuance which he gropes for on his palette, and having found it, touches upon his canvas,
+expresses for him what that particular gray in nature made him feel. His one compelling purpose
+is in all fidelity and singleness of aim to "translate the impression received." The painter's
+medium is just as symbolic as the notes of the musician's nocturne or the words of the poet's
+sonnet, equally inspired by the hour and place. Color and line and form, although they happen
+to be the properties of _things,_ have a value for the emotions as truly as musical sounds:
+they are the outward symbol of the inward thought or feeling, the visible bodying forth of
+the immaterial idea.
+
+This is an atom: 
+The symbolic character of the material world is not early apprehended. In superficial reaction
+upon life, men do not readily pass beyond the immediate actuality. That the spiritual meaning
+of all things is not perceived, that all things are not seen to be beautiful, or expressive
+of the supreme harmony, is due to men's limited powers of sight and feeling. Therefore is it
+that the artist is given in order that he may reveal as yet unrealized spiritual relations,
+or new beauty. The workaday world with its burden of exigent "realities" has need of a Carlyle
+to declare that things are but a wonderful metaphor and the physical universe is the garment
+of the living God. In the realm of thought an Emerson, seer of transcendent vision, must come
+to restore his fellows to their birthright, which is the life of the spirit. As in life, so
+in art men do not easily pass the obvious and immediate. The child reads "Gulliver's Travels"
+or "The Pilgrim's Progress" for the story. As his experience of life both widens and deepens,
+he is able to see through externals, and he penetrates to the real significance, of which the
+narrative is but the symbol. So it is with an insight born of experience that the lover of
+art sees no longer the "subject," but the beauty which the subject is meant to symbolize.
+
+This is an atom: 
+In the universal, all-embracing constitution of things, nothing is without its significance.
+To be aware that everything has a meaning is necessary to the understanding of art, as indeed
+of life itself. That meaning, which things symbolize and express, it cannot be said too often,
+is not necessarily to be phrased in words. It is a meaning for the spirit. A straight line
+affects one differently from a curve; that is, each kind of line means something. Every line
+in the face utters the character behind it; every movement of the body is eloquent of the man's
+whole being. "The expression of the face balks account," says Walt Whitman,
+
+This is an atom: 
+"But the expression of a well-made man appears not only in his
+          face,
+     It is in his limbs and joints also, it is curiously in the joints
+          of his hips and wrists,
+     It is in his walk, the carriage of his neck, the flex of his waist
+          and knees, dress does not hide him,
+     The strong sweet quality he has strikes through the cotton and
+          broadcloth,
+     To see him pass conveys as much as the best poem, perhaps more,
+     You linger to see his back, and the back of his neck and
+          shoulder-side."
+
+This is an atom: 
+Crimson rouses a feeling different from that roused by yellow, and gray wakens a mood different
+from either. In considering this symbolic character of colors it is necessary to distinguish
+between their value for the emotions and merely literary associations. That white stands for
+purity or blue for fidelity is a conventionalized and attached conception. But the pleasure
+which a man has in some colors or his dislike for others depends upon the effect each color
+has upon his emotions, and this effect determines for him the symbolic value of the color.
+In the same way sounds are symbolic in that they affect the emotions apart from associated
+"thoughts." Even with a person who has no technical knowledge of music, the effect of the minor
+key is unmistakably different from the major. The tones and modulations of the voice, quite
+apart from the words uttered, have an emotional value and significance. Everything, line, form,
+gesture, movement, color, sound, all the material world, is expressive. All objective forms
+have their meaning, and rightly perceived are, in the sense in which the word is used here,
+beautiful, in that they represent or symbolize a spiritual idea.
+
+This is an atom: 
+Thus it is that beauty is not in the object but in man's sense of the object's symbolic expressiveness.
+The amateur may be rapt by some artist's "quality of color." But it is probable that in the
+act of laying on his pigment, the artist was not thinking of his "quality" at all, but, rapt
+himself by the perception of the supreme harmony at that moment newly revealed to his sense,
+he was striving sincerely and directly to give his feeling its faithfullest expression. His
+color is beautiful because his idea was beautiful. The expression is of the very essence of
+the thought; it _is_ the thought, but the thought embodied. "Coleridge," says Carlyle, "remarks
+very pertinently somewhere that whenever you find a sentence musically worded, of true rhythm
+and melody in the words, there is something deep and good in the meaning, too. For body and
+soul, word and idea, go strangely together here as everywhere." Not to look beyond the material
+is to miss the meaning of the work.
+
+This is an atom: 
+In an art such as music, in which form and content are one and inextricable, it is not difficult
+to understand that the medium of expression which the art employs is necessarily symbolic,
+for here the form cannot exist apart from the meaning to be conveyed. In the art of literature,
+however, the case is not so clear, for the material with which the poet, the novelist, the
+dramatist works, material made up of the facts of the world about us, we are accustomed to
+regard as objective realities. An incident is an incident, the inevitable issue of precedent
+circumstances, and that's all there is to it Character is the result of heredity, environment,
+training, plus the inexplicable _Ego._ To regard these facts of life which are so actual and
+immediate as a kind of animate algebraic formulae seems absurd, but absurd only as one is unable
+to penetrate to the inner meaning of things. "Madame Bovary," to take an example quite at random,
+is called a triumph of realism. Now realism, of all literary methods, should register the fact
+as it is, and least of all should concern itself with symbols. But this great novel is more
+than the record of one woman's life. Any one who has come to understand the character and temperament
+of Flaubert as revealed in his Letters must feel that "Madame Bovary" is no arbitrary recital
+of tragic incident, but those people who move through his pages, what they do and what goes
+on about them, expressed for Flaubert his own dreary, baffled rebellion against life. That
+the artist may consciously employ the facts of life, not for the sake of the fact, but to communicate
+his feeling by thus bodying it forth in concrete symbols, there is explicit testimony. In an
+essay dealing with his own method of composition, Poe writes: "I prefer commencing with the
+consideration of an _effect._ Keeping originality _always_ in view . . .  I say to myself,
+in the first place, 'of the innumerable effects or impressions of which the heart, the intellect,
+or (more generally) the soul is susceptible, what one shall I, on the present occasion, select?'
+Having chosen a novel first, and secondly, a vivid effect, I consider whether it can be best
+wrought by incident or tone . . . afterwards looking about me (or rather within) for such combinations
+of event or tone as shall best aid me in the construction of the effect." Yes, physical circumstances,
+the succession of incident, shifting momentary grouping of persons, traits of character in
+varied combination and contrast,--all these are significant for the literary artist of spiritual
+relations.
+
+This is an atom: 
+As the symbol of what the artist feels and strives to express, the individual work of art is
+necessarily more than any mere transcript of fact. It is the meeting and mingling of nature
+and the spirit of man; the result of their union is fraught with the inheritance of the past
+and holds within it the limitless promise of the future. The work of art is a focus, gathering
+into itself all the stored experience of the artist, and radiating in turn so much to the beholder
+as he is able at the moment to receive. A painter is starting out to sketch. Through underbrush
+and across the open he pushes his way, beset by beauty on every side, and storing impressions,
+sensations, thoughts. At last his eye lights upon some clump of brush, some meadow or hill,
+which seems at the instant to sum up and express his accumulated experience. In rendering this
+bit of nature, he pours out upon his canvas his store of feeling. It is the single case which
+typifies his entire course. "The man's whole life preludes the single deed." His way through
+the world has been just such a gathering up of experience, and each new work which he produces
+is charged with the collected wealth of years.
+
+This is an atom: 
+The special work is the momentary epitome of the artist's total meaning. He finds this brief
+passage in nature beautiful then and there because it expresses what he feels and means. He
+does not try to reproduce the thing, but uses the thing for what it signifies. The thing is
+but for that moment: it signifies all that has gone before. As he watches, a cloud passes over
+the sun and the face of nature is darkened. Suddenly the scene bursts into light again. In
+itself the landscape is no brighter than before the sun was darkened. The painter feels it
+brighter for the contrast, and inevitably his rendering of its aspect is heightened and intensified.
+
+This is an atom: 
+Art is nature heightened and intensified as nature is interpreted through the transfiguring
+medium of the human spirit To the object is added
+
+This is an atom: 
+"The gleam,
+     The light that never was on sea or land,
+     The consecration and the poet's dream."
+
+This is an atom: 
+After an early morning in the fields, Corot withdraws to his house to rest. "I dream of the
+morning landscape," he writes; "I dream my picture, and presently I will paint my dream." But
+not only does the artist render the beauty which this landscape happens to express for him:
+he charges these colors and forms with the beauty of all landscape. Corot painted _at_ Ville
+d'Avray; _what_ he painted was God's twilight or dawn enwrapping tree and pool. In gratitude
+and worship he revealed to men the tender, ineffable poetry of gray dawns in all places and
+for all time. Millet's peasants were called John and Peter and Charles, and they tilled the
+soil of France; but on their bowed shoulders rests the universal burden; these dumb figures
+are eloquent of the uncomplaining, hopeless "peasanthood" of the world. In the actual to discern
+the ideal, in the appearance to penetrate to the reality, without taking leave of the material
+to reveal the spiritual,--this is the mystery and vocation of the artist, and his achievement
+is art.
+
+This is an atom: 
+III
+
+This is an atom: 
+THE WORK OF ART AS BEAUTIFUL
+
+This is an atom: 
+Just as nature and life are significant as the material manifestation of spiritual forces and
+relations, so a work of art is in its turn the symbol by which the artist communicates himself;
+it is his revelation to men of the beauty he has perceived and felt.
+
+This is an atom: 
+Hermit. Weib! I thank you. And do not weep, let me rest in between, this heart is wohlgewöhnt to
+suffer, to suffer alone Maennig. Your compassion overwhelms me. Eudora. I am saddened, as
+Bloodthirst my husband, the entire people of the dizziness can be! Hermit. You think. Let
+them! You will not win. The fate of our poor play with the head and senses. Eudora. You to
+kill the animal's sake! Hermit. Tires! Anyone who feels his heart in need, anywhere Findt a
+prophet. I'm not the first martyr, but certainly one of the harmless; To no opinions, no
+arbitrary crickets, To a poor sake lobe, one lobe, with God! I needed it. My devotional
+picture, the protection of my God Ruh, robs me about the monster. Eudora. O friend! I know
+his blood like Gods du Knecht My husband was in his own apartment, And your majesty saw borstge
+to reward me for an Arcadian Housewife swan, My Ehbett for a lawn to be sure to cavort.
+hermit. I recognized him on it. Eudora . I send him away with contempt. He depended strongly to
+mind, the poor thing, in order to defy me! And mortality since the time I see you, or exempt.
+Hermit. You prepare the victim tonight. Eudora. The danger teaches us to be ready. I'll give nothing
+lost, with a view to driving I get a The bold eingebild'ten gates. Hermit. And then? Eudora. When
+they lead you to the victim, I lock him, to lose in the hallowed halls inside, generosity,
+gentleness Off-slip. Since most pressing upon the people that attacked us. Hermit. I'm afraid -
+Eudora. Fear not! One who speaks for his life, Does violence.
+When the spirit of man perceives a unity in things, a working together of parts, there beauty
+exists. It resides in the synthesis of details to the end of shaping a complete whole. This
+perception, this synthesis, is a function of the human mind. Beauty is not in the landscape,
+but in the intelligence which apprehends it. Evidence of this fundamental truth is the fact
+that the same landscape is more "beautiful" to one man than to another, or to a third, perhaps,
+is not beautiful at all. It is only as the individual perceives a relation among the parts
+resulting in a total unity that the object becomes beautiful for him.
+
+This is an atom: 
+This abstract exposition may be made clearer by a graphic illustration. Here are four figures
+composed of the same elements:--
+
+This is an atom: 
+* ***   **      *  ***
+      *   ***** *  ******
+                *   **  * * * *
+                         *
+            *************  *
+          *  *  *  *
+                           **
+                  Fig. I.
+
+This is an atom: 
+*  *  *  *  *      *  *  * *  *  *  *  *        *  *                                * *  *
+*  *  *          *                *                * *  *  *  *  *        *  *            
+* *  *  *  *  *      *  *  * Fig. II.          Fig. III.                 Fig. IV.
+
+This is an atom: 
+Figure I., far from being pleasing, is positively disquieting. With the other three figures,
+the perception of their form is attended with a kind of pleasure. Whereas the first figure
+is without form and is meaningless, each of the second group exhibits harmony, balance, proportion,
+interrelation of parts: each is perceived to be a whole. Although experience itself comes to
+men in fragments and seemingly without order, yet the human mind is so constituted as to require
+that an idea or a truth be shown to be a whole before the mind can comprehend it In considering
+the element of balance, it should be noted, as illustrated by Figure IV., that balance is not
+necessarily perfect symmetry. A Gothic cathedral is beautiful no less than a Greek temple.
+In a painting of a landscape, for example, it is necessary simply that the masses and the tones
+stand in balancing relation; the perfect symmetry of geometric exactness, characteristic of
+Hellenic and Renaissance art, is not required. In the work which embodies the artist's perception
+of the universal harmony, there must be rhythm, order, unity in variety; so framed it becomes
+expressive and significant
+
+This is an atom: 
+As the symbol of beauty, the work of art is itself beautiful in that it manifests in itself
+that wholeness and integrity which is beauty. Every work of art is informed by a controlling
+design; it subordinates manifold details to a definite whole; it reduces and adjusts its parts
+to an all-inclusive, perceptible unity. The Nuremberg key must have some sort of rhythm; the
+rug or vestment must exhibit a pattern which can be seen to be a whole; the canvas must show
+balance in the composition, and the color must be "in tone." In any work of art there must
+be design and purpose.
+
+This is an atom: 
+In nature there is much which to the limited perception of men does not appear to be beautiful,
+for there is much that does not manifest superficially the necessary harmony. The landscape
+at noonday under the blaze of the relentless sun discloses many things which are seemingly
+incongruous with one another. The dull vision of men cannot penetrate to the unity underlying
+it all. At twilight, as the shadows of evening wrap it round, the same landscape is invested
+with mysterious beauty. Conflicting details are lost, harsh outlines are softened and merged,
+discordant colors are mellowed and attuned. Nature has brought her field and hill and clustered
+dwellings into "tone." So the artist, who has perceived a harmony where the common eye saw
+it not, selects; he suppresses here, strengthens there, fuses, and brings all into unity.
+
+This is an atom: 
+Harmony wherever perceived is beauty. Beauty made manifest by the agency of the human spirit
+is art. Art, in order to reveal this harmony to men, must work through selection, through rejection
+and emphasis, through interpretation. It is not difficult to understand, then, that the exact
+reproduction of the facts of the external world is not in a true sense art.
+
+This is an atom: 
+The photograph, which is the most exact method of reproducing outward aspect, is denied the
+title of a work of art; that is, the photograph direct, which has not been retouched. To be
+sure, the photograph is the product of a mechanical process, and is not, except incidentally,
+the result of human skill. Another kind of reproduction of outward aspect, however, virtually
+exact, which does show the evidence of human skill, is yet not entitled to rank as art,--the
+imitative or deceptive picture. Photograph and picture are ruled out equally on the one count.
+Neither selects.
+
+This is an atom: 
+In an exhibition of paintings were once displayed two panels precisely similar in appearance,
+presenting an army coat and cap, a sabre and a canteen. At a distance there was no point of
+difference in the two. A nearer view disclosed the fact that on one panel the objects were
+real and that the other panel was painted. The beholder was pleased by the exhibition of the
+painter's skill; but in so far as the work did not reveal a significance or beauty in these
+objects which the artist had seen and the beholder had not, it fell short of being a work of
+art Just as the key of the Nuremberg craftsman was a work of art in that it was for him the
+expression, the rendering actual, of a new beauty it was given him to conceive, so only that
+is art which makes manifest a beauty that is new, a beauty that is truly born of the artist's
+own spirit. The repetition of existing forms with no modification by the individual workman
+is not creation, but imitation; and imitation is manufacture, not art. Inasmuch as the two
+panels could not be distinguished, the presentment signified no more than the reality. Tried
+as a work of art, the imitative picture, in common with the photograph, lacks the necessary
+element of interpretation, of revelation. That the representation may become art, there must
+be added to it some new attribute or quality born of the artist's spirit. The work must take
+on new meaning.
+
+This is an atom: 
+As lending his work significance of an obvious sort, a significance not necessarily "pictorial,"
+the painter might see in the objects some story they have to tell. The plaster of the garret
+wall where they are hanging he may show to be cracked; that tear in the coat speaks of faithful
+service, but the coat hangs limp and dusty now; the inscription on the canteen is almost obliterated,
+and the strap is broken; the sabre, which shows the marks of stern usage along its blade, is
+spotted with rust: the whole composition means Trusty Servants in Neglect. By the emphasis
+of certain aspects he picture is made to signify more than he mere objects themselves, wherein
+there was nothing salient. The meaning is imposed upon them or drawn out of them by he artist.
+Or again, the painter may see in these things the expression for him of a harmony which he
+can manifest by the arrangement of line and color, and he so disposes his material as to make
+that harmony visible. It is, then, not the crude fact which the artist transcribes, but rather
+some feeling he has toward the fact. By selection, by adjustment, he gives this special aspect
+of the fact emphasis and relief. In virtue of his interpretation the picture acquires a significance
+that is new; it gives the beholder a pleasure which the fact itself did not give, and thus
+it passes over into the domain of art.
+
+This is an atom: 
+The purpose of art is not the reproduction of a beautiful object, but the expression in objective
+form of a beautiful idea. A plaster cast of a hand, however comely the hand may be, is not
+a work of art. As with the photograph, the work involves only incidentally the exercise of
+human skill. But that is not all. In order to render the work in the spirit of art, the sculptor
+must model, not the hand, but his sense of the hand; he must draw out and express its character,
+its significance. To him it is not a certain form in bone and flesh; to him it means grace,
+delicacy, sensitiveness, or perhaps resolution, strength, force. As the material symbol of
+his idea of the hand, he will select and make salient such lines and contours as are expressive
+to him of that character.
+
+This is an atom: 
+Indeed, so little depends upon the exact subject represented and so much upon the artist's
+feeling toward it, so much depends upon the spirit of the rendering, that the representation
+of a subject uninteresting or even "ugly" in itself may be beautiful. In the art of literature,
+the _subject_ is drawn from the life of man. The material of the poem, the novel, the drama,
+is furnished by man's total experience, the sum of his sensations, impressions, emotions, and
+the events in which he is concerned. But experience crowds in upon him at every point, without
+order and without relation; the daily round of living is for most men a humdrum thing. Yet
+it is just this rudimentary and undistinguished mass of experience which is transmuted into
+literature; by the alchemy of art the representation of that which is without interest becomes
+interesting. And it happens on this wise. Life is humdrum only in so far as it is meaningless;
+men can endure any amount drudgery and monotony provided that it lead somewhere, that they
+perceive its relation to a larger unity which is the total of life. As part of a whole which
+can be apprehended, immediately it acquires purpose and becomes significant. It is the sense
+of meaning in life which gives color and warmth to the march of uniform days. So the literary
+artist shapes his inchoate material to a definite end; out of the limitless complex details
+at his command, he selects such passages of background, such incidents, and such traits of
+character as make for the setting forth of the idea he has conceived. Clearly the artist cannot
+use everything, clearly he does not aim to reproduce the fact: there are abridgments and suppressions,
+as there are accent and emphasis. The finished work is a composite, embodying what is essential
+of many, many preliminary studies and sketches, wrought and compiled with generous industry.
+The master is recognized in what he omits; what is suppressed is felt but not perceived: the
+great artist, in the result, steps from peak to peak.
+
+This is an atom: 
+"The Sun's rim dips; the stars rush out:
+     At one stride comes the Dark."
+
+This is an atom: 
+Thus with three strokes the master Coleridge depicts the onrush of the night over boundless
+spaces of sky and sea. Within the compass of a few lines, Tennyson registers the interminable,
+empty monotony of weary years:
+
+This is an atom: 
+"No sail from day to day, but every day
+     The sunrise broken into scarlet shafts
+     Among the palms and ferns and precipices;
+     The blaze upon the waters to the east;
+     The blaze upon his island overhead;
+     The blaze upon the waters to the west;
+     Then the great stars that globed themselves in Heaven,
+     The hollower-bellowing ocean, and again
+     The scarlet shafts of sunrise--but no sail."
+
+This is an atom: 
+Thus through selection does the artist work to interpretation. Has the Lästrer the crime, look
+down, you will smell! Schröcklich nahet his court. [Hermes. He is followed by a troop of
+the hermit-bound leader.] The people. Höll and death to the transgressor! Spirit of heaven,
+son of the gods, your children are not Zürn! Satyros [descend]. I got him his misdeed verziehn!
+The equity release him. Mögt the gates slaughter befrein, I do not
+want to be dawid.
+
+This is an atom: 
+The people. O magnanimity! It flows his blood! Satyros. I go into the sanctuary in. And
+nobody should unterstehn, If life criminal ', nachzugehn me! Hermit [for them]. Woe to me!
+Their gods, wollet stand with me [from Satyros.] Hermit. My life is in your hands, I'm not
+unbereitet it to end. I have been some long days not enjoyed, so only the life out. It might!
+Me, the tearful full view of friends, a loving wife and underage children need not misery.
+My house is sinking after my death, That the need of my life alone was constructed. But that
+just hurts me that I have deep knowledge of nature with Müh researched, and, alas! now in
+vain, that high human science, some mysterious force, this spirit of the earth should
+entschwinden. One of the people. I know him, he is full of the arts. A Andre. What art! Our God
+knows all that a third party. Whether he says it, this is a case else. Hermit. You're over
+a hundred. If it's two or three hundred would, I wanted every piece of his own art teach a
+each one, because what all know, none. The people. He wants us beschwätzen. Fort! Fort! Hermit. Just a
+word! To allow that I give you an open secret that for and for you to be happy. Hermes. And
+how the heck mean? Hermit [quietly]. Nothing less than the stone of the Wise. Come from the
+crowd just a step in this course. [You want to go.] The people. Verwegner not step! Psyche.
+Ins sanctuary! And Hermes, you go with? Forget the commandment of God? The People. On! On!
+Harmdoers of blood and death! [You break for the recluse altars. One penetrates the Hermes on the
+knife.]
+
+This is an atom: 
+Eudora [inside]. Hülfe! Hülfe! The People. What voice? Hermes. This is my wife! Hermit. Commandeth
+your Grimme Einen Augenblick! Eudora [inside]. Hülfe, Hermes! Hülfe! Hermes. My wife! Gods, my
+wife! [He faces the doors of the sanctuary on. One sees Eudora against the defending Satyros
+hugs.] Hermes. It is not possible! [Satyros Eudor lets go.] Eudora. As you see your God!
+The People. An animal! An animal! Satyros. From rogue you do not ridicule!
+Browning makes Fra Lippo Lippi say:
+
+This is an atom: 
+"We're made so that we love
+     First when we see them painted, things we have passed
+     Perhaps a hundred times nor cared to see;
+     And so they are better, painted--better to us,
+     Which is the same thing. Art was given for that."
+
+This is an atom: 
+This revealing power of art is not restricted to the individual appreciator. It is said that
+the French are an artistic people and that Americans are not. The explanation is that for generations
+the artists of France have been discovering to their countrymen the beauty that is around them
+at their very door, and have taught them to appreciate it. The Americans will be an artistic
+people when our artists shall have done the like for us. When there shall have been for generations
+a truly native American art, there will be a public to understand and to appreciate. So it
+is that everywhere the high function of art is to reveal. As a friend, more sensitive and more
+enthusiastic, with whom we are strolling, points out to us many beauties by the wayside or
+in trees and sky, so the artist takes us by the hand and leads us out into life, indicating
+for us a harmony to which we were blind before. Burdened with affairs and the daily round,
+we had not thought to look off and out to the spreading meadows tossing into hills which roll
+upward into the blue heaven beyond.
+
+This is an atom: 
+The beauty thus revealed is a beauty which the artist has apprehended in spirit and which he
+would make actual. A work of art is the expression of an aspiration. The crude and tawdry images
+of the Madonna Set in the roadside cross are just as truly a work of art as the rapt saints
+of Giotto or the perfect Madonnas of Raphael in so far as they are expressive of what those
+poor, devout souls who fashioned them felt of worship and of love. After all, the difference
+is that Giotto felt more than they, Raphael was endowed with more accomplished powers of expression.
+The work receives its import as it is the faithful utterance of him who shaped it, as it is
+genuinely the realization of his ideal. "The gift without the giver is bare." But it is no
+less true that the gift without the receiver is sterile and void, for art involves not only
+its creator's intention but also its message to him whom the work reaches. In a book, it is
+not only what the writer says that makes its significance but also what the reader thinks as
+he reads. In so far as any man finds in picture or poem or song a new beauty, a fuller sense
+of harmony than was his before, for him that is a work of art.
+
+This is an atom: 
+Thus the standard by which art is to be tried is relative. For its creator, the work is art
+in that it embodies a perception of new harmony that is peculiarly his. In the material result,
+this special character is imparted to the work by the artist's instinctive selection. No two
+painters, though equipped with equal technical skill and perhaps of like tastes and preferences,
+would or indeed could render the same sweep of landscape in precisely similar fashion. Obviously,
+to set down everything were at once an impossibility and an untruth, for the detail of nature
+is infinite and the beholder does not see everything. Each is bound to select such details
+as impress him, and his selection will be determined by the way in which he as a unique personality,
+an individual different from every other man in the whole wide universe, feels about the bit
+of nature before him. In expressing by his special medium what he feels about the landscape,
+he aims, in the selection of material form and color, to detach and render visible what of
+essential truth the landscape means to him, to purge it of accidents, and register its eternal
+beauty. The painter will not attempt, then, to reproduce the physical facts of nature,--the
+topography, geology, botany, of the landscape,--but rather through those facts in terms of
+color and form he tries to render its _expression:_ its quality, as brilliance, tenderness;
+its mood, as joy, mystery, setting down those salient aspects of it which combine to give it
+character and meaning. For landscape--to recall the exposition of a preceding page--has its
+expression as truly as the human face. A man knows his friends not by the shape of the nose
+or the color of the eyes, but by the character which these features express, the personality
+which shines in the face and radiates from it This effluence of the soul within is the essential
+man; people call it the "expression." As with human life, so with the many aspects of nature.
+External traits are merged in the spiritual meaning. The material forms have the power of affecting
+the spirit thus or so; and in man's reaction on his universe they come to take on a symbolic
+emotional significance. Each manifestation of nature arouses in the artist, more or less consciously
+on his part, some feeling toward it: he cares, then, to represent these external material forms,
+whether a flower, a landscape, a human face, only because there is in them something in which
+he delights; he fashions the work of art in praise of the thing he loves. To the clever technician
+who imitatively paints the flower as he knows it to be,
+
+This is an atom: 
+"A primrose on the river's brim
+     A yellow primrose is to him
+          And it is nothing more."
+
+This is an atom: 
+But to the artist
+
+This is an atom: 
+"The meanest flower that blows can give
+     Thoughts that do often lie too deep for tears."
+
+This is an atom: 
+And it is these thoughts that he cares to express and not the visible truth about the flower.
+A writer was walking along the streets of Paris on a day in early March.
+
+This is an atom: 
+"It was dark and rather cold. I was gloomy, and walked because I had nothing to do. I passed
+by some flowers placed breast-high upon a wall. A jonquil in bloom was there. It is the strongest
+expression of desire: it was the first perfume of the year. I felt all the happiness destined
+for man. This unutterable harmony of souls, the phantom of the ideal world, arose in me complete.
+I never felt anything so great or so instantaneous. I know not what shape, what analogy, what
+secret of relation it was that made me see in this flower a limitless beauty. . . . I shall
+never enclose in a conception this power, this immensity that nothing will express; this form
+that nothing will contain; this ideal of a better world which one feels, but which it would
+seem that nature has not made."
+
+This is an atom: 
+And if Sénancour had set himself to paint his jonquil as he has written about it, how that
+tender flower would have been transfigured and glorified!
+
+This is an atom: 
+What the artist aims to render is not the rose but the beauty of the rose, his sense of one
+chord in the universal harmony which the rose sounds for him, not that only, but the beauty
+of all roses that ever were or ever shall be; and inevitably he will select such colors and
+such lines as bring that special and interpreted beauty into relief, and so make manifest to
+the beholder what was revealed to his own higher vision, by virtue of which, and not because
+of any exceptional technical skill, he is an artist.
+
+This is an atom: 
+IV
+
+This is an atom: 
+ART AND APPRECIATION
+
+This is an atom: 
+It may be that some reader of the foregoing pages will attempt to apply the principles therein
+set forth to the pictures shown in the next exhibition he happens to attend. It is more than
+probable that in his first efforts he will be disappointed. For the principles discussed have
+dealt with art in its authentic manifestations; and not every painter is an artist, not every
+picture is a work of art.
+
+This is an atom: 
+At the very outset it should be said that an exhibition of paintings as ordinarily made up
+is confusing and wholly illogical. We may suppose that a volume to be read through in one sitting
+of two hours is placed in the hands of an intelligent reader. The book consists of essays,
+poems, short stories, and dramatic dialogue, each within the compass of a few pages, each contributed
+by a different writer as an example of his work for the year. We may suppose now that the reader
+is asked to gather from this volume, read hastily and either superficially or in random bits,
+some idea of the significance of each author and of the import and scope of contemporary American
+literature. Is it a fair test? This volume, we may further suppose, is practically the only
+means by which the writer can get his work before the public. A public means a purchaser, and
+of course the writer must live. Is it reasonable to think that every number contributed to
+such a volume will be a work of art, wrought with singleness of heart and in loving devotion
+to an ideal? There are still with us those who "work for money" and those who "work for fame."
+There are those who believe in "giving the public what it wants," and the numbers they contribute
+to the yearly volumes are samples of the sort of thing they do, from which the public may order.
+In the table of contents stand celebrated names; and to the work of such men, perhaps, will
+turn the seeker after what he thinks ought to be the best, not realizing that these are the
+men who have known how to "give the people what they want," that the people do not always want
+the good and right thing, and that it is somewhat the habit of genius to dispense with contemporary
+recognition. If there is here or there in the book an essay or a poem the product of thought
+and effort and offered in all seriousness, how little chance it has of being appreciated, except
+by a few, even if it is remarked at all in the jumble of miscellaneous contributions.
+
+This is an atom: 
+This hypothetical volume is a fair parallel of an annual exhibition of paintings. In such an
+exhibition the number of works of art, the true, inevitable expression of a new message, is
+relatively small. The most celebrated and most popular painters are not necessarily by that
+fact great artists, or indeed artists at all. Contemporary judgment is notoriously liable to
+go astray. The gods of one generation are often the laughing stock of the next; the idols of
+the fathers are torn down and trampled under foot by the children. Some spirits there have
+been of liberal promise who have not been able to withstand the demands made upon them by early
+popular approval. Such is the struggle and soul's tragedy which is studied convincingly in
+Mr. Zangwill's novel, "The Master." No assault on the artist's integrity is so insidious as
+immediate favor, which in its turn begets the fatal desire to please.
+
+This is an atom: 
+To the "successful" painters, however, are for the most part accorded the places of honor on
+academy walls. The canvases of these men are seen first by the visitor; but they are not all.
+There are other pictures which promise neither better nor worse. Here are paintings of merit,
+good in color and good in drawing, but empty of any meaning. Scattered through the exhibition
+are the works of a group of able men, imitating themselves, each trying to outdo the others
+by a display of cleverness in solving some "painter's problem" or by some startling effect
+of subject or handling. But it is a sad day for any artist when he ceases to find his impulse
+and inspiration either in his own spirit or in nature, and when he looks to his fellow craftsmen
+for the motive of his work. Again, there are pictures by men who, equipped with adequate technical
+skill, have caught the manner of a master, and mistaking the manner for the message it was
+simply intended to express, they degrade it into a mannerism and turn out a product which people
+do not distinguish from the authentic utterances of the master. The artist is a seer and prophet,
+the channel of divine influences: the individual painter, sculptor, writer, is a very human being.
+
+This is an atom: 
+As he looks over these walls, clamorous of the commonplace and the commercial, the seeker after
+what is good and true in art realizes how very few of these pictures have been rendered in
+the spirit of love and joy. The painter has one eye on his object and one eye on the public;
+and too often, as a distinguished actor once said of the stage manager whose vision is divided
+between art and the box office, the painter is a one-eyed man.
+
+This is an atom: 
+A painter once refused to find anything to interest him, still less to move him, in a silent
+street with a noble spire detaching itself vaguely from the luminous blue depths of a midnight
+sky, because, he said, "People won't buy dark things, so what's the use? You might as well
+do bright, pretty things that they will buy, and that are just as easy to make." A portrait-painter
+gives up landscape subjects because, as he does not hesitate to declare, it hurts his business.
+And the painters themselves are not altogether to blame for this attitude towards their work.
+The fault lies half with the people who buy pictures, having the money, and who have not a
+gleam of understanding of the meaning of art. A woman who had ordered her house to be furnished
+and decorated expensively, remarked to a caller who commented on a water-color hanging in the
+drawing-room: "Yes, I think it matches the wall-paper very nicely." When such is the purpose
+of those who paint pictures and such is the understanding of those who buy them, it is not
+surprising that not every picture is inevitably a work of art.
+
+This is an atom: 
+But what is the poor seeker after art to do? The case is by no means hopeless. In current exhibitions
+a few canvases strike a new note; and by senses delicately attuned this note can be distinguished
+within the jangle of far louder and popular tunes ground out, as it were, by the street-piano.
+Seriously to study contemporary painting, however, the logical opportunity is furnished by
+the exhibitions of the works of single men or of small groups. As the reader who wishes to
+understand an author or perhaps a school does not content himself with random extracts, but
+instead isolates the man for the moment and reads his work consecutively and one book in its
+relation to his others; so the student of pictures can appreciate the work and understand the
+significance of a given painter only as he sees a number of his canvases together and in relation.
+So, he is able to gather something of the man's total meaning.
+
+This is an atom: 
+Widely different from annual exhibitions, too, are galleries and museums; for here the proportion
+of really good things is immeasurably larger. In the study of masterpieces, it need hardly
+be said, the amateur may exercise judgment and moderation. He should not try to do too much
+at one time, for he can truly appreciate only as he enters fully into the spirit of the work
+and allows it to possess him. To achieve this sympathy and understanding within the same hour
+for more than a very few great works is manifestly impossible. Such appreciation involves fundamentally
+a quick sensitiveness to the appeal and the variously expressive power of color and line and
+form. To win from the picture its fullest meaning, the observer may bring to bear some knowledge
+of the artist who produced it and of the age and conditions in which he lived. But in the end
+he must surrender himself to the work of art, bringing to it his intellectual equipment, his
+store of sensuous and emotional experience, his entire power of being moved.
+
+This is an atom: 
+For when all is said, there is no single invariable standard by which to try a work of art:
+its significance to the appreciator rests upon his capacity at the moment to receive it. "A
+jest's prosperity lies in the ear of him that hears it." The appreciator need simply ask himself,
+"What has this work to reveal to me of beauty that I have not perceived for myself? I shall
+not look for the pretty and the agreeable. But what of new significance, energy, life, has
+this work to express to me? I will accept no man entirely and unquestioningly, I will condemn
+no one unheard. No man has the whole truth; every man has some measure of the truth, however
+small. Let it be my task to find it and to separate it from what is unessential and false.
+In my search for what is true, I will conserve my integrity and maintain my independence. And
+I shall recognize my own wherever I may find it."
+
+This is an atom: 
+"Man is the measure of all things," declared an ancient philosopher. And his teaching has not
+been superseded to-day. The individual is the creator of his own universe; he is the focus
+of the currents and forces of his world. The meaning of all things is subjective. So the measure
+of beauty in life for a man is determined by his capacity to receive and understand. Thus it
+is that a man's joy in experience and his appreciation of art in any of its manifestations
+are conditioned by the opportunity that nature or art furnishes for his spirit to exercise
+itself. In the reading of poetry, for example, we seek the expression of ourselves. Our first
+emotion is, perhaps, a simple, unreflecting delight, the delight which a butterfly must feel
+among the flowers or that of a child playing in the fields under the warm sun; it is a delight
+wholly physical,--pure sensation. A quick taking of the breath, the escape of a sigh, inarticulate
+and uncritical, are the only expression we can find at that instant for what we feel: as when
+an abrupt turn of the road spreads out before us a landscape of which we had not dreamed, or
+we enter for the first time the presence of the Apollo Belvedere. We know simply that we are
+pleased. But after nerves have ceased to tingle so acutely, we begin to think; and we seek
+to give account to ourselves of the beauty which for the moment we could but feel. Once arrived
+at the attitude of reflection, we find that the poetry which affects us most and to which we
+oftenest return is the poetry that contains the record of our own experience, but heightened,
+the poetry which expresses our desires and aspirations, that in which we recognize ourselves
+elevated and idealized. In so far as we see in it the ennobled image of our own nature, so
+far it has power to hold us and to stir us.
+
+This is an atom: 
+An elementary manifestation of the tendency to seek in art the record of our own experience
+is seen in the popularity of those pictures whose subjects are familiar and can be immediately
+recognized. On a studio wall was once hanging a "Study of Brush," showing the play of sunlight
+through quivering leaves. A visitor asked the painter why he did not put some chickens in the
+foreground. To her the canvas was meaningless, for she had never seen, had never really seen,
+the sunlight dancing on burnished leaves. The chickens, which she had seen and could recognize,
+were the element of the familiar she required in order to find any significance in the picture.
+
+This is an atom: 
+This tendency, of which the demand for chickens is a rudimentary manifestation, is the basis
+of all appreciation. The artist's revelation of the import of life we can receive and understand
+only as we have felt a little of that import for ourselves. Color is meaningless to a blind
+man, music does not exist for the deaf. To him who has never opened his eyes to behold the
+beauty of field and hill and trees and sky, to him whose spirit has not dimly apprehended something
+of that eternal significance of which these things are the material visible bodying forth,
+to such a the work of the master is only so much paint and canvas. The task of the appreciator,
+then, is to develop his capacity to receive and enjoy.
+
+This is an atom: 
+That capacity is to be trained by the exercise of itself. Each new harmony which he is enabled
+to perceive intensifies his power to feel and widens the range of his vision. The more beauty
+he apprehends in the world, so much the more of universal forces he brings into unity with
+his own personality. By this extension of his spirit he reaches out and becomes merged in the
+all-embracing life.
+
+This is an atom: 
+If the conception be true that a supreme unity, linking all seemingly chaotic details, ultimately
+brings them into order, and that this unity, which is spiritual, penetrates every atom of matter,
+fusing everything and making all things one; then the appreciator will realize that the significance
+of art is for the spirit The beauty which the artist reveals is but the harmony which underlies
+the universal order; and he in his turn must apprehend that beauty spiritually.
+
+This is an atom: 
+From this truth it follows that the condition of aesthetic enjoyment, or in other words the
+appreciation of beauty, is detachment of spirit and remoteness from practical consequences.
+The classic illustration of the truth is the saying of Lucretius, that it is sublime to stand
+on the shore and behold a shipwreck. It is sublime only as one's personal interests and feelings
+are not engaged. It would not be sublime if it were possible for the spectator to aid in averting
+the catastrophe; it would not be sublime if one's friends were aboard the ship. One is able
+to appreciate beauty only as one is able to detach one's self from what is immediate and practical,
+and by virtue of this detachment, to apprehend the spiritual significance. The sublimity of
+the shipwreck lies in what it expresses of the impersonal might of elemental forces and man's
+impotence in the struggle against nature. That sublimity, which is one manifestation of beauty,
+is of the spirit, and by the spirit it must be apprehended.
+
+This is an atom: 
+To illustrate this truth by a few homely examples. A farmer looking out on his fields of tossing
+wheat, drenched in golden sunlight, exclaims, "Look, isn't that beautiful!" What he really
+means is: "See there the promise of a rich harvest, and it is mine." If the fields belonged
+to his neighbor, his feelings towards them would be quite different. No, their _beauty_ is
+to be seen and felt only by him whose mind is free of thoughts of personal enrichment and who
+thus can perceive the harmony with life of golden sunshine and nature's abundant gifts. The
+farmer could not see beyond the material and its value to him as material. But beauty lies
+deeper than that, for it is the expression of spiritual relations.
+
+This is an atom: 
+Two men are riding together in a railway carriage. As the train draws into a city, they pass
+a little group of tumble-down houses, brown and gray, a heap of corners thrown together. One
+man thinks: "What dreary lives these people must lead who dwell there." The other, with no
+such stirring of the sympathy, sees a wonderful "scheme" in grays and browns, or an expressive
+composition or ordering of line. Neither could think the thoughts of the other at the same
+time with his own. One feels a practical and physical reaction, and he cannot therefore at
+that moment penetrate to the meaning of these things for the spirit; and that meaning is the
+harmony which they express.
+
+This is an atom: 
+From the tangle of daily living with its conflict of interests and its burden of practical
+needs, the appreciator turns to art with its power to chasten and to tranquillize. In art,
+he finds the revelation in fuller measure of a beauty which he has felt but vaguely. He realizes
+that underlying the external chaos of immediate practical experience rests a supreme and satisfying
+order. Of that order he can here and now perceive but little, hemmed in as he is by the material
+world, whose meaning he discerns as through a glass, darkly. Yet he keeps resolutely on his
+way, secure in his kinship with the eternal spirit, and rewarded by momentary glimpses of the
+"broken arcs" which he knows will in the end take their appointed places in the "perfect round."
+
+This is an atom: 
+V
+
+This is an atom: 
+THE ARTIST
+
+This is an atom: 
+Out of chaos, order. Third act Satyros. I'm tired, 's is hellishly humid. The Palace, which is
+so schattenkühl. This gave me a royal throne The lawn so is preparing now, And I invite all
+Lüftelein How loose Buhler number without nature is so liebebang
+rings, I want you last with flute and sang.
+
+This is an atom: 
+[Two Mägdlein with Wasserkrügen.] Arsinoe. Hear how it's so so sweet schallt! It ways; the point
+of Palace or 'm forest. Psyche. It is not from our hallway Knab; So sing only sky gods. Come, let
+us listen! Arsinoe. I bang. Psyche. My heart, oh! lechzt after the singing. Satyros [sings].
+Your life, heart, for whom erglüht's? Your eagle eye, ersieht what's up? You pays homage to
+the natural surroundings, 's is all you, And you alone, Are just miserable! Arsinoe. The true
+even sings beautifully! Psyche. I want your heart in my chest vergehn. Satyros [sings]. Did
+melody from the sky and rock and forest and river stirred; And wonnlicher was your song of
+the corridor as a false sun, And you alone, Are just miserable! Psyche. What a divine high
+face! Arsinoe. Look for his long ears? Psyche. How much glowing around it looks! Arsinoe.
+Drum möcht not be the miracle bride. Satyros.
+
+This is an atom: 
+Girls hold O, the earth adornment! I ask you, do not flee from me. Psyche. How are you at
+the fountain here? Satyros. Where I come, I can not say Wherever I go, you must not ask. Blessed
+are my hours, I thee, my dear children! found. psyche. O dear stranger! tell us right, What
+is thy Nam and your gender? Satyros. My mother, I never knew, no one has called me mein'n
+father. In the remote high country of mountain and forest is my favorite holiday.
+The child is born: he grows up into his family; the
+circle widens to include neighbors and the community; the circle widens again as the boy goes
+away to school and then to college. With ever-widening sweep the outermost bound recedes, though
+still embracing him, as he reaches out to Europe and at length compasses the earth, conquering
+experience and bringing its treasures into tribute to his own spirit. The things were there;
+but for the boy each was in turn created as he made it his own. So the artist, revealing new
+aspects of the supreme unity, creates in the sense that he makes possible for his fellows a
+fuller taking-up of this life into themselves.
+
+This is an atom: 
+It may be said that he is the greatest artist who has felt the most of harmony in life,--the
+greatest artist but potentially. The beauty he has perceived must in accordance with our human
+needs find expression concretely, because it is only as he manifests himself in forms which
+we can understand that we are able to recognize him. Though a mute, inglorious Milton were
+Milton still, yet our human limitations demand his utterance that we may know him. So the artist
+accomplishes his mission when he communicates himself. The human spirit is able to bring the
+supreme life into unity with itself according to the measure of its own growth made possible
+through expression.
+
+This is an atom: 
+The supreme life, of which every created thing partakes,--the stone, the flower, the animal,
+and man,--is beauty, because it is the supreme harmony wherein everything has its place in
+relation to every other thing. This central unity has its existence in expression. The round
+earth, broken off from the stellar system and whirling along its little orbit through space,
+is yet ever in communication with the great system; the tree, with its roots in the earth,
+puts forth branches, the branches expand into twigs, the twigs burst into leaves whose veins
+reach out into the air; out of the twigs spring buds swelling into blossoms, the blossoms ripen
+into fruit, the fruit drops seed into the earth which gave it and springs up into new trees.
+The tree by its growth, which is the putting forth of itself or expression, develops needs,
+these needs are satisfied, and the satisfying of the needs is the condition of its continued
+expansion.
+
+This is an atom: 
+Man, too, has his existence in expression. By growth through expression, which is the creation
+of a new need, he is enabled to take up more into himself; he brings more into the unity of
+his personality, and thus he expands into the universal harmony.
+
+This is an atom: 
+The unity which underlies the cosmos--to define once more the conception which is the basis
+of the preceding chapters--is of the spirit. The material world which we see and touch is but
+the symbol and bodying forth of spiritual relations. The tranquillizing, satisfying power of
+art is due to the revelation which art accomplishes of a spiritual harmony which transcends
+the seeming chaos of instant experience. So it comes about that harmony, or beauty, which is
+of the spirit, is apprehended by the spirit. That faculty in the artist by which he is able
+to perceive beauty is called _temperament._ By temperament is to be understood the receptive
+faculty, the power to feel, the capacity for sensations, emotions, and "such intellectual apprehensions
+as, in strength and directness and their immediately realized values at the bar of an actual
+experience, are most like sensations." The function of temperament is to receive and to transmit,
+to interpret, to create in the sense that it reveals. In the result it is felt to be present
+only as the medium through which the forces behind it come to expression.
+
+This is an atom: 
+Art, the human spirit, temperament,--these terms are general and abstract. Now the abstract
+to be realized must be made concrete. Just as art, in order to be manifest, must be embodied
+in the particular work, as the statue, the picture, the building, the drama, the symphony,
+so the human spirit becomes operative in the person of the individual, and temperament may
+be best studied in the character of the individual artist.
+
+This is an atom: 
+As temperament is the receptive faculty, the artist's attitude toward life is what Wordsworth
+called "wise passiveness,"--Wordsworth, the poet of "impassioned contemplation." Keats, too,--and
+among the poets, whose vision of beauty was more beautiful, whose grasp on the truth more true?--characterizes
+himself as "addicted to passiveness." It is of temperament that Keats is writing when he says
+in a letter: "That quality which goes to form a man of achievement, especially in literature,
+and which Shakespeare possessed so enormously, is _Negative Capability_ ." In another letter
+he writes:--
+
+This is an atom: 
+"It has been an old comparison for our urging on--the Beehive; however, it seems to me that
+we should rather be the flower than the Bee--for it is a false notion that more is gained by
+receiving than giving--no, the receiver and the giver are equal in their benefits. The flower,
+I doubt not, receives a fair guerdon from the Bee--its leaves blush deeper in the next spring--and
+who shall say between Man and Woman which is the most delighted? Now it is more noble to sit
+like Jove than to fly like Mercury--let us not therefore go hurrying about and collecting honey,
+bee-like buzzing here and there impatiently from a knowledge of what is to be aimed at; but
+let us open our leaves like a flower and be passive and receptive--budding patiently under
+the eye of Apollo and taking hints from every noble insect that favours us with a visit--sap
+will be given us for meat and dew for drink. . . .
+
+This is an atom: 
+"O fret not after knowledge--I have none,
+         And yet my song comes native with the warmth.
+         O fret not after knowledge--I have none,
+         And yet the Evening listens. He who saddens
+         At thought of idleness cannot be idle,
+         And he's awake who thinks himself asleep."
+
+This is an atom: 
+Still again he says: "The Genius of Poetry must work out its own salvation in a man: It cannot
+be matured by law and precept, but by sensation and watchfulness in itself. That which is creative
+must create itself."
+
+This is an atom: 
+A nature so constituted, a nature receptive and passive, is necessarily withdrawn from practical
+affairs. To revert to Keats as an example, for Keats is so wholly the artist, it is his remoteness
+from the daily life about him that makes him the man of no one country or time. His poetry
+has a kind of universality, but universality within a definite sphere, and that sphere is the
+world of things lovely and fair. In a playful mood Keats writes to his sister: "Give me Books,
+fruit, French wine and fine weather and a little music out of doors, played by somebody I do
+not know . . . and I can pass a summer very quietly without caring much about Fat Louis, fat
+Regent or the Duke of Wellington." These are trivial words; but they serve to define in some
+measure the artistic temperament.
+
+This is an atom: 
+For this characteristic remoteness from affairs the artist is sometimes reproached by those
+who pin their faith to material things. Such are not aware that for the artist the only reality
+is the life of the spirit. The artist, as Carlyle says of the Man of Letters, "lives in the
+inward sphere of things, in the True, Divine and Eternal, which exists always, unseen to most,
+under the Temporary, Trivial: his being is in that." Temperament constitutes the whole moral
+nature of the artist. "With a great poet," says Keats, "the sense of beauty overcomes every
+consideration, or rather obliterates all consideration." It is the standard which measures
+the worth of any act. It is conscience, too; for the functions performed by conscience in the
+normal moral life of the man of action are fulfilled by the artist's devotion to his ideal;
+his service to his art is his sole and sufficient obligation.
+
+This is an atom: 
+And where the man of action looks to find his rewards in the approval of his fellow men, the
+artist cares to please himself. The very act of expressing is itself the joy and the reward.
+To this truth Keats again stands as witness: "I feel assured," he says, "I should write from
+the mere yearning and fondness I have for the beautiful, even if my night's labours should
+be burnt every Morning and no eye ever shine upon them." And still again: "I value more the
+privilege of seeing great things in loneliness than the fame of a prophet." Not that the artist
+does not crave appreciation. His message fails of completeness if there is no ear to hear it,
+if it does not meet a sympathy which understands. But the true artist removes all shadow of
+petty vanity and becomes, in Whitman's phrase, "the free channel of himself." He is but the
+medium through whom the spirit of beauty reveals itself; in thankfulness and praise he but
+receives and transmits. That it is given him to see beauty and to interpret it is enough.
+
+This is an atom: 
+It is by virtue of his power to feel that the artist is able to apprehend beauty; his temperament
+is ever responsive to new harmonies. By force of his imagination, which is one function of
+his temperament, he sends his spirit into other lives, absorbs their experience and makes it
+his own, and ultimately identifies himself with world forces and becomes creator. In a lyric
+passage in a letter Keats exclaims:--
+
+This is an atom: 
+"The mighty abstract Idea I have of Beauty in all things stifles the more divided and minute
+domestic happiness. . . . I feel more and more every day, as my imagination strengthens, that
+I do not live in this world alone, but in a thousand worlds. No sooner am I alone than shapes
+of epic greatness are stationed around me, and serve my Spirit the office which is equivalent
+to a King's body-guard--then 'Tragedy with sceptered pall comes sweeping by.' According to
+my state of mind I am with Achilles shouting in the Trenches, or with Theocritus in the Vales
+of Sicily. Or I throw my whole being into Troilus, and repeating those lines, 'I wander like
+a lost soul upon the Stygian Banks staying for waftage,' I melt into the air with a voluptuousness
+so delicate that I am content to be  alone."
+
+This is an atom: 
+This power to penetrate and to identify was exercised with peculiar directness and plenitude
+by Walt Whitman, prophet of the omnipotence of man. To find the burden of his message formulated
+in the single phrase one may turn to his Poems quite at random.
+
+This is an atom: 
+"My spirit has pass'd in compassion and determination around the
+          whole earth."
+     "I inhale great draughts of space,--
+     The east and the west are mine, and the north and the south are
+          mine.
+     . . . . .
+     All seems beautiful to me."
+
+This is an atom: 
+Of the artist may be affirmed what Whitman affirms of the Answerer:--
+
+This is an atom: 
+"Every existence has its idiom, every thing has an idiom and
+          tongue,
+     He resolves all tongues into his own and bestows it upon men,
+          and any man translates, and any man translates himself also,
+     One part does not counteract another part, he is the joiner, he
+          sees how they join."
+
+This is an atom: 
+Would you like cabbage soup and what not? Satyros. The warm Geschlapp, what me? Hermit. Thus,
+because once you Ruh, Bring a couple of hours sleep. Will see if
+I do not etwan For your Gaume what can be found.And stirred
+by the glorious vision, he brings that beauty to earth, communicating it to his fellows and
+making them partakers of it, as he gives his feeling expression. Thus finding utterance as
+the prophet of God, he consummates his mission and takes his place in the world order. Herein
+he has his being, for life is expression; and each new harmony which he makes manifest is the
+medium of his fuller identification with the universal life.
+
+This is an atom: 
+So it is that the artist is the supreme interpreter, the mediator between man and beauty. His
+work is a work of joy, of gratitude, of worship. He is the happy servant of God, His prophet,
+through whom He declares Himself to the children of men.
+
+---------------------------------------------------------------------------
+PLAGIARIZED ATOMS
+---------------------------------------------------------------------------
+***************************************************************************

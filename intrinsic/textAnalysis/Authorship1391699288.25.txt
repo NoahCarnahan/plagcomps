@@ -1,0 +1,1269 @@
+Document Name: /part1/suspicious-document00603.txt
+Atom_Type: paragraph
+Cluster_Method: kmeans
+Plagiarized Atoms Count: 0/150
+Non-Plagiarized Atoms Count: 150/150
+
+---------------------------------------------------------------------------
+NON-PLAGIARIZED ATOMS
+---------------------------------------------------------------------------
+This is an atom: 
+﻿Produced by David Widger
+
+This is an atom: 
+SAC-AU-DOS
+
+This is an atom: 
+By Joris Karl Huysmans
+
+This is an atom: 
+Translated by L. G. Meyer.
+
+This is an atom: 
+Copyright, 1907, by P. F. Collier & Son
+
+This is an atom: 
+As soon as I had finished my studies my parents deemed it useful to my
+career to cause me to appear before a table covered with green cloth
+and surmounted by the living busts of some old gentlemen who interested
+themselves in knowing whether I had learned enough of the dead languages
+to entitle me to the degree of Bachelor.
+
+This is an atom: 
+The test was satisfactory. A dinner to which all my relations, far
+and near, were invited, celebrated my success, affected my future, and
+ultimately fixed me in the law. Well, I passed my examination and got
+rid of the money provided for my first year's expenses with a blond girl
+who, at times, pretended to be fond of me.
+
+This is an atom: 
+I frequented the Latin Quarter assiduously and there I learned many
+things; among others to take an interest in those students who blew
+their political opinions into the foam of their beer, every night, then
+to acquire a taste for the works of George Sand and of Heine, of Edgard
+Quinet, and of Henri Murger.
+
+This is an atom: 
+The psychophysical moment of silliness was upon me.
+
+This is an atom: 
+That lasted about a year; gradually I ripened. The electoral struggles
+of the closing days of the Empire left me cold; I was the son neither of
+a Senator nor a proscript and I had but to outlive, no matter what the
+régime, the traditions of mediocrity and wretchedness long since adopted
+by my family. The law pleased me but little. I thought that the _Code_
+had been purposely maldirected in order to furnish certain people with
+an opportunity to wrangle, to the utmost limit, over the smallest
+words; even today it seems to me that a phrase clearly worded can not
+reasonably bear such diverse interpretation.
+
+This is an atom: 
+I was sounding my depths, searching for some state of being that I might
+embrace without too much disgust, when the late Emperor found one for
+me; he made me a soldier through the maladroitness of his policy.
+
+This is an atom: 
+The war with Prussia broke out. To tell the truth I did not understand
+the motives that made that butchery of armies necessary. I felt neither
+the need of killing others nor of being killed by them. However that
+may be, enrolled in the _Garde mobile_ of the Seine, I received orders,
+after having gone in search of an outfit, to visit the barber and to be
+at the barracks in the Rue Lourcine at seven o'clock in the evening.
+
+This is an atom: 
+I was at the place punctually. After roll-call part of the regiment
+swarmed out of the barrack gates and emptied into the street. Then the
+sidewalks raised a shout and the gutters ran.
+
+This is an atom: 
+Crowding one against another, workmen in blouses, workmen in tatters,
+soldiers strapped and gaitered, without arms, they scanned to the clink
+of glasses the Marseillaise over which they shouted themselves hoarse
+with their voices out of time. Heads geared with képis {1} of incredible
+height and ornamented with vizors fit for blind men and with tin
+cockades of red, white and blue, muffled in blue-black jackets with
+madder-red collars and cuffs, breached in blue linen pantaloons with a
+red stripe down the side, the militia of the Seine kept howling at the
+moon before going forth to conquer Prussia. That was a deafening uproar
+at the wine shops, a hubbub of glasses, cans and shrieks, cut into here
+and there by the rattling of a window shaken by the wind. Suddenly the
+roll of the drum muffled all that clamor; a new column poured out of the
+barracks; there was carousing and tippling indescribable. Those soldiers
+who were drinking in the wine shops shot now out into the streets,
+followed by their parents and friends who disputed the honor of carrying
+their knapsacks; the ranks were broken; it was a confusion of soldiers
+and citizens; mothers wept, fathers, more contained, sputtered wine,
+children frisked for joy and shrieked patriotic songs at the top of
+their shrill voices.
+
+This is an atom: 
+1 Military hats.
+
+This is an atom: 
+They crossed Paris helter-skelter by the flashes of lightning
+that whipped the storming clouds into white zigzags. The heat was
+overpowering, the knapsack was heavy; they drank at every corner of the
+street; they arrived at last at the railway station of Aubervilliers.
+There was a moment of silence broken by the sound of sobbing, dominated
+again by a burst of the Marseillaise, then they stalled us like cattle
+in the cars. "Good night, Jules! may we meet soon again! Be good!
+Above all write to me!" They squeezed hands for a last time, the train
+whistled, we had left the station. We were a regular shovelful of fifty
+men in that box that rolled away with us. Some were weeping freely,
+jeered at by the others who, completely lost in drink, were sticking
+lighted candles into their provisions and bawling at the top of their
+voices: "Down with Badinguet! and long live Rochefort!" {2}
+
+This is an atom: 
+2 "Badinguet, nickname given to Napoleon III; Henri
+     Rochefort, anti-Napoleon journalist and agitator.
+
+This is an atom: 
+Others, in a corner by themselves, stared silently and sullenly at the
+broad floor that kept vibrating in the dust. All at once the convoy
+makes a halt--I got out. Complete darkness--twenty-five minutes after
+midnight.
+
+This is an atom: 
+On all sides stretch the fields, and in the distance lighted up by sharp
+flashes of lightning, a cottage, a tree sketch their silhouette against
+a sky swollen by the tempest. Only the grinding and rumbling of the
+engine is heard, whose clusters of sparks flying from the smokestack
+scatter like a bouquet of fireworks the whole length of the train. Every
+one gets out, goes forward as far as the engine, which looms up in the
+night and becomes huge. The stop lasted quite two hours. The signal
+disks flamed red, the engineer was waiting for them to reverse. They
+turn; again we get back into the wagons, but a man who comes up on the
+run and swinging a lantern, speaks a few words to the conductor, who
+immediately backs the train into a siding where we remain motionless.
+Not one of us knows where we are. I descend again from the carriage, and
+sitting on an embankment, I nibble at a bit of bread and drink a drop or
+two, when the whirl of a hurricane whistles in the distance, approaches,
+roaring and vomiting fire, and an interminable train of artillery passed
+at full speed, carrying along horses, men, and cannon whose bronze necks
+sparkle in a confusion of light. Five minutes after we take up our slow
+advance, again interrupted by halts that grow longer and longer. The
+journey ends with daybreak, and leaning from the car window, worn out by
+the long watch of the night, I look out upon the country that surrounds
+us: a succession of chalky plains, closing in the horizon, a band of
+pale green like the color of a sick turquoise, a flat country, gloomy,
+meagre, the beggarly Champagne Pouilleuse!
+
+This is an atom: 
+Little by little the sun brightens, we, rumbling on the while, end,
+however, by getting there! Leaving at eight o'clock in the evening, we
+were delivered at three o'clock of the afternoon of the next day. Two of
+the militia had dropped by the way, one who had taken a header from the
+top of the car into the river, the other who had broken his head on the
+ledge of a bridge. The rest, after having pillaged the hovels and the
+gardens, met along the route wherever the train stopped, either yawned,
+their lips puffed out with wine, and their eyes swollen, or amused
+themselves by throwing from one side of the carriage to the other
+branches of shrubs and hencoops which they had stolen.
+
+This is an atom: 
+The disembarking was managed after the same fashion as the departure.
+Nothing was ready; neither canteen, nor straw, nor coats, nor arms,
+nothing, absolutely nothing. Only tents full of manure and of insects,
+just left by the troops off for the frontier. For three days we live at
+the mercy of Mourmelon.{3} Eating a sausage one day and drinking a
+bowl of café-au-lait the next, exploited to the utmost by the natives,
+sleeping, no matter how, without straw and without covering. Truly such
+a life was not calculated to give us a taste for the calling they had
+inflicted on us.
+
+This is an atom: 
+3 A suburb of Chalons.
+
+This is an atom: 
+Once in camp, the companies separated; the laborers took themselves
+to the tents of their fellows; the bourgeois did the same. The tent in
+which I found myself was not badly managed, for we succeeded in driving
+out by argument of wine the two fellows, the native odor of whose feet
+was aggravated by a long and happy neglect.
+
+This is an atom: 
+One or two days passed. They made us mount guard with the pickets, we
+drank a great deal of eau-de-vie, and the drink-shops of Mourmelon were
+full without let, when suddenly Canrobert {4} passed us in review along
+the front line of battle. I see him now on his big horse, bent over the
+saddle, his hair flying, his waxed mustaches in a ghastly face. A mutiny
+was breaking out. Deprived of everything, and hardly convinced by that
+marshal that we lacked nothing, we growled in chorus when he talked of
+repressing our complaints by force: "Ran, plan, plan, a hundred thousand
+men afoot, to Paris, to Paris!"
+
+This is an atom: 
+4 Canrobert,  a brave  and  distinguished  veteran, head of
+     the Sixth Corps of the Army of the Rhine.
+
+This is an atom: 
+Canrobert grew livid, and shouted, planting his horse in the midst of
+us. "Hats off to a marshal of France!" Again a howl goes up from the
+ranks; then turning bridle, followed in confusion by his staff officers,
+he threatened us with his finger, whistling between his separated teeth.
+"You shall pay dear for this, gentlemen from Paris!"
+
+This is an atom: 
+Two days after this episode, the icy water of the camp made me so
+sick that there was urgent need of my entering the hospital. After the
+doctor's visit, I buckle on my knapsack, and under guard of a corporal,
+here I am going limping along, dragging my legs and sweating under my
+harness. The hospital is gorged with men; they send me back. I then
+go to one of the nearest military hospitals; a bed stands empty; I am
+admitted. I put down my knapsack at last, and with the expectation that
+the major would forbid me to move, I went out for a walk in the little
+garden which connected the set of buildings. Suddenly there issued from
+the door a man with bristling beard and bulging eyes. He plants his
+hands in the pockets of a long dirt-brown cloak, and shouts out from the
+distance as soon as he sees me:
+
+This is an atom: 
+"Hey you, man! What are you doing over here?" I approach, I explain to
+him the motive that brings me. He thrashes his arms about and bawls:
+
+This is an atom: 
+"Go in again! You have no right to walk about in this garden until they
+give you your costume."
+
+This is an atom: 
+I go back into the room, a nurse arrives and brings me a great military
+coat, pantaloons, old shoes without heels, and a cap like a nightcap. I
+look at myself, thus grotesquely dressed, in my little mirror. Good
+Heavens, what a face and what an outfit!   With my haggard eyes and my
+sallow complexion, with my hair cut short, and my nose with the bumps
+shining; with my long mouse-gray coat, my pants stained russet, my great
+hedless shoes, my colossal cotton cap, I am prodigiously ugly. I could
+not keep from laughing. I turn my head toward the side of my bed
+neighbor, a tall boy of Jewish type, who is sketching my portrait in a
+notebook. We become friends at once; I tell him to call me Eugène
+Lejantel; he responds by telling me to call him Francis Emonot; we
+recall to each other this and that painter; we enter into a discussion
+of esthetics and forget our misfortune. Night arrives; they portion out
+to us a dish of boiled meat dotted black with a few lentils, they pour
+us out brimming cups of coco-clairet, and I undress, enchanted at
+stretching myself out in a bed without keeping my clothes and my shoes
+on.
+
+This is an atom: 
+The next morning I am awakened at about six o'clock by a great fracas at
+the door and a clatter of voices. I sit up in bed, I rub my eyes, and
+I see the gentleman of the night before, still dressed in his wrapper,
+brown the color of cachou, who advances majestically, followed by a
+train of nurses. It was the major. Scarcely inside, he rolls his dull
+green eyes from right to left and from left to right, plunges his hands
+in his pockets and bawls:
+
+This is an atom: 
+"Number One, show your leg--your dirty leg. Eh, it's in a bad shape,
+that leg, that sore runs like a fountain; lotion of bran and water,
+lint, half-rations, a strong licorice tea. Number Two, show your
+throat--your dirty throat. It's getting worse and worse, that throat;
+the tonsils will be cut out to-morrow."
+
+This is an atom: 
+"But, doctor--"
+
+This is an atom: 
+"Eh, I am not asking anything from you, am I? Say one word and I'll put
+you on a diet."
+
+This is an atom: 
+"But, at least--"
+
+This is an atom: 
+"Put that man on a diet. Write: diet, gargles, strong licorice tea."
+
+This is an atom: 
+In that vein he passed all the sick in review, prescribing for all, the
+syphilitics and the wounded, the fevered and the dysentery patients his
+strong licorice tea. He stopped in front of me, stared into my face,
+tore off my covering, punched my stomach with his fist, ordered
+albuminated water for me, the inevitable tea; and went out snorting and
+dragging his feet.
+
+This is an atom: 
+Life was difficult with the men who were about us. There were twenty-one
+in our sleeping quarters. At my left slept my friend, the painter; on
+my right, a great devil of a trumpeter, with face pocked like a sewing
+thimble and yellow as a glass of bile. He combined two professions, that
+of cobbler by day and a procurer of girls by night. He was, in other
+respects, a comical fellow who frisked about on his hands, or on his
+head, telling you in the most naïve way in the world the manner in which
+he expedited at the toe of his boot the work of his menials, or intoned
+in a touching voice sentimental songs:
+
+This is an atom: 
+"I have cherished in my sorrow--ow
+     But the friendship of a swallow--ow."
+
+This is an atom: 
+I conquered his good graces by giving him twenty sous to buy a liter of
+wine with, and we did well in not being on bad terms with him, for
+the rest of our quarters--composed in part of attorneys of the Rue
+Maubuée--were well disposed to pick a quarrel with us.
+
+This is an atom: 
+One night, among others, the 15th of August, Francis Emonot threatened
+to box the ears of two men who had taken his towel. There was a
+formidable hubbub in the dormitory. Insults rained, we were treated to
+"roule-en-coule et de duchesses." Being two against nineteen, we were
+in a fair way of getting a regular drubbing, when the bugler interfered,
+took aside the most desperate and coaxed them into giving up the stolen
+object. To celebrate the reconciliation which followed this scene,
+Francis and I contributed three francs each, and it was arranged that
+the bugler with the aid of his comrades should try to slip out of the
+hospital and bring back some meat and wine.
+
+This is an atom: 
+The light had disappeared from the major's window, the druggist at last
+extinguished his, we climb over the thicket, examine our surroundings,
+caution the men who are gliding along the walls not to encounter the
+sentinels on the way, mount on one another's shoulders and jump off into
+the field. An hour later they came back laden with victuals; they pass
+them over and reenter the dormitory with us; we suppress the two night
+lamps, light candle-ends stuck on the floor, and around my bed in our
+shirts we form a circle. We had absorbed three or four liters of wine
+and cut up the best part of a leg of mutton, when a great clattering of
+shoes is heard; I blow out the candle stubbs, by the grace of my shoe,
+and every one escapes under the beds. The door opens; the major appears,
+heaves a formidable "Good Heavens!" stumbles in the darkness, goes out
+and comes back with a lantern and the inevitable train of nurses. I
+profit by the moment to disperse the remains of the feast; the major
+crosses the dormitory at a quick step, swearing, threatening to take us
+all into custody and to put us in stocks.
+
+This is an atom: 
+We are convulsed with laughter under our coverings; a trumpet-flourish
+blazes from the other side of the dormitory. The major puts us all under
+diet; then he goes out, warning us that we shall know in a few minutes
+what metal he is made of.
+
+This is an atom: 
+Once gone, we vie with each other in doing our worst; flashes of
+laughter rumble and crackle. The trumpeter does a handspring in the
+dormitory, one of his friends joins him, a third jumps on his bed as
+on a springboard and bounces up and down, his arms balancing, his shirt
+flying; his neighbor breaks into a triumphant cancan; the major enters
+abruptly, orders four men of the line he has brought with him to seize
+the dancers, and announces to us that he is going to draw up a report
+and send it to whom it may concern.
+
+This is an atom: 
+Calm is restored at last; the next day we get the nurses to buy us some
+eatables. The days run on without further incident. We are beginning to
+perish of ennui in this hospital, when, one day, at five o'clock, the
+doctor bursts into the room and orders us to put on our campaign clothes
+and to buckle on our knapsacks.
+
+This is an atom: 
+We learn ten minutes later that the Prussians are marching on Chalons.
+
+This is an atom: 
+A gloomy amazement reigns in the quarters. Until now we have had no
+doubts as to the outcome of passing events. We knew about the too
+celebrated victory of Sarrebrück, we do not expect the reverses which
+overwhelm us. The major examines every man; not one is cured, all
+had been too long gorged with licorice water and deprived of care.
+Nevertheless, he returns to their corps the least sick, he orders others
+to lie down completely dressed, knapsack in readiness. Francis and I are
+among these last. The day passes, the night passes. Nothing. But I have
+the colic continually and suffer. At last, at about nine o'clock in the
+morning, appears a long train of mules with "cacolets,"{5} and led by
+"tringlots."{6}
+
+This is an atom: 
+5 Panier  seats   used   in   the   French   army  to
+     transport   the wounded.
+
+This is an atom: 
+6 Tringlots are the soldiers detailed for this duty.
+
+This is an atom: 
+We climb two by two into the baskets. Francis and I were lifted onto
+the same mule, only, as the painter was very fat and I very lean, the
+arrangement see-sawed; I go up in the air while he descends under the
+belly of the mule, who, dragged by the head, and pushed from behind,
+dances and flings about furiously. We trot along in a whirlwind of dust,
+blinded, bewildered, jolted, we cling to the bar of the cacolet, shut
+our eyes, laugh and groan. We arrive at Chalons more dead than alive;
+we fall to the gravel like jaded cattle, then they pack us into the cars
+and we leave Chalons to go--where? No one knows.
+
+This is an atom: 
+It is night; we fly over the rails. The sick are taken from the cars and
+walked up and down the platforms. The engine whistles, slows down and
+stops in a railway station--that of Reims, I suppose, but I can not be
+sure. We are dying of hunger, the commissary forgot but one thing: to
+give us bread for the journey. I get out. I see an open buffet, I run
+for it, but others are there before me. They are fighting as I come
+up. Some were seizing bottles, others meat, some bread, some cigars.
+Half-dazed but furious, the restaurant-keeper defends his shop at the
+point of a spit. Crowded by their comrades, who come up in gangs, the
+front row of militia throw themselves onto the counter, which gives
+way, carrying in its wake the owner of the buffet and his waiters. Then
+followed a regular pillage; everything went, from matches to toothpicks.
+Meanwhile the bell rings and the train starts. Not one of us disturbs
+himself, and while sitting on the walk, I explain to the painter how
+the tubes work, the mechanism of the bell. The train backs down over the
+rails to take us aboard. We ascend into our compartments again and we
+pass in review the booty we had seized. To tell the truth, there
+was little variety of food. Pork-butcher's meat and nothing but
+pork-butcher's meat! We had six strings of Bologna sausages flavored
+with garlic, a scarlet tongue, two sausages, a superb slice of Italian
+sausage, a slice in silver stripe, the meat all of an angry red, mottled
+white; four liters of wine, a half-bottle of cognac, and a few candle
+ends. We stick the candle ends into the neck of our flasks, which swing,
+hung by strings to the sides of the wagon. There was, thus, when the
+train jolted over a switch, a rain of hot grease which congealed almost
+instantly into great platters, but our coats had seen many another.
+
+This is an atom: 
+We began our repast at once, interrupted by the going and coming of
+those of the militia who kept running along the footboards the whole
+length of the train, and knocked at our window-panes and demanded
+something to drink. We sang at the top of our voices, we drank, we
+clinked glasses. Never did sick men make so much noise or romp so on a
+train in motion!
+
+This is an atom: 
+One would have said that it was a rolling Court of Miracles; the
+cripples jumped with jointed legs, those whose intestines were burning
+soaked them in bumpers of cognac, the one-eyed opened their eyes, the
+fevered capered about, the sick throats bellowed and tippled; it was
+unheard of!
+
+This is an atom: 
+This disturbance ends in calming itself. I profit by the lull to put my
+nose out of the window. There was not a star there, not even a tip of
+the moon; heaven and earth seem to make but one, and in that intensity
+of inky blackness, the lanterns winked like eyes of different colors
+attached to the metal of the disks. The engineer discharged his whistle,
+the engine puffed and vomited its sparks without rest. I reclose the
+window and look at my companions. Some were snoring, others disturbed by
+the jolting of the box, gurgled and swore in their sleep, turning over
+incessantly, searching for room to stretch their legs, to brace their
+heads that nodded at every jolt.
+
+This is an atom: 
+By dint of looking at them, I was beginning to get sleepy when the
+train stopped short and woke me up. We were at a station; and the
+station-master's office flamed like a forge fire in the darkness of the
+night. I had one leg numbed, I was shivering from cold, I descend to
+warm up a bit. I walk up and down the platform, I go to look at the
+engine, which they uncouple, and which they replace by another, and
+walking by the office I hear the bills and the tic-tac of the telegraph.
+The employee, with back turned to me, was stooping a little to the right
+in such a way that from where I was placed, I could see but the back of
+his head and the tip of his nose, which shone red and beaded with sweat,
+while the rest of his figure disappeared in the shadow thrown by the
+screen of a gas-jet.
+
+This is an atom: 
+They invite me to get back into the carriage, and I find my comrades
+again, just as I had left them. That time I went to sleep for good. For
+how long did my sleep last? I don't know--when a great cry woke me up:
+"Paris! Paris!" I made a dash for the doorway. At a distance, against a
+band of pale gold, stood out in black the smokestacks of factories and
+workshops. We were at Saint-Denis; the news ran from car to car. Every
+one was on his feet. The engine quickened its pace. The Gare du Nord
+looms up in the distance. We arrive there, we get down, we throw
+ourselves at the gates. One part of us succeeds in escaping, the others
+are stopped by the employees of the railroad and by the troops; by force
+they make us remount into a train that is getting up steam, and here we
+are again, off for God knows where!
+
+This is an atom: 
+We roll onward again all day long. I am weary of looking at the rows
+of houses and trees that spin by before my eyes; then, too, I have the
+colic continually and I suffer. About four o'clock of the afternoon, the
+engine slackens its speed, and stops at a landing-stage where awaits
+us there an old general, around whom sports a flock of young men, with
+headgear of red képis, breached in red and shod with boots with yellow
+spurs. The general passes us in review and divides us into two squads;
+the one for the seminary, the other is directed toward the hospital. We
+are, it seems, at Arras. Francis and we form part of the first squad.
+They tumble us into carts stuffed with straw, and we arrive in front
+of a great building that settles and seems about to collapse into the
+street. We mount to the second story to a room that contains some thirty
+beds; each one of us unbuckles his knapsack, combs himself, and sits
+down. A doctor arrives.
+
+This is an atom: 
+"What is the trouble with you?" he asks of the first.
+
+This is an atom: 
+"A carbuncle."
+
+This is an atom: 
+"Ah! and you?"
+
+This is an atom: 
+"Dysentery."
+
+This is an atom: 
+"Ah! and you?"
+
+This is an atom: 
+"A bubo."
+
+This is an atom: 
+"But in that case you have not been wounded during the war?"
+
+This is an atom: 
+"Not the least in the world."
+
+This is an atom: 
+"Very well! You can take up your knapsacks again. The archbishop gives
+up the beds of his seminarists only to the wounded."
+
+This is an atom: 
+I pack into my knapsack again all the knick-knacks that I had taken out,
+and we are off again, willy-nilly, for the city hospital. There was no
+more room there. In vain the sisters contrive to squeeze the iron beds
+together, the wards are full. Worn out by all these delays, I seize one
+mattress, Francis takes another, and we go and stretch ourselves in the
+garden on a great glass-plot.
+
+This is an atom: 
+The next day I have a talk with the director, an affable and charming
+man. I ask permission for the painter and for me to go out into the
+town. He consents; the door opens; we are free! We are going to dine at
+last! To eat real meat, to drink real wine! Ah, we do not hesitate; we
+make straight for the best hotel in town. They serve us there with
+a wholesome meal. There are flowers there on the table, magnificent
+bouquets of roses and fuchias that spread themselves out of the glass
+vases. The waiter brings in a roast that drains into a lake of butter;
+the sun himself comes to the feast, makes the covers sparkle and the
+blades of the knives, sifts his golden dust through the carafes, and
+playing with the pomard that gently rocks in the glasses, spots with a
+ruby star the damask cloth.
+
+This is an atom: 
+Oh, sacred joy of the guzzlers! My mouth is full and Francis is drunk!
+The fumes of the roast mingle with the perfume of the flowers; the
+purple of the wine vies in gorgeousness with the red of the roses.
+The waiter who serves us has the air of folly and we have the air of
+gluttons, it is all the same to us! We stuff down roast after roast, we
+pour down bordeaux upon burgundy, chartreuse upon cognac. To the devil
+with your weak wines and your thirty-sixes, {7} which we have been
+drinking since our departure from Paris! To the devil with those
+whimsicalities without name, those mysterious pot-house poisons with
+which we have been so crammed to leanness for nearly a month! We are
+unrecognizable; our once peaked faces redden like a drunkard's, we get
+noisy, with noise in the air we cut loose. We run all over the town that
+way.
+
+This is an atom: 
+7 Brandy of thirty-six degrees.
+
+This is an atom: 
+Evening arrives; we must go back, however. The sister who is in charge
+of the old men's ward says to us in a small flute-like voice:
+
+This is an atom: 
+"Soldiers, gentlemen, you were very cold last night, but you are going
+to have a good bed."
+
+This is an atom: 
+And she leads us into a great room where three night lamps, dimly
+lighted, hang from the ceiling. I have a white bed, I sink with delight
+between the sheets that still smell fresh with the odor of washing.
+We hear nothing but the breathing or the snoring of the sleepers. I am
+quite warm, my eyes close, I know no longer where I am, when a prolonged
+chuckling awakes me. I open one eye and I perceive at the foot of my bed
+an individual who is looking down at me. I sit up in bed. I see before
+me an old man, tall, lean, his eyes haggard, lips slobbering into a
+rough beard. I ask what he wants of me. No answer! I cry out: "Go away!
+Let me sleep!"
+
+This is an atom: 
+He shows me his fist. I suspect him to be a lunatic. I roll up my towel,
+at the end of which I quietly twist a knot; he advances one step; I leap
+to the floor; I parry the fisticuff he aims at me, and with the towel I
+deal him a return blow full in the left eye. He sees thirty candles,
+he throws himself at me; I draw back and let fly a vigorous kick in
+the stomach. He tumbles, carrying with him a chair that rebounds;
+the dormitory is awakened; Francis runs up in his shirt to lend me
+assistance; the sister arrives; the nurses dart upon the madman, whom
+they flog and succeed with great difficulty in putting in bed again. The
+aspect of the dormitory was eminently ludicrous; to the gloom of faded
+rose, which the dying night lamps had spread around them, succeeded the
+flaming of three lanterns. The black ceiling, with its rings of light
+that danced above the burning wicks, glittered now with its tints of
+freshly spread plaster. The sick men, a collection of Punch and Judies
+without age, had clutched the piece of wood that hung at the end of a
+cord above their beds, hung on to it with one hand, and with the other
+made gestures of terror. At that sight my anger cools, I split with
+laughter, the painter suffocates, it is only the sister who preserves
+her gravity and succeeds by force of threats and entreaties in restoring
+order in the room.
+
+This is an atom: 
+Night came to an end, for good or ill; in the morning at six o'clock
+the rattle of a drum assembled us, the director called off the roll. We
+start for Rouen, Arrived in that city, an officer tells the unfortunate
+man in charge of us that the hospital is full and can not take us in.
+Meanwhile we have an hour to wait. I throw my knapsack down into a
+corner of the station, and though my stomach is on fire, we are off,
+Francis and I, wandering at random, in ecstasies before the church of
+Saint-Ouen, in wonder before the old houses. We admire so much and
+so long that the hour had long since passed before we even thought of
+looking for the station again. "It's a long time since your comrades
+departed," one of the employees of the railroad said to us; "they are in
+Evreux." "The devil! The next train doesn't go until nine o'clock--Come,
+let's get some dinner!"
+
+This is an atom: 
+When we arrived at Evreux, midnight had come. We could not present
+ourselves at a hospital at such an hour; we would have the appearance
+of malefactors. The night is superb, we cross the city and we find
+ourselves in the open fields. It was the time of haying, the piles were
+in stacks. We spy out a little stack in a field, we hollow out there two
+comfortable nests, and I do not know whether it is the reminiscent odor
+of our couch or the penetrating perfume of the woods that stirs us, but
+we feel the need of airing our defunct love affairs. The subject was
+inexhaustible. Little by little, however, words become fewer, enthusiasm
+dies out, we fall asleep.
+
+This is an atom: 
+"Sacre bleu!" cries my neighbor, as he stretches himself. "What time
+can it be?" I awake in turn. The sun will not be late in rising, for the
+great blue curtain is laced at the horizon with a fringe of rose.
+What misery! It will be necessary now to go knock at the door of the
+hospital, to sleep in wards impregnated with that heavy smell through
+which returns, like an obstinate refrain, the acrid flower of powder of
+iodoform! All sadly we take our way to the hospital again. They open to
+us but alas! one only of us is admitted, Francis;--and I, they send me
+on to the lyceum. This life is no longer possible, I meditate an escape,
+the house surgeon on duty comes down into the courtyard. I show him my
+law-school diploma; he knows Paris, the Latin Quarter. I explain to him
+my situation. "It has come to an absolute necessity." I tell him "that
+either Francis comes to the lyceum or that I go to rejoin him at the
+hospital." He thinks it over, and in the evening, coming close to my
+bed, he slips these words into my ear! "Tell them tomorrow morning
+that your sufferings increase." The next day, in fact, at about seven
+o'clock, the doctor makes his appearance; a good, an excellent man,
+who had but two faults; that of odorous teeth and that of desiring to
+get rid of his patients at any cost. Every morning the follow-ing scene
+took place:
+
+This is an atom: 
+"Ah, ha! the fine fellow," he cries, "what an air he has! good color,
+no fever. Get up and go take a good cup of coffee; but no fooling,
+you know! don't go running after the girls; I will sign for you your
+_Exeat_; you will return to-morrow to your regiment."
+
+This is an atom: 
+Sick or not sick, he sent back three a day. That morning he stops in
+front of me and says:
+
+This is an atom: 
+"Ah! saperlotte, my boy, you look better!"
+
+This is an atom: 
+I exclaim that never have I suffered so much.
+
+This is an atom: 
+He sounds my stomach. "But you are better," he murmurs; "the stomach is
+not so hard." I protest--he seems astonished, the interne then says to
+him in an undertone:
+
+This is an atom: 
+"We ought perhaps to give him an injection; and we have here neither
+syringe nor stomach-pump; if we send him to the hospital--?"
+
+This is an atom: 
+"Come, now, that's an idea!" says the good man, delighted at getting rid
+of me, and then and there he signs the order for my admission. Joyfully
+I buckle on my knapsack, and under guard of one of the servants of the
+lyceum I make my entrance at the hospital. I find Francis again! By
+incredible good luck the St. Vincent corridor, where he sleeps, in
+default of a room in the wards, contains one empty bed next to his. We
+are at last reunited! In addition to our two beds, five cots stretch,
+one after the other, along the yellow glazed walls. For occupants they
+have a soldier of the line, two artillerymen, a dragoon, and a hussar.
+The rest of the hospital is made up of certain old men, crack-brained
+and weak-bodied, some young men, rickety or bandy-legged, and a great
+number of soldiers--wrecks from MacMahon's army--who, after being
+floated on from one military hospital to another, had come to be
+stranded on this bank. Francis and I, we are the only ones who wear
+the uniform of the Seine militia; our bed neighbors were good enough
+fellows; one, to tell the truth, quite as insignificant as another; they
+were, for the most part, the sons of peasants or farmers called to serve
+under the flag after the declaration of war.
+
+This is an atom: 
+While I am taking off my vest, there comes a sister, so frail, so pretty
+that I can not keep from looking at her; the beautiful big eyes! the
+long blond lashes! the pretty teeth! She asks me why I have left the
+lyceum; I explain to her in roundabout phrases how the absence of a
+forcing pump caused me to be sent back from the college. She smiles
+gently and says to me: "Ah, sir soldier, you could have called the thing
+by its name; we are used to everything." I should think she was used to
+everything, unfortunate woman, for the soldiers constrained themselves
+but little in delivering themselves of their indiscreet amenities before
+her. Yet never did I see her blush. She passed among them mute, her eyes
+lowered, seeming not to hear the coarse jokes retailed around her.
+
+This is an atom: 
+Heavens! how she spoiled me! I see her now in the morning, as the sun
+breaks on the stone floor the shadows of the window bars, approaching
+slowly from the far end of the corridor, the great wings of her bonnet
+flapping At her face-She comes close to my bed with a dish that smokes,
+and on the edge of which glistens her well-trimmed finger nail. "The
+soup is a little thin to-day," she says with her pretty smile, "so I
+bring you some chocolate. Eat it quick while it's hot!"
+
+This is an atom: 
+In spite of the care she lavished upon me, I was bored to death in that
+hospital. My friend and I, we had reached that degree of brutishness
+that throws you on your bed, trying to kill in animal drowsiness the
+long hours of insupportable days. The only distractions offered
+us consisted in a breakfast and a dinner composed of boiled beef,
+watermelon, prunes, and a finger of wine--the whole of not sufficient
+quantity to nourish a man.
+
+This is an atom: 
+Thanks to my ordinary politeness toward the sisters and to the
+prescription labels that I wrote for them, I obtained fortunately a
+cutlet now and then and a pear picked in the hospital orchard. I was,
+then, on the whole, the least to be pitied of all the soldiers packed
+together, pell-mell, in the wards, but during the first days I could not
+succeed even in swallowing the meagre morning dole. It was inspection
+hour, and the doctor chose that moment to perform his operations. The
+second day after my arrival he ripped a thigh open from top to bottom;
+I heard a piercing cry; I closed my eyes, not enough, however, to avoid
+seeing a red stream spurt in great jets on to the doctor's apron.
+That morning I could eat no more. Little by little, however, I grew
+accustomed to it; soon I contented myself by merely turning my head away
+and keeping my soup.
+
+This is an atom: 
+In the mean while the situation became intolerable. We tried, but in
+vain, to procure newspapers and books; we were reduced to masquerading,
+to donning the hussar's vest for fun. This puerile fooling quickly wore
+itself out, and stretching ourselves every twenty minutes, exchanging a
+few words, we dive our heads into the bolsters.
+
+This is an atom: 
+There was not much conversation to be drawn from our comrades. The two
+artillerymen and the hussar were too sick to talk. The dragoon swore by
+the name of heaven, saying nothing, got up every instant, enveloped
+in his great white mantle, and went to the wash-bowls, whose sloppy
+condition he reported by means of his bare feet. There were some old
+saucepans lying about in which the convalescents pretended to cook,
+offering their stew in jest to the sisters.
+
+This is an atom: 
+There remained, then, only the soldier of the line: an unfortunate
+grocer's clerk, father of a child, called to the army, stricken
+constantly by fever, shivering under his bedclothes.
+
+This is an atom: 
+Squatting, tailor-fashion, on our bed, we listen to him recount the
+battle in which he was picked up. Cast out near Froeschwiller, on a
+plain surrounded with woods, he had seen the red flashes shoot by in
+bouquets of white smoke, and he had ducked, trembling, bewildered by the
+cannonading, wild with the whistling of the balls. He had marched,
+mixed in with the regiments, through the thick mud, not seeing a single
+Prussian, not knowing in what direction they were, hearing on all sides
+groans, cut by sharp cries, then the ranks of the soldiers placed in
+front of him, all at once turned, and in the confusion of flight he had
+been, without knowing how, thrown to the ground. He had picked himself
+up and had fled, abandoning his gun and knapsack, and at last, worn
+out by the forced marches endured for eight days, undermined by fear,
+weakened by hunger, he had rested himself in a trench. He had remained
+there dazed, inert, stunned by the roar of the bombs, resolved no longer
+to defend himself, to move no more; then he thought of his wife, and,
+weeping, demanded what he had done that they should make him suffer so;
+he picked up, without knowing why, the leaf of a tree, which he kept,
+and which he had about him now, for he showed it to us often, dried and
+shriveled at the bottom of his pockets.
+
+This is an atom: 
+An officer had passed meanwhile, revolver in hand, had called him
+"coward," and threatened to break his head if he did not march. He had
+replied: "That would please me above all things. Oh, that this would
+end!" But the officer at the very moment he was shaking him on to his
+feet was stretched out, the blood bursting, spurting from his neck. Then
+fear took possession of him; he fled and succeeded in reaching a
+road far off, overrun with the flying, black with troops, furrowed by
+gun-carriages whose dying horses broke and crushed the ranks.
+
+This is an atom: 
+They succeeded at last in putting themselves under shelter. The cry of
+treason arose from the groups. Old soldiers seemed once more resolved,
+but the recruits refused to go on. "Let them go and be killed," they
+said, indicating the officers; "that's their profession. As for me I
+have children; it's not the State that will take care of them if I die!"
+And they envied the fate of those who were slightly wounded and the sick
+who were allowed to take refuge in the ambulances.
+
+This is an atom: 
+"Ah, how afraid one gets, and, then, how one holds in the ear the voices
+of men calling for their mothers and begging for something to drink,"
+he added, shivering all over. He paused, and, looking about the corridor
+with an air of content, he continued: "It's all the same, I am very
+happy to be here; and then, as it is, my wife can write to me," and he
+drew from his trousers pocket some letters, saying with satisfaction:
+"The little one has written, look!" and he points out at the foot of
+the paper under his wife's labored handwriting, some up-and-down strokes
+forming a dictated sentence, where there were some "I kiss papas" in
+blots of ink.
+
+This is an atom: 
+We listened twenty times at least to that story, and we had to suffer
+during mortal hours the repetitions of that man, delighted at having a
+child. We ended by stopping our ears and by trying to sleep so as not to
+hear him any more.
+
+This is an atom: 
+This deplorable life threatened to prolong itself, when one morning
+Francis, who, contrary to his habit, had been prowling around the whole
+of the evening before in the courtyard, says to me: "I say, Eugène, come
+out and breathe a little of the air of the fields." I prick my ears.
+"There is a field reserved for lunatics," he continued; "that field is
+empty; by climbing onto the roofs of the outhouses, and that is easy,
+thanks to the gratings that ornament the windows, we can reach the
+coping of the wall; we jump and we tumble into the country. Two steps
+from the wall is one of the gates of Evreux. What do you say?"
+
+This is an atom: 
+I say--I say that I am quite willing to go out, but how shall we get
+back?
+
+This is an atom: 
+"I do not know anything about that; first let us get out, we will plan
+afterward. Come, get up, they are going to serve the soup; we jump the
+wall after."
+
+This is an atom: 
+I get up. The hospital lacked water, so much so that I was reduced to
+washing in the seltzer water which the sister had had sent to me. I take
+my siphon, I mark the painter who cries fire, I press the trigger, the
+discharge hits him full in his face; then I place myself in front of
+him, I receive the stream in my beard, I rub my nose with the lather, I
+dry my face. We are ready, we go downstairs. The field is deserted;
+we scale the wall; Francis takes his measure and jumps. I am sitting
+astride the coping of the wall, I cast a rapid glance around me; below,
+a ditch and some grass, on the right one of the gates of the town; in
+the distance, a forest that sways and shows its rents of golden red
+against a band of pale blue. I stand up; I hear a noise in the court; I
+jump; we skirt the walls; we are in Evreux!
+
+This is an atom: 
+Shall we eat? Motion adopted.
+
+This is an atom: 
+Making our way in search of a resting-place, we perceive two little
+women wagging along. We follow them and offer to breakfast with them;
+they refuse; we insist; they answer no less gently; we insist again;
+they say yes. We go home with them, with a meat-pie, bottles of wine,
+eggs, and a cold chicken. It seems odd to us to find ourselves in a
+light room hung with paper spotted with lilac blossoms and green leaves;
+there are at the casements damask curtains of red currant color, a
+mirror over the fireplace, an engraving representing a Christ tormented
+by the Pharisees. Six chairs of cherry wood and a round table with an
+oilcloth showing the kings of France, a bedspread with eiderdown of pink
+muslin. We set the table, we look with greedy eye at the girls moving
+about. It takes a long time to get things ready, for we stop them for a
+kiss in passing; for the rest, they are ugly and stupid enough. But what
+is that to us? It's so long since we have scented the mouth of woman!
+
+This is an atom: 
+I carve the chicken; the corks fly, we drink like topers, we eat
+like ogres. The coffee steams in the cups; we gild it with cognac;
+my melancholy flies away, the punch kindles, the blue flames of the
+Kirschwasser leap in the salad bowl, the girls giggle, their hair in
+their eyes. Suddenly four strokes ring out slowly from the church tower.
+It is four o'clock. And the hospital! Good heavens, we had forgotten it!
+I turn pale. Francis looks at me in fright, we tear ourselves from the
+arms of our hostesses, we go out at double quick.
+
+This is an atom: 
+"How to get in?" says the painter.
+
+This is an atom: 
+Alas! we have no choice; we shall get there scarcely in time for supper.
+Let's trust to the mercy of heaven and make for the great gate!
+
+This is an atom: 
+We get there; we ring; the sister concierge is about to open the door
+for us and stands amazed. We salute her, and I say loud enough to be
+heard by her:
+
+This is an atom: 
+"I say, do you know, they are not very amiable at that commissariat; the
+fat one specially received us only more or less civilly."
+
+This is an atom: 
+The sister breathes not a word. We run at a gallop for the messroom; it
+was time, I heard the voice of Sister Angèle who was distributing the
+rations. I went to bed as quickly as possible, I covered with my hand a
+spot my beauty had given me the length of my neck; the sister looks at
+me, finds in my eyes an unwonted sparkle, and asks with interest: "Are
+your pains worse?"
+
+This is an atom: 
+I reassure her and reply: "On the contrary, sister, I am better; but
+this idleness and this imprisonment are killing me."
+
+This is an atom: 
+When I speak of the appalling ennui that is trying me, sunk in this
+company, in the midst of the country, far from my own people, she does
+not reply, but her lips close tight, her eyes take on an indefinable
+expression of melancholy and of pity. One day she said to me in a dry
+tone: "Oh, liberty's worth nothing to you," alluding to a conversation
+she had overheard between Francis and me, discussing the charming
+allurements of Parisian women; then she softened and added with her
+fascinating little moue: "You are really not serious, Mr. Soldier."
+
+This is an atom: 
+The next morning we agreed, the painter and I, that as soon as the soup
+was swallowed, we would scale the wall again. At the time appointed we
+prowl about the field; the door is closed. "Bast, worse luck!"
+says Francis, "_En avant!_" and he turns toward the great door of the
+hospital. I follow him. The sister in charge asks where we are going.
+"To the commissariat." The door opens, we are outside.
+
+This is an atom: 
+Arrived at the grand square of the town, in front of the church,
+I perceive, as we contemplate the sculptures of the porch, a stout
+gentleman with a face like a red moon bristling with white mustaches,
+who stares at us in astonishment. We stare back at him, boldly, and
+continue on our way. Francis is dying of thirst; we enter a café, and,
+while sipping my demi-tasse, I cast my eyes over the local paper, and
+I find there a name that sets me dreaming. I did not know, to tell the
+truth, the person who bore it, but that name recalled to me memories
+long since effaced. I remembered that one of my friends had a relation
+in a very high position in the town of Evreux. "It is absolutely
+necessary for me to see him," I say to the painter; I ask his address of
+the café-keeper; he does not know it; I go out and visit all the bakers
+and the druggists that I meet with. Every one eats bread and takes
+medicine; it is impossible that one of those manufacturers should not
+know the address of Monsieur de Fréchêdé. I did find it there, in fact;
+I dust off my blouse, I buy a black cravat, gloves, and I go and ring
+gently, in the Rue Chatrain, at the iron grating of a private residence
+which rears its brick facade and slate roofs in the clearing of a sunny
+park. A servant lets me in. Monsieur de Fréchêdé is absent, but Madame
+is at home. I wait for a few seconds in a salon; the portière is raised
+and an old lady appears. She has an air so affable that I am reassured.
+I explain to her in a few words who I am.
+
+This is an atom: 
+"Sir," she says with a kind smile, "I have often heard speak of your
+family. I think, even, that I have met at Madame Lezant's, madame, your
+mother, during my last journey to Paris; you are welcome here."
+
+This is an atom: 
+We talked a long time; I, somewhat embarrassed, covering with my képi
+the spot on my neck; she trying to persuade me to accept some money,
+which I refuse.
+
+This is an atom: 
+She says to me at last: "I desire with all my heart to be useful to you.
+What can I do?" I reply: "Heavens, Madame, if you could get them
+to send me back to Paris, you would render me a great service;
+communications will be interrupted very soon, if the newspapers are to
+be believed; they talk of another _coup d'état_, or the overthrow of the
+Empire; I have great need of seeing my mother again; and especially of
+not letting myself be taken prisoner here if the Prussians come."
+
+This is an atom: 
+In the mean while Monsieur de Fréchêdé enters. In two words he is made
+acquainted with the situation.
+
+This is an atom: 
+"If you wish to come with me to the doctor of the hospital," he says,
+"you have no time to lose."
+
+This is an atom: 
+To the doctor! Good heavens! and how account to him for my absence from
+the hospital? I dare not breathe a word; I follow my protector, asking
+myself how it will all end. We arrive; the doctor looks at me with a
+stupefied air. I do not give him time to open his mouth, and I deliver
+with prodigious volubility a string of jeremiads over my sad position.
+
+This is an atom: 
+Monsieur de Fréchêdé in his turn takes up the argument, and asks him, in
+my favor, to give me a convalescent's leave of absence for two months.
+
+This is an atom: 
+"Monsieur is, in fact, sick enough," says the doctor, "to be entitled to
+two months' rest; if my colleagues and if the General look at it as I do
+your protégé will be able in a few days to return to Paris."
+
+This is an atom: 
+"That's good," replies Monsieur de Fréchêdé. "I thank you, doctor; I
+will speak to the General myself to-night."
+
+This is an atom: 
+We are in the street; I heave a great sigh of relief; I press the hand
+of that excellent man who shows so kindly an interest in me. I run to
+find Francis again. We have but just time to get back; we arrive at the
+gate of the hospital; Francis rings; I salute the sister. She stops
+me: "Did you not tell me this morning that you were going to the
+commissariat?"
+
+This is an atom: 
+"Quite right, sister."
+
+This is an atom: 
+"Very well! the General has just left here. Go and see the director and
+Sister Angèle; they are waiting for you; you will explain to them, no
+doubt, the object of your visits to the commissariat."
+
+This is an atom: 
+We remount, all crestfallen, the dormitory stairs. Sister Angèle is
+there, who waits for us, and who says:
+
+This is an atom: 
+"Never could I have believed such a thing! You have been all over the
+city, yesterday and to-day, and Heaven knows what kind of life you have
+been leading!"
+
+This is an atom: 
+"Oh, really!" I exclaim.
+
+This is an atom: 
+She looked at me so fixedly that I breathed not another word.
+
+This is an atom: 
+"All the same," she continued, "the General himself met you on the Grand
+Square to-day. I denied that you had gone out, and I searched for you
+all over the hospital. The General was right, you were not here. He
+asked me for your names; I gave him the name of one of you, I refused
+to reveal the other, and I did wrong, that is certain, for you do not
+deserve it!"
+
+This is an atom: 
+"Oh, how much I thank you, my sister!" But Sister Angèle did not listen
+to me. She was indignant over my conduct! There was but one thing to do;
+keep quiet and accept the downpour without trying to shelter myself.
+
+This is an atom: 
+In the mean time Francis was summoned before the director, and since, I
+do not know why, they suspected him of corrupting me; and since he was,
+moreover, by reason of his foolery, in bad odor with the doctor and the
+sisters, he was informed that he must leave the hospital the following
+day and join his corps at once.
+
+This is an atom: 
+"Those huzzies with whom we dined yesterday are licensed women, who
+have sold us; it was the director himself who told me," he declared
+furiously.
+
+This is an atom: 
+All the time we are cursing the jades and lamenting over our uniforms
+which made us so recognizable, the rumor runs that the Emperor is taken
+prisoner and that the Republic has been proclaimed at Paris; I give a
+franc to an old man who was allowed to go out and who brings me a copy
+of the "Gaulois." The news is true. The hospital exults, Badinguet
+fallen! it is not too soon; good-by to the war that is ended at last.
+
+This is an atom: 
+The following morning Francis and I, we embrace and he departs. "Till we
+meet again," he shouts to me as he shuts the gate; "and in Paris!"
+
+This is an atom: 
+Oh, the days that followed that day! What suffering! what desolation!
+Impossible to leave the hospital; a sentinel paced up and down, in my
+honor, before the door. I had, however, spirit enough not to try to
+sleep. I paced like a caged beast in the yard. I prowled thus for the
+space of twelve hours. I knew my prison to its smallest cranny. I
+knew the spots where the lichens and the mosses pushed up through the
+sections of the wall which had given way in cracking. Disgust for my
+corridor, for my truckle-bed flattened out like a pancake, for my linen
+rotten with dirt, took hold of me. I lived isolated, speaking to no one,
+beating the flint stones of the courtyard with my feet, straying, like a
+troubled soul, under the arcades whitewashed with yellow ochre the same
+as the wards, coming back to the grated entrance gate surmounted by a
+flag, mounting to the first floor where my bed was, descending to where
+the kitchen shone, flashing the sparkle of its red copper through the
+bare nakedness of the scene. I gnawed my fists with impatience, watching
+at certain hours the mingled coming and going of civilians and soldiers,
+passing and repassing on every floor, filling the galleries with their
+interminable march.
+
+This is an atom: 
+I had no longer any strength left to resist the persecution of the
+sisters, who drove us on Sunday into the chapel. I became a monomaniac;
+one fixed idea haunted me; to flee as quickly as possible that
+lamentable jail. With that, money worry oppressed me. My mother had
+forwarded a hundred francs to me at Dunkirk, where it seems I ought to
+be. The money never appeared. I saw the time when I should not have a
+sou to buy either paper or tobacco.
+
+This is an atom: 
+Meanwhile the days passed. The De Fréchêdés seemed to have forgotten
+me, and I attributed their silence to my escapades, of which they had
+no doubt been informed. Soon to all these anxieties were added horrible
+pains: ill-cared for and aggravated by my chase after petticoats, my
+bowels became inflamed. I suffered so that I came to fear I should no
+longer be able to bear the journey. I concealed my sufferings, fearing
+the doctor would force me to stay longer at the hospital. I keep my bed
+for a few days; then, as I felt my strength diminishing, I wished to get
+up, in spite of all, and I went downstairs into the yard. Sister Angèle
+no longer spoke to me, and in the evening, while she made her rounds in
+the corridor and in the mess, turning so as not to notice the sparks of
+the forbidden pipes that glowed in the shadows, she passed before me,
+indifferent, cold, turning away her eyes. One morning, however, when I
+had dragged myself into the courtyard and sunk down on every bench to
+rest, she saw me so changed, so pale, that she could not keep from a
+movement of compassion. In the evening, after she had finished her visit
+to the dormitories, I was leaning with one elbow on my bolster, and,
+with eyes wide open, I was looking at the bluish beams which the moon
+cast through the windows of the corridor, when the door at the farther
+end opened again, and I saw, now bathed in silver vapor, now in shadow,
+and as if clothed in black crepe, according as to whether she passed
+before the casements or along the walls, Sister Angèle, who was coming
+toward me. She was smiling gently. "To-morrow morning," she said to me,
+"you are to be examined by the doctors. I saw Madame de Fréchêdé to-day;
+it is probable that you will start for Paris in two or three days." I
+spring up in my bed, my face brightens, I wanted to jump and sing;
+never was I happier. Morning rises. I dress, and uneasy, nevertheless, I
+direct my way to the room where sits a board of officers and doctors.
+
+This is an atom: 
+One by one the soldiers exhibit their bodies gouged with wounds or
+bunched with hair. The General scraped one of his finger nails, the
+Colonel of the Gendarmerie {8} fans himself with a newspaper; the
+practitioners talk among themselves as they feel the men. My turn
+comes at last. They examine me from head to foot, they press down on
+my stomach, swollen and tense like a balloon, and with a unanimity of
+opinion the council grants me a convalescent's leave of sixty days.
+
+This is an atom: 
+8 Armed police.
+
+This is an atom: 
+I am going at last to see my mother, to recover my curios, my books! I
+feel no more the red-hot iron that burns my entrails; I leap like a kid!
+
+This is an atom: 
+I announce to my family the good news. My mother writes me letter after
+letter, wondering why I do not come. Alas! my order of absence must be
+countersigned at the division headquarters at Rouen. It comes back after
+five days; I am "in order"; I go to find Sister Angèle; I beg her to
+obtain for me before the time fixed for my departure permission to go
+into the city to thank De Fréchêdé, who have been so good to me. She
+goes to look for the director and brings me back permission. I run
+to the house of those kind people, who force me to accept a silk
+handkerchief and fifty francs for the journey. I go in search of my
+papers at the commissariat. I return to the hospital, I have but a few
+minutes to spare. I go in quest of Sister Angèle, whom I find in the
+garden, and I say to her with great emotion:
+
+This is an atom: 
+"Oh, dear Sister, I am leaving; how can I ever repay you for all that
+you have done for me?"
+
+This is an atom: 
+I take her hand which she tries to withdraw, and I carry it to my lips.
+She grows red. "Adieu!" she murmurs, and, menacing me with her finger,
+she adds playfully, "Be good! and above all do not make any wicked
+acquaintances on the journey."
+
+This is an atom: 
+"Oh, do not fear, my Sister, I promise you!"
+
+This is an atom: 
+The hour strikes; the door opens; I hurry off to the station; I jump
+into a car; the train moves; I have left Evreux. The coach is half full,
+but I occupy, fortunately, one of the corners. I put my nose out of
+the window; I see some pollarded trees, the tops of a few hills that
+undulate away into the distance, a bridge astride of a great pond that
+sparkles in the sun like burnished glass. All this is not very pleasing.
+I sink back in my corner, looking now and then at the telegraph wires
+that stripe the ultramarine sky with their black lines, when the train
+stops, the travellers who are about me descend, the door shuts, then
+opens again and makes way for a young woman. While she seats herself and
+arranges her dress, I catch a glimpse of her face under the displacing
+of her veil. She is charming; with her eyes full of the blue of heaven,
+her lips stained with purple, her white teeth, her hair the color of
+ripe corn. I engage her in conversation. She is called Reine; embroiders
+flowers; we chat like old friends. Suddenly she turns pale, and is about
+to faint. I open the windows, I offer her a bottle of salts which I have
+carried with me ever since my departure from Paris; she thanks me, it
+is nothing, she says, and she leans on my knapsack and tries to sleep.
+Fortunately we are alone in the compartment, but the wooden partition
+that divides into equal parts the body of the carriage comes up only as
+far as the waist, and one can see and above all hear the clamor and the
+coarse laughter of the country men and women. I could have thrashed them
+with hearty good will, these imbeciles who were troubling her sleep! I
+contented myself with listening to the commonplace opinions which they
+exchanged on politics. I soon have enough of it; I stop my ears. I too,
+try to sleep; but that phrase which was spoken by the station-master of
+the last station, "You will not get to Paris, the rails are torn up
+at Mantes," returned in my dreams like an obstinate refrain. I open my
+eyes. My neighbor wakes up, too; I do not wish to share my fears with
+her; we talk in a low voice. She tells me that she is going to join her
+mother at Sèvres. "But," I say to her, "the train will scarcely enter
+Paris before eleven o'clock to-night. You will never have time to reach
+the landing on the left bank."
+
+This is an atom: 
+"What shall I do?" she says, "if my brother is not down at my arrival?"
+
+This is an atom: 
+Oh, misery, I am as dirty as a comb and my stomach burns! I can not
+dream of taking her to my bachelor lodgings, and then I wish before all
+to see my mother. What to do? I look at Reine with distress. I take
+her hand; at that moment the train takes a curve, the jerk throws her
+forward; our lips approach, they touch, I press mine; she turns red.
+Good heavens, her mouth moves imperceptibly; she returns my kiss; a long
+thrill runs up my spine; at contact of those ardent embers my senses
+fail. Oh! Sister Angèle, Sister Angèle! a man can not make himself over!
+And the train roars and rolls onward, without slackening speed; we are
+flying under full steam toward Mantes; my fears are vain; the track is
+clear. Reine half shuts her eyes; her head falls on my shoulder; her
+little waves of hair tangle with my beard and tickle my lips. I put my
+arm about her waist, which yields, and I rock her. Paris is not far; we
+pass the freight-depots, by the roundhouses where the engines roar in
+red vapor, getting up steam; the train stops; they take up the tickets.
+After reflection, I will take Reine to my bachelor rooms, provided her
+brother is not waiting her arrival. We descend from the carriage; her
+brother is there. "In five days," she says, with a kiss, and the pretty
+bird has flown. Five days after I was in my bed, atrociously sick, and
+the Prussians occupy Sèvres. Never since then have I seen her.
+
+This is an atom: 
+My heart is heavy. I heave a deep sigh; this is not, however, the time
+to be sad! I am jolting on in a fiacre. I recognize the neighborhood; I
+arrive before my mother's house; I dash up the steps, four at a time. I
+pull the bell violently; the maid opens the door. "It's Monsieur!"
+and she runs to tell my mother, who darts out to meet me, turns pale,
+embraces me, looks me over from head to foot, steps back a little, looks
+at me once more, and hugs me again. Meanwhile the servant has stripped
+the buffet. "You must be hungry, M. Eugène?" I should think I was
+hungry! I devour everything they give me. I toss off great glasses of
+wine; to tell the truth, I do not know what I am eating and what I am
+drinking!
+
+This is an atom: 
+At length I go to my rooms to rest, I find my lodging just as I left
+it. I run through it, radiant, then I sit down on the divan and I
+rest there, ecstatic, beatific, feasting my eyes with the view of my
+knickknacks and my books. I undress, however; I splash about in a great
+tub, rejoicing that for the first time in many months I am going to get
+into a clean bed with white feet and toenails trimmed. I spring onto
+the mattress, which rebounds. I dive my head into the feather pillow, my
+eyes close; I soar on full wings into the land of dreams.
+
+This is an atom: 
+I seem to see Francis, who is lighting his enormous wooden pipe, and
+Sister Angèle, who is contemplating me with her little moue; then Reine
+advances toward me, I awake with a start, I behave like an idiot, I
+sink back again up to my ears, but the pains in my bowels, calmed for
+a moment, awake, now that the nerves become less tense, and I rub my
+stomach gently, thinking that the horrors of dysentery are at last over!
+I am at home. I have my rooms to myself, and I say to myself that
+one must have lived in the promiscuosity of hospitals and camps to
+appreciate the value of a basin of water, to appreciate the solitude
+where modesty may rest at ease.
+
+---------------------------------------------------------------------------
+PLAGIARIZED ATOMS
+---------------------------------------------------------------------------
+***************************************************************************
