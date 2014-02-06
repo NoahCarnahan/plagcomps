@@ -1,0 +1,972 @@
+Document name: /part3/suspicious-document05120.txt
+Author 1: 159/265
+Author 2: 106/265
+Cluster Type: hmm
+Atom_type: sentence
+
+------------------------------------------------------------
+NON-PLAGIARIZED ATOMS: 
+
+------------------------------------------------------------
+This is an atom: 
+The men had driven away.
+
+This is an atom: 
+And their
+laughter and singing and shouts grew fainter as the bushes hid them from sight.
+
+This is an atom: 
+The women and children remained, with two old men to protect them.
+
+This is an atom: 
+They might have gone too,
+the hunters said.
+
+This is an atom: 
+"What harm could come in the broad daylight?--the bears and panthers were
+far away.
+
+This is an atom: 
+"
+
+Then Jim, the crack shot of the settlement, said, "We'll drive home the bears in the carts.
+
+This is an atom: 
+"
+
+The children shouted and danced as they thought of the sport to come, of the hunters' return
+with their game, of the bonfires they always built.
+
+This is an atom: 
+That made the men all laugh.
+
+This is an atom: 
+" they cried; "why, there've been none here for twenty
+years!
+
+This is an atom: 
+We drove them away, down there"--pointing across the plain--"to a hotter place than
+this, where the sand burns their feet and they ride for days for water.
+
+This is an atom: 
+"
+
+"Yes," cried her big husband, whose brown beard covered his chest, "and burned two cabins.
+
+This is an atom: 
+"
+
+I went with emphasis on: "and suffered damage to his soul.
+
+This is an atom: 
+It should, however, I hope we do not come.
+
+This is an atom: 
+Let me give you a story to tell -" "No, no, no," said those who "I can see who you are, and
+must be defended.
+
+This is an atom: 
+"
+
+They started off in the morning cool, toward the mountains where the trees grew.
+
+This is an atom: 
+And the long
+shadows lessened as the sun crept up the sky.
+
+This is an atom: 
+The children played in the dust; clouds rose as they shouted
+and ran.
+
+This is an atom: 
+But the woman in black still stood by her door, like a spectre in the sunshine, her thin hands
+clasped together as she gazed away over the plain toward Mexico.
+
+This is an atom: 
+Her face was parched and drawn, as if the sun from the sand had burned into the bone.
+
+This is an atom: 
+Her eyes
+alone seemed to live; they were hard and bright.
+
+This is an atom: 
+Her house was a little away from the rest, on the crest of a hill facing the desert plain.
+
+This is an atom: 
+She had heard the words of the bearded man: "Small harm the Indians did.
+
+This is an atom: 
+" Had he forgotten
+her boy?
+
+This is an atom: 
+How could he forget, while she was there to remind them of the dead?
+
+This is an atom: 
+The rude letters "Will, gone, '69," she had cut on it with
+her own hands.
+
+This is an atom: 
+It marked the last place where her boy had played.
+
+This is an atom: 
+She remembered how she went
+away softly--so he should not cry to follow her--without a word, without a kiss.
+
+This is an atom: 
+"Oh, to have that kiss now and die!
+
+This is an atom: 
+" But she had gone, unthinking, up the road where the pale
+woman lived, then a rosy-cheeked happy bride, not a widow like herself.
+
+This is an atom: 
+They laughed and discussed
+the newcomers at the settlement.
+
+This is an atom: 
+It was a holiday, for the men were away over the hills, cutting
+down trees to build their houses with.
+
+This is an atom: 
+As they talked there idly, they heard what they thought was the shrill bark of dogs running
+up the hill.
+
+This is an atom: 
+Round the curve of the road came horses wildly
+galloping, and upon their backs--Here the pale woman shrieked and fled.
+
+This is an atom: 
+They were Indians,
+beating their horses with their bare legs, their black hair streaming in the wind.
+
+This is an atom: 
+Like a flash, she had bolted the door and barred the shutters as they galloped up.
+
+This is an atom: 
+Through the open back door she saw the women run screaming up the hill, their children
+in their arms.
+
+This is an atom: 
+Where was hers?
+
+This is an atom: 
+She stopped as if turned to stone, then undid the door.
+
+This is an atom: 
+She fought with them stronger than ten men.
+
+This is an atom: 
+But there were twenty; she was alone.
+
+This is an atom: 
+They strangled her, beat
+down her face, dragged her upon a horse, and, with her crosswise on the saddle, galloped up
+and down, as they fired the cabins and the sheds.
+
+This is an atom: 
+Her hands were shackled, and her eyes blind
+with blood, but she thought only of her child.
+
+This is an atom: 
+"Where could he be?
+
+This is an atom: 
+There, where she had left him, stood the child, dazed with surprise.
+
+This is an atom: 
+She held out her arms
+tied together and called to him to come.
+
+This is an atom: 
+" Why had she
+not galloped by and never noticed him?
+
+This is an atom: 
+But she begged, caught at the horse's head, struggled to get to him; and the Indian stopped
+for a moment in his flight and caught up the child and went on.
+
+This is an atom: 
+Then the thought came to her of the end of that ride--what was to come--after.
+
+This is an atom: 
+And she tried
+to drop the boy, to let him slide gently to the ground; but the Indian held them fast.
+
+This is an atom: 
+Behind, nearer, came the following men, louder the guns.
+
+This is an atom: 
+The horse she was on snorted, staggered
+under the weight of the three, and as they reached the plain the child was torn from her, she
+was pushed away.
+
+This is an atom: 
+But she rose and staggered after them amid the blinding dust.
+
+This is an atom: 
+Sobbing, she called to them as she stumbled on.
+
+This is an atom: 
+That was all.
+
+This is an atom: 
+Her story ended there, with the thundering of horses' hoofs and the taste of
+dust in her mouth.
+
+This is an atom: 
+When she came
+back to life she asked no questions but left her neighbor's house and came to her door, where
+she was standing now, and gazed away over the sand where _he_ had gone, down toward Mexico.
+
+This is an atom: 
+The years went by, and she was still alone in the house where _two_ should have been.
+
+This is an atom: 
+His wife
+and Lizzie looked at each other, both studied the various emotions, which in this piece of news
+has led them, each in their own way, to hide, Lizzie finally could
+no longer hold, and broke out: "Will you permit us because they buy?
+
+This is an atom: 
+"
+
+The woman in black pondered, as she had so many times, how she should torture him.
+
+This is an atom: 
+She looked at the fire in the stove, and piled on the logs--the logs
+that were brought with such trouble from the mountains where the trees grew.
+
+This is an atom: 
+She could not
+make it hot enough.
+
+This is an atom: 
+She dropped on her knees and watched the iron grow red.
+
+This is an atom: 
+And the letters
+of the maker's name stamped on it grew distinct, and the word "Congress," half defaced, and
+the figures "64.
+
+This is an atom: 
+she could have kissed the spot, for her child had touched
+it Charmed by the glow, when left alone, he laid his baby hand flat on it, and burned deep
+into the palm were those letters, "S S, 64.
+
+This is an atom: 
+"
+
+She would know him among a million by that mark.
+
+This is an atom: 
+Why should she not go to them?
+
+This is an atom: 
+There were pools in the plain where
+she could drink.
+
+This is an atom: 
+That would be enough.
+
+This is an atom: 
+The men were away; the women were at work.
+
+This is an atom: 
+Who could stop her?
+
+This is an atom: 
+She put on her bonnet and started off down the hill through the green bushes.
+
+This is an atom: 
+The air was still
+crisp, though the sun was hot.
+
+This is an atom: 
+She walked quickly, and her dress
+grew gray with dust, and the air scorching, as she reached the plain.
+
+This is an atom: 
+But she kept on, and
+only looked back once at the house on the hill, and at the window where the pale woman sat.
+
+This is an atom: 
+The dust choked her, and she stumbled, and the sole of one shoe came half off, and slapped,
+and banged, and delayed her as she walked.
+
+This is an atom: 
+She tore it off and went on, but the sand cut and
+burned her so that she sat down and wept, and wanted to go back for her other pair, the ones
+she wore on Sundays.
+
+This is an atom: 
+The hill, though, looked so distant that she wearily got up and went on,
+on, till she could go no more, and crept under the shadow of a rock.
+
+This is an atom: 
+Her throat was parched, and her temples beat wildly.
+
+This is an atom: 
+She must go back and start again, strengthened,
+fortified.
+
+This is an atom: 
+She would start tomorrow, or at night, when the cool would let her get too far to
+return.
+
+This is an atom: 
+The pale woman came out of her house, and
+nodded, but the woman in black did not smile in return.
+
+This is an atom: 
+She closed her door, and went up to
+her bed, and fell on it, and slept, amid the buzzing of the flies and the fitful flapping of
+the window-shade in the breeze.
+
+This is an atom: 
+The pale woman sighed and glanced across the plain.
+
+This is an atom: 
+The roll of blowing dust was larger, and
+more regular, and nearer.
+
+This is an atom: 
+The woman shuddered as she watched it creep slowly along behind the
+sand mounds.
+
+This is an atom: 
+"It always blows," she said to herself, "but not like that, so steadily, so even.
+
+This is an atom: 
+"
+She strained her eyes, but there was only dust to be seen.
+
+This is an atom: 
+Then she thought of a telescope
+that belonged to the minister's wife, who came from a seaport town, and ran to fetch it.
+
+This is an atom: 
+The
+two women came out with it together, the minister's wife laughing at her friend, she was such
+a timid thing!
+
+This is an atom: 
+But the pale woman was paler than ever, and trembled so she could not steady
+it.
+
+This is an atom: 
+The laughing one looked through it, and laughed no more.
+
+This is an atom: 
+"
+
+"For what?
+
+This is an atom: 
+"
+
+"They may be friends--"
+
+"They are Indians!
+
+This is an atom: 
+White men would not live through that sand.
+
+This is an atom: 
+In a moment all was wild confusion, names were called,
+but not loudly, girls sobbed, some carried their little treasures, mothers held their children.
+
+This is an atom: 
+All gathered together, hidden from the plain by a house.
+
+This is an atom: 
+The pale woman led out her father, then ran to her neighbor's door.
+
+This is an atom: 
+She opened it, and called
+clearly, but softly, "Mary, Mary.
+
+This is an atom: 
+Her neighbor hesitated, then hurried after the others, as they ran up the low hills toward
+the mountains, where their men had gone.
+
+This is an atom: 
+But all was as still as the
+grave.
+
+This is an atom: 
+The woman in black slept heavily and dreamed that revenge had come at last--that in
+her hand she held an Indian's head.
+
+This is an atom: 
+The window-shade flapped loudly, and she woke with an apprehension crushing her.
+
+This is an atom: 
+She went to
+the window and looked out.
+
+This is an atom: 
+There was no blowing dust upon the plains, and the street was empty.
+
+This is an atom: 
+The woman leaned
+out and looked toward the woods.
+
+This is an atom: 
+She saw on the crest of a hill the white skirts of the flying women, and then, below, down
+the road, her ears sharpened, her heart tightening, she heard the soft, regular thumping of
+horses' feet.
+
+This is an atom: 
+This was what she had waited for!
+
+This is an atom: 
+Where was her gun?
+
+This is an atom: 
+She had loaned it to the men.
+
+This is an atom: 
+But her axe--that was below.
+
+This is an atom: 
+As she started for it, there was a burst of war cries.
+
+This is an atom: 
+She ran down the narrow stairs, and took the axe from its place on the wall.
+
+This is an atom: 
+They were passing her door.
+
+This is an atom: 
+She set her teeth hard, hid the axe behind her skirts, watched
+him motionless.
+
+This is an atom: 
+He stretched out his hand clawlike, and laughed, his eyes gleaming, as catlike he moved nearer,
+A terror seized her: with a hoarse cry, she sprang up the stairs, flinging down a chair as
+he followed panting.
+
+This is an atom: 
+Quickly she climbed up the ladder to the loft, threw down the trapdoor, fell on it, bolted
+it, waited.
+
+This is an atom: 
+She stooped noiselessly and
+put her ear upon the floor.
+
+This is an atom: 
+There was soft breathing underneath, and through a crack in the
+floor she saw an eye peering up at her.
+
+This is an atom: 
+Her back was to the bolt, but suddenly she _felt_ that there was something there.
+
+This is an atom: 
+The slender fingers touched the bolt and gently drew it back.
+
+This is an atom: 
+Then with the force of all her hatred fell the axe upon the wrist.
+
+This is an atom: 
+With a howl of agony the creature fell bumping beneath.
+
+This is an atom: 
+Her face was wet and warm with the spattered blood.
+
+This is an atom: 
+Outside she heard the crackling of a burning house, then gunshots far away, and distant shouts.
+
+This is an atom: 
+On tiptoe she went to the garret window, and peeped round its edge.
+
+This is an atom: 
+One house was blazing--the minister's.
+
+This is an atom: 
+Near her door, grazing, stood a riderless horse.
+
+This is an atom: 
+As they rode past, they
+caught at it, but were stopped by a shout from her door.
+
+This is an atom: 
+In his language he shrieked to them for revenge,
+pointing up with his red wrist to the attic where she stood.
+
+This is an atom: 
+His father's sermons, he wrote from his own tendencies and held
+them secretly in closed doors, after he set up his father's wig
+and his coat umgetan, the wigs and wardrobe floor again.
+
+This is an atom: 
+Then the women and the children came and added to the din, and the men who had followed returned.
+
+This is an atom: 
+But the woman in black sat alone in the loft, till she heard the crowd at her door below, and
+the voice of the pale woman say:
+
+"Where is Mary?
+
+This is an atom: 
+"
+
+She rose and lifted the trap-door--it was unbolted--and went down.
+
+This is an atom: 
+The pale woman came to her, but she pushed her aside, and wiped her face with her sleeve.
+
+This is an atom: 
+"Are they killed?
+
+This is an atom: 
+" "No harm
+this time," said the bearded man.
+
+This is an atom: 
+"Except my house, it is burned," said the minister's wife.
+
+This is an atom: 
+"
+
+"I don't mean _you!_" cried the woman in black.
+
+This is an atom: 
+"I mean them--red devils.
+
+This is an atom: 
+Have you got any?--killed
+any?
+
+This is an atom: 
+_You_"--this to Jim, who never missed a shot--"you"--this to the bearded man--"have _you_
+killed any?
+
+This is an atom: 
+"
+
+And one man said, "Their horses were faster than ours.
+
+This is an atom: 
+"Yes, one; better than killed.
+
+This is an atom: 
+"
+The women shrunk from her as she darted up the stair.
+
+This is an atom: 
+They will leave him some day to die in the sand.
+
+This is an atom: 
+" The
+women shuddered and drew back; the men crowded round, but they did not touch the hand.
+
+This is an atom: 
+"Are you afraid?
+
+This is an atom: 
+"Afraid of that thing!
+
+This is an atom: 
+"
+
+She bent back the fingers and looked in it with a smile of contempt.
+
+This is an atom: 
+Her face took an ashen
+hue: the hand struck the table edge and fell upon the floor.
+
+This is an atom: 
+She seemed to be trying to think
+for a second, then she gave one awful cry, and leaned her face against the wall, with her hands
+hanging at her side.
+
+This is an atom: 
+The pale woman tried to go to her, but her husband drew her back, and, with a silent crowd
+around, slowly picked up the hand.
+
+This is an atom: 
+For a second he hesitated, then did as she had done, but gently.
+
+This is an atom: 
+He bent back the fingers of
+the severed hand and read its history written there, "S S, 64," in white letters on the palm.
+
+This is an atom: 
+He remembered then how, twenty years ago, when she brought the child to him, he had tied its
+little hand in cooling salve.
+
+This is an atom: 
+The whisper went around, "It is her boy's hand," and they crept toward the door.
+
+This is an atom: 
+The pale woman took a flower from her dress, one she had put there hours before, and placed
+it in the brown fingers on the table and went out.
+
+This is an atom: 
+"It is there," and the bearded man closed the door gently behind him.
+
+This is an atom: 
+Her hard eyes were dim now.. She took the hand from the table and
+undid her dress and placed it in her breast, and went to the window, and watched, far off,
+a cloud of dust made golden by the sun, as it rolled away across the plain, down toward Mexico.
+
+
+
+------------------------------------------------------------
+
+PLAGIARIZED ATOMS: 
+
+------------------------------------------------------------
+This is an atom: 
+﻿THE INDIAN'S HAND
+
+By Lorimer Stoddard
+
+Copyright, 1892, by J. B. Lippincott & Co.
+
+This is an atom: 
+Their carts and horses disappeared behind the roll of the low hills.
+
+This is an atom: 
+They appeared now and then, like boats on the crest of a wave, further each time.
+
+This is an atom: 
+They'd be back by night, with only two carts to fill.
+
+This is an atom: 
+One pale woman clung to her husband's arm.
+
+This is an atom: 
+"But the Indians!
+
+This is an atom: 
+" she said.
+
+This is an atom: 
+"Indians!
+
+This is an atom: 
+"
+
+The pale woman murmured, "Ah, but they returned.
+
+This is an atom: 
+Small harm they did, the curs!
+
+This is an atom: 
+The woman in black stood silent by her door.
+
+This is an atom: 
+No one bade her good-by.
+
+This is an atom: 
+The other women went
+back to their houses to work.
+
+This is an atom: 
+A day's freedom lay before them.
+
+This is an atom: 
+Near her house
+was a small rock roughly marked.
+
+This is an atom: 
+Here her hands beat the side of the house.
+
+This is an atom: 
+Startled, they went to the window.
+
+This is an atom: 
+She turned
+then.
+
+This is an atom: 
+Their children!
+
+This is an atom: 
+They dragged her out by the wrists, by the hair.
+
+This is an atom: 
+The little street was empty.
+
+This is an atom: 
+"
+
+There were gunshots.
+
+This is an atom: 
+Down the hills like mad came the white men for their wives and children.
+
+This is an atom: 
+Then the Indians turned back toward the plain.
+
+This is an atom: 
+They rode past her house.
+
+This is an atom: 
+"Fool!
+
+This is an atom: 
+fool!
+
+This is an atom: 
+" Here the woman in black struck her temples with her hands.
+
+This is an atom: 
+"Fool!
+
+This is an atom: 
+They must take
+her too.
+
+This is an atom: 
+Many times she fell.
+
+This is an atom: 
+Then she could
+go no more.
+
+This is an atom: 
+They found her there unconscious.
+
+This is an atom: 
+Her friends tended her.
+
+This is an atom: 
+No pain
+could be too horrible.
+
+This is an atom: 
+" Ah, those letters!
+
+This is an atom: 
+But he was dead.
+
+This is an atom: 
+The Indians remained.
+
+This is an atom: 
+The woman in black stood up.
+
+This is an atom: 
+The desert must have an end.
+
+This is an atom: 
+She would keep on to Mexico.
+
+This is an atom: 
+There was no water near.
+
+This is an atom: 
+By slow degrees she dragged herself up the hill.
+
+This is an atom: 
+"I see a head over the mound there," she said.
+
+This is an atom: 
+The pale woman shrieked.
+
+This is an atom: 
+"They are miles away.
+
+This is an atom: 
+We may have time.
+
+This is an atom: 
+"
+
+"To get away.
+
+This is an atom: 
+We must go to the woods.
+
+This is an atom: 
+Help
+me.
+
+This is an atom: 
+Warn the women.
+
+This is an atom: 
+Gather the children.
+
+This is an atom: 
+Come.
+
+This is an atom: 
+"
+
+She rushed into her house.
+
+This is an atom: 
+The other still stood and looked.
+
+This is an atom: 
+The dust cloud was a little nearer.
+
+This is an atom: 
+" There was no answer.
+
+This is an atom: 
+The woman in black, on her bed, slept
+on.
+
+This is an atom: 
+The dust cloud grew nearer.
+
+This is an atom: 
+Now and then a head could be seen.
+
+This is an atom: 
+The doors of the houses stood open; a shawl lay in the middle of the road.
+
+This is an atom: 
+Then she _knew_.
+
+This is an atom: 
+She sat on the edge of the bed.
+
+This is an atom: 
+Was it her turn now?--or
+theirs again?
+
+This is an atom: 
+She could kill _one_.
+
+This is an atom: 
+The room grew lighter.
+
+This is an atom: 
+She turned.
+
+This is an atom: 
+One stood in the open doorway,
+black against the sunshine.
+
+This is an atom: 
+All was still.
+
+This is an atom: 
+Outside she heard the distant yells.
+
+This is an atom: 
+She stood a long time, motionless, axe in hand, ready.
+
+This is an atom: 
+She turned
+softly.
+
+This is an atom: 
+A slim brown hand was almost through a crevice in the floor.
+
+This is an atom: 
+She raised her axe.
+
+This is an atom: 
+The hand sprang up at her.
+
+This is an atom: 
+Then all again was still.
+
+This is an atom: 
+Over the hills, quite near,
+she saw the men returning.
+
+This is an atom: 
+The Indians were retreating.
+
+This is an atom: 
+_She_ knew its owner.
+
+This is an atom: 
+An Indian rushed out, handsome, young,
+holding aloft a bare right arm without a hand.
+
+This is an atom: 
+The eyes of the woman shot fire.
+
+This is an atom: 
+She leaned far out and shook her fist from the garret window.
+
+This is an atom: 
+"One Indian at least!
+
+This is an atom: 
+"
+
+She hurled the axe at them.
+
+This is an atom: 
+Shortly the men returned.
+
+This is an atom: 
+Some went by down the hill, after the Indians.
+
+This is an atom: 
+Others put out the
+fire.
+
+This is an atom: 
+All was confusion, bustle, shouts.
+
+This is an atom: 
+any of them?
+
+This is an atom: 
+" she said.
+
+This is an atom: 
+Her friend answered, "No, Mary, not one.
+
+This is an atom: 
+"We'll soon have another.
+
+This is an atom: 
+"
+
+And the men answered, "No.
+
+This is an atom: 
+"
+
+"Not one!
+
+This is an atom: 
+" The woman in black drew herself up proudly.
+
+This is an atom: 
+Wait.
+
+This is an atom: 
+They looked at each other wonderingly.
+
+This is an atom: 
+The woman returned with something in her grasp.
+
+This is an atom: 
+She flung it on the table.
+
+This is an atom: 
+"It is an Indian's
+hand.
+
+This is an atom: 
+His arm will shrivel to the bone.
+
+This is an atom: 
+" said the woman in black.
+
+This is an atom: 
+It was larger now.
+
+This is an atom: 
+The woman did _not_ stir from the wall.
+
+This is an atom: 
+"Leave the hand," she said.
+
+This is an atom: 
+The woman in black turned.
+
+************************************************************

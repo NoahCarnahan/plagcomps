@@ -1,0 +1,440 @@
+Document Name: /part1/suspicious-document01078.txt
+Atom_Type: paragraph
+Cluster_Method: combine_confidences
+Plagiarized Atoms Count: 83/83
+Non-Plagiarized Atoms Count: 0/83
+
+---------------------------------------------------------------------------
+NON-PLAGIARIZED ATOMS
+---------------------------------------------------------------------------
+---------------------------------------------------------------------------
+PLAGIARIZED ATOMS
+---------------------------------------------------------------------------
+This is an atom: 
+﻿Mr. Snyder derived the utmost enjoyment from the report. He liked the
+substance of it, and above all, he was tickled by the bitter tone of
+frustration which characterized it. Oakes was baffled, and his knowledge
+of Oakes told him that the sensation of being baffled was gall and
+wormwood to that high-spirited young man. Whatever might be the result
+of this investigation, it would teach him the virtue of patience.
+
+This is an atom: 
+He wrote his assistant a short note:
+
+This is an atom: 
+Dear Oakes,
+
+This is an atom: 
+Your report received. You certainly seem to have got the hard
+    case which, I hear, you were pining for. Don't build too much
+    on plausible motives in a case of this sort. Fauntleroy, the
+    London murderer, killed a woman for no other reason than that
+    she had thick ankles. Many years ago, I myself was on a case
+    where a man murdered an intimate friend because of a dispute
+    about a bet. My experience is that five murderers out of ten
+    act on the whim of the moment, without anything which, properly
+    speaking, you could call a motive at all.
+
+This is an atom: 
+Yours very cordially,
+    Paul Snyder
+
+This is an atom: 
+P. S. I don't think much of your Pickett theory. However, you're
+    in charge. I wish you luck.
+
+This is an atom: 
+IV
+
+This is an atom: 
+Young Mr. Oakes was not enjoying himself. For the first time in his
+life, the self-confidence which characterized all his actions seemed to
+be failing him. The change had taken place almost overnight. Soon after
+the last livre was spent, De la Salle had occasion to make a journey
+in connection with his work. He went on foot, as needs he must, and
+begged his way. An old woman gave him a piece of black bread; he
+ate it with joy, feeling that now he was indeed a poor man.True, he had only just taken it up, but something told him that, for
+all the progress he was likely to make, he might just as well have been
+working on it steadily for a month. He was completely baffled. And
+every moment which he spent in the Excelsior Boarding-House made it
+clearer to him that that infernal old woman with the pale eyes thought
+him an incompetent fool. It was that, more than anything, which made
+him acutely conscious of his lack of success. His nerves were being
+sorely troubled by the quiet scorn of Mrs. Pickett's gaze. He began to
+think that perhaps he had been a shade too self-confident and abrupt in
+the short interview which he had had with her on his arrival.
+
+This is an atom: 
+As might have been expected, his first act, after his brief interview
+with Mrs. Pickett, was to examine the room where the tragedy had taken
+place. The body was gone, but otherwise nothing had been moved.
+
+This is an atom: 
+Oakes belonged to the magnifying-glass school of detection. The first
+thing he did on entering the room was to make a careful examination of
+the floor, the walls, the furniture, and the windowsill. He would have
+hotly denied the assertion that he did this because it looked well, but
+he would have been hard put to it to advance any other reason.
+
+This is an atom: 
+If he discovered anything, his discoveries were entirely negative, and
+served only to deepen the mystery of the case. As Mr. Snyder had said,
+there was no chimney, and nobody could have entered through the locked
+door.
+
+This is an atom: 
+There remained the window. It was small, and apprehensiveness, perhaps,
+of the possibility of burglars, had caused the proprietress to make it
+doubly secure with an iron bar. No human being could have squeezed his
+way through it.
+
+This is an atom: 
+It was late that night that he wrote and dispatched to headquarters the
+report which had amused Mr. Snyder.
+
+This is an atom: 
+V
+
+This is an atom: 
+Two days later Mr. Snyder sat at his desk, staring with wide, unbelieving
+eyes at a telegram he had just received. It read as follows:
+
+This is an atom: 
+HAVE SOLVED GUNNER MYSTERY. RETURNING.... OAKES.
+
+This is an atom: 
+Mr. Snyder narrowed his eyes and rang the bell. "Send Mr. Oakes to me
+directly he arrives," he said.
+
+This is an atom: 
+He was pained to find that his chief emotion was one of bitter
+annoyance. The swift solution of such an apparently insoluble problem
+would reflect the highest credit on the Agency, and there were
+picturesque circumstances connected with the case which would make it
+popular with the newspapers and lead to its being given a great deal of
+publicity.
+
+This is an atom: 
+Yet, in spite of all this, Mr. Snyder was annoyed. He realized now how
+large a part the desire to reduce Oakes' self-esteem had played with
+him. He further realized, looking at the thing honestly, that he had
+been firmly convinced that the young man would not come within a mile
+of a reasonable solution of the mystery. He had desired only that his
+failure would prove a valuable educational experience for him. For he
+believed that failure at this particular point in his career would make
+Oakes a more valuable asset to the Agency. But now here Oakes was,
+within a ridiculously short space of time, returning to the fold, not
+humble and defeated, but triumphant. Mr. Snyder looked forward with
+apprehension to the young man's probable demeanor under the
+intoxicating influence of victory.
+
+This is an atom: 
+His apprehensions were well grounded. He had barely finished the third
+of the series of cigars, which, like milestones, marked the progress of
+his afternoon, when the door opened and young Oakes entered. Mr. Snyder
+could not repress a faint moan at the sight of him. One glance was
+enough to tell him that his worst fears were realised.
+
+This is an atom: 
+"I got your telegram," said Mr. Snyder.
+
+This is an atom: 
+Oakes nodded. "It surprised you, eh?" he asked.
+
+This is an atom: 
+Mr. Snyder resented the patronizing tone of the question, but he had
+resigned himself to be patronized, and keep his anger in check.
+
+This is an atom: 
+"Yes," he replied, "I must say it did surprise me. I didn't gather from
+your report that you had even found a clue. Was it the Indian theory
+that turned the trick?"
+
+This is an atom: 
+Oakes laughed tolerantly. "Oh, I never really believed that
+preposterous theory for one moment. I just put it in to round out my
+report. I hadn't begun to think about the case then--not really think."
+
+This is an atom: 
+Mr. Snyder, nearly exploding with wrath, extended his cigar-case.
+"Light up, and tell me all about it," he said, controlling his anger.
+
+This is an atom: 
+"Well, I won't say I haven't earned this," said Oakes, puffing away. He
+let the ash of his cigar fall delicately to the floor--another action
+which seemed significant to his employer. As a rule, his assistants,
+unless particularly pleased with themselves, used the ashtray.
+
+This is an atom: 
+"My first act on arriving," Oakes said, "was to have a talk with Mrs.
+Pickett. A very dull old woman."
+
+This is an atom: 
+"Curious. She struck me as rather intelligent."
+
+This is an atom: 
+"Not on your life. She gave me no assistance whatever. I then examined
+the room where the death had taken place. It was exactly as you described
+it. There was no chimney, the door had been locked on the inside, and
+the one window was very high up. At first sight, it looked extremely
+unpromising. Then I had a chat with some of the other boarders. They had
+nothing of any importance to contribute. Most of them simply gibbered.
+I then gave up trying to get help from the outside, and resolved to rely
+on my own intelligence."
+
+This is an atom: 
+He smiled triumphantly. "It is a theory of mine, Mr. Snyder, which I
+have found valuable that, in nine cases out of ten, remarkable things
+don't happen."
+
+This is an atom: 
+"I don't quite follow you there," Mr. Snyder interrupted.
+
+This is an atom: 
+"I will put it another way, if you like. What I mean is that the simplest
+explanation is nearly always the right one. Consider this case. It seemed
+impossible that there should have been any reasonable explanation of the
+man's death. Most men would have worn themselves out guessing at wild
+theories. If I had started to do that, I should have been guessing now.
+As it is--here I am. I trusted to my belief that nothing remarkable ever
+happens, and I won out."
+
+This is an atom: 
+Mr. Snyder sighed softly. Oakes was entitled to a certain amount of
+gloating, but there could be no doubt that his way of telling a story
+was downright infuriating.
+
+This is an atom: 
+And though some curiosity may be aroused by the discovery of that
+which has remained hidden, for over two centuries; still, to gratify
+that curiosity, many an ingrained idea must be laid aside. Difficult
+as it may seem to many, Cromwell at the outset must be regarded not
+as 'our heroic One,' but as a man who sold himself to falsehood, that
+he might 'ride in gilt coaches, escorted by the flunkeyisms, and most
+sweet voices.' Nor to appreciate the secret of our character-test, can
+the assertion of any historian, from Clarendon down to Carlyle's
+last imitator, be credited, that 'a universal rising of Royalists
+combined with Anabaptists' broke out in March 1655.
+
+This is an atom: 
+On the contrary, it must be accepted as a preliminary condition in this
+investigation that England was, at that time, in a state of immovable
+tranquillity, and that any insurrectionary movement during the year
+1655 sprang from a far-reaching design, which Cromwell practised
+alike on friends, neutrals, and enemies.
+
+This is an atom: 
+That this was the case has hitherto escaped notice. Every historian,
+who has taken part in the Cromwelliad, regards that revolt as 'a very
+tragic reality;' they all agree, that it was 'prevented from
+breaking into a dangerous flame by vigilance, prompt action, and
+by necessary severity.'
+
+This is an atom: 
+That this event might be regarded in a very different light was an idea
+far from every one of them. Proof, however, goes before disproof. The
+historians should have their say first; and our readers must endure,
+for a few moments, what may be termed the received version of the
+Insurrection of March 1655.
+
+This is an atom: 
+"How can you possibly explain that? You say yourself that the window
+was high up."
+
+This is an atom: 
+"Nevertheless, it got out by the window. The logical sequence of events
+is proof enough that it was in the room. It killed Captain Gunner
+there, and left traces of its presence outside. Therefore, as the
+window was the only exit, it must have escaped by that route. It may
+have climbed or it may have jumped, but somehow it got out of that
+window."
+
+This is an atom: 
+"What do you mean--it left traces of its presence outside?"
+
+This is an atom: 
+"It killed a dog in the backyard behind the house," Oakes said. "The
+window of Captain Gunner's room projects out over it. It is full of
+boxes and litter and there are a few stunted shrubs scattered about. In
+fact, there is enough cover to hide any small object like the body of a
+dog. That's why it was not discovered at first. The maid at the
+Excelsior came on it the morning after I sent you my report while she
+was emptying a box of ashes in the yard. It was just an ordinary stray
+dog without collar or license. The analyst examined the body, and found
+that the dog had died of the bite of a cobra."
+
+This is an atom: 
+"But you didn't find the snake?"
+
+This is an atom: 
+"No. We cleaned out that yard till you could have eaten your breakfast
+there, but the snake had gone. It must have escaped through the door of
+the yard, which was standing ajar. That was a couple of days ago, and
+there has been no further tragedy. In all likelihood it is dead. The
+nights are pretty cold now, and it would probably have died of
+exposure."
+
+This is an atom: 
+"But, I just don't understand how a cobra got to Southampton," said the
+amazed Mr. Snyder.
+
+This is an atom: 
+"Can't you guess it? I told you it came from Java."
+
+This is an atom: 
+"How did you know it did?"
+
+This is an atom: 
+"Captain Muller told me. Not directly, but I pieced it together from
+what he said. It seems that an old shipmate of Captain Gunner's was
+living in Java. They corresponded, and occasionally this man would send
+the captain a present as a mark of his esteem. The last present he sent
+was a crate of bananas. Unfortunately, the snake must have got in
+unnoticed. That's why I told you the cobra was a small one. Well,
+that's my case against Mr. Snake, and short of catching him with the
+goods, I don't see how I could have made out a stronger one. Don't you
+agree?"
+
+This is an atom: 
+It went against the grain for Mr. Snyder to acknowledge defeat, but he
+was a fair-minded man, and he was forced to admit that Oakes did
+certainly seem to have solved the impossible.
+
+This is an atom: 
+"I congratulate you, my boy," he said as heartily as he could. "To be
+completely frank, when you started out, I didn't think you could do it.
+By the way, I suppose Mrs. Pickett was pleased?"
+
+This is an atom: 
+"If she was, she didn't show it. I'm pretty well convinced she hasn't
+enough sense to be pleased at anything. However, she has invited me to
+dinner with her tonight. I imagine she'll be as boring as usual, but
+she made such a point of it, I had to accept."
+
+This is an atom: 
+VI
+
+This is an atom: 
+For some time after Oakes had gone, Mr. Snyder sat smoking and
+thinking, in embittered meditation. Suddenly there was brought the card
+of Mrs. Pickett, who would be grateful if he could spare her a few
+moments. Mr. Snyder was glad to see Mrs. Pickett. He was a student of
+character, and she had interested him at their first meeting. There was
+something about her which had seemed to him unique, and he welcomed
+this second chance of studying her at close range.
+
+This is an atom: 
+She came in and sat down stiffly, balancing herself on the extreme edge
+of the chair in which a short while before young Oakes had lounged so
+luxuriously.
+
+This is an atom: 
+"How are you, Mrs. Pickett?" said Mr. Snyder genially. "I'm very glad
+that you could find time to pay me a visit. Well, so it wasn't murder
+after all."
+
+This is an atom: 
+"Sir?"
+
+This is an atom: 
+"I've just been talking to Mr. Oakes, whom you met as James Burton,"
+said the detective. "He has told me all about it."
+
+This is an atom: 
+"He told _me_ all about it," said Mrs. Pickett dryly.
+
+This is an atom: 
+Mr. Snyder looked at her inquiringly. Alban's was founded by Abbot Paul,
+a kinsman of Archbishop Lanfrance, when the great Abbey had already
+existed for three centuries.
+
+This is an atom: 
+Paul became Abbot eleven years after the Conquest, and he showed
+himself an able and earnest administrator.
+
+This is an atom: 
+Oakes, in his hour of triumph, surely did not deserve this
+sweeping condemnation.
+
+This is an atom: 
+"Did not Mr. Oakes' solution of the mystery satisfy you, Mrs. Pickett?"
+
+This is an atom: 
+"No!"
+
+This is an atom: 
+"It struck me as logical and convincing," Mr. Snyder said.
+
+This is an atom: 
+"You may call it all the fancy names you please, Mr. Snyder. But Mr.
+Oakes' solution was not the right one."
+
+This is an atom: 
+"Have you an alternative to offer?"
+
+This is an atom: 
+Mrs. Pickett tightened her lips.
+
+This is an atom: 
+"If you have, I should like to hear it."
+
+This is an atom: 
+"You will--at the proper time."
+
+This is an atom: 
+"What makes you so certain that Mr. Oakes is wrong?"
+
+This is an atom: 
+"He starts out with an impossible explanation, and rests his whole case
+on it. There couldn't have been a snake in that room because it
+couldn't have gotten out. The window was too high."
+
+This is an atom: 
+"But surely the evidence of the dead dog?"
+
+This is an atom: 
+Mrs. Pickett looked at him as if he had disappointed her. "I had always
+heard _you_ spoken of as a man with common sense, Mr. Snyder."
+
+This is an atom: 
+"I have always tried to use common sense."
+
+This is an atom: 
+"Then why are you trying now to make yourself believe that something
+happened which could not possibly have happened just because it fits in
+with something which isn't easy to explain?"
+
+This is an atom: 
+Certainly the event proved that the Abbot was right, and it was to
+this judicious removal of a student and man of letters to his
+proper home that we owe so much of our knowledge of those interesting
+minutiæ of English history which the writer has revealed.
+
+This is an atom: 
+"You speak as if you had found it," chided Mr. Snyder.
+
+This is an atom: 
+"I have." Mrs. Pickett leaned forward as she spoke, and stared at him
+defiantly.
+
+This is an atom: 
+Mr. Snyder started. "_You_ have?"
+
+This is an atom: 
+"Yes."
+
+This is an atom: 
+"What is it?"
+
+This is an atom: 
+"You will know before tomorrow. In the meantime try and think it out
+for yourself. A successful and prosperous detective agency like yours,
+Mr. Snyder, ought to do something in return for a fee."
+
+This is an atom: 
+There was something in her manner so reminiscent of the school teacher
+reprimanding a recalcitrant pupil that Mr. Snyder's sense of humor came
+to his rescue. "We do our best, Mrs. Pickett," he said. "But you
+mustn't forget that we are only human and cannot guarantee results."
+
+***************************************************************************

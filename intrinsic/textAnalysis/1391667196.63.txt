@@ -1,0 +1,134 @@
+Document Name: /part3/suspicious-document04614.txt
+Atom_Type: paragraph
+Cluster_Method: combine_confidences
+Plagiarized Atoms Count: 32/32
+Non-Plagiarized Atoms Count: 0/32
+
+---------------------------------------------------------------------------
+NON-PLAGIARIZED ATOMS
+---------------------------------------------------------------------------
+---------------------------------------------------------------------------
+PLAGIARIZED ATOMS
+---------------------------------------------------------------------------
+This is an atom: 
+﻿'Disposed of!' said the colonel. 'Yes! I have done with him. I want no more of him.'
+
+This is an atom: 
+'Then, papa,' said Esther, sinking down on her knees beside her father, and affectionately
+laying one hand on his knee, 'don't you see this makes things easy for us? I have a proposition.
+Will you listen to it?'
+
+This is an atom: 
+'A proposition! Say on.'
+
+This is an atom: 
+'It is evident that we must take some step to bring our receipts and expenses into harmony.
+Your going without fruit and fish will not do it, papa; and I do not like that way of saving,
+besides. I had rather make one large change--cut off one or two large things--than a multitude
+of small ones. It is easier, and pleasanter. Now, so long as we live in this house we are obliged
+to keep a horse; and so long as we have a horse we must have Christopher, or some other man;
+and so long as we keep a horse and a man we _must_ make this large outlay, that we cannot afford.
+Papa, I propose we move into the city.'
+
+This is an atom: 
+'Move! Where?' asked the colonel, with a very unedified expression.
+
+This is an atom: 
+'We could find a house in the city somewhere, papa, from which I could walk to Miss Fairbairn's.
+That could not be difficult.'
+
+This is an atom: 
+'Who is to find the house?'
+
+This is an atom: 
+'Could not you, papa? Buonaparte would take you all over; the driving would not do you any harm.'
+
+This is an atom: 
+'I have no idea where to begin,' said the colonel, rubbing his head in uneasy perplexity.
+
+This is an atom: 
+'I will find out that, papa. I will speak to Miss Fairbairn; she is a great woman of business.
+She will tell me.'
+
+This is an atom: 
+The colonel still rubbed his head thoughtfully. Esther kept her position, in readiness for
+some new objection. The next words, however, surprised her.
+
+This is an atom: 
+'I have sometimes thought,'--the colonel's fingers were all the while going through and through
+his hair; the action indicating, as such actions do, the mental movement and condition, 'I
+have sometimes thought lately that perhaps I was doing you a wrong in keeping you here.'
+
+This is an atom: 
+'_Here_, papa?--in New York?'
+
+This is an atom: 
+'No. In America.'
+
+This is an atom: 
+'In America! Why, sir?'
+
+This is an atom: 
+'Your family, my family, are all on the other side. You would have friends if you were there,--you
+would have opportunities,--you would not be alone. And in case I am called away, you would
+be in good hands. I do not know that I have the right to keep you here.'
+
+This is an atom: 
+'Papa, I like to be where you like to be. Do not think of that. Why did we come away from England
+in the first place?'
+
+This is an atom: 
+The colonel was silent, with a gloomy brow.
+
+This is an atom: 
+'It was nothing better than a family quarrel,' he said.
+
+This is an atom: 
+'About what? Do you mind telling me, papa?'
+
+This is an atom: 
+'No, child; you ought to know. It was a quarrel on the subject of religion.'
+
+This is an atom: 
+'How, sir?'
+
+This is an atom: 
+'Our family have been Independents from all time. But my father married a second wife, belonging
+to the Church of England. She won him over to her way of thinking. I was the only child of
+the first marriage; and when I came home from India I found a houseful of younger brothers
+and sisters, all belonging, of course, to the Establishment, and my father with them. I was
+a kind of outlaw. The advancement of the family was thought to depend very much on the stand
+I would take, as after my father's death I would be the head of the family. At least my stepmother
+made that a handle for her schemes; and she drove them so successfully that at last my father
+declared he would disinherit me if I refused to join him.'
+
+This is an atom: 
+'In being a Church of England man?'
+
+This is an atom: 
+'Yes.'
+
+This is an atom: 
+'But, papa, that was very unjust!'
+
+This is an atom: 
+'So I thought. But the injustice was done.'
+
+This is an atom: 
+'And you disinherited?'
+
+This is an atom: 
+'Yes.'
+
+This is an atom: 
+'Oh, papa! Just because you followed your own conscience!'
+
+This is an atom: 
+'Just because I held to the traditions of the family. We had _always_ been Independents--fought
+with Cromwell and suffered under the Stuarts. I was not going to turn my back on a glorious
+record like that for any possible advantages of place and favour.'
+
+This is an atom: 
+'What advantages, papa? I do not understand. You spoke of that before.'
+
+***************************************************************************

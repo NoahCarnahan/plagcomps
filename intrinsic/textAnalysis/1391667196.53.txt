@@ -1,0 +1,276 @@
+Document Name: /part3/suspicious-document04741.txt
+Atom_Type: paragraph
+Cluster_Method: combine_confidences
+Plagiarized Atoms Count: 25/25
+Non-Plagiarized Atoms Count: 0/25
+
+---------------------------------------------------------------------------
+NON-PLAGIARIZED ATOMS
+---------------------------------------------------------------------------
+---------------------------------------------------------------------------
+PLAGIARIZED ATOMS
+---------------------------------------------------------------------------
+This is an atom: 
+﻿Poor old heart, older than its years, thus wailing out its sorrows to ears none too sympathetic;
+sad old voice, uplifted from the bright shores of that lonely island in the midst of strange
+seas!  It will not come clear to the head alone; the echoes of this cry must reverberate in
+the heart if they are to reach and animate the understanding.
+
+This is an atom: 
+At this time also the Admiral wrote to his friend Gaspar Gorricio.  For the benefit of those
+who may be interested I give the letter in English.
+
+This is an atom: 
+REVEREND AND VERY DEVOUT FATHER:
+
+This is an atom: 
+"If my voyage should be as conducive to my personal health and the
+     repose of my house as it seems likely to be conducive to the
+     aggrandisement of the royal Crown of the King and Queen, my Lords,
+     I might hope to live more than a hundred years.  I have not time to
+     write more at length.  I hope that the bearer of this letter may be
+     a person of my house who will tell you verbally more than can be
+     told in a thousand papers, and also Don Diego will supply
+     information.  I beg as a favour of the Father Prior and all the
+     members of your religious house, that they remember me in all their
+     prayers.
+
+This is an atom: 
+"Done on the island of Jamaica, July 7, 1503.
+     "I am at the command of your Reverence.
+
+This is an atom: 
+.S.
+                                             .S.A.S.  XMY
+                                              Xpo FERENS."
+
+This is an atom: 
+Diego Mendez found some one among the Spaniards to accompany him, but his name is not recorded.
+The six Indians were taken to row the canoe.  They had to make their way at first against the
+strong currents along the northern coast of Jamaica, so as to reach its eastern extremity before
+striking across to Espanola.  At one point they met a flotilla of Indian canoes, which chased
+them and captured them, but they escaped.  When they arrived at the end of the easterly point
+of Jamaica, now known as Morant Point, they had to wait two or three days for calm weather
+and a favourable wind to waft them across to Espanola, and while thus waiting they were suddenly
+surrounded and captured by a tribe of hostile natives, who carried them off some nine or ten
+miles into the island, and signified their intention of killing them.
+
+This is an atom: 
+But they began to quarrel among themselves as to how they should divide the spoils which they
+had captured with the canoe, and decided that the only way of settling the dispute was by some
+elaborate trial of hazard which they used.  While they were busy with their trial Diego Mendez
+managed to escape, got back to the canoe, and worked his way back in it alone to the harbour
+where the Spaniards were encamped.  The other Spaniard who was with him probably perished,
+for there is no record of what became of him--an obscure life lost in a brave enterprise.
+
+This is an atom: 
+One would have thought that Mendez now had enough of canoe voyages, but he had no sooner got
+back than he offered to set out again, only stipulating that an armed force should march along
+the coast by land to secure his safety until he could stand across to Espanola.  Bartholomew
+Columbus immediately put himself at the head of a large and well-armed party for this purpose,
+and Bartolomeo Fieschi, the Genoese captain of one of the lost caravels, volunteered to accompany
+Mendez in a second canoe.  Each canoe was now manned by six Spanish volunteers and ten Indians
+to row; Fieschi, as soon as they had reached the coast of Espanola, was to bring the good news
+to the Admiral; while Mendez must go on to San Domingo, procure a ship, and himself proceed
+to Spain with the Admiral's letters.  The canoes were provisioned with water, cassava bread,
+and fish; and they departed on this enterprise some time in August 1503.
+
+This is an atom: 
+Their passage along the coast was protected by Bartholomew Columbus, who marched along with
+them on the shore.  They waited a few days at the end of the island for favourable weather,
+and finally said farewell to the good Adelantado, who we may be sure stood watching them until
+they were well out of sight.
+
+This is an atom: 
+There was not a cloud in the sky when the canoes stood out to sea; the water was calm, and
+reflected the blistering heat of the sun.  It was not a pleasant situation for people in an
+open boat; and Mendez and Fieschi were kept busy, as Irving says, "animating the Indians who
+navigated their canoes, and who frequently paused at their labour."  The poor Indians, evidently
+much in need of such animation, would often jump into the water to escape the intolerable heat,
+and after a short immersion there would return to their task.  Things were better when the
+sun went down, and the cool night came on; half the Indians then slept and half rowed, while
+half of the Spaniards also slept and the other half, I suppose, "animated."  Irving also says
+that the animating half "kept guard with their weapons in hand, ready to defend themselves
+in the case of any perfidy on the part of their savage companions"; such perfidy being far
+enough from the thoughts of the savage companions, we may imagine, whose energies were entirely
+occupied with the oars.
+
+This is an atom: 
+The next day was the same: savage companions rowing, Spaniards animating; Spaniards and savage
+companions alike drinking water copiously without regard for the smallness of their store.
+The second night was very hot, and the savage companions finished the water, with the result
+that on the third day the thirst became a torment, and at mid-day the poor companions struck
+work.  Artful Mendez, however, had concealed two small kegs of water in his canoe, the contents
+of which he now administered in small doses, so that the poor Indians were enabled to take
+to their oars again, though with vigour much abated.  Presumably the Spaniards had put up their
+weapons by this time, for the only perfidy shown on the part of the savage companions was that
+one of them died in the following night and had to be thrown overboard, while others lay panting
+on the bottom of the canoes; and the Spaniards had to take their turn at the oars, although
+they were if anything in a worse case than the Indians.
+
+This is an atom: 
+Late in the night, however, the moon rose, and Mendez had the joy of seeing its lower disc
+cut by a jagged line which proved to be the little islet or rock of Navassa, which lies off
+the westerly end of Espanola. New hope now animated the sufferers, and they pushed on until
+they were able to land on this rock, which proved to be without any vegetation whatsoever,
+but on the surface of which there were found some precious pools of rain-water.  Mendez was
+able to restrain the frantic appetites of his fellow-countrymen, but the savage companions
+were less wise, and drank their fill; so that some of them died in torment on the spot, and
+others became seriously ill.  The Spaniards were able to make a fire of driftwood, and boil
+some shell-fish, which they found on shore, and they wisely spent the heat of the day crouching
+in the shade of the rocks, and put off their departure until the evening.  It was then a comparatively
+easy journey for them to cross the dozen miles that separated them from Espanola, and they
+landed the next day in a pleasant harbour near Cape Tiburon.  Fieschi, true to his promise,
+was then ready to start back for Jamaica with news of the safe accomplishment of the voyage;
+but the remnant of the crews, Spaniards and savage companions alike, had had enough of it,
+and no threats or persuasions would induce them to embark again.  Mendez, therefore, left his
+friends to enjoy some little repose before continuing their journey to San Domingo, and, taking
+six natives of Espanola to row his canoe; set off along the coast towards the capital.  He
+had not gone half-way when he learned that Ovando was not there, but was in Xaragua, so he
+left his canoe and struck northward through the forest until he arrived at the Governor's camp.
+
+This is an atom: 
+Ovando welcomed Mendez cordially, praised him for his plucky voyage, and expressed the greatest
+concern at the plight of the Admiral; but he was very busy at the moment, and was on the point
+of transacting a piece of business that furnished a dismal proof of the deterioration which
+had taken place in him.  Anacaona--the lady with the daughter whom we remember--was now ruling
+over the province of Xaragua, her brother having died; and as perhaps her native subjects had
+been giving a little trouble to the Governor, he had come to exert his authority.  The narrow
+official mind, brought into contact with native life, never develops in the direction of humanity;
+and Ovando had now for some time made the great discovery that it was less trouble to kill
+people than to try to rule over them wisely.  There had evidently always been a streak of Spanish
+cruelty in him, which had been much developed by his residence in Espanola; and to cruelty
+and narrow officialdom he now added treachery of a very monstrous and horrible kind.
+
+This is an atom: 
+He announced his intention of paying a state visit to Anacaona, who thereupon summoned all
+her tributary chiefs to a kind of levee held in his honour.  In the midst of the levee, at
+a given signal, Ovando's soldiers rushed in, seized the caciques, fastened them to the wooden
+pillars of the house, and set the whole thing on fire; the caciques being thus miserably roasted
+alive.  While this was going on the atrocious work was completed by the soldiers massacring
+every native they could see --children, women, and old men included--and Anacaona herself was
+taken and hanged.
+
+This is an atom: 
+All these things Diego Mendez had to witness; and when they were over, Ovando still had excuses
+for not hurrying to the relief of the Admiral. He had embarked on a campaign of extermination
+against the natives, and he followed up his atrocities at Xaragua by an expedition to the eastern
+end of Espanola, where very much the same kind of business was transacted.  Weeks and months
+passed in this bloody cruelty, and there was always an excuse for putting off Mendez.  Now
+it was because of the operations which he dignified by the name of wars, and now because he
+had no ship suitable for sending to Jamaica; but the truth was that Ovando, the springs of
+whose humanity had been entirely dried up during his disastrous reign in Espanola, did not
+want Columbus to see with his own eyes the terrible state of the island, and was callous enough
+to leave him either to perish or to find his own way back to the world.  It was only when news
+came that a fleet of caravels was expected from Spain that Ovando could no longer prevent Mendez
+from going to San Domingo and, purchasing one of them.
+
+This is an atom: 
+Ovando had indeed lost all but the outer semblance of a man; the soul or animating part of
+him had entirely gone to corruption.  He had no interest in rescuing the Admiral; he had, on
+the contrary, great interest in leaving him unrescued; but curiosity as to his fate, and fear
+as to his actions in case he should return to Espanola, induced the Governor to make some effort
+towards spying cut his condition.  He had a number of trained rascals under his command--among
+them Diego de Escobar, one of Roldan's bright brigade; and Ovando had no sooner seen Mendez
+depart on his journey to San Domingo than he sent this Escobar to embark in a small caravel
+on a visit to Jamaica in order to see if the Admiral was still alive.  The caravel had to be
+small, so that there could be no chance of bringing off the 130 men who had been left to perish
+there; and various astute instructions were given to Escobar in order to prevent his arrival
+being of any comfort or assistance to the shipwrecked ones.  And so Escobar sailed; and so,
+in the month of March 1504, eight months after the vanishing of Mendez below the eastern horizon,
+the miserable company encamped on the two decaying ships on the sands at Puerto Santa Gloria
+descried with joyful excitement the sails of a Spanish caravel standing in to the shore.
+
+This is an atom: 
+CHAPTER V
+
+This is an atom: 
+THE ECLIPSE OF THE MOON
+
+This is an atom: 
+We must now return to the little settlement on the coast of Jamaica --those two wornout caravels,
+lashed together with ropes and bridged by an erection of wood and thatch, in which the forlorn
+little company was established.  In all communities of men so situated there are alternate
+periods of action and reaction, and after the excitement incidental to the departure of Mendez,
+and the return of Bartholomew with the news that he had got safely away, there followed a time
+of reaction, in which the Spaniards looked dismally out across the empty sea and wondered when,
+if ever, their salvation would come.  Columbus himself was now a confirmed invalid, and could
+hardly ever leave his bed under the thatch; and in his own condition of pain and depression
+his influence on the rest of the crew must inevitably have been less inspiriting than it had
+formerly been.  The men themselves, moreover, began to grow sickly, chiefly on account of the
+soft vegetable food, to which they were not accustomed, and partly because of their cramped
+quarters and the moist, unhealthy climate, which was the very opposite of what they needed
+after their long period of suffering and hardship at sea.
+
+This is an atom: 
+As the days and weeks passed, with no occupation save the daily business of collecting food
+that gradually became more and more nauseous to them, and of straining their eyes across the
+empty blue of the sea in an anxious search for the returning canoes of Fieschi, the spirits
+of the castaways sank lower and lower.  Inevitably their discontent became articulate and broke
+out into murmurings.  The usual remedy for this state of affairs is to keep the men employed
+at some hard work; but there was no work for them to do, and the spirit of dissatisfaction
+had ample opportunity to spread.  As usual it soon took the form of hostility to the Admiral.
+They seem to have borne him no love or gratitude for his masterly guiding of them through so
+many dangers; and now when he lay ill and in suffering his treacherous followers must needs
+fasten upon him the responsibility for their condition.  After a month or two had passed, and
+it became certain that Fieschi was not coming back, the castaways could only suppose that he
+and Mendez had either been captured by natives or had perished at sea, and that their fellow-countrymen
+must still be without news of the Admiral's predicament.  They began to say also that the Admiral
+was banished from Spain; that there was no desire or intention on the part of the Sovereigns
+to send an expedition to his relief; even if they had known of his condition; and that in any
+case they must long ago have given him up for lost.
+
+This is an atom: 
+When the pot boils the scum rises to the surface, and the first result of these disloyal murmurings
+and agitations was to bring into prominence the two brothers, Francisco and Diego de Porras,
+who, it will be remembered, owed their presence with the expedition entirely to the Admiral's
+good nature in complying with the request of their brother-in-law Morales, who had apparently
+wished to find some distant occupation for them.  They had been given honourable posts as officers,
+in which they had not proved competent; but the Admiral had always treated them with kindness
+and courtesy, regarding them more as guests than as servants.  Who or what these Porras brothers
+were, where they came from, who were their father and mother, or what was their training, I
+do not know; it is enough for us to know that the result of it all had been the production
+of a couple of very mean scoundrels, who now found an opportunity to exercise their scoundrelism.
+
+This is an atom: 
+When they discovered the nature of the murmuring and discontent among the crew they immediately
+set them to work it up into open mutiny.  They represented that, as Mendez had undoubtedly
+perished, there was no hope of relief from Espanola; that the Admiral did not even expect such
+relief, knowing that the island was forbidden ground to him.  They insinuated that he was as
+well content to remain in Jamaica as anywhere else, since he had to undergo a period of banishment
+until his friends at Court could procure his forgiveness.  They were all, said the Porras brothers,
+being made tools for the Admiral's convenience; as he did not wish to leave Jamaica himself,
+he was keeping them all there, to perish as likely as not, and in the meantime to form a bodyguard,
+and establish a service for himself.  The Porras brothers suggested that, under these circumstances,
+it would be as well to take a fleet of native canoes from the Indians and make their own way
+to Espanola; the Admiral would never undertake the voyage himself, being too helpless from
+the gout; but it would be absurd if the whole company were to be allowed to perish because
+of the infirmities of one man.  They reminded the murmurers that they would not be the first
+people who had rebelled with success against the despotic rule of Columbus, and that the conduct
+of the Sovereigns on a former occasion afforded them some promise that those who rebelled again
+would receive something quite different from punishment.
+
+This is an atom: 
+Christmas passed, the old year went out in this strange, unhomelike place, and the new year
+came in.  The Admiral, as we have seen, was now almost entirely crippled and confined to his
+bed; and he was lying alone in his cabin on the second day of the year when Francisco de Porras
+abruptly entered.  Something very odd and flurried about Porras; he jerks and stammers, and
+suddenly breaks out into a flood of agitated speech, in which the Admiral distinguishes a stream
+of bitter reproach and impertinence.  The thing forms itself into nothing more or less than
+a hurried, gabbling complaint; the people are dissatisfied at being kept here week after week
+with no hope of relief; they accuse the Admiral of neglecting their interests; and so on. 
+Columbus, raising himself in his bed, tries to pacify Porras; gives him reasons why it is impossible
+for them to depart in canoes; makes every endeavour, in short, to bring this miserable fellow
+back to his duties.  He is watching Porras's eye all the time; sees that he is too excited
+to be pacified by reason, and suspects that he has considerable support behind him; and suggests
+that the crew had better all be assembled and a consultation held as to the best course to pursue.
+
+This is an atom: 
+It is no good to reason with mutineers; and the Admiral has no sooner made this suggestion
+than he sees that it was a mistake.  Porras scoffs at it; action, not consultation, is what
+he demands; in short he presents an ultimatum to the Admiral--either to embark with the whole
+company at once, or stay behind in Jamaica at his own pleasure.  And then, turning his back
+on Columbus and raising his voice, he calls out, "I am for Castile; those who choose may follow
+me!"
+
+***************************************************************************

@@ -1,0 +1,197 @@
+Document Name: /part1/suspicious-document01184.txt
+Atom_Type: paragraph
+Cluster_Method: combine_confidences
+Plagiarized Atoms Count: 11/11
+Non-Plagiarized Atoms Count: 0/11
+
+---------------------------------------------------------------------------
+NON-PLAGIARIZED ATOMS
+---------------------------------------------------------------------------
+---------------------------------------------------------------------------
+PLAGIARIZED ATOMS
+---------------------------------------------------------------------------
+This is an atom: 
+﻿from the 1864 Chapman and Hall "Tales of all Countries" edition.
+
+This is an atom: 
+THE HOUSE OF HEINE BROTHERS, IN MUNICH
+
+This is an atom: 
+by Anthony Trollope
+
+This is an atom: 
+The house of Heine Brothers, in Munich, was of good repute at the
+time of which I am about to tell,--a time not long ago; and is so
+still, I trust.  It was of good repute in its own way, seeing that
+no man doubted the word or solvency of Heine Brothers; but they did
+not possess, as bankers, what would in England be considered a large
+or profitable business.  The operations of English bankers are
+bewildering in their magnitude.  Legions of clerks are employed.
+The senior book-keepers, though only salaried servants, are
+themselves great men; while the real partners are inscrutable,
+mysterious, opulent beyond measure, and altogether unknown to their
+customers.  Take any firm at random,--Brown, Jones, and Cox, let us
+say,--the probability is that Jones has been dead these fifty years,
+that Brown is a Cabinet Minister, and that Cox is master of a pack
+of hounds in Leicestershire.  But it was by no means so with the
+house of Heine Brothers, of Munich.  There they were, the two
+elderly men, daily to be seen at their dingy office in the Schrannen
+Platz; and if any business was to be transacted requiring the
+interchange of more than a word or two, it was the younger brother
+with whom the customer was, as a matter of course, brought into
+contact.  There were three clerks in the establishment; an old man,
+namely, who sat with the elder brother and had no personal dealings
+with the public; a young Englishman, of whom we shall anon hear
+more; and a boy who ran messages, put the wood on to the stoves, and
+swept out the bank.  Truly he house of Heine Brothers was of no
+great importance; but nevertheless it was of good repute.
+
+This is an atom: 
+The office, I have said, was in the Schrannen Platz, or old Market-
+place.  Munich, as every one knows, is chiefly to be noted as a new
+town,--so new that many of the streets and most of the palaces look
+as though they had been sent home last night from the builders, and
+had only just been taken out of their bandboxes It is angular,
+methodical, unfinished, and palatial.  But there is an old town;
+and, though the old town be not of surpassing interest, it is as
+dingy, crooked, intricate, and dark as other old towns in Germany.
+Here, in the old Market-place, up one long broad staircase, were
+situated the two rooms in which was held the bank of Heine Brothers.
+
+This is an atom: 
+Of the elder member of the firm we shall have something to say
+before this story be completed.  He was an old bachelor, and was
+possessed of a bachelor's dwelling somewhere out in the suburbs of
+the city.  The junior brother was a married man, with a wife some
+twenty years younger than himself, with two daughters, the elder of
+whom was now one-and-twenty, and one son.  His name was Ernest
+Heine, whereas the senior brother was known as Uncle Hatto.  Ernest
+Heine and his wife inhabited a portion of one of those new palatial
+residences at the further end of the Ludwigs Strasse; but not
+because they thus lived must it be considered that they were
+palatial people.  By no means let it be so thought, as such an idea
+would altogether militate against whatever truth of character
+painting there may be in this tale.  They were not palatial people,
+but the very reverse, living in homely guise, pursuing homely
+duties, and satisfied with homely pleasures.  Up two pairs of
+stairs, however, in that street of palaces, they lived, having there
+a commodious suite of large rooms, furnished, after the manner of
+the Germans, somewhat gaudily as regarded their best salon, and with
+somewhat meagre comfort as regarded their other rooms.  But, whether
+in respect of that which was meagre, or whether in respect of that
+which was gaudy, they were as well off as their neighbours; and
+this, as I take it, is the point of excellence which is desirable.
+
+This is an atom: 
+Ernest Heine was at this time over sixty; his wife was past forty;
+and his eldest daughter, as I have said, was twenty-one years of
+age.  His second child, also a girl, was six years younger; and
+their third child, a boy, had not been born till another similar
+interval had elapsed.  He was named Hatto after his uncle, and the
+two girls had been christened Isa and Agnes.  Such, in number and
+mode of life, was the family of the Heines.
+
+This is an atom: 
+We English folk are apt to imagine that we are nearer akin to
+Germans than to our other continental neighbours.  This may be so in
+blood, but, nevertheless, the difference in manners is so striking,
+that it could hardly be enhanced.  An Englishman moving himself off
+to a city in the middle of Central America will find the customs to
+which he must adapt himself less strange to him there, than he would
+in many a German town.  But in no degree of life is the difference
+more remarkable than among unmarried but marriageable young women.
+It is not my purpose at the present moment to attribute a
+superiority in this matter to either nationality.  Each has its own
+charm, its own excellence, its own Heaven-given grace, whereby men
+are led up to purer thoughts and sweet desires; and each may
+possibly have its own defect.  I will not here describe the
+excellence or defect of either; but will, if it be in my power, say
+a word as to this difference.  The German girl of one-and-twenty,--
+our Isa's age,--is more sedate, more womanly, more meditative than
+her English sister.  The world's work is more in her thoughts, and
+the world's amusements less so.  She probably knows less of those
+things which women learn than the English girl, but that which she
+does know is nearer to her hand for use.  She is not so much
+accustomed to society, but nevertheless she is more mistress of her
+own manner.  She is not taught to think so much of those things
+which flurry and disturb the mind, and therefore she is seldom
+flurried and disturbed.  To both of them, love,--the idea of love,--
+must be the thought of all the most absorbing; for is it not fated
+for them that the joys and sorrows of their future life must depend
+upon it?  But the idea of the German girl is the more realistic, and
+the less romantic.  Poetry and fiction she may have read, though of
+the latter sparingly; but they will not have imbued her with that
+hope for some transcendental paradise of affection which so often
+fills and exalts the hearts of our daughters here at home.  She is
+moderate in her aspirations, requiring less excitement than an
+English girl; and never forgetting the solid necessities of life,--
+as they are so often forgotten here in England.  In associating with
+young men, an English girl will always remember that in each one she
+so meets she may find an admirer whom she may possibly love, or an
+admirer whom she may probably be called on to repel.  She is ever
+conscious of the fact of this position; and a romance is thus
+engendered which, if it may at times be dangerous, is at any rate
+always charming.  But the German girl, in her simplicity, has no
+such consciousness.  As you and I, my reader, might probably become
+dear friends were we to meet and know each other, so may the German
+girl learn to love the fair-haired youth with whom chance has for a
+time associated her; but to her mind there occurs no suggestive
+reason why it should be so,--no probability that the youth may
+regard her in such light, because that chance has come to pass.  She
+can therefore give him her hand without trepidation, and talk with
+him for half an hour, when called on to do so, as calmly as she
+might do with his sister.
+
+This is an atom: 
+Such a one was Isa Heine at the time of which I am writing.  We
+English, in our passion for daily excitement, might call her
+phlegmatic, but we should call her so unjustly.  Life to her was a
+serious matter, of which the daily duties and daily wants were
+sufficient to occupy her thoughts.  She was her mother's companion,
+the instructress of both her brother and her sister, and the charm
+of her father's vacant hours.  With such calls upon her time, and so
+many realities around her, her imagination did not teach her to look
+for joys beyond those of her present life and home.  When love and
+marriage should come to her, as come they probably might, she would
+endeavour to attune herself to a new happiness and a new sphere of
+duties.  In the meantime she was contented to keep her mother's
+accounts, and look after her brother and sister up two pair of
+stairs in the Ludwigs Strasse.  But change would certainly come, we
+may prophesy; for Isa Heine was a beautiful girl, tall and graceful,
+comely to the eye, and fit in every way to be loved and cherished as
+the partner of a man's home.
+
+This is an atom: 
+I have said that an English clerk made a part of that small
+establishment in the dingy banking-office in the Schrannen Platz,
+and I must say a word or two of Herbert Onslow.  In his early career
+he had not been fortunate.  His father, with means sufficiently
+moderate, and with a family more than sufficiently large, had sent
+him to a public school at which he had been very idle, and then to
+one of the universities, at which he had run into debt, and had
+therefore left without a degree.  When this occurred, a family
+council of war had been held among the Onslows, and it was decided
+that Herbert should be sent off to the banking-house of Heines, at
+Munich, there being a cousinship between the families, and some
+existing connections of business.
+
+This is an atom: 
+It was, therefore, so settled; and Herbert, willing enough to see
+the world,--as he considered he should do by going to Munich,--
+started for his German home, with injunctions, very tender from his
+mother, and very solemn from his aggrieved father.  But there was
+nothing bad at the heart about young Onslow, and if the solemn
+father had well considered it, he might perhaps have felt that those
+debts at Cambridge reflected more fault on him than on his son.
+When Herbert arrived at Munich, his cousins, the Heines,--far-away
+cousins though they were,--behaved kindly to him.  They established
+him at first in lodgings, where he was boarded with many others,
+having heard somewhat of his early youth.  But when Madame Heine, at
+the end of twelve months, perceived that he was punctual at the
+bank, and that his allowances, which, though moderate in England,
+were handsome in Munich, carried him on without debt, she opened her
+motherly arms and suggested to his mother and to himself, that he
+should live with them.  In this way he also was domiciled up two
+pairs of stairs in the palatial residence in the Ludwigs Strasse.
+
+***************************************************************************

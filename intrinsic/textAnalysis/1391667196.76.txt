@@ -1,0 +1,726 @@
+Document Name: /part2/suspicious-document03352.txt
+Atom_Type: paragraph
+Cluster_Method: combine_confidences
+Plagiarized Atoms Count: 149/149
+Non-Plagiarized Atoms Count: 0/149
+
+---------------------------------------------------------------------------
+NON-PLAGIARIZED ATOMS
+---------------------------------------------------------------------------
+---------------------------------------------------------------------------
+PLAGIARIZED ATOMS
+---------------------------------------------------------------------------
+This is an atom: 
+﻿"_I cannot tell how the truth may be: I say the tale as 'twas said to me._"
+
+This is an atom: 
+BY THE SAME AUTHOR
+
+This is an atom: 
+IDOLS SEPTIMUS THE USURPER THE WHITE DOVE THE BELOVED VAGABOND THE DEMAGOGUE AND LADY PHAYRE
+THE MORALS OF MARCUS ORDEYNE AT THE GATE OF SAMARIA A STUDY IN SHADOWS SIMON THE JESTER WHERE
+LOVE IS DERELICTS
+
+This is an atom: 
+[Illustration: "I HEARD IT. I FELT IT. It WAS LIKE THE BEATING OF WINGS."]
+
+This is an atom: 
+A CHRISTMAS MYSTERY THE STORY OF THREE WISE MEN
+
+This is an atom: 
+BY WILLIAM J. LOCKE
+
+This is an atom: 
+ILLUSTRATED BY BLENDON CAMPBELL
+
+This is an atom: 
+1910
+
+This is an atom: 
+LIST OF ILLUSTRATIONS
+
+This is an atom: 
+"I heard it. I felt it. It was like the beating of wings." Frontispiece
+
+This is an atom: 
+"I told you the place was uncanny."
+
+This is an atom: 
+Consequently the martyrs were made into a hierarchy of saintly
+protectors of the strayed flock of Christ, and round their graves
+in the catacombs sprang up a harvest of tales, of visions, of
+miracles, and of superstitions.
+
+This is an atom: 
+As the Church sank lower and lower, as the need of a heavenly
+advocate with God was more and more impressed upon the minds of the
+Christians of those days, the idea seems to have arisen that
+neighborhood of burial to the grave of some martyr might be an
+effectual way to secure the felicity of the soul.
+
+This is an atom: 
+Consequently we find in these chapels that the later Christians,
+those perhaps of the fifth and sixth centuries, disregarding the
+original arrangements, and having lost all respect for the Art, and
+all reverence for the memorial pictures which made the walls precious,
+were often accustomed to cut out graves in the walls above and
+around the martyr's tomb, and as near as possible to it.
+
+This is an atom: 
+The instances are numerous in which pictures of the highest interest have been thus ruthlessly
+defaced. No sacredness of subject could resist the force of the superstition; and we remember
+one instance where, in a picture of which the part that remains
+is of peculiar interest, the body of the Good Shepherd has been cut
+through for the grave of a child,--so that only the feet and a part
+of the head of the figure remain.
+
+This is an atom: 
+There is little reason for supposing, as has frequently been done, that the catacombs, even
+in times of persecution, afforded shelter to any large body of the
+faithful.
+
+This is an atom: 
+Lord Doyne said courteously: "I have a reserved carriage. The railway company is always good
+enough to place one at my disposal. It would give me great pleasure if you would share it."
+
+This is an atom: 
+The invitation was accepted, and the three men crossed the busy, crowded platform to take their
+seats in the great express train. A porter, laden with an incredible load of paraphernalia,
+trying to make his way through the press, happened to jostle Sir Angus McCurdie. He rubbed
+his shoulder fretfully.
+
+This is an atom: 
+"Why the whole land should be turned into a bear garden on account of this exploded superstition
+of Christmas is one of the anomalies of modern civilization. Look at this insensate welter
+of fools travelling in wild herds to disgusting places merely because it's Christmas!"
+
+This is an atom: 
+"You seem to be travelling yourself, McCurdie," said Lord Doyne.
+
+This is an atom: 
+"Yes--and why the devil I'm doing it, I've not the faintest notion," replied Sir Angus.
+
+This is an atom: 
+"It's going to be a beast of a journey," he remarked some moments later, as the train carried
+them slowly out of the station. "The whole country is under snow--and as far as I can understand
+we have to change twice and wind up with a twenty-mile motor drive."
+
+This is an atom: 
+He was an iron-faced, beetle-browed, stern man, and this morning he did not seem to be in the
+best of tempers. Finding his companions inclined to be sympathetic, he continued his lamentation.
+
+This is an atom: 
+"And merely because it's Christmas I've had to shut up my laboratory and give my young fools
+a holiday--just when I was in the midst of a most important series of experiments."
+
+This is an atom: 
+Professor Biggleswade, who had heard vaguely of and rather looked down upon such new-fangled
+toys as radium and thorium and helium and argon--for the latest astonishing developments in
+the theory of radio-activity had brought Sir Angus McCurdie his world-wide fame--said somewhat
+ironically:
+
+This is an atom: 
+"If the experiments were so important, why didn't you lock yourself up with your test tubes
+and electric batteries and finish them alone?"
+
+This is an atom: 
+"Man!" said McCurdie, bending across the carriage, and speaking with a curious intensity of
+voice, "d'ye know I'd give a hundred pounds to be able to answer that question?"
+
+This is an atom: 
+"What do you mean?" asked the Professor, startled.
+
+This is an atom: 
+"I should like to know why I'm sitting in this damned train and going to visit a couple of
+addle-headed society people whom I'm scarcely acquainted with, when I might be at home in my
+own good company furthering the progress of science."
+
+This is an atom: 
+"I myself," said the Professor, "am not acquainted with them at all."
+
+This is an atom: 
+It was Sir Angus McCurdie's turn to look surprised.
+
+This is an atom: 
+"Then why are you spending Christmas with them?"
+
+This is an atom: 
+"I reviewed a ridiculous blank-verse tragedy written by Deverill on the Death of Sennacherib.
+Historically it was puerile. I said so in no measured terms. He wrote a letter claiming to
+be a poet and not an archæologist. I replied that the day had passed when poets could with
+impunity commit the abominable crime of distorting history. He retorted with some futile argument,
+and we went on exchanging letters, until his invitation and my acceptance concluded the correspondence."
+
+This is an atom: 
+McCurdie, still bending his black brows on him, asked him why he had not declined. --But it is
+best to let him speak for himself. I found him that night very feverish, yet not wild at all.
+
+This is an atom: 
+"Hullo, Doctor!" said he, "I'm all afire! I've ben thinkin' about my old mother's humstead
+up to Simsbury, and the great big well to the back door; how I used to tilt that 'are sweep up, of
+a hot day, till the bucket went 'way down to the bottom and come up drippin' over,--such
+cold, clear water!
+
+This is an atom: 
+I swear, I'd give all Madagascar for a drink on't!"
+I called the nurse to bring me a small basket of oranges I had sent
+out in the morning, expressly for this patient, and squeezing the
+juice from one of them on a little bit of ice, I held it to his
+lips, and he drank eagerly.
+
+This is an atom: 
+"That's better for you than water, Jackson," said I.
+
+This is an atom: 
+"I dunno but 'tis, Doctor; I dunno but 'tis; but there a'n't nothin' goes to the spot like that
+Simsbury water. You ha'n't never v'yaged to them parts, have ye?"
+"Bless you, yes, man! I was born and brought up in Hartford, just over the mountain, and I've
+been to Simsbury, fishing, many a time."
+"Good Lord! _You_ don't never desert a feller, ef the ship _is_
+a-goin' down!"
+
+This is an atom: 
+fervently ejaculated Eben, looking up as he did sometimes in his
+brief delirium, when he said the Lord's Prayer, and thought his
+mother held his folded hands; but this was no delirious aspiration.
+
+This is an atom: 
+He went on:--
+"You see, Doctor, I've had somethin' in the hold a good spell't I
+wanted to break bulk on, but I didn't know as I ever was goin' to
+see a shipmet agin; and now you've jined convoy jist in time, for
+Davy Jones's a'n't fur off.
+
+This is an atom: 
+Are you calculatin' to go North afore long?"
+"Yes, I mean to go next spring," said I.
+
+This is an atom: 
+Jackson began to fumble with weak and trembling hands about his
+throat, to undo his shirt-collar,--he would not let me help him,--and
+presently, flushed and panting from the effort, he drew out a length
+of delicate Panama chain fastened rudely together by a link of
+copper wire, and suspended on it a little old-fashioned ring of
+reddish gold, twisted of two wires, and holding a very small dark
+garnet.
+
+This is an atom: 
+Jackson looked at it as I have seen many a Catholic look at his reliquary in mortal sickness.
+
+This is an atom: 
+"Well," said he, "I've carried that 'are gimcrack nigh twenty long
+year round my old scrag, and when I'm sunk I want you to take it
+off, Doctor.
+
+This is an atom: 
+Keep it safe till you go to Connecticut, and then some day take a tack over to Simsbury. Don't
+ye go through the Gap, but go 'long out on the turnpike over the mountain, and down t'other
+side to Avon, and so nor'ard till jist arter you git into Simsbury town you see an old red
+house 'longside o' the mountain, with a big ellum-tree afore the door, and a stone well to the side
+on't. Go 'long in and ask for Hetty Buel, and give her that 'are thing, and tell her where
+you got it, and that I ha'n't never forgot to wish her well allus, though I couldn't write to
+her."
+There was Eben Jackson's romance! It piqued my curiosity. The poor fellow was wakeful and
+restless,--I knew he would not sleep, if I left him,--and I encouraged him to go on talking.
+
+This is an atom: 
+"I will, Jackson, I promise you. But wouldn't it be better for you
+to tell me something about where you have been all these long years?
+
+This is an atom: 
+Your friends will like to know."
+
+This is an atom: 
+His eye brightened; he was like all the rest of us, pleased with
+any interest taken in him and his; he turned over on his pillow,
+and I lifted him into a half-sitting position.
+
+This is an atom: 
+"Ay," said McCurdie.
+
+This is an atom: 
+Lord Doyne said nothing, but tugged at his moustache and looked out of the window as the frozen
+meadows and bits of river and willows raced past. A dead silence fell on them. McCurdie broke
+it with another laugh and took a whiskey flask from his hand-bag.
+
+This is an atom: 
+"Have a nip?"
+
+This is an atom: 
+"Thanks, no," said the Professor. "I have to keep to a strict dietary, and I only drink hot
+milk and water--and of that sparingly. I have some in a thermos bottle."
+
+This is an atom: 
+Lord Doyne also declining the whiskey, McCurdie swallowed a dram and declared himself to be
+better. The Professor took from his bag a foreign review in which a German sciolist had dared
+to question his interpretation of a Hittite inscription. Over the man's ineptitude he fell
+asleep and snored loudly.
+
+This is an atom: 
+To escape from his immediate neighbourhood McCurdie went to the other end of the seat and faced
+Lord Doyne, who had resumed his gold glasses and his listless contemplation of obscure actresses.
+McCurdie lit a pipe, Doyne another black cigar. The train thundered on.
+
+This is an atom: 
+Presently they all lunched together in the restaurant car. The windows steamed, but here and
+there through a wiped patch of pane a white world was revealed. The snow was falling. As they
+passed through Westbury, McCurdie looked mechanically for the famous white horse carved into
+the chalk of the down; but it was not visible beneath the thick covering of snow.
+
+This is an atom: 
+"It'll be just like this all the way to Gehenna--Trehenna, I mean," said McCurdie.
+
+This is an atom: 
+Doyne nodded. He had done his life's work amid all extreme fiercenesses of heat and cold, in
+burning droughts, in simoons and in icy wildernesses, and a ray or two more of the pale sun
+or a flake or two more of the gentle snow of England mattered to him but little. But Biggleswade
+rubbed the pane with his table-napkin and gazed apprehensively at the prospect.
+
+This is an atom: 
+"If only this wretched train would stop," said he, "I would go back again."
+
+This is an atom: 
+And he thought how comfortable it would be to sneak home again to his books and thus elude
+not only the Deverills, but the Christmas jollities of his sisters' families, who would think
+him miles away. But the train was timed not to stop till Plymouth, two hundred and thirty-five
+miles from London, and thither was he being relentlessly carried. Then he quarrelled with his
+food, which brought a certain consolation.
+
+This is an atom: 
+*       *       *       *       *
+
+This is an atom: 
+The train did stop, however, before Plymouth--indeed, before Exeter. An accident on the line
+had dislocated the traffic. The express was held up for an hour, and when it was permitted
+to proceed, instead of thundering on, it went cautiously, subject to continual stoppings. It
+arrived at Plymouth two hours late. The travellers learned that they had missed the connection
+on which they had counted and that they could not reach Trehenna till nearly ten o'clock. But no
+large number of persons could have existed within them. The closeness of the air would very
+soon have rendered life insupportable; and supposing any considerable number had collected near
+the outlet, where a supply of fresh air could have reached them, the difficulty of obtaining
+food and of concealing their place of retreat would have been in most instances insurmountable.
+The catacombs were always places for the few, not for the many; for the few who followed a body
+to the grave; for the few who dug the narrow, dark passages in which not many could work; for
+the few who came to supply the needs of some hunted and hidden friend; for the few who in better
+times assembled to join in the service commemorating the last
+supper of their Lord.
+
+This is an atom: 
+It is difficult, as we have said before, to clear away the obscuring fictions of the Roman
+Church from the entrance of the catacombs; but doing this so far
+as with our present knowledge may be done, we find ourselves entering
+upon paths that bring us into near connection and neighborhood with
+the first followers of the founders of our faith at Rome.
+
+This is an atom: 
+The reality which is given to the lives of the Christians of the
+first centuries by acquaintance with the memorials that they have
+left of themselves here quickens our feeling for them into one
+almost of personal sympathy.
+
+This is an atom: 
+"Your obedience is come abroad unto all men," wrote St. Paul to the first Christians of Rome.
+The record of that obedience is in the catacombs.
+
+This is an atom: 
+And in the vast labyrinth of obscure galleries one beholds and enters into the spirit of the
+first followers of the Apostle to the Gentiles.
+
+This is an atom: 
+[To be continued.]
+
+This is an atom: 
+THE NEST.
+
+This is an atom: 
+MAY.
+
+This is an atom: 
+When oaken woods with buds are pink, And new-come birds each morning sing,-- When fickle May
+on Summer's brink Pauses, and knows not which to fling, Whether
+fresh bud and bloom again, Or hoar-frost silvering hill and plain,--
+
+This is an atom: 
+Then from the honeysuckle gray The oriole with experienced quest
+Twitches the fibrous bark away, The cordage of his hammock-nest,--
+Cheering his labor with a note Rich as the orange of his throat.
+
+This is an atom: 
+High o'er the loud and dusty road The soft gray cup in safety swings,
+To brim ere August with its load Of downy breasts and throbbing
+wings, O'er which the friendly elm-tree heaves An emerald roof with
+sculptured eaves.
+
+This is an atom: 
+Below, the noisy World drags by In the old way, because it must,-- The bride with trouble in her
+eye, The mourner following hated dust:
+
+This is an atom: 
+Thy duty, winged flame of Spring, Is but to love and fly and sing.
+
+This is an atom: 
+Oh, happy life, to soar and sway Above the life by mortals led,
+Singing the merry months away, Master, not slave of daily bread,
+And, when the Autumn comes, to flee Wherever sunshine beckons thee!
+
+This is an atom: 
+PALINODE.--DECEMBER.
+
+This is an atom: 
+Like some lorn abbey now, the wood Stands roofless in the bitter air; In ruins on its floor
+is strewed The carven foliage quaint and rare, And homeless winds complain along The columned
+choir once thrilled with song.
+
+This is an atom: 
+And thou, dear nest, whence joy and praise The thankful oriole used to pour, Swing'st empty
+while the north winds chase Their snowy swarms from Labrador:
+But, loyal to the happy past, I love thee still for what thou wast.
+
+This is an atom: 
+Ah, when the Summer graces flee From other nests more dear than thou, And, where June crowded
+once, I see Only bare trunk and disleaved bough, When springs of
+life that gleamed and gushed Run chilled, and slower, and are
+hushed,--
+I'll think, that, like the birds of Spring, Our good goes not without
+repair, But only flies to soar and sing Far off in some diviner
+air, Where we shall find it in the calms Of that fair garden 'neath
+the palm
+
+This is an atom: 
+s
+A tiny electric lamp inside the hood made the darkness
+of the world to right and left and in front of the talc windows still darker. McCurdie and
+Biggleswade fell into a doze. Lord Doyne chewed the end of his cigar. The car sped on through
+an unseen wilderness.
+
+This is an atom: 
+Suddenly there was a horrid jolt and a lurch and a leap and a rebound, and then the car stood
+still, quivering like a ship that has been struck by a heavy sea. The three men were pitched
+and tossed and thrown sprawling over one another onto the bottom of the car. Biggleswade screamed.
+McCurdie cursed. Doyne scrambled from the confusion of rugs and limbs and, tearing open the
+side of the Cape-cart hood, jumped out. The chauffeur had also just leaped from his seat. It
+was pitch dark save for the great shaft of light down the snowy road cast by the acetylene
+lamps. The snow had ceased falling.
+
+This is an atom: 
+"What's gone wrong?"
+
+This is an atom: 
+"It sounds like the axle," said the chauffeur ruefully.
+
+This is an atom: 
+He unshipped a lamp and examined the car, which had wedged itself against a great drift of
+snow on the off side. Meanwhile McCurdie and Biggleswade had alighted.
+
+This is an atom: 
+"Yes, it's the axle," said the chauffeur.
+
+This is an atom: 
+"Then we're done," remarked Doyne.
+
+This is an atom: 
+"I'm afraid so, my lord."
+
+This is an atom: 
+"What's the matter? Can't we get on?" asked Biggleswade in his querulous voice.
+
+This is an atom: 
+McCurdie laughed. "How can we get on with a broken axle? The thing's as useless as a man with
+a broken back. Gad, I was right. I said it was going to be an infernal journey."
+
+This is an atom: 
+The little Professor wrung his hands. "But what's to be done?" he cried.
+
+This is an atom: 
+"Tramp it," said Lord Doyne, lighting a fresh cigar.
+
+This is an atom: 
+"It's ten miles," said the chauffeur.
+
+This is an atom: 
+"It would be the death of me," the Professor wailed.
+
+This is an atom: 
+"I utterly refuse to walk ten miles through a Polar waste with a gouty foot," McCurdie declared
+wrathfully.
+
+This is an atom: 
+The chauffeur offered a solution of the difficulty. He would set out alone for Foullis Castle--five
+miles farther on was an inn where he could obtain a horse and trap--and would return for the
+three gentlemen with another car. In the meanwhile they could take shelter in a little house
+which they had just passed, some half mile up the road. This was agreed to. The chauffeur went
+on cheerily enough with a lamp, and the three travellers with another lamp started off in the
+opposite direction. As far as they could see they were in a long, desolate valley, a sort of
+No Man's Land, deathly silent. The eastern sky had cleared somewhat, and they faced a loose
+rack through which one pale star was dimly visible.
+
+This is an atom: 
+*       *       *       *       *
+
+This is an atom: 
+"I'm a man of science," said McCurdie as they trudged through the snow, "and I dismiss the
+supernatural as contrary to reason; but I have Highland blood in my veins that plays me exasperating
+tricks. My reason tells me that this place is only a commonplace moor, yet it seems like a
+Valley of Bones haunted by malignant spirits who have lured us here to our destruction. There's
+something guiding us now. It's just uncanny."
+
+This is an atom: 
+"Why on earth did we ever come?" croaked Biggleswade.
+
+This is an atom: 
+Lord Doyne answered: "The Koran says, 'Nothing can befall us but what God hath destined for
+us.' So why worry?"
+
+This is an atom: 
+.
+
+This is an atom: 
+* * * * *
+EBEN JACKSON.
+
+This is an atom: 
+Fear no more the heat o' the sun, Nor the furious winter's rages; Thou thine earthly task hast
+done.
+
+This is an atom: 
+The large tropical moon rose in full majesty over the Gulf of Mexico, that beneath it rolled a
+weltering surge of silver, which broke upon the level sand of the beach with a low, sullen
+roar, prophetic of storms to come. To-night a south wind was heavily blowing over Gulf and
+prairie, laden with salt odors of weed and grass, now and then crossed by a strain of such
+perfume as only tropic breezes know,--a breath of heavy, passionate
+sweetness from orange-groves and rose gardens, mixed with the
+miasmatic sighs of rank forests, and mile on mile of tangled
+cane-brake, where jewel-tinted snakes glitter and emit their own
+sickly-sweet odor, and the deep blue bells of luxuriant vines wave
+from their dusky censers steams of poisonous incense.
+
+This is an atom: 
+I endured the influence of all this as long as I dared, and then
+turned my pony's head from the beach, and, loitering through the
+city's hot streets, touched him into a gallop as the prairie opened
+before us, and followed the preternatural, colossal shadow of horse
+and man east by the moon across the dry dull grass and bitter yellow
+chamomile growth of the sand, till I stopped at the office door of
+the Hospital, when, consigning my horse to a servant, I commenced
+my nightly round of the wards.
+
+This is an atom: 
+There were but few patients just now, for the fever had not yet
+made its appearance, and until within a week the unwontedly clear
+and cool atmosphere had done the work of the physician.
+
+This is an atom: 
+Most of the sick were doing well enough without me; some few needed
+and received attention; and these disposed of, I betook myself to
+the last bed in one of the long wards, quite apart from the others,
+which was occupied by a sailor, a man originally from New England,
+whose hard life and continual exposure to all climates and weathers
+had at length resulted in slow tubercular consumption.
+
+This is an atom: 
+It was one of the rare cases of this disease not supervening upon an original strumous diathesis,
+and, had it been properly cared for in the beginning, might have
+been cured.
+
+This is an atom: 
+Now there was no hope; but the case being a peculiar and interesting one, I kept a faithful
+record of its symptoms and progress for publication. Besides, I liked the man; rugged and
+hardy by nature, it was curious to see what strange effects a long,
+wasting, and painful disease produced upon him.
+
+This is an atom: 
+Biggleswade
+put on the table a bundle which he had picked up outside. It contained some poor provisions--a
+loaf, a piece of fat bacon, and a paper of tea. As far as they could guess (and as they learned
+later they guessed rightly) the man was the master of the house, who, coming home blind drunk
+from some distant inn, had fallen at his own threshold and got frozen to death. As they could
+not unclasp his fingers from the broken bottleneck they had to let him clutch it as a dead
+warrior clutches the hilt of his broken sword.
+
+This is an atom: 
+Then suddenly the whole place was rent with another and yet another long, soul-piercing moan
+of anguish.
+
+This is an atom: 
+"There's a second room," said Doyne, pointing to a door. "The sound comes from there." He opened
+the door, peeped in, and then, returning for the lamp, disappeared, leaving McCurdie and Biggleswade
+in the pitch darkness, with the dead man on the floor.
+
+This is an atom: 
+"For heaven's sake, give me a drop of whiskey," said the Professor, "or I shall faint."
+
+This is an atom: 
+Presently the door opened and Lord Doyne appeared in the shaft of light. He beckoned to his
+companions.
+
+This is an atom: 
+"It is a woman in childbirth," he said in his even, tired voice. "We must aid her. She appears
+unconscious. Does either of you know anything about such things?"
+
+This is an atom: 
+They shook their heads, and the three looked at each other in dismay. Masters of knowledge
+that had won them world-wide fame and honour, they stood helpless, abashed before this, the
+commonest phenomenon of nature.
+
+This is an atom: 
+"My wife had no child," said McCurdie.
+
+This is an atom: 
+"I've avoided women all my life," said Biggleswade.
+
+This is an atom: 
+"And I've been too busy to think of them. God forgive me," said Doyne.
+
+This is an atom: 
+*       *       *       *       *
+
+This is an atom: 
+The history of the next two hours was one that none of the three men ever cared to touch upon.
+They did things blindly, instinctively, as men do when they come face to face with the elemental.
+A fire was made, they knew not how, water drawn they knew not whence, and a kettle boiled.
+Doyne accustomed to command, directed. The others obeyed. At his suggestion they hastened to
+the wreck of the car and came staggering back beneath rugs and travelling bags which could
+supply clean linen and needful things, for amid the poverty of the house they could find nothing
+fit for human touch or use. It is impossible to ascertain the date at which these chapels
+were first made; probably some time about the middle of the second century they became common.
+In many of the catacombs they are very numerous, and it is in them that the chief ornaments and
+decorations, and the paintings which give to the catacombs an
+especial value and importance in the history of Art, and which are
+among the most interesting illustrations of the state of religious
+feeling and belief in the early centuries, are found.
+
+This is an atom: 
+Some of the chapels are known to be of comparatively late date, of the fourth and perhaps of the
+fifth century. In several even of earlier construction is found, in addition to the altar,
+a niche cut out in the rock, or a ledge projecting from it, which seems to have been intended
+to serve the place of the credence table, for holding the articles
+used in the service of the altar, and at a later period for receiving
+the elements before they were handed to the priest for consecration.
+
+This is an atom: 
+The earliest services in the catacombs were undoubtedly those connected with the communion of
+the Lord's Supper. The mystery of the mass and the puzzles of transubstantiation had not yet
+been introduced among the believers; but all who had received baptism as followers of Christ, all
+save those who had fallen away into open and manifest sin, were admitted to partake of the Lord's
+Supper. Possibly upon some occasions these chapels may have been filled with the sounds of exhortation
+and lamentation.
+In the legends of the Roman Church we read of large numbers of Christians being buried alive,
+in time of persecution, in these underground chambers where they had assembled for worship and
+for counsel. But we are not aware of any proof of the truth of these stories having been
+discovered in recent times. This, and many other questionable points in the history and in
+the uses of the catacombs, may be solved by the investigations which are now proceeding; and
+it is fortunate for the interests, not only of truth, but of
+religion, that so learned and so honest-minded a man as the Cavaliere
+de Rossi should have the direction of these explorations.
+
+This is an atom: 
+Few of the chapels that are to be seen now in the catacombs are in their original condition.
+
+This is an atom: 
+This
+is the fourth."
+
+This is an atom: 
+Biggleswade plucked nervously at the fringe of whisker under his jaws and said faintly, "It's
+the fourth time up to now. I thought it was fancy."
+
+This is an atom: 
+"I have felt it, too," said Doyne. "It is the Angel of Death." And he pointed to the room where
+the dead man and woman lay.
+
+This is an atom: 
+"For God's sake let us get away from this," cried Biggleswade.
+
+This is an atom: 
+"And leave the child to die, like the others?" said Doyne.
+
+This is an atom: 
+"We must see it through," said McCurdie.
+
+This is an atom: 
+*       *       *       *       *
+
+This is an atom: 
+A silence fell upon them as they sat round in the blaze with the new-born babe wrapped in its
+odd swaddling clothes asleep on the pile of fur coats, and it lasted until Sir Angus McCurdie
+looked at his watch.
+
+This is an atom: 
+"Good Lord," said he, "it's twelve o'clock."
+
+This is an atom: 
+"Christmas morning," said Biggleswade.
+
+This is an atom: 
+"A strange Christmas," mused Doyne.
+
+This is an atom: 
+McCurdie put up his hand. "There it is again! The beating of wings." And they listened like
+men spellbound. McCurdie kept his hand uplifted, and gazed over their heads at the wall, and
+his gaze was that of a man in a trance, and he spoke:
+
+This is an atom: 
+"Unto us a child is born, unto us a son is given--"
+
+This is an atom: 
+Doyne sprang from his chair, which fell behind him with a crash.
+
+This is an atom: 
+"Man--what the devil are you saying?"
+
+This is an atom: 
+Then McCurdie rose and met Biggleswade's eyes staring at him through the great round spectacles,
+and Biggleswade turned and met the eyes of Doyne. A pulsation like the beating of wings stirred
+the air.
+
+This is an atom: 
+The three wise men shivered with a queer exaltation. Something strange, mystical, dynamic had
+happened. It was as if scales had fallen from their eyes and they saw with a new vision. But
+as the disease gained ground, its characteristic languor unstrung his force; the hard and sinewy
+limbs became attenuated and relaxed; his breath labored; a hectic fever burnt in his veins like light
+flame every afternoon, and subsided into chilly languor toward
+morning; profuse night-sweats increased the weakness; and as he
+grew feebler, offering of course less resistance to the febrile
+symptoms, they were exacerbated, till at times a slight delirium
+showed itself; and so, without haste or delay, he "made for port,"
+as he said.
+
+This is an atom: 
+"It's true," he murmured. "Unto us a child is born, unto us a son is given. Unto the three of us."
+
+This is an atom: 
+Biggleswade took off his great round spectacles and wiped them.
+
+This is an atom: 
+"Gaspar, Melchior, Balthazar. But where are the gold, frankincense and myrrh?"
+
+This is an atom: 
+"In our hearts, man," said McCurdie.
+
+This is an atom: 
+The babe cried and stretched its tiny limbs.
+
+This is an atom: 
+[Illustration: INSTINCTIVELY THEY ALL KNELT DOWN.]
+
+This is an atom: 
+Instinctively they all knelt down together to discover, if possible, and administer ignorantly
+to, its wants. The scene had the appearance of an adoration.
+
+This is an atom: 
+His name was Eben Jackson, and the homely appellation was no way
+belied by his aspect.
+
+This is an atom: 
+He never could have been handsome, and now fifteen years of rough-and-tumble life had left
+their stains and scars on his weather-beaten visage, whose only notable features were the
+deep-set eyes retreating under shaggy brows, that looked one through and through with the
+keen glance of honest instinct; while a light tattooing of red and blue on either cheek-bone
+added an element of the grotesque to his homeliness.
+And, when their watch was ended, they wrapped up the babe with precious care, and carried him
+with them, an inalienable joy and possession, into the great world.
+
+This is an atom: 
+[Illustration: CARRIED WITH THEM AN INALIENABLE JOY AND POSSESSION INTO THE GREAT WORLD.]
+
+***************************************************************************

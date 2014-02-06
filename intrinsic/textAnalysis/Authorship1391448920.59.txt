@@ -1,0 +1,343 @@
+Document name: /part2/suspicious-document03267.txt
+Author 1: 52/78
+Author 2: 26/78
+Cluster Type: hmm
+Atom_type: sentence
+
+------------------------------------------------------------
+NON-PLAGIARIZED ATOMS: 
+
+------------------------------------------------------------
+This is an atom: 
+﻿250.
+
+This is an atom: 
+251.
+
+This is an atom: 
+252.
+
+This is an atom: 
+"I have hidden the Thunderer's hammer eight miles below the earth.
+
+This is an atom: 
+No man shall bring
+it back, unless he bring me Freyja to wife.
+
+This is an atom: 
+"
+
+9.
+
+This is an atom: 
+Then Loki flew, the feather-coat rustled, until he came out of
+Jötunheim and into Asgard.
+
+This is an atom: 
+[The monarch] is to determine the price, in unison with the wishes of both purchaser and
+seller; first adding to the cost of the article the expense of bringing it to the market.
+
+This is an atom: 
+[344]
+
+254.
+
+This is an atom: 
+255.
+
+This is an atom: 
+There may be a re-sale of goods sold, if the original buyer will not receive them.
+
+This is an atom: 
+If
+loss arise from misconduct of the buyer, he shall bear it.
+
+This is an atom: 
+256.
+
+This is an atom: 
+257.
+
+This is an atom: 
+258.
+
+This is an atom: 
+259.
+
+This is an atom: 
+[346]
+
+260.
+
+This is an atom: 
+[347]
+
+261.
+
+This is an atom: 
+The monarch, for fixing the prices, should receive a duty of a twentieth.
+
+This is an atom: 
+[350]
+
+262.
+
+This is an atom: 
+[351]
+
+263.
+
+This is an atom: 
+They are of high birth, and descended from the best Alpen Stock.
+
+This is an atom: 
+No one should pass the season in Switzerland without seeing these
+mountains.
+
+This is an atom: 
+They will repay a perusal.
+
+This is an atom: 
+A SCENE IN THE TROPICS.
+
+This is an atom: 
+This gorgeous painting brings before you all the luxuriance of
+tropical vegetation.
+
+This is an atom: 
+Magnolias and palm trees wave their heads proudly, while bananas, oranges, and bread fruit abound
+in rank profusion.
+
+This is an atom: 
+This picturesque object is an alligator basking in the sun.
+
+This is an atom: 
+Our advice to inexperienced
+travellers is: "Let him bask!
+
+This is an atom: 
+"
+These cotton fields, rice plantations, and the colored member of
+Congress addressing his constituents on the right, all stamp this
+scene as unmistakably Southern.
+
+This is an atom: 
+We will cancel the stamp and move on.
+
+This is an atom: 
+272.
+
+This is an atom: 
+Thrym killed he first, the lord of the Giants, and all the race of the Giants he struck.
+
+This is an atom: 
+32.
+
+This is an atom: 
+She got a blow instead of shillings, and a stroke of the hammer for
+abundance of rings.House-breakers,[356] they who steal horses or elephants, murderers by open violence--such
+shall be impaled.
+
+This is an atom: 
+274.
+
+This is an atom: 
+He who purloins [apparel, &c.
+
+This is an atom: 
+275.
+
+This is an atom: 
+In its determination, place,
+time, age, and ability, are to be considered.
+
+This is an atom: 
+[360]
+
+276.
+
+This is an atom: 
+One who knowingly supplies a thief or a murderer with food, shelter, fire, water, counsel,
+implements, or money, incurs the highest fine.
+
+This is an atom: 
+[361]
+
+277.
+
+This is an atom: 
+For wounding with weapons, and for causing abortion, the highest fine is ordained; the
+highest or the lowest for killing a man or a woman.
+
+This is an atom: 
+278.
+
+This is an atom: 
+279.
+
+This is an atom: 
+[363]
+
+280.
+
+This is an atom: 
+The great necklace Brising, stolen by Loki and won back in fight by Heimdal (according to the
+tenth-century Skalds Thjodulf and Ulf Uggason), is Freyja's property.
+
+This is an atom: 
+[365]
+
+285.
+
+This is an atom: 
+The following lines, on the chaining of Loki, suggest his complicity.
+
+This is an atom: 
+Vali was his avenger and slew his brother's slayer.
+
+This is an atom: 
+"For adultery with a woman of equal cast, a man incurs the highest fine; with a woman of
+lower cast, the middle fine; with a woman of higher cast, [the penalty is] death,[367] and
+the woman is to have her ears, &c.
+
+This is an atom: 
+[368] cut off.
+
+
+
+------------------------------------------------------------
+
+PLAGIARIZED ATOMS: 
+
+------------------------------------------------------------
+This is an atom: 
+For traders who combine, by [arbitrarily fixing] an improper price, to impede [the traffic
+in] any commodity, or to make [an injurious] sale of it,[341] the highest fine is ordained.
+
+This is an atom: 
+The price in [transactions of] sale and purchase, daily, is regulated by the monarch;[342]
+the difference[343] is declared to be the traders' profit.
+
+This is an atom: 
+He who, having received the price of any commodity, fails to deliver it to the buyer,
+shall be compelled to deliver the article, together with damages [for the detention]; and should
+the buyer be from foreign parts, then, the foreign profit [shall be added].
+
+This is an atom: 
+Whatever damage may befal goods by [act of] the monarch, or by accident, shall be the
+loss of the seller,[345] where he has failed to make delivery on demand.
+
+This is an atom: 
+If a person re-sell that which has been sold to another, or sell, as sound, a damaged
+article; [in either case] the fine shall be double the value [of the article sold].
+
+This is an atom: 
+A trader who makes a purchase in ignorance of the rise and fall of prices, must not recede
+from his bargain; if he do, he shall be fined a sixth [of the price].
+
+This is an atom: 
+Traders who carry on business jointly, for profit, shall share the profits and losses,
+either in proportion to the capital [brought in by each], or according to the contract between
+them.
+
+This is an atom: 
+[A joint trader] who occasions loss [to the partnership] by [engaging in] something which
+his partner has either prohibited or not sanctioned, or by any negligence, shall make it good:
+if [on the other hand by his personal exertion] he preserve anything [of the partnership property]
+from loss, he shall have the tenth of it.
+
+This is an atom: 
+[348]
+
+If an article of which the sale is prohibited, or one fitting for the monarch[349] [to possess],
+be sold [without the royal license], it shall be forfeited to the Crown.
+
+This is an atom: 
+Whoever declares false weight, or avoids the place where custom is levied, shall be made
+to pay eight-fold; so he who fraudulently buys or sells.
+
+This is an atom: 
+While the prices may not be extravagant enough for Americans, still, those who have scaled these
+noble elevations may well account the prospect as one of the most
+striking features of a foreign climb.
+
+This is an atom: 
+Here the cane brake stretches away as far as the eye can reach (and to
+those who are not near-sighted still farther), recalling those
+beautiful lines of the poet:-- 
+"Break, break, break!
+
+This is an atom: 
+"
+
+The broad river in the foreground, mountains melting away on the horizon (that's because they're
+volcanic), and the sun broiling and sizzling high up in the heavens, are deliciously blended
+together.
+
+This is an atom: 
+Our artist, full of perspiration (he can blend better than any man we ever ployed), has seized upon
+a moment when all Nature seems to say: ("Steady there, what makes that canvas wriggle so?
+
+This is an atom: 
+")
+
+Notice the warmth of coloring; and see to what a high degree of art the general effect is
+carried-about 90° Fahrenheit in the shade.
+
+This is an atom: 
+In our next we shall find that our artist has given himself more
+latitude, say about eighty degrees North.When a murder or theft has occurred, and [the criminal] is not traced beyond the village,
+blame falls on the village governor; if [he be traced] to the public road, blame falls on the
+governor of the district; if traced out of the district, the officer charged with pursuit of
+criminals shall be to blame.
+
+This is an atom: 
+He slew the Giants' aged sister, who had asked him for a bridal
+gift.
+
+This is an atom: 
+[357]] shall have a hand cut off; cut-purses,[358] shall
+have the thumb and fore-finger cut off; for a second offence, a hand and a foot shall be cut off.
+
+This is an atom: 
+For theft of goods of trifling, of medium, and of the highest value,[359] the penalty
+to be inflicted is proportioned to the value of what is stolen.
+
+This is an atom: 
+A woman incorrigibly wicked, one who has slain a man, one who has destroyed dams,[362]
+shall, unless she be in a state of pregnancy, be thrown into [deep] water with a [heavy] stone
+tied to her.
+
+This is an atom: 
+A woman who is a poisoner, or an incendiary, one who has slain her husband, her _guru_,
+or her child, shall be put to death by bulls, her ears, hands, nose, and lips being cut off.
+
+This is an atom: 
+Idunn, the wife of Bragi, and a purely Norse creation, seems to be a double of Freyja;
+she, too, according to Snorri, is carried away by the giants and rescued by Loki.
+
+This is an atom: 
+The golden apples
+which she is to keep till Ragnarök remind us of those which Frey
+offered to Gerd; and the gift of eternal youth, of which they are
+the symbols, would be appropriate enough to Freyja as an agricultural
+deity.
+
+This is an atom: 
+On this ground, she has
+been identified with the heroine of _Svipdag and Menglad_, a poem
+undoubtedly old, though it has only come down in paper MSS.
+
+This is an atom: 
+A man is to be apprehended for adultery, if [found] with another man's wife in mutual
+grasping of hair or with recent love-marks, or when both admit [their fault],
+
+284. or [if the man be found] toying with her girdle, with her breasts, her upper garment,
+her thigh, or her hair, or conversing with her at an unfitting place or hour, or on the same
+spot with her.
+
+This is an atom: 
+(5) _Hyndluljod_ has one reference: "There were eleven Aesir by
+number when Baldr went down into the howe.
+
+************************************************************

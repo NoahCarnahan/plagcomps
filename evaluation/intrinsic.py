@@ -156,7 +156,7 @@ def evaluate(features, cluster_type, k, atom_type, docs, corpus='intrinsic', sav
             feature_vecs = weighted_vecs
 
         likelihood = cluster(cluster_type, k, feature_vecs, **clusterargs)
-        doc_plag_assignments[doc] = likelihood
+        doc_plag_assignments[d] = likelihood
         plag_likelihoods.append(likelihood)
 
     _output_to_file(doc_plag_assignments, atom_type, cluster_type)
@@ -175,7 +175,7 @@ def evaluate(features, cluster_type, k, atom_type, docs, corpus='intrinsic', sav
 def _output_to_file(assignment_dict, atom_type, cluster_type):
 
     for document in assignment_dict.keys():
-	output_file = open("plagcomps/intrinsic/TextAnalysis/" + str(time.time()) + ".txt")
+	output_file = open("plagcomps/intrinsic/textAnalysis/Authorship" + str(time.time()) + ".txt", "w+")
         plag_atoms = []
         non_plag_atoms = []
         for i in xrange(len(assignment_dict[document])):

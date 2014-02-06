@@ -1,0 +1,1537 @@
+Document Name: /part2/suspicious-document03855.txt
+Atom_Type: paragraph
+Cluster_Method: combine_confidences
+Plagiarized Atoms Count: 124/124
+Non-Plagiarized Atoms Count: 0/124
+
+---------------------------------------------------------------------------
+NON-PLAGIARIZED ATOMS
+---------------------------------------------------------------------------
+---------------------------------------------------------------------------
+PLAGIARIZED ATOMS
+---------------------------------------------------------------------------
+This is an atom: 
+﻿It is hardly wonderful that such a method should incur the charge of sentimentalism. "It would
+be so nice to believe it, therefore it must be true," sounds like a shameless abandonment of
+reasonableness. The fact that a belief is "consoling," quite independently of its truth or
+falsehood, creates a bias towards its acceptance. That it is pleasant to believe oneself very
+clever and competent will incline one to that belief until something important depends, not
+on our thinking ourselves so, but on our being so. Before an examination, the wish to succeed
+will make me sceptical about my prospects, much as I should like to think them the brightest;
+afterwards, when self-deception can only console and can do no harm, I shall be credulous of
+any flattery that is offered me. In one case, my interest depends upon the facts, and therefore
+the wish to believe makes me critical and even sceptical; in the other, on my belief concerning
+the facts, and the wish to believe, makes me uncritical and credulous.
+
+This is an atom: 
+It was seemingly a bold and hazardous venture to justify this same credulity, and to affirm
+that an argument could be drawn from the wish to believe in just those cases where its influence
+would seem most suspicious; yet this was practically what the new apologetic amounted to. It
+was an argument from the utility of beliefs to their truth; from the fact that certain subjective
+convictions produced good results, to the correspondence of such convictions with objective
+reality. The advantages to the individual and to society of a firm belief in God the righteous
+Judge, in the sanction of eternal reward and penalty, in the eventual adjustment of all inequalities,
+in the reversible character of sin through repentance, in the divine authority of conscience,
+of Christianity, of the Catholic Church, are to a great extent independent of the truth of
+those beliefs. No amount of hypnotic suggestion will enable a man to subsist upon cinders,
+under the belief that they are a very nutritious diet; for the effect depends upon their actual
+nature, and not wholly upon his belief concerning their nature; but the salutary fear of Hell
+or hope of Heaven, depends not on the existence of either state, but on our belief in its existence.
+The fact that the denial of these and many similar beliefs would bring chaos into our spiritual
+and moral life, that it would extinguish hopes which often alone make life bearable, that it
+would issue for society at large in such a grey, meaningless, uninspired existence as Mr. F.
+W. Myers prognosticates in his admirable essay on "The Disillusionment of France," [2] all
+this and much more makes it our interest, if not our duty, to cling to such convictions at
+all costs. "If these things are not true, it might be said, then life is chaos; and if life
+be chaos, what does truth matter? Why may not such useful illusions and self-deceptions be
+fostered? If we are dreaming, let our dreams be the pleasantest possible!"
+
+This is an atom: 
+Nor can it be urged that though some part of our interest thus depends on the beliefs, rather
+than on their being true, yet the consequences of self-deception are so momentous, as to create
+a spirit of criticism to balance or over-balance the said bias of credulity. For though the
+consequences of denial are disastrous if the beliefs are true, yet if they are false, the ill-consequences
+of belief are almost insignificant. It is sometimes said too hastily that if religion be an
+illusion, then religious people lose both this life and the next; and it is assumed that an
+unrestrained devotion to pleasure would secure a happiness which faith requires us to forego.
+But unless we take a gross, and really unthinkable view of the homogeneity of all happiness,
+and reduce its differences to degree and quantity, the shallowness of the preceding objection
+will be apparent. It is only through restraint that the higher kinds of temporal happiness
+are reached, and as confusions are cleared away in process of discussion, it becomes patent
+that such restraint finds its motive directly or indirectly in religion. When the religious
+influence with which irreligious society is saturated, has exhausted itself, and idealism is
+no more, the unrestrained egoistic pursuit of enjoyment must tend to its steady diminution
+in quantity, and its depreciation in kind. The sorrow and pain entailed by fidelity to the
+Christian ideal is, on the whole, immeasurably less in the vast majority of cases than that
+attendant on the struggles of unqualified selfishness, while the capacities for the higher
+happiness are steadily raised and largely satisfied by hope and even by some degree of present
+fruition. Even vice would be in many ways sauceless and insipid in the absence of faith. Who
+does not remember the old cynic's testimony (in the "New Republic") to the piquancy lent by
+Christianity to many a sin, otherwise pointless. If the moralist distinguishes between actions
+that are evil because they are forbidden, and those that are forbidden because they are evil,
+the libertine has a counter-distinction between those that are forbidden because they are pleasant,
+and those that are pleasant because they are forbidden. St. Paul himself is explicit enough
+as to this effect of the law.
+
+This is an atom: 
+Look at it how we will, even were religion unfounded our life would on the whole gain in fulness
+far more than it would lose, by our believing in religion. Hence some of our more thoughtful
+agnostics, however unable themselves to find support in what they deem an illusion, are quite
+willing to acknowledge the part religion has played in the past in the evolution of rational
+life, and to look upon it as a necessary factor in the earlier stages of that process whose
+place is to be taken hereafter by some as yet undefined substitute. If indeed Nature thus works
+by illusions and justifies the lying means by the benevolent end, it is hard to believe in
+a moral government of the universe, or to hope that an "absolute morality"--righteousness for
+its own sake--will be the outcome of such disreputable methods. But till the illusion of "absolute
+morality" is strong enough to take care of itself, and has passed from the professors to the
+populace, it is plainly for the interest and happiness of individuals and of society to hold
+fast to religion.
+
+This is an atom: 
+Undoubtedly then the advantages resulting from a belief in religion, whether valid or illusory,
+are such as to incline not only the higher and more unselfish minds, but even those which are
+more prudential and self-regarding, to wish to hold that belief--to be unwilling to hear arguments
+against it. But among the former class will be found many intellectually conscientious and
+even scrupulous persons, whom the recognition of this inevitable bias will drive to an extreme
+of caution. Not so much because the facts believed-in are of such intense moment, but rather
+because the belief itself, whether true or false, is so consoling and helpful, that there seems
+to them a danger of self-deception just proportioned to their wish to believe.
+
+This is an atom: 
+It were then no small rest and relief to such, could it be shown that what they deem a reason
+for doubt, is really a reason for belief; that the welcome which all that is best in them gives
+to a belief, affords some sort of philosophical justification thereof.
+
+This is an atom: 
+This particular argument had undoubtedly a more favourable hearing in the age of Chateaubriand,
+when unbelief stopped short at the threshold of what was called "Natural Religion," and the
+apologist's task was confined to the establishment of revelation. "It is now pretty generally
+admitted," says the author of _Contemporary Evolution_, "with regard to Christianity and theism
+that the arguments really telling against the first, are in their logical consequences fatal
+also to the second, and that a _Deus Unus, Remunerator_ once admitted, an antecedent probability
+for a revelation must be conceded."
+
+This is an atom: 
+Given an intelligent and benevolent author of the universe, it is not perhaps very difficult
+to show that any further religious belief approximates to the truth in the measure that it
+satisfies the more highly developed rational needs of mankind. It is not seriously denied any
+longer that religion is an instinct with man, however it may be lacking in some individuals
+or dormant in others. We have savages at both ends of the scale of civilization, but man is
+none the less a political creature; nor does the existence of idiots and deaf mutes and criminals
+at all affect the fact that he is a reasoning and speaking and ethical animal. As soon as he
+wakes to consciousness, he feels that he is part of a whole, one of a multitude; and that as
+he is related to his fellow-parts--equals or inferiors--so also is he related to the Whole
+which is above him and greater than all put together. Religion, taken subjectively, in its
+loosest sense, is a man's mental and moral attitude in regard to real or imaginary superhuman
+beings--a definition which includes pantheism, polytheism, monotheism; moral, non-moral, and
+immoral religions; which prescinds from materialist or spiritualist conceptions of the universe.
+And by a religion in the objective sense, so far as true or false can be predicated of it,
+we mean a body of beliefs intended to regulate and correct man's subjective religion. It is
+to such systems and their parts that we think the above test of "adaptability" maybe applied
+as we have stated it.
+
+This is an atom: 
+We must of course assume that our distinction of higher from lower states of rational development
+is valid; that we can really attach some absolute meaning to the terms "progress" and "decline;"
+that there is some vaguely conceived standard of human excellence which such terms refer to.
+Else we are flung into the very whirlpool of scepticism. Measured back from infinity it may
+be infinitesimal, but measured forward from zero, the difference of mental and, partly, of
+moral culture between ourselves and the aborigines of Australia is considerable, and is really
+to our advantage. Now if a given religion or religious belief suggests itself more readily,
+or when suggested commends itself more cordially in the measure that men's spiritual needs
+are more highly developed; if, furthermore, it tends to make men still better and to raise
+their desires still higher so as to prepare the way for a yet fuller conception of religious
+truth, it may be said to be adapted to human needs; and it is from such adaptability that we
+argue its approach to the truth. We say "its approach," for all our ideas of the Whole, of
+the superhuman, of those beings with which religion deals, are necessarily analogous and imperfect.
+What is admitted by all with regard to the strict mysteries of the Christian faith is in a
+great measure to be extended to the central or fundamental ideas of all religion. They are
+at best woefully inadequate, and if the unity between the parts of an idea be organic and not
+merely mechanical, they must be regarded as containing false mingled with true.[3] Still some
+analogies are less imperfect, less mingled with fallacy than others, and there is room for
+indefinite approximation towards an unattainable exactitude. For example, assuming theism,
+as we do in the argument under consideration, it is evident that man conceives the superhuman
+object of his fear and worship more truly as personal than as impersonal; as spiritual than
+as embodied; as one or few than as many; as infinite than as finite; as creator than as maker;
+as moral than as non-moral or immoral; as both transcendent and immanent than as either alone.
+If then it appears that as man's intelligence and morality develop in due proportion, he advances
+from a material polytheistic immoral conception of the All, to a spiritual and moral monotheism,
+it may be claimed that the latter is a less inadequate conception. And similarly with regard
+to other dependent religious beliefs which usually radiate from the central notion. It will
+be seen that we do not argue from the self-determined wishes or desires of any individual or
+class of individuals to their possible fulfilment,--to the existence in Nature of some supply
+answering to that demand; we do not argue that because many men or all men desire to fly, flying
+must for that reason alone be possible. We speak of the needs of man's nature, not of this
+individual's nature; of needs consequent on what man is made, and not on what he has made himself;
+of those wants and exigencies which if unsatisfied or insatiable must leave his nature not
+merely negatively imperfect and finite, but positively defective and as inexplicable as a lock
+without a key--not necessarily, of needs felt at all times by every man, but of those which
+manifest themselves naturally and regularly at certain stages of moral and social development;
+just as the bodily appetites assert themselves under certain conditions not always given.
+
+This is an atom: 
+Now there is one form in which this argument from adaptability is somewhat too hastily applied
+and which it is well to guard against. Were we to find a key accommodated to the wards of a
+most complicated lock, we should be justified in concluding, with a certainty proportioned
+to the complexity of the lock, that both originated with one and the same mind; and so, it
+is urged, if a religion, say Christianity, answers to the needs of human nature, we may conclude
+that it is from the Author of human nature with a certainty increasing as it is seen to answer
+to the higher and more complex developments of the soul.
+
+This is an atom: 
+Now if, like the key in our illustration, the religion in question were something given _in
+rerum natura_ independent of human origination in any form, this argument would be practically
+irresistible. That besides those beliefs which lead man on to an ever fuller understanding
+of his better self, and stimulate and direct his moral progress, Christianity imposes others
+more principal, of which man as yet has no exigency, and which hint at some future order of
+existence that new faculties will disclose--all this, in no wise makes the argument inapplicable.
+The whole system of beliefs is accepted for the sake, and on the credit, of that part which
+so admirably unlocks the soul to her own gaze. "Now are we the sons of God, but it doth not
+yet appear what we shall be;" if besides satisfying our present ideal of religion, Christianity
+hints at and prepares us for such a transition as that from merely organic to sensitive life,
+or from this, to rational life, it rather adds to than detracts from the force of the argument.
+
+This is an atom: 
+Yet all this supposes that Christianity is something found by man outside himself, with whose
+origination he had nothing to do; but, if this be established, its supernatural origin, and
+therefore, supposing theism, its truth, is already proved, and can only receive confirmation
+from the argument of adaptability. If the Book of Mormon really came down from Heaven, my conviction
+that polygamy is not for the best, would seem a feeble objection against its claims. That the
+Judaeo-Christian religion is supernatural and is from without, not only with respect to the
+individual but to the race; that it is an external, God-given rule, awakening, explaining,
+developing man's natural religious instinct, correcting his own clumsy interpretations thereof,
+is just what gives it its claim to pre-eminence over all, even the most highly conceived, man-made
+interpretations of the same instinct.
+
+This is an atom: 
+Yet though claiming to be a God-made interpretation, it is confessedly through human agency,
+through the human mind and lips of the prophets and of Christ that this revelation has come
+to us. Moreover, it involves, though it transcends, all those religious beliefs of which human
+nature seems exigent and which are, absolutely speaking, attainable by what might be called
+the "natural inspiration" of religious genius. Viewing the whole revelation in itself, its
+adaptability is evident only in respect to that part which might have originated with those
+minds through which it was delivered to us. If the beliefs proposed seem to have anticipated
+moral and intellectual needs not felt in the prophet's own age or society, this might be paralleled
+from the inspiration of genius in other departments, and could not of itself be regarded as
+establishing the _ab extra_ character of the revelation.
+
+This is an atom: 
+Plainly, then, so far as a religion claims to be from outside, its adaptability to our religious
+and moral instincts may confirm but cannot establish its Divine origin, which, given theism,
+is equivalent to its truth. For to show that it is from outside, is to show that it is from God.
+
+This is an atom: 
+It is only therefore with regard to man-made interpretations of our spiritual instincts, to
+the natural inspirations of religious genius, to the intuitions and even the reasoned inferences
+of the conscientious and clean-hearted, that the argument from adaptability can have any independent
+value. It is now no longer as one who argues from a comparison of lock and key to their common
+authorship; but rather we have a self-conscious lock, pining to be opened, and from a more
+or less imperfect self-knowledge dreaming of some sort of key and arguing that in the measure
+that its dream is based on true self-knowledge there must be a reality corresponding to it--a
+valid argument enough, supposing the locksmith to act on the usual lines and not to be indulging
+in a freak.
+
+This is an atom: 
+Such, in substance, is the argument from adaptability founded on the assumption of theism and
+applied to the criticism or establishment of further religious beliefs. It is indeed somewhat
+stronger when we remember that the self-consciousness, with which we fictitiously endowed the
+lock, plays chief part in the very design and structure of man; that his self-knowledge, his
+moral and religious instincts, his desire and power of interpreting them, are all from the
+Author of his nature.
+
+This is an atom: 
+Of this difference Tennyson takes note in applying the argument from adaptability to the immortality
+of the soul:
+
+This is an atom: 
+Thou wilt not leave us in the dust;
+  Thou madest man, he knows not why;
+  He thinks he was not made to die,
+  And Thou hast made him, Thou art just.
+
+This is an atom: 
+But so far as the argument presupposes theism it cannot be made to support or even confirm
+theism. If, then, we want to make the argument absolutely universal with regard to religious
+beliefs--theism included and not presupposed--and so to make it available for apologetic purposes
+in regard to those whose doubt is more deep-seated, we must inquire whether any basis can be
+found for it in non-theistic philosophy; whether, prescinding from Divine governance and from
+an intelligent purpose running through nature, the adaptability of a belief to the higher needs
+of mankind can be considered in any way to prove its truth. So far we have only shown that
+such a conclusion results from a clearer insight into the theistic conception. Can we show
+that it springs, co-ordinately with theism, from some conception prior to both?
+
+This is an atom: 
+II.
+
+This is an atom: 
+If what is usually understood by "theism" be once granted as a foundation, it is easy to raise
+thereon a superstructure of further religious beliefs by means of the argument drawn from their
+adaptability to the higher needs of mankind. However individuals may fail, yet it must be allowed
+that on the whole the human mind progresses, or tends to progress, from a less to a more perfect
+self-knowledge, to a fuller understanding of its own origin, its end and destiny, and of the
+kind of life by which that end is to be reached,--that is, if once we admit that man is a self-interpreting
+creature, and the work of an intelligent Creator. So far however as the Christian creed exceeds
+man's natural exigencies and aspirations, it plainly cannot be subjected to this criterion;
+and so far as it includes (while it transcends) the highest form of "natural religion," the
+argument from adaptability holds of it only if we suppose Christianity to be a natural product
+of the human mind, thus destroying its claim to be from without and from above. But if from
+other reasons we know Christianity to be a God-made and not a man-made religion, then, though
+its divinity and truth is already proved, yet it is in some sort confirmed and verified by
+its adaptability to the demands of our higher nature. In a word, this particular argument holds
+strictly only for man's own guesses at religious truth,--for "natural" religions; but for Christianity,
+only so far as we deny it to be supernatural as to its content and mode of origination.
+
+This is an atom: 
+But so far as this argument presupposes theism, it cannot be made to support or even confirm
+theism; if then we wish to make it available for apologetic purposes in regard to those whose
+doubt is more deep-seated, we must now inquire whether, prescinding from divine governance
+and from finality in nature, the adaptability of a belief (say, in God, or in future retribution)
+to the needs of mankind, can be considered in any way as a proof of its truth; whether that
+argument can find any deeper mental basis than theism; whether it can be rested on anything
+which in the order of our thought is prior to theism so as to support or at least to confirm
+theism itself.
+
+This is an atom: 
+Our present endeavour is to show that though this argument rests more easily and securely on
+theism, yet it need not rest upon it; but springs, co-ordinately with theism, from _any_ conception
+of the world that saves us from mental and moral chaos. Hence it confirms theism and is confirmed
+by theism; but each is strictly independent of the other and rests on a conception prior to
+both; they diverge from one and the same root and then intertwine and support one another.
+
+This is an atom: 
+By prescinding from theism I do not mean to exclude or deny it; for it is, as I have just said,
+bound up with the same conception from which the "argument from adaptability" is drawn. I only
+mean that I do not need to build upon it as on a prior conception; that I can put it aside.
+Indeed, of these two off-shoots, theism is less near to the common root, as will appear later.
+
+This is an atom: 
+Our limited mind cannot take in at once all the consequences or presuppositions of a thought;
+for this would be to know everything; but as with our outward eye we take in the circle of
+the horizon bit by bit, so with our mind when we turn to one aspect of an idea we lose sight
+of another. Hence in studying some complex organism or mechanism I may be clear about the bearing
+of any part on its immediately neighbouring parts, and yet may have no present notion of the
+whole; or may prescind entirely from the question of its origin or its purpose. Thus our thoughts
+are always unfinished and frayed round the edges, and we do not know how much they involve
+and drag along with them. We can think of the mechanism, and the organism, and the design,
+without thinking of the mechanist, or the organizer, or the designer; and so in all cases where
+two ideas are connected without being actually correlative. What is commonly called a philosophical
+proof consists simply in showing us the implications of some part of the general conception
+of things that we already hold. It is to force us either to loosen our hold on that part or
+else to admit all that it entails by way of consequences or presuppositions; and so to bring
+our thoughts into consistency one way or the other. But until something sets our mind in motion
+it can rest very comfortably in partial conceptions, without following them out to their results.
+
+This is an atom: 
+Now as we can understand a mechanism to the extent of seeing the bearing of part upon part,
+and even of all the parts upon the work it does, without going on to think about the designer
+or his design; and without explicitly considering it as designed; so we can and do think of
+the world and recognize order in it, and see the bearing of part upon part without going back
+to God or forward to God's purposes. Indeed, so far as we use the argument from design to prove
+the existence of God, it means that we first apprehend this order and regular sequence of events,
+and then, as a second and distinct step, put it down to design. For although God is the prior
+cause of design and of all creation, yet design and creation is the prior cause of our knowing
+God, The conception of a rational and moral world leads us to the conception of a rational
+and moral origin, i.e., to theism. Further, it is plain that this same order and regularity
+is recognized by many who refuse to see design in it, and who invent other hypotheses to account
+for it; and of one of these hypotheses we shall presently speak at length.
+
+This is an atom: 
+Now, if I take any single organism and study it carefully, simply as a biologist or physiologist,
+I shall recognize in it certain regularities of structure and function and development, upon
+which I can found various arguments and predictions. I can argue from its general characteristics,
+to the nature of its environment and habits and modes of life; or from its earlier stages,
+to what it will be when more fully developed; and these arguments will be quite unaffected
+by any theory I may hold as to the origin of these changes, and as to the causes of these adaptations.
+The order and regularity on which my predictions are based is an admitted fact. Theism or materialism
+are only theories by which that fact is explained. Now, for mind in the abstract, theism is
+really as much a presupposition of that fact, as the predicted truth is a consequence of it.
+Both are logically connected with it, and yet neither is derived from it through the other.
+
+This is an atom: 
+If, however, we cannot thus observe and calculate on certain regularities and tendencies in
+the world as we know it, then, not only is the appearance of design and finality an illusion,
+not only is that particular argument for theism cut away, but with it goes all scientific certainty,
+all that stands between us and the most hopeless mental and moral scepticism.
+
+This is an atom: 
+It is not our immediate concern to prove the value of the "argument from adaptability," but
+simply to show that it is logically (though not really) unaffected by the question of theism
+and finality and design. As long as we admit those same effects and consequences of which design
+is one explanation, but of which others are _prima facie_ conceivable; as long as we hold that
+the world works on the whole as though it were designed; that the present anticipates and prepares
+for the future; that the future and absent can be predicted from the present, so long do we
+hold all upon which the "argument of adaptability" is strictly based. And indeed, as has been
+said, if once it be admitted that the general progressive tendency on the part of living things
+is towards a greater harmony and correspondence with surrounding reality, then that argument
+is a more immediate inference from the existence of an orderly world, than is theism.
+
+This is an atom: 
+Though both are strictly independent deductions from the same principle (i.e., from an orderly
+world), yet theism and the argument from adaptability when once deduced, confirm one another.
+For it is not hard to show that theism is better adapted to man's higher needs, than atheism
+or polytheism or pantheism; while if theism be once granted, then, as we said in the last section,
+the argument from adaptability is much more easily established.
+
+This is an atom: 
+There have been at various times several philosophies or attempted explanations of the world,
+which have either denied or prescinded from theism and finality. These two conceptions may
+be considered as one; for by finality we mean the intelligent direction of means towards a
+preconceived end; and therefore to admit a pervading finality, is to imply a theistic origin
+and government of the universe.
+
+This is an atom: 
+Perhaps, the best and most finished attempt to explain the world independently of finality
+is the philosophy of Evolution, so widely popularized in our own day; and since it is in the
+region of organic existence, that finalism looks for its chief basis, it is especially by Darwinistic
+Evolution that its force is supposed to be destroyed.
+
+This is an atom: 
+Any form of "monism" gets rid of finality more easily than does any form of dualism; and again,
+any form of materialism, more easily than idealism; and therefore as monistic and materialistic
+(at least in some sense of the term), popular Evolutionism is the best plea for non-finalist
+philosophy. We propose therefore briefly to examine this philosophy, so far as it claims to
+be such, and to see whether it in any way touches the validity of the argument from adaptability.
+
+This is an atom: 
+Evolution may be considered both as an empirical fact and as an aetiological theory or philosophy.
+Considered as a fact, it is the statement of observed processes, and belongs to positive science
+like the observed courses of the planets, or any other observed regularities and uniformities.
+Science professes to have found everywhere as far as its experience has extended--in astronomy,
+geology, physiology, biology, psychology, ethics, sociology--a uniform process of change from
+the simple to the complex, from the indefinite and unstable to the stable and definite; and
+with this statement, so far as it can be verified, the positivist should rest content, seeking
+no theory, and drawing no generalization. But, the mind cannot hold together such collected
+facts without some binding theory, nor even observe a single fact without some preconception
+to give meaning to its suggested outlines: for what we really get from our senses bears but
+a slight ratio to what we fill in with our mind. Hence, answering to this supposed, but far
+from proven, universality of Evolution as a fact,[4] we have a certain philosophy of Evolution
+which takes us out of the sphere of facts into that of hypotheses and generalizations, and
+tries to give meaning and unity to the positive information that physical science has collected
+and classified; to finish, as it were, the suggested curves; to fill up the lacunae of observation;
+to extend to the whole world what is known of the part; and perhaps to erect into a cause what
+is only an orderly statement of facts. Undoubtedly it is this last fallacy that makes it more
+easy for evolutionists to dispense with or ignore finality. Law in its first sense is an expression
+of effectual human will. Call Evolution a law and the popular mind will soon vaguely conceive
+it as a rule or uniformity resulting from some kind of unconscious will-power at the back of
+everything; and this Will-Power stops the gap created in our thought by the exclusion of theism
+and finality. This confusion is furthered still more by not distinguishing between the cause
+of a fact and the cause of our knowledge of the fact. If I act in willing conformity with the
+civil law, I also act in obedience to it, in some way coerced by its authority and its sanctions.
+The law is really a cause of my action; because it represents the fixed will and effectual
+power of the ruler. But when this conception and name is transferred by analogy to physical
+uniformities of action, an event which conforms to the observed law or regularity of sequence,
+is not really caused by the law unless we suppose that law to be representative of something
+equivalent to a fixed will from which it originates. Yet we say loosely, such an event happens
+_in consequence of_ the law of attraction; meaning only, _in conformity with_ the law, so as
+to verify the law, to follow from it logically. Thus again the law comes to be mistaken for
+an effectual power of some kind, whereas it is merely a sort of regularity that might result
+either from an intelligent will or from something equivalent. But in thus adroitly slipping-in
+the conception of a governing force or tendency, or even in openly asserting it, with Schopenhauer
+or Hartmann, and in explaining the graduated resemblances of species by the origin of one from
+the other, and in extending this mode of Evolution in all directions from the known to the
+unknown so as to make it pervade the universe, we at once cease to be faithful positivists
+and, becoming philosophers, must submit to philosophic criticism, since these problems cannot
+be settled merely by an appeal to facts. Thus when Professor Mivart speaks of Evolution as
+"the continuous progress of the material universe by the unfolding of latent potentialities
+in harmony with a preordained end," the latent potentialities, the preordained end, the procession
+of one species from another, the extension of this law to every difference of time and place--all
+are matters of hypothesis or intuition; but by no means of exterior observation.
+
+This is an atom: 
+The most that observation gives us is the very imperfect suggestion of the track that such
+a movement would have left behind it, not unlike the scraps that boys litter along the road
+in a paper-chase. Similarly, if in the case of organic Evolution we deny all latent potentialities
+and preordained ends and throw the whole burden on accidental variations and natural selection;
+if we regard the whole process as no more intelligent or designed than that by which water
+seeks and finds its own level; yet as in the case of water we must perforce introduce "a gravitating
+tendency," so in the case of living organisms a "persisting" or "struggling tendency," as an
+hypothesis to give unity to our facts or to account for their uniformity. But these tendencies
+are as little matter of observation as the aforesaid latent potentialities or preordained ends.
+In fine, Evolution, whatever form it take, gets rid of theism and finality only by slipping
+into their place some tendency or indefinable power which it considers adequate to account
+for the facts to be explained.
+
+This is an atom: 
+Let us now see if there be room in this philosophy for our argument from adaptability, and
+whether it will allow us to infer that because belief in theism and in future retribution are
+beliefs postulated by our higher moral aspirations, therefore they answer to reality more or
+less approximately; whether, in short, under certain conditions (specified in our last essay)
+the wish to believe may be a valid reason for believing.
+
+This is an atom: 
+Now Evolution as a philosophy or explanatory hypothesis owes its popularity to its apparent
+simplicity. Wrapped in its wordy envelope, the notion as formulated by Spencer needs no subtilty
+of apprehension, but only a dictionary. Nor is the Darwinian theory of Natural Selection more
+difficult.
+
+This is an atom: 
+Other things equal, the simpler hypothesis is to be preferred to the less simple where no proof
+can be had of either. But none the less, the simpler may be false and the other true. Cheapness
+is no proof of goodness. We are naturally impatient of troublesome and complex theories; but
+what we gain in the simplicity of an hypothesis, we commonly lose in the difficulty of getting
+the facts to square with it. It is a simple theory that circular motion is the most perfect,
+and that the planets being the most perfect bodies must move with the most perfect motion;
+but so many epicycles must be introduced to explain apparent exceptions that the modern astronomical
+hypothesis, however more complex in statement, is on the whole welcomed as a simplification.
+So we are disposed to think it is with regard to the popular form of Evolutionism. Its simplicity
+in statement is more than cancelled by its difficulty in application; and at last we are driven
+to conceive it in a form which at once deprives it of its title to popularity. So far as it
+is simple it is fallacious and proves incoherent on closer inspection, when we try to translate
+its terms into clear and distinct ideas; but when we get it into intelligible form it is no
+simpler than the theistic hypothesis which it wants to displace, except inasmuch as it prescinds
+from the question of origin and last end. But in this, its only intelligible form, it leaves
+the argument from adaptability intact, and even requires theism as its rational complement.
+
+This is an atom: 
+This is what we must now endeavour to show. We cannot illustrate our contention better than
+from the popular simplification of Ethics introduced by Bentham. Taking pleasure as a simple
+and ultimate notion he affirms that our conduct is always determined by a balance of pleasure
+on one side or the other. The problem of practical ethics is to construct a calculus of pleasures,
+a sort of ready-reckoner whereby men may be able to invest in the most profitable course of
+action. "When we have a hedonistic calculus with its senior wranglers," says Mr. Bain, "we
+shall begin to know whether society admits of being properly reconstructed." [5] It is assumed
+that pleasures differ only in quantity, i.e., in intensity, extent, and duration, just as warmth
+does, which may be of high or low temperature; diffused over a greater or less extent of body;
+and that, for a shorter or a longer time. On this assumption pleasure is every bit as mathematically
+measurable as is warmth, the whole difficulty being due to its subjective and therefore inaccessible
+nature. Simple in statement, this theory proves in application infinitely complex, and indeed
+on closer inspection breaks up into a mere verbal fallacy--as Dr. Martineau, amongst others,
+has shown in his _Types of Ethical Theory_. For "pleasure," though one simple word, has an
+endless variety of meanings, not indeed wholly disconnected, but bound together only by a certain
+kind of analogy. The eye, the ear, the palate, the mind, the heart, have each their proper
+pleasure; which is nothing else than the resultant of their perfect operation in response to
+the stimulus of some all-satisfying object--a fact which may be expressed differently by different
+philosophies, but with substantial identity of meaning. But not till we find some common measure
+for sound and colour and flavour and thought and affection, will it be possible to compare
+in any hedonistic scales the pleasures they produce. Yet colour is to the eye what music is
+to the ear; and therefore the one word pleasure is used not unreasonably of both.
+
+This is an atom: 
+Quite similar seems to us the fallacy to which Evolution owes its seeming simplicity and its
+popularity. The word "existence" or "life" (which is the existence of organic beings, about
+which we are chiefly concerned), is taken as having one homogeneous meaning, like "heat" or
+"warmth;" the only difference being quantitative--a difference of intensity, of breadth, of
+duration; not a difference of kind such as would destroy all common measure. Life is something
+which we predicate of the most diversely organized beings, and therefore would seem to be something
+the same in all, which they secure in a diversity of ways.
+
+This is an atom: 
+Thus Darwin defines the general good or welfare which should be the aim of our conduct as "the
+rearing of the greatest number of individuals in full health and vigour with all their faculties
+perfect;" upon which Mr. Sidgwick remarks[6] with justice: "Such a reduction of the notion
+of 'well-being' to 'being' (actual and potential) would be a most important contribution from
+the doctrine of Evolution to ethical science. But it at least conflicts in a very startling
+manner with those ordinary notions of progress and development" in which "it is always implied
+that certain forms of life are qualitatively superior to others, independently of the number
+of individuals, present or future, in which each form is realized.... And if we confine ourselves
+to human beings, to whom alone the practical side of the doctrine applies, is it not too paradoxical
+to assert that 'rising in the scale of existence' means no more than 'developing the capacity
+to exist'? A greater degree of fertility would thus become an excellence outweighing the finest
+moral and intellectual endowments; and some semi-barbarous races must be held to have attained
+the end of human existence more than some of the pioneers and patterns of civilization." Nor
+is it only in the region of ethics but in every region that this false simplification is fertile
+in paradoxes; and yet if it be disowned, the charm to which Evolution owes its popularity is gone.
+
+This is an atom: 
+It would be indeed a short cut to knowledge if we might believe life to be, as this theory
+imagines it, a simple, self-diffusing force with an irrepressible tendency to spread itself
+in all directions, like fire in a prairie. True we should not have altogether got rid of innate
+tendencies, but we should have reduced them to one, namely, to the struggling, or persisting,
+or self-asserting tendency; a simplification like that offered by the matter-and-force theory
+of Buchner.
+
+This is an atom: 
+This flame of life once kindled (we are told) endeavours to subdue all things to itself, and
+all that we find in the way of variety of organic structure and function has been shaped and
+determined by its struggle--much as a river channels a way for its waters in virtue of its
+own onward force, checked and determined by the nature of the obstacles it has to encounter.
+Every organism is related to life as the candlestick to the candle; it is simply a device for
+supporting and spreading as much life as is possible with the surrounding conditions. Often,
+when conditions are favourable, the simplest contrivance will be more effectual, more life-producing
+than the most complex in less favourable conditions. Where food is not present the animal that
+can move about in search of it will survive, and the stationary animal perish; and likewise
+those that can escape their foes will live down those rooted in one spot. And if to motion
+we add perception and intelligence, and associative instincts and the rest, we increase the
+appliances for dealing with difficulties; and therewith the means of survival when such difficulties
+exist. Still, in the hypothesis we are dealing with, all these contrivances--movement, consciousness,
+intelligence, will, society--are distinct from life and ministerial to it; they are instruments
+by which it is preserved, increased, and multiplied--like those contrivances by which heat
+or electricity is generated, sustained, and transmitted; with this difference, that no one
+has designed these life-machines, but they are simply the result of life's innate tendency
+to struggle and spread. A great deal of the form and movement of the inorganic world is due
+simply to the stress of gravitation and not to design, and so we are asked to believe that
+the human and every other organism has been shaped and quickened by the action of as blind
+a power; that it is in some sense a casual result.
+
+This is an atom: 
+Now if seeing and hearing and thinking do not constitute life, but are only chance discoveries
+helpful to life; if we do not live in order to eat and to see and to think, but only think,
+see, and eat in order to live, we ask ourselves, what then is this life which is none of these
+things and to which they are all subordinate? And when once we begin subtracting those functions
+which minister to life and which life has selected for its own service, we find there is absolutely
+nothing left to serve. Taking the very earliest forms, if we subtract movement, nutrition,
+growth, generation, we find there is nothing over called "life" distinct from these. This is
+the first and fundamental incoherence of the theory; life has simply no meaning apart from
+those functions which we speak of as ministering to life; unless we mean by life the mere cohering
+together of the bodily organism--an end more effectually secured without any such complex apparatus,
+by a stone or by an elementary atom.
+
+This is an atom: 
+If existence in that sense, be the force or principle whose persistence and self-assertion
+is the cause of all evolution, it is impossible to conceive how primordial atoms, which are
+assumed to be indestructible and constant in quantity, should trouble themselves to struggle
+at all; since the amount of that kind of existence can neither be lessened nor increased. And
+as motion is also assumed to be a constant quantity, it is plain that what struggles to be
+and to multiply, must be some special collocation and grouping of atoms with some correspondingly
+particular determination of motion, called "life;" but what "life" is, apart from the means
+it is supposed to have selected for itself, does not appear.
+
+This is an atom: 
+Another difficulty attendant on this false simplification is the complete subversion of that
+scale of dignity or excellence upon which we range the various kinds of living creatures, putting
+ourselves at the top--not merely in obedience to a pardonable vanity, but, as has hitherto
+been supposed, in obedience to a trustworthy intuition which, without attempting to apply a
+common measure to things incommensurable, judges life to be higher than death; consciousness
+than unconsciousness; mind than mere sensation; and in general, what includes and surpasses,
+than what is included and surpassed. We see that the organic world presupposes the ministry
+of the inorganic; and the animal world, that of the plant world; and that the human world depends
+on the ministry of all three; and our whole conception of this world as "cosmos" is simply
+the filling in of this hierarchic framework. Yet this old structure falls to pieces under the
+new simplification. If "life" (as vaguely conceived) be the first beginning and the last end
+(or rather result) of the whole process of evolution, if it be the _summum bonum_, then the
+"highest" creature means, the most life-producing.
+
+This is an atom: 
+Now if we put "money" instead of "life," and begin to classify men by this standard, we see
+how it inverts the old-world ideas of social hierarchy. True it is, the man of letters or of
+high artistic gifts can produce a certain amount of money, but has little chance against the
+inventor of a new soap or a patent pill. Honesty at once becomes the worst policy, and a thousand
+other maxims have to be reformed. Yet this is a trifling _boule-versement_ compared with that
+which would have to be introduced into our scientific classification were "life-productivity"
+(in the vague) taken as the criterion of excellence.
+
+This is an atom: 
+For we cannot any longer determine the rank of an animal by its organic complexity, since,
+_ceteris paribus_, this is a defect rather than otherwise.
+
+This is an atom: 
+To secure life more simply is better than to secure the same amount by means of complex apparatus.
+Of course when the favouring conditions are altered, then any apparatus that makes life still
+possible is an advantage; but till that crisis arises it is only an encumbrance. When life
+can be secured only at the cost of greater labour and exertion and cunning, it is well to be
+capable of these things, but surely those animals are more to be envied that have no need of
+these things. It is only on the hypothesis of an unkindly environment that complexity of organization
+is an excellence.
+
+This is an atom: 
+Furthermore, although these accidental variations allow certain creatures to survive in crises
+of difficulty, yet they also make the conditions of their survival more complicated and hard
+to secure. All that differentiates man from an amoeba has enabled him to get safe through certain
+straits where the lower forms of life were left behind to perish; but it has also made it impossible
+for him to live in the simpler conditions he has escaped from; like a parvenu whose luxurious
+habits have gradually created a number of new necessities for him, which make a return to his
+original poverty and hardships quite impracticable. If the development of lungs has allowed
+animals to come out of the water into the air, it has also prevented their going back again.
+Furthermore, a considerable amount of vital energy is consumed in the production, support,
+and repair of all this supplementary, life-preserving apparatus; just as, much of the national
+wealth for whose protection they exist is absorbed by a standing army and other military preparations.
+And in fact of two countries otherwise equal in wealth, that is surely the better off which
+has no need of being thus armed up to the teeth. Thus man's superior organization may be compared
+to the overcoat and umbrella with which one sets out on a threatening morning; very desirable
+should it rain, but a great nuisance should it clear up.
+
+This is an atom: 
+It seems, then, that the highest organism is that which produces or secures the greatest quantity
+of life in the simplest manner, and at the cost of the least complexity of structure and function;
+while the lowest is that which yields the least quantity at the greatest cost; and between
+these two extremes organisms will be ranked by the ratio of their complexity to their life-productivity--life
+being measured mathematically (as something homogeneous) by its vigour, by its duration, and
+by the amount of matter animated, whether in the individual or in its progeny. It is obvious
+how, at this rate, our zoological hierarchy is turned topsy-turvy; and how difficult it will
+be to show that man is a better life-machine than, say, a mud-turtle with its centuries of
+vital existence.
+
+This is an atom: 
+It would be a monstrous allegation to say that any evolutionist would defend these conclusions
+in all their crudity; but is only by thus pushing implied principles to their results, that
+their incoherence can be made plain. Once more, if this simple uniform thing called life be
+the sole cause, determining organic Evolution and selecting accidental variations, just in
+so far as they favour its own maintenance and multiplication, then every organ, appliance,
+and faculty by which man differs from the simplest bioplast, is merely a life-preserving contrivance.
+To speak human-wise, Nature in that case has but one end--animal life; and chooses every means
+solely with a view to that end. She does not care about pain or pleasure, or consciousness,
+or knowledge, or truth, or morality, or society, or science, or religion, for their own sakes;
+she cares for life only, and for these so far as--like horns and teeth and claws--they are
+conducive to life. Evolution therefore is governed by a blind non-moral principle--as blind
+and ruthless as gravitation. This being so, the mind is for the sake of the body, and not conversely.
+Evolution is not making for truth and righteousness as for greater or even as for co-ordinate
+ends; but simply for life, to which sometimes truth and righteousness, but just as often illusion
+and selfishness, are means. There is nothing therefore in this process of Nature to make us
+trust that our mind really makes for truth as such, or that it has any essential tendency to
+greater correspondence with reality, beyond what subserves to fuller animal existence. The
+fact that a certain belief makes animal life possible is no proof of its truth, but only of
+its expediency. The extent to which many pleasures depend on illusion is proverbial; and pleasure
+is almost the note of vital vigour, according to this philosophy.
+
+This is an atom: 
+Plainly, our argument from the adaptability of a belief to man's higher moral needs, vanishes
+into thin air as soon as the key to the order of nature is thus sought in a blind non-moral
+tendency, and when that which is lowest is put at the top, and everything above it made to
+minister to it.
+
+This is an atom: 
+But then it is not only this particular argument that perishes, but all possibility of arguing
+at all, all faith in our mental faculties, except so far as they minister to the finding of
+food and the propagation of life. Thus the very attempt to prove such a system of Evolution
+is a contradiction, since it cuts away all basis of proof. On this I need not dwell longer,
+since it has been worked out so fully and clearly by others. We get rid of the argument from
+adaptability, by a conception of the order of Nature that reduces us to mental and moral chaos.
+
+This is an atom: 
+In its semblance of simplicity this form of Evolution-philosophy shows itself kin to those
+other old-world attempts to dispense with a governing mind, and to educe the existing cosmos
+from the blind strife of primordial atoms. It has indeed a more plausible basis, seeing how
+many things, too quickly attributed to design in a theological age, can really be explained
+by the struggle for existence. But in trying to make an occasional and partial cause universal
+and ultimate, it has undertaken the impossible task of bringing the greater out of the less;
+which really means bringing their difference out of nothing--and this is creation with the
+First Cause left out; that is, spontaneous creation. It is from first to last an "aggregation"
+theory, and has to face the insupportable burdens which such a theory brings with it. Haunted
+by a false analogy drawn from the political organism whose members are intelligent and self-directive,
+and who put themselves under an intelligent government to be marshalled and directed to one
+common end--haunted by this anthropomorphic conception, it tries to explain how independent
+and indestructible units, void of all intelligence, come together into polities with no assignable
+government; and how these groups or polities, which are nothing separate from the sum of their
+components, are aggregated to one another in like manner; until at last we come to the highest
+organism, which again is only the sum of its ultimate atoms, and its activity the sum of their
+activities--the whole distinction between highest and lowest organism being such as exists
+between a society of two and a highly complex civilized state. And all this political life
+is the spontaneous work of unintelligent units; that is to say, we have results exceeding the
+highest ever attained by human intelligence, long before intelligence or sentience has yet
+been evolved.
+
+This is an atom: 
+Nobody will care to support "Pangenesis" as a theory of generation. To suppose that there is
+a mysterious power which breaks a little fraction off each of the bioplasts of which we are
+asserted to be the sum; that having collected these fractions it arranges them all in the right
+order within the compass of a single germ, and from that germ reproduces the parent organism,
+is an hypothesis compared with which the creation of the world in its entirety six thousand
+years ago, including the fossils and remains of aeonian civilizations, is lucid and intelligible.
+This is no hyperbole. For if once we allow creation at all, the creation of the world at any
+stage of Evolution is just as conceivable as the creation of primordial atoms. If any living
+thing were now created (e.g., a grain of corn or a full ear) it would bear in itself the apparent
+evidence of having _grown_ to its present state _ab ovo_; or the _ovum_ itself would seem to
+ground a similar false inference of having come from a parent. Strange as such an idea may
+be, it is easy and pellucid compared with the hypothesis of Pangenesis--still more when we
+remember that this complex germ, which is a lion or a horse in small--itself the elaboration
+of aeons of Evolution--can replicate itself with ease and rapidity, reproducing in adjacent
+pabulum a "cosmos" which differs in degree, not in kind, from that described in the story of
+the Six Days. Yet the more we look into it, the more clear is it that Pangenesis (and not Polarigenesis
+or Perigenesis) is the inevitable outcome of the aggregation-theory of life.
+
+This is an atom: 
+And therefore to return to our former assertion, whatever we seem to gain in simplicity of
+statement by this form of the Evolution theory, we pay for dearly when we come to its application;
+nay more, as soon as we attempt to translate the words into clear and distinct ideas, we are
+left with nothing coherent that the mind can get hold of; and it is only at this price that
+we can cut away the basis of the "argument from adaptability," and with it the basis of all
+reason and morality. We must therefore go on to examine if there be any alternative form of
+the same philosophy more bearable.
+
+This is an atom: 
+I have forborne all criticism of the supposed _facts_ on which Evolution is based; as others
+have dealt frequently with their various weaknesses. Nor do I think it necessary to deal with
+the extravagant subordinate hypotheses by aid of which facts are forced under the main hypothesis,
+e.g., those which explain how the horse grew out of the hipparion. The crudest finalists have
+been everywhere out-stripped by Evolutionists in dextrous application of the argument _a posse
+ad esse_.
+
+This is an atom: 
+III.
+
+This is an atom: 
+Assuming still that the facts collected and arranged by experimental science in favour of the
+hypothesis are such as to demand some kind of Evolution-philosophy; assuming that the very
+imperfect serial classification of living things according to their degree of organic definiteness,
+coherence, and heterogeneity not merely represents a variety which has always coexisted since
+life was possible on this earth, but rather traces out or hints at the genetic process by which
+this variety has been produced, let us see if there be any other governing principle directing
+the process, more intelligible than the persistence of that mere organic life which cannot
+even be thought of as distinct from those appliances and functions which it is supposed to
+have evolved for its own service by "natural selection."
+
+This is an atom: 
+Let us admit, what is really evident, that life is nothing distinct from the sum of those functions
+which minister to the preservation of life; and that therefore it is not the same thing in
+a man and in a mud-turtle. Man's superior faculties are not merely a more complicated machinery
+for producing an identical effect which the mud-turtle produces more simply and abundantly,
+but rather by their very play _constitute_ an entirely different and higher kind of life. When
+Hume, in his _Treatise on Human Nature_, says: "Reason is and ought to be the slave of the
+passions and can never pretend to any other office than to serve and obey them," he implies
+that the exercise of reason is no constituent factor of human life, but something outside it,
+subordinate to it, whereas that life itself consists in passion, or pleasurable sensation,
+of which man, in virtue of his reason and other advantages, secures more than do his fellow-animals.
+This is just the conception of life which we have seen to be incoherent on close inspection;
+and if it be so, then the evolutionary process is a struggle not for bare life or existence,
+but for the prevalence of the _higher kinds_ of life and existence; and intelligence and morality
+are not only co-operative as instruments in maintaining and extending human life, but are themselves
+the principal elements of that complex life. True, the mind does minister to the body and preserve
+it; but still more does the body minister to the mind; or rather, each ministers to that whole
+in which the play of the mind is the principal function and the play of the body subordinate.
+If, then, we hold to the verdict of our common sense, and regard our mental life not as subordinate
+to our sensitive and vegetal life, but as co-ordinate and even superior, we must (so to speak)
+view it as no less "for its own sake," as no less an "end in itself" than they are, but rather
+much more; we must regard evolution as making for the life of truth and the life of righteousness
+even more principally than for bare existence or animal vitality. It is now no longer mere
+life that tries to assert itself, and in the struggle shapes things to what they are; but it
+is the very highest kind of life, that is trying to come to the birth. Nature inherently tends
+to the higher through the lower forms of life, and these minister to the higher and receive
+in return from them the means of a yet more efficacious ministry.
+
+This is an atom: 
+In this conception, every function of the organism has two aspects, under one of which it is
+its own end and exists for its own sake as an element of the life of the whole; under the other
+it is ministerial, serving other functions above and below it, as it in return is served by
+them. Correspondence with the environment is, similarly, not merely a condition of life, but
+also that wherein vitality principally consists. "Living" is spontaneous self-adaptation to
+surrounding reality, taken in the very widest sense. The more diverse and multiform this adaptability,
+the fuller and higher is the life; and thus our ordinary common-sense classifications are justified.
+Each new manifestation of life means some new correspondence with surrounding reality as we
+piss from mere vegetation, and then add local movement, and one sense after another, till we
+come finally to intelligence and the life of reason and right-doing, which again, consists
+in self-conformation to things as they really are. In all this we are in agreement with common
+sense and common language, which identify the fullest life with the fullest activity; all activity
+being of the nature of response to stimulus, that is, correspondence to reality. As soon as
+consciousness supervenes on the lower forms of life it is evident that the pleasures of sight,
+hearing, taste, mind, and affection all depend on, and consist in, the consciousness of this
+successful accommodation of the subject to the object; and that all pain and disease is simply
+the felt failure of such adaptation. What was anciently and very wisely called the "natural
+appetite" of living creatures is in this view nothing else but their response to the modifying
+attraction exerted upon them by the objective Reality which presses upon them on every side,
+and tends to draw them into conformity with itself so far as they have latent capacity for
+such a correspondence. It is the light that makes (or rather elicits) sight; and it is sound
+that develops the sense of hearing: and it is the ideas embodied in Nature that call our intellect
+into play. Hence it follows that, desire for truth and justice, for society and for religion,
+which assert themselves as invariably in the soul of man at certain stages of progress, as
+the desire for mere life asserts itself from the first, is simply the felt result of the as
+yet unsuccessful endeavour of Nature to draw man into a fuller kind of correspondence with herself.
+
+This is an atom: 
+Thus conceived, the course of evolution is comparable, not as before, to the gradual unveiling
+of a blank canvas, revealing simply a greater extent of the same appearance, but to the gradual
+unveiling of a picture whose full unity of meaning is held in suspense till the disclosure
+is completed. We do not now interpret the higher by the lower, but the lower by the higher;
+the beginning by the end. This may seem perilously near to finalism, yet it is no more necessarily
+so, than the process of photography; we only need a self-adaptive tendency in life-matter responsive
+to the stimulating-tendency of the environment. Not, of course, that this bundle of words really
+explains anything, but that like other formulae of the kind, it prescinds from the question
+of ends and origins, by making a statement of what happens serve as a cause of what happens,
+and calling it a Law or a Tendency, or a Latent Potentiality--thus filling the gap which mere
+agnosticism creates in our thought.
+
+This is an atom: 
+With this conception of Evolution our ordinary estimates of "higher" and "lower" are saved;
+also the value of our mental processes upon which rests whatever proof the theory may admit
+of; while the "argument from adaptability" is provided with a firm basis independent of finality.
+All our "natural," as opposed to our personal and self-determined appetites or cravings,--those
+which are, so to say, constitutional and inseparable from our nature in certain conditions,
+are evidence of the influence of some reality outside us seeking to draw us into more perfect
+correspondence with itself, and whose nature can be more or less dimly conjectured from the
+nature of those cravings. What are called "natural religions" represent man's self-devised
+attempts to explain the reality answering to his religious and moral cravings. Revelation is
+but a divine interpretation of the same; as though one with dim vision were to supplement his
+defect by the testimony of another more clear-sighted.
+
+This is an atom: 
+It may be practically admitted that no philosophy allows of strict demonstration, since, being
+a conception of the totality of things, it modifies our understanding of every principle by
+which one might attempt to prove or disprove it. Eventually it is its harmony with the totality
+of things as we perceive them that determines us to accept it, and no two of us perceive just
+the same totality, however substantial an agreement there may be in our experience; yet I think
+it can hardly be denied that this conception of evolution is far more in agreement with the
+world as most of us know it, and commonly think and speak of it, than the former; that it not
+merely satisfies our intellect, but offers some satisfaction to our whole spiritual nature.
+"Is it certain," asks Mr. Bradley, in a fairly similar connection, "that the mere intellect
+can be self-satisfied if the other elements of our nature remain uncontented?" And, again:
+"A result, if it fails to satisfy our whole nature, comes short of perfection: and I could
+not rest tranquilly in a truth if I were compelled to regard it as hateful.... I should insist
+that the inquiry was not yet closed and that the result was but partial. And if metaphysics"
+[for which we may substitute: any philosophy, such a& that of Evolution] "is to stand, it must,
+I think, take account of all sides of our being. I do not mean that every one of our desires
+must be met by a promise of particular satisfaction; for that would be absurd and utterly impossible.
+But if the main tendencies of our nature do not reach consummation in the Absolute, we cannot
+believe that we have attained to perfection and truth."[7] From this point of view there can
+be no doubt as to which of these conceptions of Evolution is the more rational and satisfactory;
+that which would explain it by a simple tendency in living matter to persist and spread, and
+would see in all organic variety only the selected means to that somewhat colourless end; or
+that conception which would explain it by a tendency in living matter to come into ever fuller
+correspondence with its environment, seeing in such spontaneous correspondence the very essence
+of life, and not merely a condition of life.
+
+This is an atom: 
+We need only add a few criticisms on this second conception.
+
+This is an atom: 
+1. It is true that every creature struggles more intensely and vigorously for the lower kind
+of life, or for "mere life," as we might say, than for any of those things which alone would
+seem to make life worth the having. But this only means that to live at all is the most fundamental
+condition of living well and fully and enjoyably. The higher life cannot stand without the
+lower, which it includes, but the lower is not therefore the better, nor is it the end for
+whose sake the higher is desirable; but conversely. Not until men have got bread enough to
+eat will they have leisure or energy to spare for the animal grades of vitality. When the means
+of bodily subsistence grow scarce, then the faculties that were previously set free to seek
+the bread of a higher and fuller life are diverted to the struggle for bare animal existence,
+and progress is thrown back; but when there is abundance for all, secured by the labour of
+a few from whom the remainder can buy, then fuller life becomes once more possible for that
+remainder. The struggle for bodily food gives an advantage to, and "selects" naturally, those
+mental and other powers which facilitate its attainment; but just as man does not only eat
+and labour in order to live, but also (however it may shock conventional ethics) lives in order
+to eat and labour; so the new energies called forth by competition do not merely secure that
+grade of life in whose interests they are evoked and perfected, but extend the sphere of vitality,
+in so much as their own play adds a new element to life and gives it a new form.
+
+This is an atom: 
+The part played by struggle and competition in this process of Evolution is naturally exaggerated
+by those who deny any latent tendency other than that of mere persistence in being; who repudiate
+an internal expansiveness towards fuller kinds of existence, drawn out or checked by the environment.
+
+This is an atom: 
+Competition plays a prominent part when there is question of the lower grades of life, in so
+far as these depend on a pabulum that is limited in quantity. In such cases competition, within
+certain limits, will secure the bringing-out of latent powers by which the lower level of life
+is maintained and a higher level entered upon; the lower being secured by the superimposition
+of the higher.
+
+This is an atom: 
+But how does it do so? Not by creating anything, but by giving the victory to those individuals
+who already were ahead of their fellows in virtue of a fuller development of their nature from
+within; in clearing the ground for them and letting them increase and multiply.
+
+This is an atom: 
+2. Again, we should notice that development in one direction may be at the cost of development
+in another. The struggle for any lower form of existence than that already attained, is inevitably
+at the cost of the higher. The degrading effects of destitution are proverbial. Craft, cruelty,
+selfishness, and all the vices needed for success in a gladiatorial contest are often the fruits
+of such competition. Also, commercial progress seems on the whole to be at the expense of progress
+in art and the higher tastes, sacrificing everything to the production of the greatest possible
+quantity of material comforts. If it sharpens the wits and sensibilities in some directions,
+it blunts them in others.
+
+This is an atom: 
+Now, the first sense suggested to us in these days by the word "progress," is material progress--all
+that came in with steam; and this narrow conception vitiates much of our reasoning. It is in
+this realm undoubtedly that competition is such a factor of rapid advance; but we forget that
+the food of what the best men have ever considered the best life, is not limited or divisible;
+but like the light and air is undiminished how many soever share it. Whatever advance there
+has been in the life of the mind and of the higher tastes and sensibilities, cannot directly
+be explained by competition, but simply by the quiet upward working of Nature's inherent forces.
+We look with scorn at the unprogressive East, satisfied that there can be no progress, no life
+worth living, where there is no rush for dollars. But I think we have yet to learn the meaning
+of _ex Oriente lux_.
+
+This is an atom: 
+Much of our immorality and our social evil comes from the fact that those who have developed
+the faculties of a higher grade of life, seek the lower as an end in itself, and not simply
+so far as it is a condition of the higher and no further. The Gospel precept, as usual, enunciates
+only the law of reason and nature, when it bids us to "Seek first the Kingdom of God and its
+justice," that is, to put our best life in the front, and to make it the measure and limit
+of any other quest. The neglect of this principle gives us high living and plain thinking,
+instead of "high thinking and plain living;" and takes the bread out of the mouths of the poor.
+The competition for pleasures and luxuries and amusements, may indeed develop certain industries
+and cause progress in certain narrow lines, but it is at the cost of the only progress worth
+the name.
+
+This is an atom: 
+The conflict between this "struggle-theory" and ethics has been freely acknowledged by Professor
+Huxley and others; every attempt to educe unselfishness from selfishness has failed. The moral
+man even in our day has rather a bad time of it; what chance would he have had of surviving
+to propagate his species in the supposed pre-moral states of human society? Who can possibly
+conceive mere rottenness being cured by progress in rottenness; or a man drinking himself into
+temperance? On the other hand, it is at least conceivable that in the wildest savage there
+is some little seed of a moral sense--weak, compared with the lowest springs of action, just
+because it is the highest and therefore only struggling into being; and that in the slow lapse
+of time events may here and there prove that honesty is the best policy; and that honesty once
+tasted may be found not only useful for other things, but agreeable for itself, and may be
+cherished and strengthened by social and religious sanctions.
+
+This is an atom: 
+There is, however, a reaction on foot which tends to reconcile the breach between ethics and
+evolution, by reducing the part played by competition within reasonable bounds, and making
+it subservient to the survival, not of the most selfish, but of the most social individuals.
+Definite variations from within, modified between narrow limits by accidental variation from
+without, is coming to be acknowledged as the chief factor of progress. But we should not forget
+that to allow an internal principle of orderly development is, not merely to modify the popular
+evolution theory by a slight concession to its adversaries; it is rather to make it no longer
+the supreme explanation of development, but at most a slight modification of the more mysterious
+theory which it was its boast and merit to have supplanted. According to Geddes and Foster
+and others of their school, it is the species-subserving qualities that Nature selects; and
+these, in the higher grades of life, are equivalent to the altruistic, social, and ethical
+qualities. It is in virtue of the parental and maternal instincts of self-sacrifice, self-diffusion,
+self-forgetfulness in the interests of the offspring, that species are preserved and prevail.
+Selfish egoism leads eventually (as we see in some modern countries where _laizzez-faire_ liberalism
+prevails) to social disruption, decadence, and chaos; and this is the universal law of life
+in every grade. At first indeed the unit struggles to live, for life is the condition of propagation;
+but the root of this instinct is altruistic; it is the whole asserting itself in the part;
+and all "self-regarding" instincts are to be likewise explained as subordinate to the "other-regarding"
+instincts. As soon as this sub-ordination is ignored in practice, regress takes the place of
+progress. The transit, we are told, from the unicellular to the multicellular organism cannot
+be explained by individualism, but implies a diminution of the competitive, an increase of
+the social and subordinative tendency. The argument from economics to biology and back again,
+is said to be nearing exposure; the "progress of the species through the internecine struggle
+of its individuals at the margin of subsistence," is the outgoing idea. Yes, and with it goes
+out all that made Evolution a simple and therefore popular explanation of the world; and there
+comes in that "organic" conception of the process which clamours for theism and finalism as
+its only coherent complement.
+
+This is an atom: 
+3. But though Evolution so conceived makes the "argument from adaptability," as well as the
+arguments for theism, stronger rather than weaker; we must not shut our eyes to the difficulty
+created by the fact (too little insisted upon by Evolutionists) that there is no solid reason
+for thinking that progress is all-pervading. We have already said that progress in commerce
+may be regress in art or in religion or in morality. Also, progress in benevolence may co-exist
+with regress in fortitude and purity; progress in one point of morality with regress in another;
+progress in ethical judgment with regress in ethical practice. And in every realm, growth and
+decay, life and death, seem so to intertwine and oscillate that it is very gratuitous to designate
+the total process as being one or the other. Spencer confesses that the entire universe oscillates
+between extremes of integration and disintegration. Why we should consider the universe at
+present to be rising rather than falling, waxing rather than waning, one cannot say. The easier
+presumption is that it is equally one and the other, and always has been. Even were we rash
+enough to pronounce progress to be on the whole prevalent within the narrow field of our own
+experience, surely it were nothing but the inevitable "provincialism" of the human mind to
+pass _per saltum_ from that, to a generalization for all possible experience. Our optimism,
+our faith that right, truth, and order will eventually prevail, can find only a delusive basis
+in actual experience, and must draw its life from some deeper source.
+
+This is an atom: 
+Why then should we so presume that our moral and religious ideas are really progressive and
+not regressive, as to regard their interpretation as approximating to the truth? The answer
+is simply that our argument from adaptability does not require the assumption in question,
+but only that we should be able to distinguish higher from lower tendencies, progressive from
+regressive movements, without holding the optimistic view that on the whole the forward tendency
+is at present prevailing. It is not because we live in the nineteenth century that we consider
+our moral perceptions truer than those of the ancient Hebrews, but because we at once comprehend
+and transcend their ideas (in some respects), as the greater does the less. In many points
+surely the relation is inverted and we feel ourselves transcended (or may at least suspect
+it), by those who lived or live in ruder conditions than our own. David has perhaps taught
+us more than we could have taught him; and there are other vices than those proper to semi-barbarism.
+It is not by reference to date or country, or grade of material progress, that we assess the
+value of moral judgments, but by that subjective standard with which our own moral attainments
+supply us in regard to all that is equal or less, similar or dissimilar. To deny this discernment
+is to throw the doors open to unqualified scepticism; to admit it, is all that we need for
+the validity of our inference.
+
+This is an atom: 
+4. If Evolution is really of this oscillatory character; if at all times much the same processes
+have been going on in different parts of this universe as now--one system decaying as another
+is coming into being; is it not more reasonable to imagine (for it is only a question of imagining)
+that the primordial datum was not uniform nebula, but matter in all stages of elaboration from
+the highest to the lowest--the same sort of result as we should get from a cross-section at
+any subsequent moment in the process? What reason is there for assuming primordial homogeneity,
+since every backward step would show us, together with the unravelling of what is now in process
+of weaving, a counter-balancing weaving of what is now in process of disintegration? Were this
+earth all, we might dream of universal advance by shutting our eyes to a great many incompatible
+facts; but when our telescopes show us the co-existence of integration and disintegration everywhere,
+what can we conclude but that in the past as in the future, no alteration is to be looked for
+beyond the shifting of the waves' crest from side to side of the sea of matter--the total ratio
+of depressions to elevations remaining exactly constant.
+
+This is an atom: 
+Were the other view of an original universal homogeneity correct, how conies it that we have
+still co-existent every stage of advance from the lowest to the highest, and that there is
+not a greater equality?--a difficulty which does not exist if we suppose things to have been
+_on the whole,_ as they are now, from the very first. But whichever view we take; whether we
+suppose all things collectively to oscillate between recurring extremes of "sameness" and "otherness;"
+or every stage of the wave of progress from crest to trough, to be simultaneously manifested
+in the universe at all times, the old difficulty of "the beginning" will force itself upon
+us. A process _ab aeterno_ is at least as unimaginable as the process of creation _ex nihilo;_
+if it be not altogether inconceivable to boot. And the alternative is, either a primordial
+state of homogeneous matter which contains the present cosmos in germ, and from which it is
+evolved without the aid of any environment--such a germ claiming a designer as much as any
+ready-made perfect world; or else, a primordial state of things like that which we should get
+at any cross-section of the secular process, in which every stage of life and death, growth
+and decay, evolution and involution, is represented as now. This would include fossils and
+remains of past civilizations which (in the hypothesis) would never have existed; and would
+be in all respects as difficult as the crudest conception of the creation-hypothesis. And if
+this absurdity drives us back to primordial homogeneity, as before, we must remember that here,
+too, though not so evidently, we should have all the signs of an antecedent process that was
+non-existent. Life and death, corruption and integration, are parts of one undulatory process.
+Cut the wave where you will its curve claims to be finished in both directions and suggests
+a before as well as an after. If, in the very nature of things, the pendulum sways between
+confusion and order, chaos and cosmos, each extreme intrinsically demands the other, not only
+as its consequent, but as its antecedent; and the first chaos, no less than any succeeding
+one, will seem the ruin of a previous cosmos. Therefore we are driven back upon a process _ab
+aeterno_ with every stage of evolution always simultaneously represented in one part or other
+of the whole. Whatever mitigation such a conception may offer, surely we may be excused for
+still adhering to that simpler explanation which involves a mystery indeed, but nothing so
+positively unthinkable as a process without a beginning.
+
+This is an atom: 
+5. This same conception of a process without beginning, favours the notion that since life
+was possible on our globe all species may well have co-existed in varying proportions. From
+the sudden spread of population through almost accidental conditions, we can imagine how certain
+species might have been so scarce as to leave no trace in geological strata, whereas those
+which enormously preponderated at the same time would have done so. A change of conditions
+might easily cause the former to preponderate, and their sudden appearance in the strata would
+look as though they had then first come into being. In a word, we can have good evidence for
+the extinction of species, but scarcely any for their origination.
+
+This is an atom: 
+This supposition is not adverse to the derivation of species from a common stock, but rather
+favours the notion that as in the case of the individual the period of plasticity is short
+compared with that of morphological stability, so if there was such an arboreal branching out
+of species from a common root, it took place rapidly in conditions as different from ours as
+those of uterine from extra-uterine life; and that the stage of inflexibility may have been
+reached before any time of which we have record.
+
+This is an atom: 
+But in truth when we see in the world of chemical substances an altogether similar sedation
+of species where there can be no question of common descent as its cause, we may well suspend
+our judgment till the established facts have excluded the many hypotheses other than Evolution
+by which they may be explained.
+
+This is an atom: 
+As long as Evolution claims to be no more than a working scientific hypothesis, like ether
+or electric fluid--a sort of frame or subjective category into which observed facts are more
+conveniently fitted, it cannot justly be pressed for a solution of ultimate problems; but when
+it claims to be a complete philosophy and as such to extrude other philosophies previously
+in possession, it must show that it can rest the mind where they leave it restless; or that
+it has proved their proffered solutions spurious. This, so far, it has absolutely failed to
+do. At most it may determine more accurately the way in which God works out His Idea in Creation.
+It can stand as long as it is content to prescind from the question of ends and origins; but
+then it is no longer a complete philosophy. As soon as it attempts to solve those problems
+it becomes incoherent and unthinkable. Its true complement is theism and finality, which flow
+from it as naturally, if not quite so immediately as the "argument from adaptability." _Deus
+creavit_ is so far the only moderately intelligible, or at least not demonstrably unintelligible,
+answer given to the problem of _In principio_.
+
+This is an atom: 
+We have then in this second and soberer form of the philosophy of Evolution, an attempt to
+explain the order of the universe without explicit recourse to the hypothesis of an intelligent
+authorship and government of the world: that is to say, independently of theism and finality;
+and so far as this explanation admits all the effects and consequences of an intelligent government,
+without ascribing them to that cause, it admits among their number the value of the "argument
+from adaptability," and allows us to infer that the postulates of man's higher moral needs
+correspond approximately to reality, of which they are in some sense the product; and that
+the "wish to believe" is less likely to be a source of delusion in proportion as the belief
+in question is higher in the moral scale.
+
+This is an atom: 
+But it is also clear how unsuccessful this attempted philosophy is in many ways; and with what
+difficulties and mysteries it is burdened. At best it can prescind from finalism by a confession
+of incompleteness and philosophical bankruptcy; by resolutely refusing to face the problem
+of the whole--of the ultimate whence and whither. If it would positively exclude theism or
+finalism it must ascribe all seeming order and adaptation to the persistence of some blind
+force, subduing all things to itself, to "existence," or to "life" striving to assert and extend
+itself. It is this conception that seems best to bring the mystery of the universe within the
+comprehension of the popular mind, and is more in keeping with those "aggregation theories"
+of our day which regard dust as the one eternal reality whose combination and disguises delude
+us into believing in soul and intelligence and divinity. But on closer examination the words
+"life" and "existence" answer to no simple reality or force which can be regarded as governing
+nature, and from this radical fallacy of language a whole brood of further absurdities spring
+up which make the popular form of Evolution-philosophy utterly incoherent.
+
+This is an atom: 
+_June, Aug. Sept._ 1899.
+
+This is an atom: 
+Footnotes:
+
+This is an atom: 
+[Footnote 1: This will perhaps be the most convenient term. In the _Summa of Aquinas_, the
+elaborate treatise _De vera religione_, called into existence by more recent exigencies, had
+no place. Still, in so far as it is constructed roughly on the same scheme and presupposes
+the same philosophy, and (were it not a deepening of the roots rather than an extension of
+the branches) might almost be regarded as a development of scholasticism, it may rightly be
+called "scholastic" to distinguish it, say, from such a work as the _Grammar of Assent_.]
+
+This is an atom: 
+[Footnote 2: _Science and a Future Life_, By F. W. Myers.]
+
+This is an atom: 
+[Footnote 3: i.e., If an object be adequately and exhaustively conceived under the predicates
+A.B.C.D., it is inadequately conceived as A.B.x.x. But if each of these properties be permeated
+and modified by the rest, then A in this object is not as A in any other combination, but is
+A as related to and modified by B.C.D.; and similarly, the other properties are each unique.
+Hence any part is somewhat falsely apprehended till the whole be apprehended, when we are dealing
+with organic as opposed to mechanical totalities.]
+
+This is an atom: 
+[Footnote 4: Not that the transmutation of one species into another has yet been detected in
+any instance, or perhaps, even were it a fact, could be detected; but that such a serial graduation
+has been observed as might be commodiously explained by that supposition,--and also by fifty
+others.]
+
+This is an atom: 
+[Footnote 5: _Mind_, 1876, p. 185.]
+
+This is an atom: 
+[Footnote 6: _Mind_, 1876, p. 9.]
+
+This is an atom: 
+[Footnote 7: _Appearance and Reality_.]
+
+This is an atom: 
+XXIII.
+
+This is an atom: 
+IDEALISM IN STRAITS.
+
+This is an atom: 
+"Can any good come out of Trinity?" is a question that has been asked and answered in various
+senses during the recent Catholic University controversies in Ireland; but for whatever other
+good Catholics might look to that staunchly Elizabethan institution, they would scarcely turn
+thither for theological guidance. Yet all definition is negative as well as positive; exclusive
+as well as inclusive; and we always know our position more deeply and accurately in the measure
+that we comprehend those other positions to which it is opposed. The educative value of comparing
+notes, quite apart from all prospect of coming to an agreement, or even of flaying our adversaries
+alive, is simply inestimable; we do not rightly know where we stand, except in so far as we
+know where others stand--for place is relative.
+
+This is an atom: 
+The Donnellan Lecturer for 1897-8 [1] took for his subject the doctrine of the Blessed Trinity
+in relation to contemporary idealistic philosophy. The scope of these lectures is, not to prove
+the doctrine of the Trinity philosophically, but to show that the difficulty besetting the
+conception of a multiplicity of persons united by a superpersonal bond, is just the same difficulty
+that brings idealistic philosophy to a dead-lock when it endeavours (1) to escape from solipsism,
+(2) to vindicate free-will,(3) to solve the problem of evil. He naturally speaks of Idealism
+as "the only philosophy which can now be truly called living," in the sense in which a language
+is said to live; that is, which is growing and changing, and endeavouring to bring new tracts
+of experience under its synthesis; which is current in universities of the day. Of the Realism
+which survives in the seminaries of the ecclesiastical world he naturally knows nothing; addressing
+himself to a wholly different public, he speaks to it on its own assumptions, in its own mental
+language; and indeed he knows no other. But having weighed idealism in the balance of criticism,
+he finds it far short of its pretensions to be an adequate accounting for the data of experience;
+he finds that it leads the mind in all directions to impassable chasms which only faith can
+overleap. It does not demand or suggest the mystery of the Trinity, but reveals a void which,
+as a fact that doctrine alone does fill. The convinced Realist will not be very interested
+about the problem of solipsism which for him is non-existent, but the proposed relief from
+the difficulties of free-will and of the existence of evil may be grateful to all indifferently;
+or at least may suggest principles adaptable to other systems. In his Trinitarian theology
+Mr. D'Arcy is in many points at variance with the later conclusions of the schools; and in
+some instances his argument depends vitally on this variance; but not in the main. For his
+main point is that as our own personality--the highest unity of which we have experience--takes
+under itself unities of a lower grade; so the doctrine of the Trinity implies what the hiatuses
+of philosophy require, namely, that personal unity is not the highest; that, beyond any power
+of our present conception, the personally many can be really (not only morally or socially)
+_one thing_. "A wonderfully unspeakable thing it is," says Augustine, "and unspeakably wonderful
+that whereas this image of the Trinity" _(sc.,_ the human soul), "is one person, and the sovereign
+Trinity itself, three persons, yet that Trinity of three persons is more inseparable than this
+trinity" (memory, understanding, and will) "of one person." This "superpersonal" unity is of
+course a matter of faith and not of philosophy, yet it is a faith without which subjective
+philosophy must come to a stand-still; it is as much a postulate of the speculative reason
+as God and immortality are of the practical reason.
+
+This is an atom: 
+"If man is to retain the full endowment of his moral nature, we must make up our minds to accept
+for ourselves an incomplete theory of things." A philosophy which should unify the sum-total
+of human experience, including the supernatural facts of Christianity, is impossible; but even
+excluding these facts there is always need of some kind of non-rational assent, which, however
+reasonable and prudent in the very interests of thought, is not necessitated by the laws of
+thought--is not, in the strictest sense philosophical. Idealism, like other philosophies, "is
+not satisfied with an imperfect knowledge of the greatest things. It must rise to the Divine
+standpoint and comprehend the concrete universal," and so, of course, it breaks down. "But
+it would surely be a hasty inference," says Mr. D'Arcy, "that philosophy must needs be exhausted
+because idealism has done its work and delivered its message to mankind," that is, has explored
+another blind alley, and has arrived at the _cul de sac_. In fact, if idealism is a living
+philosophy, it is nevertheless showing signs of age and decay. Ptolemaic astronomy, as an explanation
+of planetary movements, proved its exhaustion by a liberal recourse to epicycles as the answer
+to all awkward objections; and philosophies show themselves moribund in an analogous way, by
+a monotonous pressing of some one hackneyed principle to a degree that makes common-sense revolt
+and fling the whole theory to the winds--chaff and grain indiscriminately. But philosophy must
+be distinguished from philosophies, as religion from religions. The imperfection of the various
+concrete attempts to satisfy either spiritual need, may make the desperate-minded wish to cut
+themselves free from all connection with any particular system; but the desire and effort to
+have a knowledge of the whole (_i.e._, a philosophy) is as natural and ineradicable as the
+desire to live and breathe. In this general sense, philosophy "takes human experience, sets
+it out in all its main elements, and then endeavours to form a plan of systematic thought which
+will account for the whole. It has one fundamental postulate, that there is a meaning, or,
+in other words, that there is an all-pervading unity." This "faith" in the ultimate coherence
+and unity of everything is the presupposition and motive of the very attempt to philosophize
+or to determine the nature of that unity. It is not, therefore, itself a product of philosophy;
+it is an innate conviction that can be denied only from the teeth outwards, but can neither
+be proved nor disproved by the finite mind.
+
+This is an atom: 
+To "explain" is in one way or another to liken the less known to what is better known; and
+thus every philosophy is an attempt to express--by means of sundry extensions and limitations--the
+universe of our experience in the terms of some totality with which we are more familiar; plainly,
+it is also an endeavour to express the greater in terms of the less, and must therefore be
+almost infinitely inadequate even at the best. At one time the Whole has been conceived as
+the unity of a mere aggregate--of a heap of stones; at another, as a mere sand-storm of fortuitous
+atoms; there has been the egg-theory, and the tortoise-theory, and many others, no less grotesque
+to our seeming. But, leaving fanciful and poetical philosophies aside, and considering only
+those which pretend to be strictly rational, we find the objective philosophy and the subjective
+confronting one another; the former likening the universe to the works of men's hands; the
+latter likening it to man himself; the former taking its metaphors from the artificer shaping
+his material according to a preconceived plan for a definite purpose; the latter, from the
+thinking and willing self considered as the creator of its own personal experience.
+
+This is an atom: 
+There is enough uniformity of plan throughout the animal body to make any one part of the organism
+a likeness of the whole--the eye, the heart, or the hand. And so, presumably, there is hardly
+any unity we can think of in our own little corner of experience that does not offer some similitude
+of the universal unity. But to take this as an adequate explanation; to force the metaphor
+to its logical consequences, to the exclusion of every other reasonable though non-rational
+assent, is the commonest but most fatal form of intellectual provincialism and narrowness.
+Our mind is essentially limited not merely in that it cannot know everything, but in that its
+mode of knowledge is imperfect and analogical in regard to all that is greater than itself.
+It is broad only when conscious of its narrowness.
+
+This is an atom: 
+The first difficulty into which idealism gets itself is that of solipsism. According to its
+rigidly argued principles, "mind is separated from mind by a barrier which is, not figuratively,
+but literally impassable. It is impossible for any _ego_ to leap this barrier and enter into
+the experience of any other _ego_." It is not an abstract self-in-general, but my one solitary
+concrete self for which all experience exists. There is no room for any other person. But this
+philosophy does not account for our common-sense belief in Nature as existing independently
+of self and of other selfs; or in those other selfs with their several and distinct spheres
+of experience.
+
+This is an atom: 
+The unification it effects when treated rigorously as a complete philosophy leaves out of account
+the best part of what it was bound to account for. In spite of idealism, the idealist goes
+on _believing_ in other persons or spheres of experience, and in Nature as the experience of
+a Divine Person. But since, on his principles, persons are mutually exclusive, and none can
+enter the sphere of another's experience, to see with his eyes, or to feel with his nerves, since,
+
+This is an atom: 
+Each in his hidden sphere of joy or woe
+     Our hermit spirits dwell and range apart,
+
+This is an atom: 
+we are thrown back on a disconnected plurality of beings, and God Himself, viewed as personal
+(in this sense) is but one among many. Albeit immeasurably the greatest, He cannot be regarded
+as the ground of the possibility and existence of all the rest--the home and bond of union
+of all other spirits which in Him live and move and have their being.
+
+This is an atom: 
+The belief in the personality of God is all-essential for the satisfaction of our religious
+cravings, as a presupposition of trust, love, prayer, obedience, and such relationships; as
+bringing out the transcendence in contrast with the all-pervading immanence of the deity; as
+checking the pantheistic perversion of this latter truth by which, in turn, its own deistic
+perversion is checked. God is not only in and through all things; but also outside and above
+all things; just as Christ is not only the soul of the Church, but also its Head and Ruler.
+Between these two compensating statements the exact truth is hidden from our eyes.
+
+This is an atom: 
+But it is not to the conception of the Divine personality and separateness that we are to look
+for the missing bond by which the head and members are to be knit together, and the essential
+disconnection of these "spheres of experience" overcome. The ultimate unity is a mystery; in
+a word, philosophy, as a quest of that unity, breaks down. The solution is suggested only by
+the revelation of a superpersonal unity in some sense prior to the multiplicity of Divine Persons,
+a unity in which they being many are one, and in which we too are, not merged, but unified
+without prejudice to our personal distinctness.
+
+This is an atom: 
+Hence, the writer concludes: "Materialism, when its defect is discovered and understood, points
+on to idealism. Idealism, when its defect is disclosed, points to Christian theism." For those
+who have not come to Christian theism by this thorny and circuitous path, the mode in which
+the idealist extricates himself from his self-wrought entanglement may seem of little interest;
+but inasmuch as they take for granted the existence of that same multitude of mutually impenetrable
+personalities which he, by a revolt of his common-sense against his philosophy is forced to
+confess, the problem of the ultimate unity exists for them also.
+
+This is an atom: 
+If in its endeavour to vindicate the spirituality of man against the materialist, idealism
+tumbles into the slough of solipsism and needs to be fetched out by the doctrine of the Trinity,
+it fares much the same way in its attempted defence of free-will against necessity. That freedom
+from determination by the "not-self" which idealism vindicates, can belong only to the all-inclusive
+Spirit, outside whose self nothing exists; it belongs to me only on the supposition that I
+am the all-inclusive; and this, as before, is the point at which common-sense revolts. "Free-will
+is based on man's consciousness of his moral nature. It represents not any speculative theory,
+but one of the great facts which every theory of things must explain or perish." If we ascribe
+freedom to the Absolute and to other spirits (whose existence is forced on us in spite of Idealism),
+it is because we first find it in ourselves as the very essence of our spiritual nature. But
+if we accept our freedom as a fact which it is the business of philosophy to explain and not
+to deny; on just the same testimony we must accept the fact of the manifold limitations of
+our liberty of which we are continually conscious. Now here it is that the Idealist defence
+of liberty against materialism fails by a deplorable _nimis probat_. It can only save our liberty
+by denying our limitations; or at least it leaves us facing a problem which can be solved only
+by an assumption for which Idealism offers no philosophical warrant. Hence we are brought back
+to the world-old dilemma "between a freedom of God which annihilates man, and a freedom of
+man which annihilates God." Idealism has really contributed nothing to the solution of the
+difficulty which is persistent as long as God is known only as a Sovereign and Infinite Personality
+among a multitude of finite personalities, and until revelation hints at the possibility of
+a higher "unity which transcends personality, by which He is to be the reconciling principle
+and home of the multitude of self-determining agents." "Final reconciliation of the Divine
+and human personality is in fact beyond us."
+
+This is an atom: 
+Similarly, in dealing with problems of moral evil, Idealism leads to an _impasse_. As long
+as we keep to the notion of one all-inclusive Spirit, the Subject of universal experience,
+it is easy to show that sin is but relatively evil, that it is, when viewed absolutely, as
+much a factor of the universal life as is righteousness; yet surely this is not to account
+for so large and obstinate a part of our experience, but to deny it. Nor can the ethical corollaries
+of such a view be tolerated for a moment. That sin is an absolute, eternal, in some sense,
+irreparable evil is a conception altogether fundamental to that morality with which Christianity
+and modern civilization have identified themselves. It is but another aspect of the doctrine
+of freedom and responsibility. Of physical and necessary evil it is possible to assert the
+merely negative or relative character; we can view it as the good in process of making; or
+as the good imperfectly comprehended; but if this optimism be extended to sin it can only be
+because sin is regarded as necessitated, _i.e._, as no longer sin. Hence the view in question
+does not account for, but implicitly denies the existence of sin.
+
+This is an atom: 
+Furthermore, the whole tendency of more recent idealism is to explain moral evil as an offence
+against man's social nature by which he is a member of an organism or community. It is the
+undue self-assertion of the part against the interests of the whole. Of course the idealist
+explains this organic conception with a respect for personality which is absent from socialistic
+and evolutionary doctrines of society. But the notion of sin as a rebellion of one member against
+all, is common to both. The latter consider the external life and activity of the unit as an
+element in the collective external life of the community--as part of a common work; the former
+considers the unity as a free spiritual agency, an end for itself--whose liberty is curtailed
+only by the claims of other like agencies, equal or greater. But by what process, apart from
+faith and practical postulates and regulative ideas, can subjectivism pass to belief in other
+free agencies outside the thinking and all-creating self? The result of Mr, D'Arcy's criticism
+of the matter is that "it is because the man exists as a member of a spiritual universe, and
+must therefore so exert his power of self-determination as to be in harmony or discord with
+God above him, and with other men around him, that the distinction between the good self and
+the bad self arises. But in this very conception of a universe of spirits we have passed beyond
+the bounds of a purely rational philosophy. Such a universe is not explicable by reference
+to the vivifying principle of the self;" and accordingly we are driven back as before upon
+the alternative of philosophical chaos, or else of faith in such a superpersonal unity as is
+suggested by the doctrine of the Trinity.
+
+This is an atom: 
+We have but hinted at the barest outlines of Mr. D'Arcy's argument which, as against Idealism,
+is close-reasoned and subtle; and now we have left but little space to deal with the more really
+interesting chapter on the "Ultimate Unity." It is not pretended that we can form any conception
+of the precise nature of that unity, but merely that some such unknown kind of unity is needed
+to deliver us from the antinomies of thought. As we could never rise to the intrinsic conception
+of personal unity from the consideration of some lower unity, material or mechanical; so neither
+can we pass from the notion of personal to that of superpersonal unity or being.
+
+This is an atom: 
+This is only a modern and Hegelian setting of the truth that "being" and "unity" are said analogously
+and not univocally of God and creatures. That there are grades of reality; that "substance
+is more real than quality and subject is more real than substance," that "the most real of
+all is the concrete totality, the all-inclusive universal"--the _Ens determinatissimum_, is
+not a modern discovery, but a re-discovery. That our own personality is the highest unity of
+which we have any proper non-analogous notion; that it is the measure by which we spontaneously
+try to explain to ourselves other unities, higher or lower, by means of extensions or limitations;
+that our first impulse, prior to correction, is to conceive everything self-wise, be it super-human
+or infra-human, is of course profoundly true; but for this reason to make "self" the all-explaining
+and only category, to deny any higher order of reality because we can have no definite conception
+of its precise nature, is the narrowness which has brought Idealism into such difficulties.
+It is probably in his notion of Divine personality that Mr. D'Arcy comes most in conflict with
+the technicalities of later schools. If, as he says, modern theology oscillates between the
+poles of Sabellianism and Tritheism, he himself inclines to the latter pole. Father de Regnon,
+S.J., in his work on the Trinity, shows that the Greek Fathers and the Latin viewed the problem
+from opposite ends. "How three can be one," was the problem with the former; "How one can be
+three," with the latter. These inclined to an emptier, those to a fuller notion of personality.
+Mr. D'Arcy's Trinitarianism is decidedly more Greek than Latin. The more "content" he gives
+to Divine personality, the more he is in-danger of denying identity of nature and operation;
+as appears later.
+
+This is an atom: 
+Plainly, the word "person," however analogously applied to God, must contain something of what
+we mean when we call ourselves "persons," else "we are landed in the unmeaning." When Christ
+spoke of Himself as "I," the selfness implied by the pronoun must have had some kind of resemblance
+to our own; just as when He called God His Father He intended to convey something of what fatherhood
+meant for His then hearers. That He intended to convey what it might come to mean in other
+conditions and ages seems very doubtful; and so if the word "person" has acquired a fuller
+and different meaning in modern philosophy, we are not at once justified in applying this fuller
+conception to the Divine persons, unless we can show that it is a legitimate development of
+the older sense.
+
+This is an atom: 
+He argues that if the Trinity be the ultimate truth, the Unitarian suppositions and conclusions
+of the "natural theologian" are bound to lead to antinomies and confusions; and he sees in
+those harmonious interferences and variations of universal import (which are no less an essential
+factor in the evolution of the world than the groundwork of uniformity and law), evidence of
+a multi-personal Divine government, of a division of labour between co-operant agencies. This,
+of course, goes beyond the doctrine of "appropriation;" and amounts to a denial of the singleness
+of the Divine operation _ad extra_. It seems, in short, to imply a diversity of nature in each
+of the persons, over and above the principle of personal distinctness. Indeed, while it offers
+a plausible solution of some minor perplexities, it rather weakens the value of the general
+argument. For the notion of a superpersonal unity is needed chiefly as suggesting a mode in
+which many mutually exclusive personalities or "spheres of experience" or lives, may be welded
+together into a coherent whole. Even could I reproduce most exactly in myself the thoughts
+and feelings of another, it were but a reproduction or similarity. I can know and feel the
+like; but I cannot know his knowing and feel his feeling; for this were to be that other and
+not myself.
+
+This is an atom: 
+That God's knowledge of our thoughts and feelings should be of this external, inferential kind
+is as intolerable to our mental needs of unification as it is to our religious sense, our hope,
+our confidence, our love. In Him we live and move and think and feel; and He in us. That we
+can say this of no other personality is what constitutes the burden of our separateness and
+loneliness. Our experience exists for no other; but at least it is in some mysterious way shared
+by That which lies behind all otherness, not destroying, but fulfilling. "We know not why it
+is," says St. Catherine of Genoa, "we feel an internal necessity of using the plural pronoun
+instead of the singular." Perhaps it was that she saw in a purer and clearer light what we
+only half feel in the obscurity of our grosser hearts.
+
+This is an atom: 
+But if God knows our knowing, and feels our feeling, not merely by a similitude but in itself,
+it is not because He is transcendent and "personal," as we understand the word, because He
+is immanent and "superpersonal," whatever that may mean. But it is just because revelation
+tells us that in God there are three selves or Egos, for each of whom the experience (i.e.,
+the thought, love, and action) of the other two exists, not merely similar, but one and the
+same--the same thinking, loving, and doing, no less than the same thought, love, and deed--that
+we can believe in the possibility of our personal separateness being at once preserved and
+overcome in that mysterious unity.
+
+This is an atom: 
+That God is love; and that love, which as an affection, produces an affective unity between
+separate persons, can as the subsistent and primal unity produce a substantial and ineffable
+union of which the other is a shadow, is a view towards which revelation points. That the mere
+affection of love, the moral union of wills, is an insufficient unification of personalities
+is implied by the fact that love always tends to some sort of real union and communication;
+and still more, that it springs from a sense of inexplicable identity.
+
+This is an atom: 
+It is almost a crime in criticism to deal with such a multitude of deep problems in so brief
+and hasty an essay. But if we have roughly indicated the main outlines of the author's position,
+we shall have done as much as can be reasonably expected of us; though it is with great reluctance
+that we pass over many points, and even whole chapters, bristling with interest.
+
+This is an atom: 
+Perhaps the most important feature of the book is the prominence it gives to the difficulties
+and insufficiencies of idealism. With those of realism we are all familiar enough, but so far,
+idealism has been looked at one-sidedly as evading, if not solving, some of the antinomies
+of the earlier philosophy, while its own embarrassments have been condoned in hopes of future
+solution. The solution has not come, and now the hopes are dead or dying. What we need is a
+higher synthesis, if such be possible for the human mind, or else a frank admission that faith,
+in some sense or other, is a necessary complement of every philosophy. One thing is clear,
+that reconciliation can be effected, if at all, only by a fair-minded admission of difficulties
+inseparable from either system, and by a conscientious criticism of presuppositions. No one
+can deal effectually with the idealist position to whom it is simply "absurd" or "ridiculous;"
+who has not been to some degree intellectually entangled in it; whose realism is not more or
+less of an effort. Else he is dealing with some man of straw of his own fancy, and will be
+found, as so often happens, assuming the truth of realism in every argument he brings forward.
+Plainly the best minds of modern times have not been victimized by a fallacy within the competence
+of a school-boy. And a like intellectual self-denial is needed on the part of the idealist,
+who is apt to dismiss all realism as crude, uncritical, or barbaric. We have all our antinomies,
+our blind alleys, our crudities; and we have all to fill up awkward interstices with assumptions
+and postulates.
+
+This is an atom: 
+However much we may dissent from Mr. D'Arcy's theology in certain details; however little we
+personally may labour under the difficulties of idealism, we cannot too strongly commend the
+endeavour to meet the modern mind on its own platform; to speak to the cultivated in their
+own language. Belief is caused by the wish to believe; but it is conditioned by the removal
+of intellectual obstacles, different for different grades of intelligence and education. To
+create the "wish to believe" is largely a matter of example, of letting Christianity appear
+attractive and desirable, and correspondent to the deeper needs of the soul. It is also to
+some extent a work of exposition. But when this all-important wish has been created, the intellect
+can hinder its effect. It is much to know and feel that Christianity is good and useful and
+beautiful; "But some time or other the question must be asked: _Is it true_?" And to liberate
+the will by satisfying the intellect is work of what alone is properly called apologetic. Unless
+we fall back into quietism which would tell us to read a Kempis and say our prayers and wait,
+we must address ourselves first of all to making Christianity attractive; and then to making
+it intelligible. And if we do not find it against Gospel simplicity to address ourselves, as
+we continually do, to the intelligence of the semi-educated, we cannot allege that scruple
+as a reason why we should not address ourselves to the fully educated,--to those who eventually
+form and guide the opinions of the many.
+
+This is an atom: 
+_Feb. 1901_.
+
+This is an atom: 
+Footnotes:
+
+This is an atom: 
+[Footnote 1: _Idealism and Theology_. By Charles D'Arcy, B.D. Hodder and Stoughton, 1900.]
+
+***************************************************************************
