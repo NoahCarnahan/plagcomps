@@ -11,22 +11,144 @@ class _State :
 		self.ft_list_means = means_list
 		self.ft_list_variances = variances
 		self.trans_probs = trans_probs 
-	
+
 	def get_emission_probability(self, feature_vector):
 		''' Returns the probability of this state outputting the given feature_vector. 
 		    This is done by quantizing the continous values described by the gaussian
 		    distribution for this state. '''
-		probability = 1.0
-		if feature_vector == self.ft_list_means:
-			return probability
+						
+		probability = 0.02
 		for i in xrange(len(feature_vector)):
 			z_score = (feature_vector[i] - self.ft_list_means[i]) / self.ft_list_variances[i]
-			upper = math.floor(z_score+1) * self.ft_list_variances[i] + self.ft_list_means[i]
-			lower = math.floor(z_score) * self.ft_list_variances[i] + self.ft_list_means[i]
+			z_score *= 100
+			upper = math.floor(z_score+1)/100 * self.ft_list_variances[i] + self.ft_list_means[i]
+			lower = math.floor(z_score)/100 * self.ft_list_variances[i] + self.ft_list_means[i]
 			prob = scipy.stats.norm(self.ft_list_means[i], self.ft_list_variances[i]).cdf(upper) - scipy.stats.norm(self.ft_list_means[i], self.ft_list_variances[i]).cdf(lower)
-			probability *= prob
+			
+			probability = prob
+		#return an adjusted probability, non-adjusted probabilities seem to break things.
 		return math.log(probability + 0.00001)
 		
+def get_confidences1(stylo_vectors, centroids, cluster_assignments):
+	'''
+	Given the stylo vector list, centroid values and cluster assignments, returns a list of confidences
+	where confidences[i] pertains to stylo_vectors[i] -- only works for 2 clusters'''
+	
+	list_nonplag_tuples = []
+	list_plag_tuples = []
+	confidences = [0 for z in xrange(len(stylo_vectors))]
+	list_indicies = [z for z in xrange(len(stylo_vectors))]
+	list_abs_differences = [0 for q in xrange(len(stylo_vectors))]
+	'''
+	for vector, assigned_centroid, y in zip(stylo_vectors, cluster_assignments, list_indicies) :
+		for a, b in zip(vector, assigned_centroid) :
+
+			list_abs_differences[y] = math.fabs(stylo_vectors[i] - centroids[cluster_assignments[i]])'''
+
+	for i in xrange(len(stylo_vectors)):
+		#confidence distance is currently calculated via distance from assigned centroid
+		diff_vector = []
+		temp = 0
+		for a, b in zip(stylo_vectors[i], centroids[cluster_assignments[i]]) :
+			diff_vector.append(math.fabs(a-b))
+		for y in diff_vector:
+			temp += y*y
+		list_abs_differences[i] = math.sqrt(temp)
+
+		#math.fabs(stylo_vectors[i] - centroids[cluster_assignments[i]])
+		#for each centroid, create a list of tuples where tuples are (list_differences[i],i)
+	for i in xrange(len(stylo_vectors)):
+		if (cluster_assignments[i] == 0): 
+			list_nonplag_tuples.append((list_abs_differences[i],i))
+		else: list_plag_tuples.append((list_abs_differences[i],i))
+		#the two lists should now be sorted by ascending i values
+	list_nonplag_tuples.sort(); list_plag_tuples.sort()
+		#they should be sorted by ascending first element of the Tuple, Python default for sort
+		#normalize by dividing by largest distance,
+	#print 'list_plag_tuples is :', list_plag_tuples
+	#print 'last element is :', list_plag_tuples[-1]
+	
+	if (len(list_plag_tuples) != 0) :
+		maxdisttuple = list_plag_tuples[-1]
+		for x in xrange(len(list_plag_tuples)) :
+			temp = list_plag_tuples[x]
+			list_plag_tuples[x] = (1 - temp[0] / (maxdisttuple[0] + 0.000001), temp[1])
+	#print 'normalized list_nonplag_tuples is: ', list_plag_tuples
+	
+	if (len(list_nonplag_tuples) != 0) :
+		maxdisttuple = list_nonplag_tuples[-1]
+		for y in xrange(len(list_nonplag_tuples)) :
+			temp = list_nonplag_tuples[y]
+			list_nonplag_tuples[y] = (1 - temp[0] / (maxdisttuple[0] + 0.000001), temp[1])
+	#now the lists have normalized distances from centroid
+	
+	for vtuple in list_plag_tuples :
+		confidences[vtuple[1]] = vtuple[0] / 2 + 0.5
+	for vectuple in list_nonplag_tuples :
+		confidences[vectuple[1]] = 0.1
+		#confidences[vectuple[1]] = vectuple[0] / 2
+	#return a list called confidences where confidences[i] = (normlized_distance of stylo_vectors[i])
+	#print 'confidences are: ', confidences
+	return confidences
+
+def get_confidences2(stylo_vectors, centroids, cluster_assignments):
+	list_nonplag_tuples = []
+	list_plag_tuples = []
+	confidences = [0 for z in xrange(len(stylo_vectors))]
+	list_indicies = [z for z in xrange(len(stylo_vectors))]
+	list_abs_difference_from_assign = [0 for q in xrange(len(stylo_vectors))]
+	list_abs_difference_from_other = [0 for q in xrange(len(stylo_vectors))]
+
+	for i in xrange(len(stylo_vectors)):
+		#confidence will be the average of distance from assigned
+		# and distance from unassigned centroid
+		diff_vector = []
+		temp = 0
+		for a, b in zip(stylo_vectors[i], centroids[cluster_assignments[i]]) :
+			diff_vector.append(math.fabs(a-b))
+		for y in diff_vector:
+			temp += y*y
+		list_abs_difference_from_assign[i] = math.sqrt(temp)
+
+		#math.fabs(stylo_vectors[i] - centroids[cluster_assignments[i]])
+		#for each centroid, create a list of tuples where tuples are (list_differences[i],i)
+	for i in xrange(len(stylo_vectors)):
+		if (cluster_assignments[i] == 0): 
+			list_nonplag_tuples.append((list_abs_difference_from_assign[i],i))
+		else: list_plag_tuples.append((list_abs_difference_from_assign[i],i))
+		#the two lists should now be sorted by ascending i values
+	list_nonplag_tuples.sort(); list_plag_tuples.sort()
+		#they should be sorted by ascending first element of the Tuple, Python default for sort
+		#normalize by dividing by largest distance,
+	#print 'list_plag_tuples is :', list_plag_tuples
+	#print 'last element is :', list_plag_tuples[-1]
+	
+	if (len(list_plag_tuples) != 0) :
+		maxdisttuple = list_plag_tuples[-1]
+		for x in xrange(len(list_plag_tuples)) :
+			temp = list_plag_tuples[x]
+			list_plag_tuples[x] = (1 - temp[0] / (maxdisttuple[0] + 0.000001), temp[1])
+	#print 'normalized list_nonplag_tuples is: ', list_plag_tuples
+	
+	if (len(list_nonplag_tuples) != 0) :
+		maxdisttuple = list_nonplag_tuples[-1]
+		for y in xrange(len(list_nonplag_tuples)) :
+			temp = list_nonplag_tuples[y]
+			list_nonplag_tuples[y] = (1 - temp[0] / (maxdisttuple[0] + 0.000001), temp[1])
+	#now the lists have normalized distances from centroid
+	
+
+	#CURRENTLY THIS IS THE DIFFERENCE BETWEEN GETCONFIDENCES1 AND GETCONFIDENCES2
+	for vtuple in list_plag_tuples :
+		confidences[vtuple[1]] = vtuple[0] 
+	for vectuple in list_nonplag_tuples :
+		confidences[vectuple[1]] = vectuple[0]
+		#confidences[vectuple[1]] = vectuple[0] / 2
+	#return a list called confidences where confidences[i] = (normlized_distance of stylo_vectors[i])
+	#print 'confidences are: ', confidences
+	return confidences
+
+
 def hmm_cluster(stylo_vectors, k):
 	'''
 	Return a list of k centroids and a list of the assigned clusters.
@@ -46,7 +168,8 @@ def hmm_cluster(stylo_vectors, k):
 	for i in xrange(len(means_sum)):
 		means_sum[i] /= float(len(stylo_vectors))
 	
-	variances = [0 for j in xrange(len(stylo_vectors[0]))]
+	variances = [0.0000001 for j in xrange(len(stylo_vectors[0]))]
+	# we occasionally divide by variances so it's good to not initialize to 0
 	for vector in stylo_vectors:
 		for i in xrange(len(vector)):
 			variances[i] += (vector[i] - means_sum[i])**2
@@ -72,7 +195,8 @@ def hmm_cluster(stylo_vectors, k):
 			centroids.append([a/len(clusters_indices[i]) for a in centroid])
 		else:
 			centroids.append(centroid)
-
+	
+	#print trained_path
 	return centroids, trained_path
 	
 def train_parameters(feature_vectors, states, initial_state_probs):
@@ -110,7 +234,7 @@ def train_parameters(feature_vectors, states, initial_state_probs):
 		# updates gaussian parameters
 		for i in xrange(len(states)):
 			states[i].ft_list_means = [(x+y)/2 for x, y in zip(means[i], states[i].ft_list_means)]
-			# states[i].ft_list_variances = [(x+y)/2 for x, y in zip(variances[i], states[i].ft_list_variances)]
+			states[i].ft_list_variances = [(x+y)/2 for x, y in zip(variances[i], states[i].ft_list_variances)]
 
 		#update transission probabilities
 		trans_possibilities = {}
@@ -184,3 +308,5 @@ def viterbi(feature_vectors, states, initial_state_probs):
 		vpath.insert(0, prev_state)
 		cur_state = table2[i-1][prev_state]
 	return vpath, cur_max
+#if __name__ == "__main__" :
+	

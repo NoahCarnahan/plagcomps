@@ -225,20 +225,50 @@ def _agglom(stylo_vectors, k):
     
 def _hmm(stylo_vectors, k):
     '''
-    Given a list of stylo_vectors, where each element is itself a feature vector,
-    return our confidence that each vector is in the plagiarism cluster 
+    Given a list of stylo_vectors, where each element of the list is a feature vector,
+    use a hidden Markov model to assign one of k preposed state values to the vectors, 
+    Observed outputs assigned similar state values are of the same cluster.
+
+    To Do:
+    Return a list of confidence values for the vector assignments
     where the i_th element in the returned list represents the confidence assigned
-    to the i_th input vector
-    
-    Uses a hidden markov model to assign states to the observed feature vector outputs.
-    Observed outputs assigned to identical states are assigned to the same cluster.
+    to the i_th input vector.
     '''
-    centroids, assigned_clusters = hmm.hmm_cluster(stylo_vectors, k)
     
+    #get centroids and cluster assignments
+    centroids, assigned_clusters = hmm.hmm_cluster(stylo_vectors, k)
+    #print 'centroids are: ', centroids
+    #print 'assigned_clusters are: (before knowing which group is nonplagiarized)', assigned_clusters    
+    '''feature_mat = array(stylo_vectors)
+    # Normalizes by column
+    normalized_features = whiten(feature_mat)
+    #Noah's version
+    if k == 2:
+        confidences = []
+        plag_cluster = Counter(assigned_clusters).most_common()[-1][0] #plag_cluster is the smallest cluster
+        not_plag_cluster = 1 if plag_cluster == 0 else 0
+        for feat_vec in normalized_features:
+            distance_from_plag = float(pdist(matrix([centroids[plag_cluster], feat_vec])))
+            distance_from_notplag = float(pdist(matrix([centroids[not_plag_cluster], feat_vec])))
+            conf = distance_from_notplag / (distance_from_notplag + distance_from_plag)
+            confidences.append(conf)
+    else:
+        # TODO: Develop a notion of confidence when k != 2
+        plag_cluster = Counter(assigned_clusters).most_common()[-1][0]
+        confidences = [1 if x == plag_cluster else 0 for x in assigned_clusters]
+        
+    return confidences
+    '''
     # Get confidences
     # TODO: Develop a real notion of confidence for hmm clustering
     plag_cluster = Counter(assigned_clusters).most_common()[-1][0]
-    return [1 if x == plag_cluster else 0 for x in assigned_clusters]
+    
+    cluster_assign = [1 if x == plag_cluster else 0 for x in assigned_clusters]
+    #print cluster_assign
+    confidences = hmm.get_confidences1(stylo_vectors, centroids, cluster_assign)
+    #confidences = hmm.get_confidences2(stylo_vectors, centroids, cluster_assign)
+    #return cluster_assign , confidences
+    return confidences
 
 def two_normal_test(n, spacing):
     first = [[random.normal()] for x in range(n)]
