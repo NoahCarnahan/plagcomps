@@ -12,7 +12,7 @@ from plagcomps.evaluation.intrinsic import _get_reduced_docs
 from plagcomps.intrinsic.featureextraction import FeatureExtractor
 
 # Hardcoded because I'm lazy. Will break.
-sys.path.append("/Accounts/wooddouz/PyGene/")
+sys.path.append("../PyGene/")
 from pygene.prog import ProgOrganism
 from pygene.population import Population
 
@@ -142,7 +142,7 @@ class FeatureGeneticProgram(ProgOrganism):
 #        'tan' : tan,
         }
     vars = [chr(ord("A") + x) for x in range(len(features))]
-    consts = [-1.0, 1.5, 10.0, -12.0]
+    consts = [-1.0] + [x/2.0 for x in range(1, 11)]
 
     mutProb = 0.4
 
@@ -225,8 +225,6 @@ class ConfidenceGeneticProgram(ProgOrganism):
     mutProb = 0.4
 
     def fitness(self, training=True):
-        # choose 10 random values
-        badness = 0.0
         actuals = []
         confidences = []
 
@@ -239,11 +237,13 @@ class ConfidenceGeneticProgram(ProgOrganism):
 
                 confidence_vectors = [ [] for x in range(len(actuals)) ] 
                 feature_vectors = doc.get_feature_vectors(features, session)
-                for index, feature in feature_vector:
-                    feature_vector = [x[index] for x in feature_vectors]
-                    one_feature_confidences = cluster("kmeans", 2, [[x] for x in feature_vector])
-                    for i in range(len(one_feature_confidences)):
-                        confidence_vectors[i].append(one_feature_confidences[i])
+                num_passages = len(feature_vectors)
+                num_features = len(features)
+                for feature_index in range(num_features):
+                    one_feature_vector = [passage_features[feature_index] for passage_features in feature_vectors]
+                    one_feature_confidences = cluster("kmeans", 2, [[feature_value] for feature_value in one_feature_vector])
+                    for passage_index in range(num_passages):
+                        confidence_vectors[passage_index].append(one_feature_confidences[passage_index])
 
             for confidence_tuple in confidence_vectors:
                 ith_confidence_slice = {chr(ord("A") + j):value for j,value in enumerate(confidence_tuple)}
@@ -252,11 +252,9 @@ class ConfidenceGeneticProgram(ProgOrganism):
                 confidences.append(computed_confidence)
 
             print self.calc_dump(self.tree)
-            print "Conf, Actual", confidences, actuals
-            # For each document, add (1 - AUC) for our ROC calculation
-            badness += (1 - BaseUtility.draw_roc(actuals, confidences, save_figure=False)[1])
+            #print "Conf, Actual", confidences, actuals
+            return (1 - BaseUtility.draw_roc(actuals, confidences, save_figure=False)[1])
 
-            return badness
         except OverflowError:
             return 1.0e+255 # infinitely bad
 
@@ -434,5 +432,8 @@ def confidence_main(nfittest=10, nkids=100):
         outfile.write("Testing: best=" + str(b.fitness(training=False)) + "\n")
 
 if __name__ == '__main__':
-    print "badness", feature_test("(((((1.5*<D>)-<Y>)-(-12.0**10.0))+(((<L>+10.0)+10.0)+10.0))*(10.0*(((1.5+<P>)**(-12.0-<H>))-((<X>*-12.0)+-1.0))))", {"D":"avg_internal_word_freq_class", "H" : "honore_r_measure", "L":"syntactic_complexity", "P":"pos_trigram,NN,NN,VB", "X":"pos_trigram,NN,NN,NN", "Y":"pos_trigram,NN,IN,DT"})
-    #print "badness", feature_test("((-12.0**<H>)*(<b>**<R>))")
+    #print "badness", feature_test("(((((1.5*<D>)-<Y>)-(-12.0**10.0))+(((<L>+10.0)+10.0)+10.0))*(10.0*(((1.5+<P>)**(-12.0-<H>))-((<X>*-12.0)+-1.0))))", {"D":"avg_internal_word_freq_class", "H" : "honore_r_measure", "L":"syntactic_complexity", "P":"pos_trigram,NN,NN,VB", "X":"pos_trigram,NN,NN,NN", "Y":"pos_trigram,NN,IN,DT"})
+
+    for i in range(100):
+        confidence_main()
+        feature_main()
