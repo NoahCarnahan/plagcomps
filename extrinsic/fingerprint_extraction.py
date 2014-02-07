@@ -13,9 +13,9 @@ import fingerprintstorage
 
 class FingerprintExtractor:
 
-    def __init__(self):
+    def __init__(self, hash_span=10000):
         self.anchors = ['ul', 'ay', 'oo', 'yo', 'si', 'ca', 'am', 'ie', 'mo', 'rt']
-        self.hash_span = 10000
+        self.hash_span = hash_span
 
     def _gen_string_hash(self, in_string):
         '''
