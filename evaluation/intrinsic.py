@@ -426,8 +426,7 @@ def _roc(reduced_docs, plag_likelihoods, save_roc_figure=True, cheating=False, c
     Note that all passages have equal weight for this curve. So, if one document is considerably
     longer than the others and our tool does especially poorly on this document, it will look as
     if the tool is bad (which is not necessarily a bad thing).
-    '''
-    print "_roc:", cheating
+    '''    
     # This function was modeled in part from this example:
     # http://scikit-learn.org/0.13/auto_examples/plot_roc.html
     
