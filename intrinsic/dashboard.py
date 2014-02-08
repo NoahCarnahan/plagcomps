@@ -14,12 +14,12 @@ import cPickle
 import glob
 
 import sqlalchemy
-from sqlalchemy import Table, Column, Sequence, Integer, String, Float, DateTime
+from sqlalchemy import Table, Column, Sequence, Integer, String, Float, DateTime, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import sessionmaker
 
-DASHBOARD_VERSION = 1
+DASHBOARD_VERSION = 3
 DASHBOARD_WEIGHTING_FILENAME = 'weighting_schemes/scheme*.pkl'
 
 Base = declarative_base()
@@ -48,6 +48,7 @@ class IntrinsicTrial(Base):
     timestamp = Column(DateTime)
     version_number = Column(Integer)
     corpus = Column(String)
+    cheating = Column(Boolean)
 
     # Actual results
     time_elapsed = Column(Float)
@@ -81,6 +82,7 @@ class IntrinsicTrial(Base):
         self.timestamp = datetime.datetime.now()
         self.version_number = args['version_number']
         self.corpus = args.get('corpus', 'intrinsic')
+        self.cheating = args.get('cheating', False)
 
         # Actual results
         self.time_elapsed = args['time_elapsed']
@@ -107,14 +109,14 @@ def all_k_sets_of_features(k=2):
 
     return k_sets
 
-def run_one_trial(feature_set, atom_type, cluster_type, k, first_doc_num, n, min_len):
+def run_one_trial(feature_set, atom_type, cluster_type, k, first_doc_num, n, min_len, cheating):
     '''
     Runs <evaluate_n_documents> and saves trial to DB
     '''
     session = Session()
 
     start = time.time()
-    path, auc = evaluate_n_documents(feature_set, cluster_type, k, atom_type, n, min_len=min_len)
+    path, auc = evaluate_n_documents(feature_set, cluster_type, k, atom_type, n, min_len=min_len, cheating=cheating)
     end = time.time()
 
     time_elapsed = end - start
@@ -129,7 +131,8 @@ def run_one_trial(feature_set, atom_type, cluster_type, k, first_doc_num, n, min
         'figure_path' : os.path.basename(path),
         'version_number' : version_number,
         'time_elapsed' : time_elapsed,
-        'auc' : auc
+        'auc' : auc,
+        'cheating' : cheating
     }
     trial = IntrinsicTrial(**trial_results)
     session.add(trial)
@@ -141,7 +144,7 @@ def run_one_trial(feature_set, atom_type, cluster_type, k, first_doc_num, n, min
     return path, auc
 
 
-def run_one_trial_weighted(feature_set, feature_set_weights, feature_weights_filename, atom_type, cluster_type, k, first_doc_num, n, min_len):
+def run_one_trial_weighted(feature_set, feature_set_weights, feature_weights_filename, atom_type, cluster_type, k, first_doc_num, n, min_len, cheating):
     '''
     Runs <evaluate_n_documents> using the given raw feature weights or confidence
     weights, and saves trail to DB.
@@ -150,9 +153,9 @@ def run_one_trial_weighted(feature_set, feature_set_weights, feature_weights_fil
 
     start = time.time()
     if cluster_type == "combine_confidences":
-        path, auc = evaluate_n_documents(feature_set, cluster_type, k, atom_type, n, min_len=min_len, feature_confidence_weights=feature_set_weights)
+        path, auc = evaluate_n_documents(feature_set, cluster_type, k, atom_type, n, min_len=min_len, feature_confidence_weights=feature_set_weights, cheating=cheating)
     else:
-        path, auc = evaluate_n_documents(feature_set, cluster_type, k, atom_type, n, min_len=min_len, feature_weights=feature_set_weights)
+        path, auc = evaluate_n_documents(feature_set, cluster_type, k, atom_type, n, min_len=min_len, feature_weights=feature_set_weights, cheating=cheating)
     end = time.time()
 
     time_elapsed = end - start
@@ -169,7 +172,8 @@ def run_one_trial_weighted(feature_set, feature_set_weights, feature_weights_fil
         'figure_path' : os.path.basename(path),
         'version_number' : version_number,
         'time_elapsed' : time_elapsed,
-        'auc' : auc
+        'auc' : auc,
+        'cheating' : cheating
     }
     trial = IntrinsicTrial(**trial_results)
     session.add(trial)
@@ -181,19 +185,19 @@ def run_one_trial_weighted(feature_set, feature_set_weights, feature_weights_fil
     return trial
 
 
-def run_all_dashboard(num_files):
+def run_all_dashboard(num_files, cheating=False):
     '''
     Runs through all parameter options as listed below, writing results to DB as it goes 
     '''
     feature_set_options = get_feature_sets()
     atom_type_options = [
         'nchars',
-        'paragraph'
+        #'paragraph'
     ]
 
     cluster_type_options = [
         'outlier',
-        'kmeans'
+        #'kmeans'
     ]
 
     # For now, test on all documents (not just "long" ones)
@@ -210,14 +214,15 @@ def run_all_dashboard(num_files):
             'n' : num_files,
             'min_len' : min_len,
             'k' : 2,
+            'cheating' : cheating
         }
 
         trial = run_one_trial(**params)
 
-    run_all_weighting_schemes(num_files, atom_type_options, cluster_type_options, min_len_options)
+    run_all_weighting_schemes(num_files, atom_type_options, cluster_type_options, min_len_options, cheating)
 
 
-def run_all_weighting_schemes(num_files, atom_types, cluster_types, min_len_options):
+def run_all_weighting_schemes(num_files, atom_types, cluster_types, min_len_options, cheating):
     '''
     Reads the weighting schemes from 'feature_weights.txt' and write the results to DB.
     '''
@@ -252,7 +257,8 @@ def run_all_weighting_schemes(num_files, atom_types, cluster_types, min_len_opti
                 'first_doc_num' : 0,
                 'n' : num_files,
                 'min_len' : min_len,
-                'k' : 2
+                'k' : 2,
+                'cheating' : cheating
             }
             print
 
@@ -301,5 +307,5 @@ Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 
 if __name__ == '__main__':
-    n = 500
+    n = 20
     run_all_dashboard(n)
