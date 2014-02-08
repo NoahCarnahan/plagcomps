@@ -52,12 +52,14 @@ class BaseUtility:
         
         figure_path = os.path.join(os.path.dirname(__file__), "../figures/roc"+str(time.time())+".pdf")
         json_path = figure_path.replace('pdf', 'json')
-        pyplot.savefig(figure_path)
+        
+        if save_figure:
+            pyplot.savefig(figure_path)
 
-        # Save a JSON file of metadata about figure
-        metadata['auc'] = roc_auc
-        with open(json_path, 'wb') as f:
-            json.dump(metadata, f, indent=4)
+            # Save a JSON file of metadata about figure
+            metadata['auc'] = roc_auc
+            with open(json_path, 'wb') as f:
+                json.dump(metadata, f, indent=4)
 
         return figure_path, roc_auc
 
