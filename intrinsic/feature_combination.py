@@ -189,21 +189,25 @@ def _get_feature_conf_and_actuals(features, cluster_type, atom_type, start_doc, 
     return rotated, actuals
 
 def _test():
-    # features = [
-    #     'average_syllables_per_word',
-    #     'flesch_kincaid_grade',
-    #     'gunning_fog_index',
-    #     'honore_r_measure',
-    #     'yule_k_characteristic',
-    #     'avg_external_word_freq_class'
-    # ]
-    features = FeatureExtractor.get_all_feature_function_names()
+    features = [
+        'gunning_fog_index',
+        'syntactic_complexity',
+        'word_unigram,is',
+        'avg_internal_word_freq_class',
+        'average_sentence_length',
+        'avg_external_word_freq_class',
+        'average_syllables_per_word',
+        'pos_trigram,VB,NN,VB',
+        # others
+        'honore_r_measure',
+        'yule_k_characteristic',
+    ]
     print features
     start_doc = 0
     cluster_type = 'outlier'
     atom_type = 'nchars'
-    ntrain = 10
-    ntest = 25
+    ntrain = 200
+    ntest = 300
 
     model, confs = train_and_predict(features, cluster_type, atom_type, start_doc, ntrain, ntest)
 
@@ -237,6 +241,7 @@ def stepwise_feature_selection(features, cluster_type, k, atom_type, n, min_len=
 
         for next_feat in remaining_features:
             cand_feature_set = last_best_feature_set + [next_feat]
+            print 'Using feature set', cand_feature_set
             cand_path, cand_auc = run_one_trial(cand_feature_set, atom_type, cluster_type, k, first_doc_num,
                                                        n, min_len=min_len)
 
@@ -248,6 +253,7 @@ def stepwise_feature_selection(features, cluster_type, k, atom_type, n, min_len=
             print 'One attempt:', cand_feature_set, cand_auc
             print 'Current best:', cur_best_feature_set, cur_best_auc
             
+        remaining_features.remove(cur_added_feature)
         # Keep track of the best set from this round
         last_best_feature_set = cur_best_feature_set
         # Add the latest best feature set, move on to next round
@@ -262,7 +268,7 @@ def _default_stepwise_params():
     cluster_type = 'outlier'
     k = 2
     atom_type = 'nchars'
-    n = 400
+    n = 500
     first_doc_num = 0
     
     results = stepwise_feature_selection(features, cluster_type, k, atom_type, n, first_doc_num=first_doc_num)
@@ -271,4 +277,5 @@ def _default_stepwise_params():
 
 
 if __name__ == '__main__':
-    print _default_stepwise_params()
+    #print _default_stepwise_params()
+    _test()
