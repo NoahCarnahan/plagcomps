@@ -258,6 +258,39 @@ def run_all_weighting_schemes(num_files, atom_types, cluster_types, min_len_opti
 
             trial = run_one_trial_weighted(**params)
 
+def get_latest_dashboard():
+    '''
+    TODO finish this -- should grab/display latest dashboard runs broken
+    down by various params. Perhaps like:
+    |    PARAGRAPH     |       NCHARS     |
+    | kmeans | outlier | kmeans | outlier |
+    '''
+    feature_set_options = get_feature_sets()
+    atom_type_options = [
+        'nchars',
+        'paragraph'
+    ]
+
+    cluster_type_options = [
+        'outlier',
+        'kmeans'
+    ]
+
+    for feature_set, atom_type, cluster_type, min_len in \
+            itertools.product(feature_set_options, atom_type_options, cluster_type_options, min_len_options):
+        print feature_set, atom_type, cluster_type, min_len
+        try:
+            q = session.query(IntrinsicTrial).filter(
+                and_(IntrinsicTrial.atom_type == atom_type,
+                     IntrinsicTrial.cluster_type == cluster_type,
+                     IntrinsicTrial.features == feature_set,
+                     IntrinsicTrial.min_len == min_len)).order_by(IntrinsicTrial.timestamp)
+
+            latest_matching_trial = q.first()
+        except sqlalchemy.orm.exc.NoResultFound, e:
+            print 'Didn\'t find a trial for %s, %s, min_len = %i' % (atom_type, cluster_type, )
+            print 'Using' 
+
 
 # an Engine, which the Session will use for connection resources
 url = "postgresql://%s:%s@%s" % (username, password, dbname)
