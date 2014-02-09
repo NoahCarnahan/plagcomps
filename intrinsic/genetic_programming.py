@@ -11,7 +11,6 @@ from plagcomps.intrinsic.cluster import cluster
 from plagcomps.evaluation.intrinsic import _get_reduced_docs
 from plagcomps.intrinsic.featureextraction import FeatureExtractor
 
-# Hardcoded because I'm lazy. Will break.
 sys.path.append("../PyGene/")
 from pygene.prog import ProgOrganism
 from pygene.population import Population
@@ -19,16 +18,6 @@ from pygene.population import Population
 import sqlalchemy
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-
-"""
-Demo of genetic programming
-
-This gp setup seeks to breed an organism which
-implements func x^2 + y
-
-Takes an average of about 40 generations
-to breed a matching program
-"""
 
 url = "postgresql://%s:%s@%s" % (username, password, dbname)
 engine = sqlalchemy.create_engine(url)
@@ -38,11 +27,12 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 features = FeatureExtractor.get_all_feature_function_names()
-num_training = 50 
+num_training = 3 
 num_testing = 0
 starting_doc = 0
 training_files = IntrinsicUtility().get_n_training_files(n=num_training, first_doc_num=starting_doc)
 test_files = IntrinsicUtility().get_n_training_files(n=num_testing, first_doc_num=starting_doc + num_training)
+cached_reduced_docs = {}
 
 # a tiny batch of functions
 def add(x,y):
@@ -321,6 +311,25 @@ def graph(orig, best):
             print "%03.0f " % z,
         print
 
+def get_cached_reduced_docs(atom_type, files):
+    cached_docs = cached_reduced_docs.get(atom_type, {})
+    return_docs = []
+    need_to_query = []
+    for f in files:
+        if f in cached_docs:
+            return_docs.append(cached_docs[f])
+        else:
+            need_to_query.append(f)
+    
+    queried = _get_reduced_docs(atom_type, need_to_query, session)  
+    for q in queried:
+       return_docs.append(q)
+       cached_docs[q.full_path] = q
+    
+    cached_reduced_docs[atom_type] = cached_docs
+    return return_docs
+
+
 def test_evaluate(formula, feature_slice, feature_mapping):
     #print "feature_slice", feature_slice
     #print "feature_mapping", feature_mapping
@@ -432,7 +441,15 @@ def confidence_main(nfittest=10, nkids=100):
         outfile.write("Testing: best=" + str(b.fitness(training=False)) + "\n")
 
 if __name__ == '__main__':
-    print feature_test("(((((1.5*<D>)-<Y>)-(-12.0**10.0))+(((<L>+10.0)+10.0)+10.0))*(10.0*(((1.5+<P>)**(-12.0-<H>))-((<X>*-12.0)+-1.0))))", {"D":"avg_internal_word_freq_class", "H" : "honore_r_measure", "L":"syntactic_complexity", "P":"pos_trigram,NN,NN,VB", "X":"pos_trigram,NN,NN,NN", "Y":"pos_trigram,NN,IN,DT"})
+
+    print cached_reduced_docs
+    print get_cached_reduced_docs("paragraph", training_files)
+    print cached_reduced_docs
+    print get_cached_reduced_docs("nchars", training_files)
+    print cached_reduced_docs
+    
+
+    #print feature_test("(((((1.5*<D>)-<Y>)-(-12.0**10.0))+(((<L>+10.0)+10.0)+10.0))*(10.0*(((1.5+<P>)**(-12.0-<H>))-((<X>*-12.0)+-1.0))))", {"D":"avg_internal_word_freq_class", "H" : "honore_r_measure", "L":"syntactic_complexity", "P":"pos_trigram,NN,NN,VB", "X":"pos_trigram,NN,NN,NN", "Y":"pos_trigram,NN,IN,DT"})
 
     #for i in range(100):
     #    confidence_main()
