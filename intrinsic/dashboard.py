@@ -13,13 +13,15 @@ import os.path
 import cPickle
 import glob
 
+import numpy
+
 import sqlalchemy
-from sqlalchemy import Table, Column, Sequence, Integer, String, Float, DateTime, Boolean
+from sqlalchemy import Table, Column, Sequence, Integer, String, Float, DateTime, Boolean, and_, cast
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import sessionmaker
 
-DASHBOARD_VERSION = 3
+DASHBOARD_VERSION = 1
 DASHBOARD_WEIGHTING_FILENAME = 'weighting_schemes/scheme*.pkl'
 
 Base = declarative_base()
@@ -192,12 +194,12 @@ def run_all_dashboard(num_files, cheating=False):
     feature_set_options = get_feature_sets()
     atom_type_options = [
         'nchars',
-        #'paragraph'
+        'paragraph'
     ]
 
     cluster_type_options = [
         'outlier',
-        #'kmeans'
+        'kmeans'
     ]
 
     # For now, test on all documents (not just "long" ones)
@@ -297,6 +299,119 @@ def get_latest_dashboard():
             print 'Didn\'t find a trial for %s, %s, min_len = %i' % (atom_type, cluster_type, )
             print 'Using' 
 
+def get_pairwise_results(atom_type, cluster_type, n, min_len, feature_set=None, cheating=False):
+    '''
+    Generates a table for the results of all feature pairs.
+    '''
+    all_features = FeatureExtractor.get_all_feature_function_names()
+    if not feature_set:
+        feature_set = itertools.combinations(all_features, 2)
+
+    session = Session()
+
+    values = []
+    results = {}
+    for feature_pair in feature_set:
+        trial = _get_latest_trial(atom_type, cluster_type, n, min_len, list(feature_pair), cheating, session)
+        if trial:
+            results[feature_pair] = round(trial.auc, 4)
+            values.append(trial.auc)
+        else:
+            results[feature_pair] = "n/a"
+
+    mean = numpy.array(values).mean()
+    stdev = numpy.array(values).std()
+
+    columns = all_features
+    rows = all_features
+
+    cells = []
+    for feature_a in rows:
+        row = []
+        for feature_b in columns:
+            if feature_a == feature_b:
+                row.append("n/a")
+            else:
+                if (feature_a, feature_b) in results:
+                    row.append(results[(feature_a, feature_b)])
+                elif (feature_b, feature_a) in results:
+                    row.append(results[(feature_b, feature_a)])
+                else:
+                    row.append('???')
+        cells.append(row)
+
+    # Is html table the best way to view it?
+    html = '<html><head></head><body>'
+    html += '<h1>Pairwise Feature Results</h1>'
+    html += '<p>DASHBOARD_VERSION = ' + str(DASHBOARD_VERSION) + '</p>'
+    html += '<p>cheating = ' + str(cheating) + '</p>'
+    html += '<p>atom_type = ' + str(atom_type) + '</p>'
+    html += '<p>cluster_type = ' + str(cluster_type) + '</p>'
+    html += '<p>n >= ' + str(n) + '</p>'
+    html += '<p>min_len = ' + str(min_len) + '</p>'
+    html += '<p>auc mean = ' + str(round(mean, 4)) + ', stdev = ' + str(round(stdev, 4)) + '</p>'
+    html += '<table border="1">'
+    html += '<tr>'
+    html += '<td></td>'
+    for feature in columns:
+        html += '<td>' + feature + '</td>'
+    html += '</tr>'
+    for i, feature_a in enumerate(rows, 0):
+        html += '<tr>'
+        html += '<td>' + feature_a + '</td>'
+        for j, feature_b in enumerate(columns, 0):
+            # set bg color of table cell to help visualize good features
+            if type(cells[i][j]) == float:
+                val = cells[i][j]
+                z_score = (val - mean) / stdev
+                if z_score > 3:
+                    bgcolor = '#00FF00'
+                elif z_score > 2:
+                    bgcolor = '#AAFFAA'
+                elif z_score > 1:
+                    bgcolor = '#DDFFDD'
+                elif z_score > -1:
+                    bgcolor = '#FFFFFF'
+                elif z_score > -2:
+                    bgcolor = '#FFDDDD'
+                elif z_score > -3:
+                    bgcolor = '#FFAAAA'
+                else:
+                    bgcolor = '#FF0000'
+            else:
+                bgcolor = '#888888'
+
+            html += '<td style="background-color: ' + bgcolor + '">' + str(cells[i][j]) + '</td>'
+        html += '</tr>'
+
+    html += '</table></body></html>'
+    
+    html_path = os.path.join(os.path.dirname(__file__), "../figures/dashboard_pairwise_table_"+str(DASHBOARD_VERSION)+"_"+str(time.time())+".html")
+    with open(html_path, 'w') as f:
+        f.write(html)
+    print 'Saved pairwise feature table to ' + html_path
+
+
+def _get_latest_trial(atom_type, cluster_type, n, min_len, feature_set, cheating, session):
+    '''
+    Helper that queries that database for the latest version of the trials with the
+    given parameters.
+    '''
+    try:
+        q = session.query(IntrinsicTrial).filter(
+            and_(IntrinsicTrial.atom_type == atom_type,
+                 IntrinsicTrial.cluster_type == cluster_type,
+                 IntrinsicTrial.features == cast(feature_set, ARRAY(String)),
+                 IntrinsicTrial.n >= n,
+                 IntrinsicTrial.min_len == min_len,
+                 IntrinsicTrial.cheating == cheating,
+                 IntrinsicTrial.version_number == DASHBOARD_VERSION)).order_by(IntrinsicTrial.timestamp)
+        latest_matching_trial = q.first()
+    except sqlalchemy.orm.exc.NoResultFound, e:
+        print 'Didn\'t find a trial for params:', atom_type, cluster_type, feature_set, n, min_len
+        latest_matching_trial = 1
+    return latest_matching_trial
+
 
 # an Engine, which the Session will use for connection resources
 url = "postgresql://%s:%s@%s" % (username, password, dbname)
@@ -307,5 +422,7 @@ Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 
 if __name__ == '__main__':
-    n = 20
+    # get_pairwise_results('nchars', 'outlier', 500, 0, cheating=False)
+    
+    n = 500
     run_all_dashboard(n)
