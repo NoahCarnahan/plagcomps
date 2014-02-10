@@ -6,7 +6,6 @@ each of the suspicious passages. It will return a % likelihood of plagiarism
 for each suspicious paragraph in terms of intrinsic and extrinsic analysis.
 '''
 import intrinsic
-
 import operator
 
 INTRINSIC_SUSPICION_THRESHOLD = .85
