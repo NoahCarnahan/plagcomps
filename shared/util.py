@@ -156,6 +156,8 @@ class IntrinsicUtility(BaseUtility):
 
     TRAINING_LOC = os.path.join(UTIL_LOC, '..', 'corpus_partition/training_set_files.txt')
     CORPUS_LOC = '/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents'
+    # TRAINING_LOC = os.path.join(UTIL_LOC, '..', 'sample_corpus/sample_files.txt')
+    # CORPUS_LOC = os.path.join(UTIL_LOC, '..', 'sample_corpus/')
 
     def read_corpus_file(self, rel_path):
         '''
