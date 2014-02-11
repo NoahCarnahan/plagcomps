@@ -590,26 +590,6 @@ class FeatureExtractor:
 
         return 10000 * (M2 - M1) / max(1, (M1 ** 2))
 
-    def evolved_feature_one(self, sent_spans_index_start, sent_spans_index_end):
-        '''
-        (((((1.5*D)-Y)-(-12.0**10.0))+(((L+10.0)+10.0)+10.0))*(10.0*(((1.5+P)**(-12.0-H))-((X*-12.0)+-1.0))))
-        where D = avg_internal_word_freq_class; H = honore_r_measure; L = syntactic_complexity;
-        P = pos_trigram,NN,NN,VB; X = pos_trigram,NN,NN,NN; Y = pos_trigram,NN,IN,DT
-        '''
-
-        start = self.sentence_spans[sent_spans_index_start][0]
-        if sent_spans_index_end >= len(self.sentence_spans):
-            end = self.sentence_spans[-1][1]
-        else:
-            end = self.sentence_spans[sent_spans_index_end][1]
-    
-        #for feature in ["x", "y"]:
-            
-        D, H, L, P, X, Y = self._get_feature_vector(["avg_internal_word_freq_class", "honore_r_measure", "syntactic_complexity",
-                        "pos_trigram,NN,NN,VB", "pos_trigram,NN,NN,NN", "pos_trigram,NN,IN,DT"], start, end)
-    
-        return (((((1.5*D)-Y)-(-12.0**10.0))+(((L+10.0)+10.0)+10.0))*(10.0*(((1.5+P)**(-12.0-H))-((X*-12.0)+-1.0))))
-
     def _init_evolved_feature_two(self):
         '''
         save the feature vectors for the features we care about for this feature
@@ -628,6 +608,92 @@ class FeatureExtractor:
 
         D, H, L, P, X, Y = [sum([feature_tuple[i] for feature_tuple in feature_vectors]) for i in range(len(feature_vectors[0]))]
         computed = (((((1.5*D)-Y)-(-12.0**10.0))+(((L+10.0)+10.0)+10.0))*(10.0*(((1.5+P)**(-12.0-H))-((X*-12.0)+-1.0))))
+
+        return computed
+
+    def _init_evolved_feature_three(self):
+        '''
+        save the feature vectors for the features we care about for this feature
+        F = evolved_feature_two; K = num_chars
+        M = stopword_percentage; O = syntactic complexity
+        '''
+
+        self.features["evolved_feature_three"] = self.get_feature_vectors(["evolved_feature_two", "num_chars", "stopword_percentage", "syntactic_complexity"], "paragraph")
+        
+    def evolved_feature_three(self, para_spans_index_start, para_spans_index_end):
+        '''
+        calculate out the evolved formula
+        '''
+        if "evolved_feature_three" not in self.features:
+            self._init_evolved_feature_three()
+
+        feature_vectors = self.features["evolved_feature_three"][para_spans_index_start:para_spans_index_end]
+
+        F, K, M, O = [sum([feature_tuple[i] for feature_tuple in feature_vectors]) for i in range(len(feature_vectors[0]))]
+        computed = F - 2 * K - M + O
+
+        return computed
+
+    def _init_evolved_feature_four(self):
+        '''
+        save the feature vectors for the features we care about for this feature
+        '''
+
+        self.features["evolved_feature_four"] = self.get_feature_vectors(["evolved_feature_two", "flesch_kincaid_grade", "flesch_reading_ease", "stopword_percentage", "pos_trigram,DT,NNS,IN"], "paragraph")
+        
+    def evolved_feature_four(self, para_spans_index_start, para_spans_index_end):
+        '''
+        calculate out the evolved formula
+        '''
+        if "evolved_feature_four" not in self.features:
+            self._init_evolved_feature_four()
+
+        feature_vectors = self.features["evolved_feature_four"][para_spans_index_start:para_spans_index_end]
+
+        F, G, H, M, W = [sum([feature_tuple[i] for feature_tuple in feature_vectors]) for i in range(len(feature_vectors[0]))]
+        computed = F + G + 6 * H + M - W
+
+        return computed
+
+    def _init_evolved_feature_five(self):
+        '''
+        save the feature vectors for the features we care about for this feature
+        '''
+
+        self.features["evolved_feature_five"] = self.get_feature_vectors(["average_syllables_per_word", "honore_r_measure"], "paragraph")
+        
+    def evolved_feature_five(self, para_spans_index_start, para_spans_index_end):
+        '''
+        calculate out the evolved formula
+        '''
+        if "evolved_feature_five" not in self.features:
+            self._init_evolved_feature_five()
+
+        feature_vectors = self.features["evolved_feature_five"][para_spans_index_start:para_spans_index_end]
+
+        B, J = [sum([feature_tuple[i] for feature_tuple in feature_vectors]) for i in range(len(feature_vectors[0]))]
+        computed = 5 * 4 ** ( (1.5 - J)**B - B - J - 3)
+
+        return computed
+
+    def _init_evolved_feature_six(self):
+        '''
+        save the feature vectors for the features we care about for this feature
+        '''
+
+        self.features["evolved_feature_six"] = self.get_feature_vectors(["evolved_feature_two", "flesch_reading_ease", "pos_trigram,VB,NN,VB", "pos_trigram,DT,NN,IN", "word_unigram,been"], "paragraph")
+        
+    def evolved_feature_six(self, para_spans_index_start, para_spans_index_end):
+        '''
+        calculate out the evolved formula
+        '''
+        if "evolved_feature_six" not in self.features:
+            self._init_evolved_feature_six()
+
+        feature_vectors = self.features["evolved_feature_six"][para_spans_index_start:para_spans_index_end]
+
+        F, H, X, Y, d = [sum([feature_tuple[i] for feature_tuple in feature_vectors]) for i in range(len(feature_vectors[0]))]
+        computed = 20 * d * H * 6.5 ** (x ** Y ) + F
 
         return computed
 
