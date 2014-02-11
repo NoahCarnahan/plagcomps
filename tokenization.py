@@ -2,7 +2,7 @@ import nltk
 import re
 import string
 
-def tokenize(text, atom_type, n=None, return_spans=True):
+def tokenize(text, atom_type, n=5000, return_spans=True):
     '''
     By default, return a list of spans designating the location of 
     each passage in the given text. atom_type determines the type of passages.

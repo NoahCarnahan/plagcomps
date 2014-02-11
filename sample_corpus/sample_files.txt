@@ -1,0 +1,3 @@
+hamlet_clean
+emma_clean
+emma_and_shakespeare

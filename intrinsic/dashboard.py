@@ -21,7 +21,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import sessionmaker
 
-DASHBOARD_VERSION = 1
+DASHBOARD_VERSION = 2
 DASHBOARD_WEIGHTING_FILENAME = 'weighting_schemes/scheme*.pkl'
 
 Base = declarative_base()
@@ -187,11 +187,15 @@ def run_one_trial_weighted(feature_set, feature_set_weights, feature_weights_fil
     return trial
 
 
-def run_all_dashboard(num_files, cheating=False):
+def run_all_dashboard(num_files, cheating=False, feature_set=None):
     '''
     Runs through all parameter options as listed below, writing results to DB as it goes 
     '''
-    feature_set_options = get_feature_sets()
+    if feature_set:
+        feature_set_options = feature_set
+    else:
+        feature_set_options = get_feature_sets()
+
     atom_type_options = [
         'nchars',
         'paragraph'
@@ -305,19 +309,21 @@ def get_pairwise_results(atom_type, cluster_type, n, min_len, feature_set=None, 
     '''
     all_features = FeatureExtractor.get_all_feature_function_names()
     if not feature_set:
-        feature_set = itertools.combinations(all_features, 2)
-
+        feature_set = list(itertools.combinations(all_features, 2))
+        feature_set += [(x,x) for x in all_features]
     session = Session()
 
     values = []
     results = {}
     for feature_pair in feature_set:
+        if feature_pair[0] == feature_pair[1]:
+            feature_pair = [feature_pair[0]]
         trial = _get_latest_trial(atom_type, cluster_type, n, min_len, list(feature_pair), cheating, session)
         if trial:
-            results[feature_pair] = round(trial.auc, 4)
+            results[tuple(feature_pair)] = round(trial.auc, 4)
             values.append(trial.auc)
         else:
-            results[feature_pair] = "n/a"
+            results[tuple(feature_pair)] = "n/a"
 
     mean = numpy.array(values).mean()
     stdev = numpy.array(values).std()
@@ -330,7 +336,7 @@ def get_pairwise_results(atom_type, cluster_type, n, min_len, feature_set=None, 
         row = []
         for feature_b in columns:
             if feature_a == feature_b:
-                row.append("n/a")
+                row.append(results[tuple([feature_a])])
             else:
                 if (feature_a, feature_b) in results:
                     row.append(results[(feature_a, feature_b)])
@@ -354,7 +360,7 @@ def get_pairwise_results(atom_type, cluster_type, n, min_len, feature_set=None, 
     html += '<tr>'
     html += '<td></td>'
     for feature in columns:
-        html += '<td>' + feature + '</td>'
+        html += '<td style="font-size: 0.7em">' + feature + '</td>'
     html += '</tr>'
     for i, feature_a in enumerate(rows, 0):
         html += '<tr>'
@@ -422,7 +428,26 @@ Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 
 if __name__ == '__main__':
-    # get_pairwise_results('nchars', 'outlier', 500, 0, cheating=False)
+    # get_pairwise_results('nchars', 'outlier', 500, 0, cheating=True)
     
+    # good_features = ['average_sentence_length',
+    #                 'average_syllables_per_word',
+    #                 'avg_external_word_freq_class',
+    #                 'avg_internal_word_freq_class',
+    #                 'gunning_fog_index',
+    #                 'honore_r_measure',
+    #                 'num_chars',
+    #                 'punctuation_percentage',
+    #                 'syntactic_complexity',
+    #                 'vowelness_trigram,C,V,C',
+    #                 'vowelness_trigram,C,V,V',
+    #                 'word_unigram,of',
+    #                 'word_unigram,the']
+    # feature_set_options = []
+    # for i in xrange(3, len(good_features)+1):
+    #     for x in itertools.combinations(good_features, i):
+    #         feature_set_options.append(x)
+    # feature_set_options = feature_set_options[50:]
+
     n = 500
-    run_all_dashboard(n)
+    run_all_dashboard(n, cheating=True)
