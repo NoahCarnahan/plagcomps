@@ -148,7 +148,7 @@ def evaluate(features, cluster_type, k, atom_type, docs, corpus='intrinsic', sav
         if DEBUG:
             print "On document", d, ". The", count, "th document."
 
-        feature_vecs = d.get_feature_vectors(features, session, cheating=cheating)
+        feature_vecs = d.get_feature_vectors(features, session, cheating=cheating, cheating_min_len=cheating_min_len)
         # skip if there are no feature_vectors
         if cheating and len(feature_vecs) < 7: # 7, because that's what Benno did
             continue
@@ -174,7 +174,7 @@ def evaluate(features, cluster_type, k, atom_type, docs, corpus='intrinsic', sav
     metadata['k'] = k
     metadata['atom_type'] = atom_type
     metadata['n'] = len(reduced_docs)
-    roc_path, roc_auc = _roc(valid_reduced_docs, plag_likelihoods, save_roc_figure=save_roc_figure, cheating=cheating, **metadata)
+    roc_path, roc_auc = _roc(valid_reduced_docs, plag_likelihoods, save_roc_figure=save_roc_figure, cheating=cheating, cheating_min_len=cheating_min_len, **metadata)
     session.close()
 
     # Return reduced_docs for caching in case we call <evaluate> multiple times
@@ -183,11 +183,11 @@ def evaluate(features, cluster_type, k, atom_type, docs, corpus='intrinsic', sav
 def _output_to_file(assignment_dict, atom_type, cluster_type):
 
     for document in assignment_dict.keys():
-	output_file = open("plagcomps/intrinsic/textAnalysis/Authorship" + str(time.time()) + ".txt", "w+")
+        output_file = open(ospath.join(ospath.dirname(__file__), "../intrinsic/textAnalysis/" + str(time.time()) + ".txt"), "w")
         plag_atoms = []
         non_plag_atoms = []
         for i in xrange(len(assignment_dict[document])):
-            if assignment_dict[document][i] <= 50:
+            if assignment_dict[document][i] <= 0.5:
                 non_plag_atoms.append(i)
             else:
                 plag_atoms.append(i)
@@ -196,34 +196,34 @@ def _output_to_file(assignment_dict, atom_type, cluster_type):
         text = reader.read()
         reader.close()
 
-	total_atoms = len(non_plag_atoms) + len(plag_atoms)
+    	total_atoms = len(non_plag_atoms) + len(plag_atoms)
         atom_spans = tokenize(text, atom_type)
 
-	output_file.write("Document Name: " +  document._short_name + "\n")
-	output_file.write("Atom_Type: " + atom_type + "\n")
-	output_file.write("Cluster_Method: " + cluster_type + "\n")
-	output_file.write("Plagiarized Atoms Count: " + str(len(plag_atoms)) + "/" + str(total_atoms) + "\n")
-	output_file.write("Non-Plagiarized Atoms Count: " + str(len(non_plag_atoms)) + "/" + str(total_atoms) + "\n\n")
-	output_file.write("---"*25 + "\n")
-	output_file.write("NON-PLAGIARIZED ATOMS\n")
-	output_file.write("---"*25 + "\n")
+    	output_file.write("Document Name: " +  document._short_name + "\n")
+    	output_file.write("Atom_Type: " + atom_type + "\n")
+    	output_file.write("Cluster_Method: " + cluster_type + "\n")
+    	output_file.write("Plagiarized Atoms Count: " + str(len(plag_atoms)) + "/" + str(total_atoms) + "\n")
+    	output_file.write("Non-Plagiarized Atoms Count: " + str(len(non_plag_atoms)) + "/" + str(total_atoms) + "\n\n")
+    	output_file.write("---"*25 + "\n")
+    	output_file.write("NON-PLAGIARIZED ATOMS\n")
+    	output_file.write("---"*25 + "\n")
 
-	for index in non_plag_atoms:
-		atom_text = text[atom_spans[index][0]:atom_spans[index][1]]
-		output_file.write("This is an atom: \n")
-		output_file.write(atom_text + "\n\n")
+    	for index in non_plag_atoms:
+    		atom_text = text[atom_spans[index][0]:atom_spans[index][1]]
+    		output_file.write("This is an atom: \n")
+    		output_file.write(atom_text + "\n\n")
 
-	output_file.write("---"*25 + "\n")
-	output_file.write("PLAGIARIZED ATOMS\n")
-	output_file.write("---"*25 + "\n")
+    	output_file.write("---"*25 + "\n")
+    	output_file.write("PLAGIARIZED ATOMS\n")
+    	output_file.write("---"*25 + "\n")
 
-	for index in plag_atoms:
-		atom_text = text[atom_spans[index][0]:atom_spans[index][1]]
-		output_file.write("This is an atom: \n")
-		output_file.write(atom_text + "\n\n")
+    	for index in plag_atoms:
+    		atom_text = text[atom_spans[index][0]:atom_spans[index][1]]
+    		output_file.write("This is an atom: \n")
+    		output_file.write(atom_text + "\n\n")
 
-	output_file.write("***"*25)
-	output_file.close()
+    	output_file.write("***"*25)
+    	output_file.close()
 		
 
 def compare_outlier_params(n, features=None, min_len=None):
@@ -814,9 +814,9 @@ if __name__ == "__main__":
 
     # _test()
 
-    features = ['gunning_fog_index','syntactic_complexity',"word_unigram,is",'avg_internal_word_freq_class','average_sentence_length',"word_unigram,of",'avg_external_word_freq_class',"word_unigram,the",'flesch_reading_ease','average_sentence_length',"vowelness_trigram,C,V,C","word_unigram,is",'gunning_fog_index','average_sentence_length','honore_r_measure',"word_unigram,of",'gunning_fog_index',"word_unigram,is","pos_trigram,NNS,IN,DT",'average_sentence_length',"word_unigram,been",'average_sentence_length','num_chars','average_sentence_length',"word_unigram,is","word_unigram,of",'avg_internal_word_freq_class','gunning_fog_index',"vowelness_trigram,V,V,V","word_unigram,the",'punctuation_percentage','average_sentence_length',"word_unigram,is","word_unigram,of",'honore_r_measure','average_sentence_length','average_sentence_length',"pos_trigram,VB,IN,DT","pos_trigram,NN,IN,NN",'punctuation_percentage',"word_unigram,of","pos_trigram,DT,NNS,IN","pos_trigram,NN,NN,NN",'average_sentence_length','average_sentence_length',"word_unigram,the",'average_sentence_length',"word_unigram,is",'average_sentence_length','honore_r_measure',"word_unigram,of","vowelness_trigram,C,V,V","word_unigram,of","word_unigram,is",'flesch_reading_ease','average_sentence_length',"word_unigram,the","pos_trigram,NN,IN,NP"]
+    features = ['punctuation_percentage', 'gunning_fog_index','syntactic_complexity', 'num_chars', 'vowelness_trigram,C,V,C', 'avg_internal_word_freq_class']
                  
     #feature_confidence_weights = [0.6492269039473438, 0.08020730166391861, 1.0, 0.7481609037593294, 0.00001, 0.07811654825143369, 0.272335107617069, 0.06299892339329263, 0.05524606112540992]
     #print evaluate_n_documents(features, 'combine_confidences', 2, 'paragraph', 50, feature_confidence_weights=feature_confidence_weights, first_doc_num=0, min_len=0)
 
-    print evaluate_n_documents(features, "outlier", 2, "nchars", 500, cheating=True, save_roc_figure=True)
+    print evaluate_n_documents(features, "outlier", 2, "nchars", 3, cheating=True, cheating_min_len=5000, save_roc_figure=True)
