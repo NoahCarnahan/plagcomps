@@ -809,16 +809,21 @@ def run_individual_features(features, cluster_type, k, atom_type, n, min_len=Non
 # ls -t | grep json | xargs grep auc | awk '{print $1, $3; }' | sort -gk 2 | tail -n 20
 # Replace the 20 with a larger number to see more results
 if __name__ == "__main__":
-    # features = FeatureExtractor.get_all_feature_function_names()
+    features = FeatureExtractor.get_all_feature_function_names()
+    features_nested = FeatureExtractor.get_all_feature_function_names(True)
     # populate_database(['paragraph', 'nchars'], None, features=features, corpus='extrinsic')
 
     # _test()
 
-    features = ['punctuation_percentage', 'gunning_fog_index','syntactic_complexity', 'num_chars', 'vowelness_trigram,C,V,C', 'avg_internal_word_freq_class']
+    #features = ['punctuation_percentage', 'gunning_fog_index','syntactic_complexity', 'num_chars', 'vowelness_trigram,C,V,C', 'avg_internal_word_freq_class']
                  
     #feature_confidence_weights = [0.6492269039473438, 0.08020730166391861, 1.0, 0.7481609037593294, 0.00001, 0.07811654825143369, 0.272335107617069, 0.06299892339329263, 0.05524606112540992]
     #print evaluate_n_documents(features, 'combine_confidences', 2, 'paragraph', 50, feature_confidence_weights=feature_confidence_weights, first_doc_num=0, min_len=0)
-    print evaluate_n_documents(["evolved_feature_three"], "kmeans", 2, "paragraph", 500)
+
+    # zach test
+    print features_nested, len(features_nested)
+
+    print evaluate_n_documents(features_nested, "kmeans", 2, "paragraph", 550, first_doc_num=0)
 
     #print evaluate_n_documents(features, "outlier", 2, "nchars", 500, cheating=True, save_roc_figure=True)
-    print evaluate_n_documents(features, "outlier", 2, "nchars", 3, cheating=True, cheating_min_len=5000, save_roc_figure=True)
+    #print evaluate_n_documents(features, "outlier", 2, "nchars", 3, cheating=True, cheating_min_len=5000, save_roc_figure=True)

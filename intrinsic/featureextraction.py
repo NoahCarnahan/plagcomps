@@ -53,6 +53,7 @@ class FeatureExtractor:
 
         # We will track different kinds of features to include nested features
         char_features, word_features, sent_features = [], [], []
+        not_nestable = ["word_unigram", "pos_trigram", "vowelness_trigram"]
 
         for func_name, func in all_methods:
             func_args = set(inspect.getargspec(func).args)
@@ -65,7 +66,7 @@ class FeatureExtractor:
                 feature_function_names.append(func_name)
 
                 # if we want nested features, save functions in their respective lists
-                if include_nested:
+                if include_nested and func_name not in not_nestable:
                     if "char_spans_index_start" in func_args:
                         char_features.append(func_name)
                     if "word_spans_index_start" in func_args:
@@ -938,6 +939,46 @@ class FeatureExtractor:
         num_chars = char_index_end - char_index_start
         return float(total_punctuation) / max(num_chars, 1)
 
+    def _init_syntactic_complexity(self):
+        sum_table = [0]
+        for start, end in self.word_spans:
+            word_spans = spanutils.slice(self.word_spans, start, end, True)
+            try:
+                conjunctions_table = self.pos_frequency_count_table.get("SUB", None)
+                if conjunctions_table != None:
+                    #print "conjunctions", conjunctions_table[word_spans[0]:word_spans[1]+1]
+                    num_conjunctions = conjunctions_table[word_spans[1]] - conjunctions_table[word_spans[0]]
+                else:
+                    num_conjunctions = 0
+
+                wh_table = self.pos_frequency_count_table.get("WH", None)
+                if wh_table != None:
+                    #print "wh", wh_table[word_spans[0]:word_spans[1]+1]
+                    num_wh_pronouns = wh_table[word_spans[1]] - wh_table[word_spans[0]]
+                else:
+                    num_wh_pronouns = 0
+
+                verb_table = self.pos_frequency_count_table.get("VERBS", None)
+                if verb_table != None:
+                    #print "verbs", verb_table[word_spans[0]:word_spans[1]+1]
+                    num_verb_forms = verb_table[word_spans[1]] - verb_table[word_spans[0]]
+                else:
+                    num_verb_forms = 0
+
+            except IndexError:
+                with open("SyntacticComplexityError.txt", "w") as error_file:
+                    error_file.write(str(self.text[self.word_spans[word_spans_index_start][0]:]))
+                    error_file.write("-------")
+                    error_file.write(self.word_spans[word_spans_index_start:])
+                    error_file.write("-------")
+                    error_file.write(self.pos_frequency_count_table)
+                raise IndexError("There appears to be an indexing problem with POS tags! Alert Zach!")
+        
+            complexity = 2 * num_conjunctions + 2 * num_wh_pronouns + num_verb_forms
+            sum_table.append(complexity + sum_table[-1])
+
+        self.features["syntactic_complexity"] = sum_table
+
     def syntactic_complexity(self, word_spans_index_start, word_spans_index_end):
         '''
         This feature is a modified version of the "Index of Syntactic Complexity" taken from
@@ -949,41 +990,13 @@ class FeatureExtractor:
         # Note that this feature uses the same initialization that pos_percentage_vector does.
         if not self.pos_frequency_count_table_initialized:
             self._init_pos_frequency_table()
+        if "syntactic_complexity" not in self.features:
+            self._init_syntactic_complexity()
+
         #print "querying syntactic complexity of", word_spans_index_start, "to", word_spans_index_end    
 
-        try:
-
-            conjunctions_table = self.pos_frequency_count_table.get("SUB", None)
-            if conjunctions_table != None:
-                #print "conjunctions", conjunctions_table[word_spans_index_start:word_spans_index_end+1]
-                num_conjunctions = conjunctions_table[word_spans_index_end] - conjunctions_table[word_spans_index_start]
-            else:
-                num_conjunctions = 0
-
-            wh_table = self.pos_frequency_count_table.get("WH", None)
-            if wh_table != None:
-                #print "wh", wh_table[word_spans_index_start:word_spans_index_end+1]
-                num_wh_pronouns = wh_table[word_spans_index_end] - wh_table[word_spans_index_start]
-            else:
-                num_wh_pronouns = 0
-
-            verb_table = self.pos_frequency_count_table.get("VERBS", None)
-            if verb_table != None:
-                #print "verbs", verb_table[word_spans_index_start:word_spans_index_end+1]
-                num_verb_forms = verb_table[word_spans_index_end] - verb_table[word_spans_index_start]
-            else:
-                num_verb_forms = 0
-
-        except IndexError:
-            with open("SyntacticCompliexityError.txt", "w") as error_file:
-                error_file.write(str(self.text[self.word_spans[word_spans_index_start][0]:]))
-                error_file.write("-------")
-                error_file.write(self.word_spans[word_spans_index_start:])
-                error_file.write("-------")
-                error_file.write(self.pos_frequency_count_table)
-            raise IndexError("There appears to be an indexing problem with POS tags! Alert Zach!")
-        
-        return 2 * num_conjunctions + 2 * num_wh_pronouns + num_verb_forms
+        sum_table = self.features["syntactic_complexity"]
+        return sum_table[word_spans_index_end] - sum_table[word_spans_index_start]
 
     def _init_syntactic_complexity_average(self):
         '''
@@ -1014,7 +1027,7 @@ class FeatureExtractor:
         num_sents = sent_spans_index_end - sent_spans_index_start
         return float(total_syntactic_complexity) / max(num_sents, 1)
     
-    def _init_internal_word_freq_class(self):
+    def _init_avg_internal_word_freq_class(self):
         '''
         Initializes the internal_freq_class_table. internal_freq_class_table[i]
         is the sum of the classes of words 0 to i-1.
@@ -1046,13 +1059,13 @@ class FeatureExtractor:
         text, not the brown corpus.
         '''
         if "avg_internal_word_freq_class" not in self.features:
-            self._init_internal_word_freq_class()
+            self._init_avg_internal_word_freq_class()
 
         sum_table = self.features["avg_internal_word_freq_class"]
         total = sum_table[word_spans_index_end] - sum_table[word_spans_index_start]
         return total / float(max(1, word_spans_index_end - word_spans_index_start))
         
-    def _init_external_word_freq_class(self):
+    def _init_avg_external_word_freq_class(self):
 
         #word_freq_dict = {}
         #for word in nltk.corpus.brown.words():
@@ -1081,7 +1094,8 @@ class FeatureExtractor:
         Plus one smoothing is used.
         '''
         if "avg_external_word_freq_class" not in self.features:
-            self._init_external_word_freq_class()
+            self._init_avg_external_word_freq_class()
+
         sum_table = self.features["avg_external_word_freq_class"]
         total = sum_table[word_spans_index_end] - sum_table[word_spans_index_start]
         num_words = word_spans_index_end - word_spans_index_start
