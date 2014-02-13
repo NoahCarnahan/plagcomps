@@ -198,12 +198,12 @@ def run_all_dashboard(num_files, cheating=False, feature_set=None):
 
     atom_type_options = [
         'nchars',
-        'paragraph'
+        # 'paragraph'
     ]
 
     cluster_type_options = [
         'outlier',
-        'kmeans'
+        # 'kmeans'
     ]
 
     # For now, test on all documents (not just "long" ones)
@@ -225,7 +225,7 @@ def run_all_dashboard(num_files, cheating=False, feature_set=None):
 
         trial = run_one_trial(**params)
 
-    run_all_weighting_schemes(num_files, atom_type_options, cluster_type_options, min_len_options, cheating)
+    # run_all_weighting_schemes(num_files, atom_type_options, cluster_type_options, min_len_options, cheating)
 
 
 def run_all_weighting_schemes(num_files, atom_types, cluster_types, min_len_options, cheating):
@@ -398,6 +398,29 @@ def get_pairwise_results(atom_type, cluster_type, n, min_len, feature_set=None, 
     print 'Saved pairwise feature table to ' + html_path
 
 
+def measure_cheating_improvement(n, feature_set_options, min_len=0):
+    '''
+    Compare each method using both cheating and non-cheating.
+    '''
+    session = Session()
+
+    atom_types = ['nchars']
+    cluster_types = ['outlier']
+
+    differences = []
+    for atom_type, cluster_type, feature_set in itertools.product(atom_types, cluster_types, feature_set_options):
+        cheating_trial = _get_latest_trial(atom_type, cluster_type, n, min_len, feature_set, True, session)
+        honest_trial = _get_latest_trial(atom_type, cluster_type, n, min_len, feature_set, False, session)
+        print cheating_trial, honest_trial
+        if not (cheating_trial and honest_trial):
+            print 'At least one of the trials is not in the database:', atom_type, cluster_type, feature_set
+            continue
+        diff = cheating_trial.auc - honest_trial.auc
+        differences.append(diff)
+
+    print 'Average ROC auc gain:', sum(differences) / len(differences)
+
+
 def _get_latest_trial(atom_type, cluster_type, n, min_len, feature_set, cheating, session):
     '''
     Helper that queries that database for the latest version of the trials with the
@@ -410,12 +433,11 @@ def _get_latest_trial(atom_type, cluster_type, n, min_len, feature_set, cheating
                  IntrinsicTrial.features == cast(feature_set, ARRAY(String)),
                  IntrinsicTrial.n >= n,
                  IntrinsicTrial.min_len == min_len,
-                 IntrinsicTrial.cheating == cheating,
-                 IntrinsicTrial.version_number == DASHBOARD_VERSION)).order_by(IntrinsicTrial.timestamp)
+                 IntrinsicTrial.cheating == cheating)).order_by(IntrinsicTrial.timestamp)
         latest_matching_trial = q.first()
     except sqlalchemy.orm.exc.NoResultFound, e:
         print 'Didn\'t find a trial for params:', atom_type, cluster_type, feature_set, n, min_len
-        latest_matching_trial = 1
+        latest_matching_trial = None
     return latest_matching_trial
 
 
@@ -428,8 +450,9 @@ Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 
 if __name__ == '__main__':
+    # measure_cheating_improvement(500, all_k_sets_of_features(k=2))
     # get_pairwise_results('nchars', 'outlier', 500, 0, cheating=True)
-    
+
     # good_features = ['average_sentence_length',
     #                 'average_syllables_per_word',
     #                 'avg_external_word_freq_class',
@@ -450,4 +473,4 @@ if __name__ == '__main__':
     # feature_set_options = feature_set_options[50:]
 
     n = 500
-    run_all_dashboard(n, cheating=True)
+    run_all_dashboard(n, cheating=False, feature_set=feature_set_options)
