@@ -939,6 +939,44 @@ class FeatureExtractor:
         num_chars = char_index_end - char_index_start
         return float(total_punctuation) / max(num_chars, 1)
 
+    def _init_syntactic_complexity(self):
+        sum_table = [0]
+        for start, end in self.word_spans:
+            word_spans = spanutils.slice(self.word_spans, start, end, True)
+            try:
+                conjunctions_table = self.pos_frequency_count_table.get("SUB", None)
+                if conjunctions_table != None:
+                    #print "conjunctions", conjunctions_table[word_spans[0]:word_spans[1]+1]
+                    num_conjunctions = conjunctions_table[word_spans[1]] - conjunctions_table[word_spans[0]]
+                else:
+                    num_conjunctions = 0
+
+                wh_table = self.pos_frequency_count_table.get("WH", None)
+                if wh_table != None:
+                    #print "wh", wh_table[word_spans[0]:word_spans[1]+1]
+                    num_wh_pronouns = wh_table[word_spans[1]] - wh_table[word_spans[0]]
+                else:
+                    num_wh_pronouns = 0
+
+                verb_table = self.pos_frequency_count_table.get("VERBS", None)
+                if verb_table != None:
+                    #print "verbs", verb_table[word_spans[0]:word_spans[1]+1]
+                    num_verb_forms = verb_table[word_spans[1]] - verb_table[word_spans[0]]
+                else:
+                    num_verb_forms = 0
+
+            except IndexError:
+                with open("SyntacticComplexityError.txt", "w") as error_file:
+                    error_file.write(str(self.text[self.word_spans[word_spans_index_start][0]:]))
+                    error_file.write("-------")
+                    error_file.write(self.word_spans[word_spans_index_start:])
+                    error_file.write("-------")
+                    error_file.write(self.pos_frequency_count_table)
+                raise IndexError("There appears to be an indexing problem with POS tags! Alert Zach!")
+        
+            complexity = 2 * num_conjunctions + 2 * num_wh_pronouns + num_verb_forms
+            sum_table.append(complexity + sum_table[-1])
+
     def syntactic_complexity(self, word_spans_index_start, word_spans_index_end):
         '''
         This feature is a modified version of the "Index of Syntactic Complexity" taken from
@@ -950,41 +988,13 @@ class FeatureExtractor:
         # Note that this feature uses the same initialization that pos_percentage_vector does.
         if not self.pos_frequency_count_table_initialized:
             self._init_pos_frequency_table()
+        if "syntactic_complexity" not in self.features:
+            self._init_syntactic_complexity()
+
         #print "querying syntactic complexity of", word_spans_index_start, "to", word_spans_index_end    
 
-        try:
-
-            conjunctions_table = self.pos_frequency_count_table.get("SUB", None)
-            if conjunctions_table != None:
-                #print "conjunctions", conjunctions_table[word_spans_index_start:word_spans_index_end+1]
-                num_conjunctions = conjunctions_table[word_spans_index_end] - conjunctions_table[word_spans_index_start]
-            else:
-                num_conjunctions = 0
-
-            wh_table = self.pos_frequency_count_table.get("WH", None)
-            if wh_table != None:
-                #print "wh", wh_table[word_spans_index_start:word_spans_index_end+1]
-                num_wh_pronouns = wh_table[word_spans_index_end] - wh_table[word_spans_index_start]
-            else:
-                num_wh_pronouns = 0
-
-            verb_table = self.pos_frequency_count_table.get("VERBS", None)
-            if verb_table != None:
-                #print "verbs", verb_table[word_spans_index_start:word_spans_index_end+1]
-                num_verb_forms = verb_table[word_spans_index_end] - verb_table[word_spans_index_start]
-            else:
-                num_verb_forms = 0
-
-        except IndexError:
-            with open("SyntacticCompliexityError.txt", "w") as error_file:
-                error_file.write(str(self.text[self.word_spans[word_spans_index_start][0]:]))
-                error_file.write("-------")
-                error_file.write(self.word_spans[word_spans_index_start:])
-                error_file.write("-------")
-                error_file.write(self.pos_frequency_count_table)
-            raise IndexError("There appears to be an indexing problem with POS tags! Alert Zach!")
-        
-        return 2 * num_conjunctions + 2 * num_wh_pronouns + num_verb_forms
+        sum_table = self.features["syntactic_complexity"]
+        return sum_table[word_spans_index_end] - sum_table[word_spans_index_start]
 
     def _init_syntactic_complexity_average(self):
         '''
