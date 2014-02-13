@@ -1014,7 +1014,7 @@ class FeatureExtractor:
         num_sents = sent_spans_index_end - sent_spans_index_start
         return float(total_syntactic_complexity) / max(num_sents, 1)
     
-    def _init_internal_word_freq_class(self):
+    def _init_avg_internal_word_freq_class(self):
         '''
         Initializes the internal_freq_class_table. internal_freq_class_table[i]
         is the sum of the classes of words 0 to i-1.
@@ -1046,7 +1046,7 @@ class FeatureExtractor:
         text, not the brown corpus.
         '''
         if "avg_internal_word_freq_class" not in self.features:
-            self._init_internal_word_freq_class()
+            self._init_avg_internal_word_freq_class()
 
         sum_table = self.features["avg_internal_word_freq_class"]
         total = sum_table[word_spans_index_end] - sum_table[word_spans_index_start]
@@ -1082,6 +1082,7 @@ class FeatureExtractor:
         '''
         if "avg_external_word_freq_class" not in self.features:
             self._init_avg_external_word_freq_class()
+
         sum_table = self.features["avg_external_word_freq_class"]
         total = sum_table[word_spans_index_end] - sum_table[word_spans_index_start]
         num_words = word_spans_index_end - word_spans_index_start
