@@ -101,7 +101,8 @@ class BaseUtility:
 
         return relative_paths
 
-    def get_plagiarized_spans(self, xml_path):
+    @staticmethod
+    def get_plagiarized_spans(xml_path):
         '''
         Using the ground truth, return a list of spans representing the passages of the
         text that are plagiarized. Note, this method was plagiarized from Noah's intrinsic
