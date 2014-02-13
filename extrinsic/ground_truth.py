@@ -22,6 +22,8 @@ def _query_ground_truth(doc_name, atom_type, session, base_path):
     queries the database to see if the ground_truth in question exists in the database.
     If it does, it will be returned, otherwise it is created and added to the database.
     '''
+    if session == None:
+        session = Session()
     try:
         q = session.query(GroundTruth).filter(and_(GroundTruth.document_name == doc_name, GroundTruth.atom_type == atom_type))
         gt = q.one()

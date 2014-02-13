@@ -9,7 +9,7 @@ from ..tokenization import tokenize
 
 TMP_LOAD_FILE = "/tmp/dbimport.txt"
 DEBUG = True
-DEV_MODE = True
+DEV_MODE = False
 
 '''
 Tables created with:
@@ -64,11 +64,11 @@ def populate_database(files, method, n, k, atom_type, hash_len, check_for_duplic
             f.close()
             if atom_type == "full":
                 atom_texts = [text]
-            elif atom_type == "paragraph":
-                paragraph_spans = tokenize(text, atom_type)
-                atom_texts = [text[start:end] for start, end in paragraph_spans]
+            elif atom_type == "paragraph" or atom_type == "nchars":
+                atom_spans = tokenize(text, atom_type, n=5000)
+                atom_texts = [text[start:end] for start, end in atom_spans]
             else:
-                raise ValueError("Invalid atom_type! Only 'full' and 'paragraph' are allowed.")
+                raise ValueError("Invalid atom_type! Only 'full', 'nchars', and 'paragraph' are allowed.")
             
             # Initialize a string to write to the copy file.
             copy_file_string = ""
@@ -159,6 +159,61 @@ def get_passage_fingerprint(full_path, passage_num, method, n, k, atom_type, has
         clean_fp = [hsh[0] for hsh in fingerprint]
         
         return clean_fp
+
+def get_passages_with_fingerprints(target_hash_value, method, n, k, atom_type, hash_len):
+    '''
+    Returns a list of dictionaries like this:
+    [{"id":1, "doc_name":"foo", "atom_number":34, "fingerprint":[23453, 114, ...]}, ...]
+    
+    Only returns dictionaries where <target_hash_value> is part of its fingerprint.
+    '''
+    
+    with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) \
+            as conn:
+        if DEV_MODE:
+            reverse_query = '''SELECT dev_passage_fingerprints.id, dev_passage_fingerprints.doc_name, dev_passage_fingerprints.atom_number
+                            FROM dev_passage_fingerprints, dev_hash_table WHERE
+                            dev_hash_table.hash_value = %s AND
+                            dev_hash_table.fingerprint_id = dev_passage_fingerprints.id AND
+                            dev_passage_fingerprints.method = %s AND
+                            dev_passage_fingerprints.n = %s AND
+                            dev_passage_fingerprints.k = %s AND
+                            dev_passage_fingerprints.atom_type = %s AND
+                            dev_passage_fingerprints.hash_len = %s AND
+                            dev_passage_fingerprints.is_source = 't';'''
+        else:
+            reverse_query = '''SELECT passage_fingerprints.id, passage_fingerprints.doc_name, passage_fingerprints.atom_number
+                            FROM passage_fingerprints, hash_table WHERE
+                            hash_table.hash_value = %s AND
+                            hash_table.fingerprint_id = passage_fingerprints.id AND
+                            passage_fingerprints.method = %s AND
+                            passage_fingerprints.n = %s AND
+                            passage_fingerprints.k = %s AND
+                            passage_fingerprints.atom_type = %s AND
+                            passage_fingerprints.hash_len = %s AND
+                            passage_fingerprints.is_source = 't';'''
+        reverse_args = (target_hash_value, method, n, k, atom_type, hash_len)
+
+        # With statement cleans up the cursor no matter what
+        with conn.cursor() as cur:
+            cur.execute(reverse_query, reverse_args)
+            matching_passages = cur.fetchall()
+
+        passages = [{"id":passage[0], "doc_name":passage[1], "atom_number":passage[2]} for passage in matching_passages]
+        
+        # Now get the fingerprints for each passage:
+        for i in range(len(passages)):
+            if DEV_MODE:
+                fp_query = "SELECT dev_hash_table.hash_value FROM dev_hash_table WHERE dev_hash_table.fingerprint_id = %s"
+            else:
+                fp_query = "SELECT hash_table.hash_value FROM hash_table WHERE hash_table.fingerprint_id = %s"
+            with conn.cursor() as cur:
+                cur.execute(fp_query, (passages[i]["id"],))
+                fingerprint = cur.fetchall()
+                passages[i]["fingerprint"] = [row[0] for row in fingerprint]
+
+    return passages
+
 
 def get_passage_ids_with_hash(target_hash_value, method, n, k, atom_type, hash_len):
     '''
@@ -344,28 +399,27 @@ def _test_reverse_lookup():
         print '-'*40
 
 def _populate_variety_of_params():
-    srs, sus = ExtrinsicUtility().get_training_files(n=100)
-    hash_len = 10000
+    srs, sus = ExtrinsicUtility().get_training_files(n=400)
+    #populate_database(sus+srs, "kth_in_sent", 5, 0, "full", 10000000, check_for_duplicate=True)
+    populate_database(sus+srs, "kth_in_sent", 5, 0, "nchars", 10000000, check_for_duplicate=False)
+    
+    #hash_len = 10000
     # method, n, k, atom_type
-    populate_database(sus+srs, "anchor", 5, 0, "paragraph", hash_len, check_for_duplicate=False)
-    populate_database(sus+srs, "anchor", 3, 0, "paragraph", hash_len, check_for_duplicate=False)
-    print 'Done with anchor params!'
+    
+    #populate_database(sus+srs, "anchor", 5, 0, "paragraph", hash_len, check_for_duplicate=False)
+    #populate_database(sus+srs, "anchor", 3, 0, "paragraph", hash_len, check_for_duplicate=False)
 
-    populate_database(sus+srs, "kth_in_sent", 5, 5, "paragraph", hash_len, check_for_duplicate=False)
-    populate_database(sus+srs, "kth_in_sent", 5, 3, "paragraph", hash_len, check_for_duplicate=False)
-    populate_database(sus+srs, "kth_in_sent", 3, 5, "paragraph", hash_len, check_for_duplicate=False)
-    populate_database(sus+srs, "kth_in_sent", 3, 3, "paragraph", hash_len, check_for_duplicate=False)
-    print 'Done with kth_in_sent params!'
+    #populate_database(sus+srs, "kth_in_sent", 5, 5, "paragraph", hash_len, check_for_duplicate=False)
+    #populate_database(sus+srs, "kth_in_sent", 5, 3, "paragraph", hash_len, check_for_duplicate=False)
+    #populate_database(sus+srs, "kth_in_sent", 3, 5, "paragraph", hash_len, check_for_duplicate=False)
+    #populate_database(sus+srs, "kth_in_sent", 3, 3, "paragraph", hash_len, check_for_duplicate=False)
 
-    populate_database(sus+srs, "full", 5, 0, "paragraph", hash_len, check_for_duplicate=False)
-    populate_database(sus+srs, "full", 3, 0, "paragraph", hash_len, check_for_duplicate=False)
-    #populate_db(sus+srs, "winnow-k", 5, 5, "paragraph")
-    #populate_db(sus+srs, "winnow-k", 5, 3, "paragraph")
-    #populate_db(sus+srs, "winnow-k", 3, 5, "paragraph")
-    #populate_db(sus+srs, "winnow-k", 3, 3, "paragraph")
+    #populate_database(sus+srs, "full", 5, 0, "paragraph", hash_len, check_for_duplicate=False)
+    #populate_database(sus+srs, "full", 3, 0, "paragraph", hash_len, check_for_duplicate=False)
+
 
 if __name__ == "__main__":
     print 'DEV_MODE is set to', DEV_MODE
-    #_populate_variety_of_params()
-    _test_get_fp_query()
+    _populate_variety_of_params()
+    #_test_get_fp_query()
     #_test()

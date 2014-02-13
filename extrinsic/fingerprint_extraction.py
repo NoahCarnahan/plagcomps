@@ -7,9 +7,25 @@ import os
 import string, random, re, operator
 from .. import tokenization
 from ..shared.util import ExtrinsicUtility
-import fingerprintstorage
+import two_table_fp_storage
 
 # TODO: omit words tokenized by nltk that are just puncuation
+
+
+class Passage:
+    def __init__(self, id, doc_name, doc_path, doc_xml_path, method, n, k, hash_len, atom_type, atom_number, is_source, hash_values):
+        self.id = id
+        self.doc_name = doc_name
+        self._doc_path = doc_path
+        self._doc_xml_path = doc_xml_path
+        self.method = method
+        self.n = n
+        self.k = k
+        self.hash_len = hash_len
+        self.atom_type = atom_type
+        self.atom_number = atom_number
+        self.is_source = is_source
+        self.hash_values = hash_values
 
 class FingerprintExtractor:
 
@@ -194,7 +210,7 @@ class FingerprintEvaluator:
     #    fp = extrinsic_processing.query_fingerprint(filename, self.fingerprint_method, self.n, self.k, atom_type, session, base_path)
     #    return fp
 
-    def classify_document(self, filename, atom_type, atom_index, fingerprint_method, n, k, confidence_method, session):
+    def classify_document(self, filename, atom_type, atom_index, fingerprint_method, n, k, hash_len, confidence_method):
         '''
         Returns a list of (source_filename, similarity) tuples sorted in decreasing similarity to the 
         input document.
@@ -207,21 +223,23 @@ class FingerprintEvaluator:
         
         if atom_type == "full":
             atom_index = 0
-        fingerprint = fingerprintstorage.get_fingerprint(filename, ExtrinsicUtility.CORPUS_SUSPECT_LOC, fingerprint_method, n, k, atom_type, atom_index, False, session).hash_values
+        
+        # Get the full path from the filename and base_path
+        full_path = ExtrinsicUtility.CORPUS_SUSPECT_LOC + filename + ".txt"
+        fingerprint = two_table_fp_storage.get_passage_fingerprint(full_path, atom_index, fingerprint_method, n, k, atom_type, hash_len)
 
         source_documents = {}
         # get the list of fingerprint ids for each minutia in the fingerprint
         for minutia in fingerprint:
             if minutia == 0: # every document has 0, so minutia = 0 is basically useless
                 continue
-                
-                
-            source_fps = fingerprintstorage.get_fingerprints_by_hash(minutia, fingerprint_method, n, k, atom_type, session)
+            
+            source_fps = two_table_fp_storage.get_passages_with_fingerprints(minutia, fingerprint_method, n, k, atom_type, hash_len)
             for fp in source_fps:
-                if len(fp.hash_values): # make sure its not an empty fingerprint
-                    source_documents[(fp.doc_name, fp.atom_number)] = get_plagiarism_confidence(fingerprint, fp.hash_values, confidence_method)
+                if len(fp["fingerprint"]): # make sure its not an empty fingerprint
+                    source_documents[(fp["doc_name"], fp["atom_number"])] = get_plagiarism_confidence(fingerprint, fp["fingerprint"], confidence_method)
                 else:
-                    source_documents[(fp.doc_name, fp.atom_number)] = 0
+                    source_documents[(fp["doc_name"], fp["atom_number"])] = 0
                 
         if not len(source_documents): # insert dummy for now...
             source_documents[('dummy', 0)] = 0
