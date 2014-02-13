@@ -469,4 +469,4 @@ if __name__ == '__main__':
         for at in ["paragraph", "nchars"]:
             for ct in ["kmeans", "outlier"]:
                 atom_type, cluster_type = at, ct
-                confidence_main()
+                feature_main()
