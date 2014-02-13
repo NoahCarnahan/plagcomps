@@ -63,23 +63,27 @@ class FeatureExtractor:
             # Has overlap and is not a helper function for nested features
             if valid_func and 'subfeatures' not in func_args:
                 feature_function_names.append(func_name)
-                if "char_spans_index_start" in func_args:
-                    char_features.append(func_name)
-                if "word_spans_index_start" in func_args:
-                    word_features.append(func_name)
-                if "sent_spans_index_start" in func_args:
-                    sent_features.append(func_name)
 
-        # If we want nested features, we will now add in all allowable nestings
-        for char_feature in char_features:
-            for nesting in [["avg"], ["std"], ["avg", "avg"], ["avg", "std"], ["avg", "avg", "avg"], ["avg", "avg", "std"]]:
-                feature_function_names.append("(".join(nesting) + char_feature + ")" * len(nesting))
-        for word_feature in word_features:
-            for nesting in [["avg"], ["std"], ["avg", "avg"], ["avg", "std"]]:
-                feature_function_names.append("(".join(nesting) + word_feature + ")" * len(nesting))
-        for sent_feature in sent_features:
-            for nesting in [["avg"], ["std"]]:
-                feature_function_names.append("(".join(nesting) + sent_feature + ")" * len(nesting))
+                # if we want nested features, save functions in their respective lists
+                if include_nested:
+                    if "char_spans_index_start" in func_args:
+                        char_features.append(func_name)
+                    if "word_spans_index_start" in func_args:
+                        word_features.append(func_name)
+                    if "sent_spans_index_start" in func_args:
+                        sent_features.append(func_name)
+
+        if include_nested:
+            # If we want nested features, we will now add in all allowable nestings
+            for char_feature in char_features:
+                for nesting in [["avg"], ["std"], ["avg", "avg"], ["avg", "std"], ["avg", "avg", "avg"], ["avg", "avg", "std"]]:
+                    feature_function_names.append("(".join(nesting) + "(" + char_feature + ")" * len(nesting))
+            for word_feature in word_features:
+                for nesting in [["avg"], ["std"], ["avg", "avg"], ["avg", "std"]]:
+                    feature_function_names.append("(".join(nesting) + "(" + word_feature + ")" * len(nesting))
+            for sent_feature in sent_features:
+                for nesting in [["avg"], ["std"]]:
+                    feature_function_names.append("(".join(nesting) + "(" + sent_feature + ")" * len(nesting))
         
         # pos_trigram, word_unigram, and vowelness_trigram are special cases
         valid_pos_trigrams = [
@@ -1319,3 +1323,4 @@ def _test():
     
 if __name__ == "__main__":
     _test()
+
