@@ -1048,7 +1048,7 @@ class FeatureExtractor:
         total = sum_table[word_spans_index_end] - sum_table[word_spans_index_start]
         return total / float(max(1, word_spans_index_end - word_spans_index_start))
         
-    def _init_external_word_freq_class(self):
+    def _init_avg_external_word_freq_class(self):
 
         #word_freq_dict = {}
         #for word in nltk.corpus.brown.words():
@@ -1077,7 +1077,7 @@ class FeatureExtractor:
         Plus one smoothing is used.
         '''
         if "avg_external_word_freq_class" not in self.features:
-            self._init_external_word_freq_class()
+            self._init_avg_external_word_freq_class()
         sum_table = self.features["avg_external_word_freq_class"]
         total = sum_table[word_spans_index_end] - sum_table[word_spans_index_start]
         num_words = word_spans_index_end - word_spans_index_start
