@@ -51,20 +51,35 @@ class FeatureExtractor:
         # all_methods[i] == (<func_name>, <unbound_method_obj>)
         all_methods = inspect.getmembers(FeatureExtractor, predicate=inspect.ismethod)
 
+        # We will track different kinds of features to include nested features
+        char_features, word_features, sent_features = [], [], []
+
         for func_name, func in all_methods:
             func_args = set(inspect.getargspec(func).args)
 
             valid_func = len(feature_arg_options.intersection(func_args)) > 0
 
-            # Has some overlap -- may be a nested function
-            if include_nested and valid_func:
-                feature_function_names.append(func_name)
 
-            # Has some overlap, but we want to ignore nested functions
-            # (which include 'subfeatures' as an argument)
-            if not include_nested and valid_func and \
-                    'subfeatures' not in func_args:
+            # Has overlap and is not a helper function for nested features
+            if valid_func and 'subfeatures' not in func_args:
                 feature_function_names.append(func_name)
+                if "char_spans_index_start" in func_args:
+                    char_features.append(func_name)
+                if "word_spans_index_start" in func_args:
+                    word_features.append(func_name)
+                if "sent_spans_index_start" in func_args:
+                    sent_features.append(func_name)
+
+        # If we want nested features, we will now add in all allowable nestings
+        for char_feature in char_features:
+            for nesting in [["avg"], ["std"], ["avg", "avg"], ["avg", "std"], ["avg", "avg", "avg"], ["avg", "avg", "std"]]:
+                feature_function_names.append("(".join(nesting) + char_feature + ")" * len(nesting))
+        for word_feature in word_features:
+            for nesting in [["avg"], ["std"], ["avg", "avg"], ["avg", "std"]]:
+                feature_function_names.append("(".join(nesting) + word_feature + ")" * len(nesting))
+        for sent_feature in sent_features:
+            for nesting in [["avg"], ["std"]]:
+                feature_function_names.append("(".join(nesting) + sent_feature + ")" * len(nesting))
         
         # pos_trigram, word_unigram, and vowelness_trigram are special cases
         valid_pos_trigrams = [
@@ -1303,7 +1318,4 @@ def _test():
         print "honore_r_measure test FAILED"
     
 if __name__ == "__main__":
-    #_test()
-
-    f = FeatureExtractor("The mad hatter likes tea and the red queen hates alice.\n\n Images of the Mandelbrot set display an elaborate boundary that reveals progressively ever-finer recursive detail at increasing magnifications.\n\n The style of this repeating detail depends on the region of the set being examined.\n\n The set's boundary also incorporates smaller versions of the main shape, so the fractal property of self-similarity applies to the entire set, and not just to its parts.\n\n")
-    print f.get_feature_vectors(["evolved_feature_one", "evolved_feature_two"], "nchars")
+    _test()
