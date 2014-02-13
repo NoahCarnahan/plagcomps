@@ -818,5 +818,7 @@ if __name__ == "__main__":
                  
     #feature_confidence_weights = [0.6492269039473438, 0.08020730166391861, 1.0, 0.7481609037593294, 0.00001, 0.07811654825143369, 0.272335107617069, 0.06299892339329263, 0.05524606112540992]
     #print evaluate_n_documents(features, 'combine_confidences', 2, 'paragraph', 50, feature_confidence_weights=feature_confidence_weights, first_doc_num=0, min_len=0)
+    print evaluate_n_documents(["evolved_feature_three"], "kmeans", 2, "paragraph", 500)
 
+    #print evaluate_n_documents(features, "outlier", 2, "nchars", 500, cheating=True, save_roc_figure=True)
     print evaluate_n_documents(features, "outlier", 2, "nchars", 3, cheating=True, cheating_min_len=5000, save_roc_figure=True)

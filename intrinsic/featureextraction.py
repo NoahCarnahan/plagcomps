@@ -672,7 +672,16 @@ class FeatureExtractor:
         feature_vectors = self.features["evolved_feature_five"][para_spans_index_start:para_spans_index_end]
 
         B, J = [sum([feature_tuple[i] for feature_tuple in feature_vectors]) for i in range(len(feature_vectors[0]))]
-        computed = 5 * 4 ** ( (1.5 - J)**B - B - J - 3)
+
+        try:
+            if J > 1.5 and B != int(B):
+                # this will cause us to root a negative number
+                computed = 5 * 4 ** ( (1.5 - J)**int(B) - B - J - 3)
+            else:
+                computed = 5 * 4 ** ( (1.5 - J)**B - B - J - 3)
+        except OverflowError:
+            # on overflow, return max value
+            return 1.0e+255
 
         return computed
 
@@ -693,7 +702,7 @@ class FeatureExtractor:
         feature_vectors = self.features["evolved_feature_six"][para_spans_index_start:para_spans_index_end]
 
         F, H, X, Y, d = [sum([feature_tuple[i] for feature_tuple in feature_vectors]) for i in range(len(feature_vectors[0]))]
-        computed = 20 * d * H * 6.5 ** (x ** Y ) + F
+        computed = 20 * d * H * 6.5 ** (X ** Y ) + F
 
         return computed
 
