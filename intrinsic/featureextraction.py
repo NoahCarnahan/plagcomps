@@ -977,6 +977,8 @@ class FeatureExtractor:
             complexity = 2 * num_conjunctions + 2 * num_wh_pronouns + num_verb_forms
             sum_table.append(complexity + sum_table[-1])
 
+        self.features["syntactic_complexity"] = sum_table
+
     def syntactic_complexity(self, word_spans_index_start, word_spans_index_end):
         '''
         This feature is a modified version of the "Index of Syntactic Complexity" taken from
