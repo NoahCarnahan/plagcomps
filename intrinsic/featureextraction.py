@@ -53,6 +53,7 @@ class FeatureExtractor:
 
         # We will track different kinds of features to include nested features
         char_features, word_features, sent_features = [], [], []
+        not_nestable = ["word_unigram", "pos_trigram", "vowelness_trigram"]
 
         for func_name, func in all_methods:
             func_args = set(inspect.getargspec(func).args)
@@ -65,7 +66,7 @@ class FeatureExtractor:
                 feature_function_names.append(func_name)
 
                 # if we want nested features, save functions in their respective lists
-                if include_nested:
+                if include_nested and func_name not in not_nestable:
                     if "char_spans_index_start" in func_args:
                         char_features.append(func_name)
                     if "word_spans_index_start" in func_args:
