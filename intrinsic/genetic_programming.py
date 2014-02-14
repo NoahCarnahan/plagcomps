@@ -11,7 +11,6 @@ from plagcomps.intrinsic.cluster import cluster
 from plagcomps.evaluation.intrinsic import _get_reduced_docs
 from plagcomps.intrinsic.featureextraction import FeatureExtractor
 
-# Hardcoded because I'm lazy. Will break.
 sys.path.append("../PyGene/")
 from pygene.prog import ProgOrganism
 from pygene.population import Population
@@ -19,16 +18,6 @@ from pygene.population import Population
 import sqlalchemy
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-
-"""
-Demo of genetic programming
-
-This gp setup seeks to breed an organism which
-implements func x^2 + y
-
-Takes an average of about 40 generations
-to breed a matching program
-"""
 
 url = "postgresql://%s:%s@%s" % (username, password, dbname)
 engine = sqlalchemy.create_engine(url)
@@ -39,10 +28,15 @@ session = Session()
 
 features = FeatureExtractor.get_all_feature_function_names()
 num_training = 50 
-num_testing = 0
+num_testing = 500
 starting_doc = 0
 training_files = IntrinsicUtility().get_n_training_files(n=num_training, first_doc_num=starting_doc)
 test_files = IntrinsicUtility().get_n_training_files(n=num_testing, first_doc_num=starting_doc + num_training)
+cached_reduced_docs = {}
+cached_confidences = {}
+
+# set base values for globals
+atom_type, cluster_type = "paragraph", "kmeans"
 
 # a tiny batch of functions
 def add(x,y):
@@ -156,7 +150,7 @@ class FeatureGeneticProgram(ProgOrganism):
 
 
         try:
-            for doc in _get_reduced_docs("paragraph", files, session):
+            for doc in get_cached_reduced_docs(atom_type, files):
                 for span in doc.get_spans():
                     actuals.append(1 if doc.span_is_plagiarized(span) else 0)
 
@@ -169,7 +163,7 @@ class FeatureGeneticProgram(ProgOrganism):
                     computed_feature_vector.append([computed_feature])
 
                 #print "clustering with", computed_feature_vector
-                confidences += cluster("kmeans", 2, computed_feature_vector)
+                confidences += cluster(cluster_type, 2, computed_feature_vector)
 
             #print "Conf, Actual", confidences, actuals
             # For each document, add (1 - AUC) for our ROC calculation
@@ -231,25 +225,18 @@ class ConfidenceGeneticProgram(ProgOrganism):
         files = training_files if training else test_files
 
         try:
-            for doc in _get_reduced_docs("paragraph", files, session):
+            for doc in get_cached_reduced_docs(atom_type, files):
                 for span in doc.get_spans():
                     actuals.append(1 if doc.span_is_plagiarized(span) else 0)
 
-                confidence_vectors = [ [] for x in range(len(actuals)) ] 
-                feature_vectors = doc.get_feature_vectors(features, session)
-                num_passages = len(feature_vectors)
-                num_features = len(features)
-                for feature_index in range(num_features):
-                    one_feature_vector = [passage_features[feature_index] for passage_features in feature_vectors]
-                    one_feature_confidences = cluster("kmeans", 2, [[feature_value] for feature_value in one_feature_vector])
-                    for passage_index in range(num_passages):
-                        confidence_vectors[passage_index].append(one_feature_confidences[passage_index])
+                confidence_vectors = get_cached_confidences(doc)
+                #print "for doc", doc, "we have", len(doc.get_spans()), "spans and", len(confidence_vectors), "confidence"
 
-            for confidence_tuple in confidence_vectors:
-                ith_confidence_slice = {chr(ord("A") + j):value for j,value in enumerate(confidence_tuple)}
-                #print ith_confidence_slice
-                computed_confidence = self.calc(**ith_confidence_slice)
-                confidences.append(computed_confidence)
+                for confidence_tuple in confidence_vectors:
+                    ith_confidence_slice = {chr(ord("A") + j):value for j,value in enumerate(confidence_tuple)}
+                    #print ith_confidence_slice
+                    computed_confidence = self.calc(**ith_confidence_slice)
+                    confidences.append(computed_confidence)
 
             print self.calc_dump(self.tree)
             #print "Conf, Actual", confidences, actuals
@@ -321,6 +308,41 @@ def graph(orig, best):
             print "%03.0f " % z,
         print
 
+def get_cached_reduced_docs(atom_type, files):
+    cached_docs = cached_reduced_docs.get(atom_type, {})
+    return_docs = []
+    need_to_query = []
+    for f in files:
+        if f in cached_docs:
+            return_docs.append(cached_docs[f])
+        else:
+            need_to_query.append(f)
+    
+    queried = _get_reduced_docs(atom_type, need_to_query, session)  
+    for q in queried:
+       return_docs.append(q)
+       cached_docs[q.full_path] = q
+    
+    cached_reduced_docs[atom_type] = cached_docs
+    return return_docs
+
+def get_cached_confidences(doc):
+    if doc in cached_confidences:
+        return cached_confidences[doc]
+
+    confidence_vectors = [ [] for x in range(len(doc.get_spans())) ] 
+    feature_vectors = doc.get_feature_vectors(features, session)
+    num_passages = len(feature_vectors)
+    num_features = len(features)
+    for feature_index in range(num_features):
+        one_feature_vector = [passage_features[feature_index] for passage_features in feature_vectors]
+        one_feature_confidences = cluster(cluster_type, 2, [[feature_value] for feature_value in one_feature_vector])
+        for passage_index in range(num_passages):
+            confidence_vectors[passage_index].append(one_feature_confidences[passage_index])
+
+    cached_confidences[doc] = confidence_vectors
+    return confidence_vectors
+
 def test_evaluate(formula, feature_slice, feature_mapping):
     #print "feature_slice", feature_slice
     #print "feature_mapping", feature_mapping
@@ -347,7 +369,7 @@ def feature_test(formula, feature_mapping):
     files = training_files + test_files
 
     #try:
-    for doc_num,doc in enumerate(_get_reduced_docs("paragraph", files, session)):
+    for doc_num,doc in enumerate(get_cached_reduced_docs("paragraph", files)):
         print str(doc_num)
         for span in doc.get_spans():
             actuals.append(1 if doc.span_is_plagiarized(span) else 0)
@@ -395,6 +417,9 @@ def feature_main(nfittest=10, nkids=100):
 
     with open("genetic_program_outputs.txt", "a") as outfile:
         outfile.write("\n\n----\n")
+        outfile.write("using " + atom_type + ", " + cluster_type + "\n")
+        outfile.write("training on " + str(starting_doc) + ":" + str(starting_doc+num_training) + "\t")
+        outfile.write("testing on " + str(starting_doc+num_training) + ":" + str(starting_doc+num_training + num_testing) + "\n")
         outfile.write(";".join([",".join([chr(ord("A") + j),value]) for j,value in enumerate(features)]) +"\n")
         outfile.write(b.dump())
         outfile.write("\n")
@@ -406,7 +431,7 @@ def confidence_main(nfittest=10, nkids=100):
 
     ngens = 0
     i = 0
-    while ngens < 10:
+    while ngens < 1:
         b = pop.best()
         print "Generation %s: %s best=%s average=%s" % (
             i, repr(b), b.fitness(), pop.fitness())
@@ -425,6 +450,9 @@ def confidence_main(nfittest=10, nkids=100):
 
     with open("genetic_program_confidences.txt", "a") as outfile:
         outfile.write("\n\n----\n")
+        outfile.write("using " + atom_type + ", " + cluster_type + "\n")
+        outfile.write("training on " + str(starting_doc) + ":" + str(starting_doc+num_training) + "\t")
+        outfile.write("testing on " + str(starting_doc+num_training) + ":" + str(starting_doc+num_training + num_testing) + "\n")
         outfile.write(";".join([",".join([chr(ord("A") + j),value]) for j,value in enumerate(features)]) +"\n")
         outfile.write(b.dump())
         outfile.write("\n")
@@ -432,8 +460,13 @@ def confidence_main(nfittest=10, nkids=100):
         outfile.write("Testing: best=" + str(b.fitness(training=False)) + "\n")
 
 if __name__ == '__main__':
-    print feature_test("(((((1.5*<D>)-<Y>)-(-12.0**10.0))+(((<L>+10.0)+10.0)+10.0))*(10.0*(((1.5+<P>)**(-12.0-<H>))-((<X>*-12.0)+-1.0))))", {"D":"avg_internal_word_freq_class", "H" : "honore_r_measure", "L":"syntactic_complexity", "P":"pos_trigram,NN,NN,VB", "X":"pos_trigram,NN,NN,NN", "Y":"pos_trigram,NN,IN,DT"})
 
-    #for i in range(100):
-    #    confidence_main()
-    #    feature_main()
+
+    #print feature_test("(((((1.5*<D>)-<Y>)-(-12.0**10.0))+(((<L>+10.0)+10.0)+10.0))*(10.0*(((1.5+<P>)**(-12.0-<H>))-((<X>*-12.0)+-1.0))))", {"D":"avg_internal_word_freq_class", "H" : "honore_r_measure", "L":"syntactic_complexity", "P":"pos_trigram,NN,NN,VB", "X":"pos_trigram,NN,NN,NN", "Y":"pos_trigram,NN,IN,DT"})
+
+
+    for i in range(100):
+        for at in ["paragraph", "nchars"]:
+            for ct in ["kmeans", "outlier"]:
+                atom_type, cluster_type = at, ct
+                feature_main()

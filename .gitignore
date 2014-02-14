@@ -4,6 +4,7 @@ restructure/plagcomps/dbconstants.py
 intrinsic/serialized/*.pdf
 intrinsic/serialized/*.png
 intrinsic/serialized/*.csv
+intrinsic/textAnalysis/*.txt
 
 # Add these manually with git add -f figures/foo.pdf
 figures/*.pdf

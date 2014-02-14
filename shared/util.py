@@ -52,12 +52,14 @@ class BaseUtility:
         
         figure_path = os.path.join(os.path.dirname(__file__), "../figures/roc"+str(time.time())+".pdf")
         json_path = figure_path.replace('pdf', 'json')
-        pyplot.savefig(figure_path)
+        
+        if save_figure:
+            pyplot.savefig(figure_path)
 
-        # Save a JSON file of metadata about figure
-        metadata['auc'] = roc_auc
-        with open(json_path, 'wb') as f:
-            json.dump(metadata, f, indent=4)
+            # Save a JSON file of metadata about figure
+            metadata['auc'] = roc_auc
+            with open(json_path, 'wb') as f:
+                json.dump(metadata, f, indent=4)
 
         return figure_path, roc_auc
 
@@ -99,7 +101,8 @@ class BaseUtility:
 
         return relative_paths
 
-    def get_plagiarized_spans(self, xml_path):
+    @staticmethod
+    def get_plagiarized_spans(xml_path):
         '''
         Using the ground truth, return a list of spans representing the passages of the
         text that are plagiarized. Note, this method was plagiarized from Noah's intrinsic
@@ -154,6 +157,8 @@ class IntrinsicUtility(BaseUtility):
 
     TRAINING_LOC = os.path.join(UTIL_LOC, '..', 'corpus_partition/training_set_files.txt')
     CORPUS_LOC = '/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents'
+    # TRAINING_LOC = os.path.join(UTIL_LOC, '..', 'sample_corpus/sample_files.txt')
+    # CORPUS_LOC = os.path.join(UTIL_LOC, '..', 'sample_corpus/')
 
     def read_corpus_file(self, rel_path):
         '''

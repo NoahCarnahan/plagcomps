@@ -86,7 +86,8 @@ def populate_database(atom_types, num, features=None, corpus='intrinsic'):
 
     session.close()
 
-def evaluate_n_documents(features, cluster_type, k, atom_type, n, corpus='intrinsic', save_roc_figure=True, min_len=None, first_doc_num=0, feature_weights=None, feature_confidence_weights=None):
+def evaluate_n_documents(features, cluster_type, k, atom_type, n, corpus='intrinsic', save_roc_figure=True, min_len=None,
+                        first_doc_num=0, feature_weights=None, feature_confidence_weights=None, cheating=False, cheating_min_len=5000):
     '''
     Return the evaluation (roc curve path, area under the roc curve) of the first n training
     documents parsed by atom_type, using the given features, cluster_type, and number of clusters k.
@@ -101,13 +102,14 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n, corpus='intrin
     # as is done in Stein's paper
     first_training_files = IntrinsicUtility().get_n_training_files(n, min_len=min_len, first_doc_num=first_doc_num)
     # Also returns reduced_docs from <first_training_files>
-
     metadata = {
         'min_len' : min_len,
         'first_doc_num' : first_doc_num
     }
 
-    roc_path, roc_auc, _ = evaluate(features, cluster_type, k, atom_type, first_training_files, corpus=corpus, save_roc_figure=save_roc_figure, feature_vector_weights=feature_weights, feature_confidence_weights=feature_confidence_weights, metadata=metadata)
+    roc_path, roc_auc, _ = evaluate(features, cluster_type, k, atom_type, first_training_files, corpus=corpus, save_roc_figure=save_roc_figure, 
+                                    feature_vector_weights=feature_weights, feature_confidence_weights=feature_confidence_weights, metadata=metadata,
+                                    cheating=cheating, cheating_min_len=cheating_min_len)
     
     # Store the figures in the database
     # session = Session()
@@ -119,7 +121,8 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n, corpus='intrin
     return roc_path, roc_auc
 
 
-def evaluate(features, cluster_type, k, atom_type, docs, corpus='intrinsic', save_roc_figure=True, reduced_docs=None, feature_vector_weights=None, metadata={}, **clusterargs):
+def evaluate(features, cluster_type, k, atom_type, docs, corpus='intrinsic', save_roc_figure=True, reduced_docs=None, feature_vector_weights=None, 
+            metadata={}, cheating=False, cheating_min_len=5000, **clusterargs):
     '''
     Return the roc curve path and area under the roc curve for the given list of documents parsed
     by atom_type, using the given features, cluster_type, and number of clusters k.
@@ -132,7 +135,6 @@ def evaluate(features, cluster_type, k, atom_type, docs, corpus='intrinsic', sav
     '''
     # TODO: Return more statistics, not just roc curve things.
     session = Session()
-    
     # If previous call cached <reduced_docs>, don't re-query the DB
     if not reduced_docs:
         reduced_docs = _get_reduced_docs(atom_type, docs, session, corpus=corpus)
@@ -140,12 +142,18 @@ def evaluate(features, cluster_type, k, atom_type, docs, corpus='intrinsic', sav
     doc_plag_assignments = {}
     
     count = 0
+    valid_reduced_docs = []
     for d in reduced_docs:
         count += 1
         if DEBUG:
             print "On document", d, ". The", count, "th document."
 
-        feature_vecs = d.get_feature_vectors(features, session)
+        feature_vecs = d.get_feature_vectors(features, session, cheating=cheating, cheating_min_len=cheating_min_len)
+        # skip if there are no feature_vectors
+        if cheating and len(feature_vecs) < 7: # 7, because that's what Benno did
+            continue
+        valid_reduced_docs.append(d)
+
         if feature_vector_weights:
             weighted_vecs = []
             for vec in feature_vecs:
@@ -159,14 +167,14 @@ def evaluate(features, cluster_type, k, atom_type, docs, corpus='intrinsic', sav
         doc_plag_assignments[d] = likelihood
         plag_likelihoods.append(likelihood)
 
-    _output_to_file(doc_plag_assignments, atom_type, cluster_type)
+    # _output_to_file(doc_plag_assignments, atom_type, cluster_type)
     
     metadata['features'] = features
     metadata['cluster_type'] = cluster_type
     metadata['k'] = k
     metadata['atom_type'] = atom_type
     metadata['n'] = len(reduced_docs)
-    roc_path, roc_auc = _roc(reduced_docs, plag_likelihoods, save_roc_figure=save_roc_figure, **metadata)
+    roc_path, roc_auc = _roc(valid_reduced_docs, plag_likelihoods, save_roc_figure=save_roc_figure, cheating=cheating, cheating_min_len=cheating_min_len, **metadata)
     session.close()
 
     # Return reduced_docs for caching in case we call <evaluate> multiple times
@@ -175,11 +183,11 @@ def evaluate(features, cluster_type, k, atom_type, docs, corpus='intrinsic', sav
 def _output_to_file(assignment_dict, atom_type, cluster_type):
 
     for document in assignment_dict.keys():
-	output_file = open("plagcomps/intrinsic/textAnalysis/Authorship" + str(time.time()) + ".txt", "w+")
+        output_file = open(ospath.join(ospath.dirname(__file__), "../intrinsic/textAnalysis/" + str(time.time()) + ".txt"), "w")
         plag_atoms = []
         non_plag_atoms = []
         for i in xrange(len(assignment_dict[document])):
-            if assignment_dict[document][i] <= 50:
+            if assignment_dict[document][i] <= 0.5:
                 non_plag_atoms.append(i)
             else:
                 plag_atoms.append(i)
@@ -188,34 +196,34 @@ def _output_to_file(assignment_dict, atom_type, cluster_type):
         text = reader.read()
         reader.close()
 
-	total_atoms = len(non_plag_atoms) + len(plag_atoms)
+    	total_atoms = len(non_plag_atoms) + len(plag_atoms)
         atom_spans = tokenize(text, atom_type)
 
-	output_file.write("Document Name: " +  document._short_name + "\n")
-	output_file.write("Atom_Type: " + atom_type + "\n")
-	output_file.write("Cluster_Method: " + cluster_type + "\n")
-	output_file.write("Plagiarized Atoms Count: " + str(len(plag_atoms)) + "/" + str(total_atoms) + "\n")
-	output_file.write("Non-Plagiarized Atoms Count: " + str(len(non_plag_atoms)) + "/" + str(total_atoms) + "\n\n")
-	output_file.write("---"*25 + "\n")
-	output_file.write("NON-PLAGIARIZED ATOMS\n")
-	output_file.write("---"*25 + "\n")
+    	output_file.write("Document Name: " +  document._short_name + "\n")
+    	output_file.write("Atom_Type: " + atom_type + "\n")
+    	output_file.write("Cluster_Method: " + cluster_type + "\n")
+    	output_file.write("Plagiarized Atoms Count: " + str(len(plag_atoms)) + "/" + str(total_atoms) + "\n")
+    	output_file.write("Non-Plagiarized Atoms Count: " + str(len(non_plag_atoms)) + "/" + str(total_atoms) + "\n\n")
+    	output_file.write("---"*25 + "\n")
+    	output_file.write("NON-PLAGIARIZED ATOMS\n")
+    	output_file.write("---"*25 + "\n")
 
-	for index in non_plag_atoms:
-		atom_text = text[atom_spans[index][0]:atom_spans[index][1]]
-		output_file.write("This is an atom: \n")
-		output_file.write(atom_text + "\n\n")
+    	for index in non_plag_atoms:
+    		atom_text = text[atom_spans[index][0]:atom_spans[index][1]]
+    		output_file.write("This is an atom: \n")
+    		output_file.write(atom_text + "\n\n")
 
-	output_file.write("---"*25 + "\n")
-	output_file.write("PLAGIARIZED ATOMS\n")
-	output_file.write("---"*25 + "\n")
+    	output_file.write("---"*25 + "\n")
+    	output_file.write("PLAGIARIZED ATOMS\n")
+    	output_file.write("---"*25 + "\n")
 
-	for index in plag_atoms:
-		atom_text = text[atom_spans[index][0]:atom_spans[index][1]]
-		output_file.write("This is an atom: \n")
-		output_file.write(atom_text + "\n\n")
+    	for index in plag_atoms:
+    		atom_text = text[atom_spans[index][0]:atom_spans[index][1]]
+    		output_file.write("This is an atom: \n")
+    		output_file.write(atom_text + "\n\n")
 
-	output_file.write("***"*25)
-	output_file.close()
+    	output_file.write("***"*25)
+    	output_file.close()
 		
 
 def compare_outlier_params(n, features=None, min_len=None):
@@ -404,7 +412,7 @@ def _get_reduced_docs(atom_type, docs, session, corpus='intrinsic', create_new=T
         
     return reduced_docs
 
-def _roc(reduced_docs, plag_likelihoods, save_roc_figure=True, **metadata):
+def _roc(reduced_docs, plag_likelihoods, save_roc_figure=True, cheating=False, cheating_min_len=5000, **metadata):
     '''
     Generates a reciever operator characterstic (roc) curve and returns both the path to a pdf
     containing a plot of this curve and the area under the curve. reduced_docs is a list of
@@ -418,17 +426,18 @@ def _roc(reduced_docs, plag_likelihoods, save_roc_figure=True, **metadata):
     Note that all passages have equal weight for this curve. So, if one document is considerably
     longer than the others and our tool does especially poorly on this document, it will look as
     if the tool is bad (which is not necessarily a bad thing).
-    '''
-
+    '''    
     # This function was modeled in part from this example:
     # http://scikit-learn.org/0.13/auto_examples/plot_roc.html
     
     actuals = []
     confidences = []
-    
+
     for doc_index in xrange(len(reduced_docs)):
         doc = reduced_docs[doc_index]
-        spans = doc.get_spans()
+        spans = doc.get_spans(cheating, cheating_min_len)
+        if cheating and not len(spans):
+            continue
         for span_index in xrange(len(spans)):
             span = spans[span_index]
             actuals.append(1 if doc.span_is_plagiarized(span) else 0)
@@ -441,7 +450,7 @@ def _roc(reduced_docs, plag_likelihoods, save_roc_figure=True, **metadata):
 
     # metadata generally also includes keys: features, cluster_type, k, atom_type
     metadata['n'] = len(reduced_docs)    
-    path, roc_auc = BaseUtility.draw_roc(actuals, confidences, save_roc_figure=save_roc_figure, **metadata)
+    path, roc_auc = BaseUtility.draw_roc(actuals, confidences, save_figure=save_roc_figure, **metadata)
 
     return path, roc_auc
 
@@ -515,14 +524,27 @@ class ReducedDoc(Base):
     def __repr__(self):
         return "<ReducedDoc('%s','%s', '%s')>" % (self._short_name, self.atom_type, self.corpus)
     
-    def get_feature_vectors(self, features, session):
+    def get_feature_vectors(self, features, session, cheating=False, cheating_min_len=5000):
         '''
         Returns a list of feature vectors for each passage in the document. The components
         of the feature vectors are in order of the features list.
         '''
-        return zip(*[self._get_feature_values(x, session) for x in features])
+        feature_vectors = zip(*[self._get_feature_values(x, session) for x in features])
+        if not cheating:
+            return feature_vectors
+
+        cheating_feature_vectors = []
+        cheating_spans = []
+        # only return feature vectors part of a 'cheating' span
+
+        for feature_vector, span in zip(feature_vectors, self.get_spans(cheating=False)):
+            if not self.cheating_excludes_span(span, cheating_min_len):
+                cheating_feature_vectors.append(feature_vector)
+                cheating_spans.append(span)
+        return cheating_feature_vectors
     
-    def get_spans(self):
+
+    def get_spans(self, cheating=False, cheating_min_len=5000):
         '''
         Returns a list of lists. The ith list contains the start and end characters for the ith
         passage in this document.
@@ -530,28 +552,35 @@ class ReducedDoc(Base):
         if self._spans == None:
             raise Exception("See note in ReducedDoc.__init__")
         else:
-            return self._spans
+            if not cheating:
+                return self._spans
+            else:
+                return [s for s in self._spans if not self.cheating_excludes_span(s, cheating_min_len)]
 
-    def cheating_excludes_span(self, span):
+
+    def cheating_excludes_span(self, span, min_chars):
+        '''
+        Returns True if the given span should be excluded when 'cheating'.
+        '''
+        if span[1] - span[0] < min_chars:
+            return True
+
         overlap_amount = 0
         for s in self._plagiarized_spans:
             overlap_amount += BaseUtility().overlap(span, s)
-            
-        if overlap < (span[1] - span[0])/2.0 and overlap > 0:
+
+        if overlap_amount < (span[1] - span[0])/2.0 and overlap_amount > 0:
             return True
         return False
     
-    def span_is_plagiarized(self, span):
+    def span_is_plagiarized(self, span, cheating=False):
         '''
         Returns True if the span was plagiarized (according to the ground truth). Returns
         False otherwise. A span is considered plagiarized if it overlaps a plagiarised span.
         
         '''
         # TODO: Consider other ways to judge if an atom is plagiarized or not. 
-        #       For example, look to see if the WHOLE atom in a plagiarized segment (?)
-
-        cheating = False
-        
+        #       For example, look to see if the WHOLE atom in a plagiarized segment (?)        
         for s in self._plagiarized_spans:
             if not cheating:
                 if BaseUtility().overlap(span, s) > 0:
@@ -780,22 +809,22 @@ def run_individual_features(features, cluster_type, k, atom_type, n, min_len=Non
 # ls -t | grep json | xargs grep auc | awk '{print $1, $3; }' | sort -gk 2 | tail -n 20
 # Replace the 20 with a larger number to see more results
 if __name__ == "__main__":
-    # features = FeatureExtractor.get_all_feature_function_names()
+    features = FeatureExtractor.get_all_feature_function_names()
+    features_nested = FeatureExtractor.get_all_feature_function_names(True)
     # populate_database(['paragraph', 'nchars'], None, features=features, corpus='extrinsic')
 
     # _test()
 
-    features = ['average_syllables_per_word',
-                 'avg_external_word_freq_class',
-                 'avg_internal_word_freq_class',
-                 'flesch_kincaid_grade',
-                 'flesch_reading_ease',
-                 'punctuation_percentage',
-                 'stopword_percentage',
-                 'syntactic_complexity',
-                 'syntactic_complexity_average']
+    #features = ['punctuation_percentage', 'gunning_fog_index','syntactic_complexity', 'num_chars', 'vowelness_trigram,C,V,C', 'avg_internal_word_freq_class']
                  
     #feature_confidence_weights = [0.6492269039473438, 0.08020730166391861, 1.0, 0.7481609037593294, 0.00001, 0.07811654825143369, 0.272335107617069, 0.06299892339329263, 0.05524606112540992]
     #print evaluate_n_documents(features, 'combine_confidences', 2, 'paragraph', 50, feature_confidence_weights=feature_confidence_weights, first_doc_num=0, min_len=0)
 
-    print evaluate_n_documents(["evolved_feature_two", "average_sentence_length"], "kmeans", 2, "paragraph", 1)
+
+    # zach test
+    print features_nested, len(features_nested)
+
+    print evaluate_n_documents(features_nested, "kmeans", 2, "paragraph", 550, first_doc_num=0)
+
+    #print evaluate_n_documents(features, "outlier", 2, "nchars", 500, cheating=True, save_roc_figure=True)
+    #print evaluate_n_documents(features, "outlier", 2, "nchars", 3, cheating=True, cheating_min_len=5000, save_roc_figure=True)

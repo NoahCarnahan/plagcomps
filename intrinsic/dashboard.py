@@ -13,13 +13,15 @@ import os.path
 import cPickle
 import glob
 
+import numpy
+
 import sqlalchemy
-from sqlalchemy import Table, Column, Sequence, Integer, String, Float, DateTime
+from sqlalchemy import Table, Column, Sequence, Integer, String, Float, DateTime, Boolean, and_, cast
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import sessionmaker
 
-DASHBOARD_VERSION = 1
+DASHBOARD_VERSION = 2
 DASHBOARD_WEIGHTING_FILENAME = 'weighting_schemes/scheme*.pkl'
 
 Base = declarative_base()
@@ -48,6 +50,7 @@ class IntrinsicTrial(Base):
     timestamp = Column(DateTime)
     version_number = Column(Integer)
     corpus = Column(String)
+    cheating = Column(Boolean)
 
     # Actual results
     time_elapsed = Column(Float)
@@ -81,6 +84,7 @@ class IntrinsicTrial(Base):
         self.timestamp = datetime.datetime.now()
         self.version_number = args['version_number']
         self.corpus = args.get('corpus', 'intrinsic')
+        self.cheating = args.get('cheating', False)
 
         # Actual results
         self.time_elapsed = args['time_elapsed']
@@ -107,14 +111,14 @@ def all_k_sets_of_features(k=2):
 
     return k_sets
 
-def run_one_trial(feature_set, atom_type, cluster_type, k, first_doc_num, n, min_len):
+def run_one_trial(feature_set, atom_type, cluster_type, k, first_doc_num, n, min_len, cheating):
     '''
     Runs <evaluate_n_documents> and saves trial to DB
     '''
     session = Session()
 
     start = time.time()
-    path, auc = evaluate_n_documents(feature_set, cluster_type, k, atom_type, n, min_len=min_len)
+    path, auc = evaluate_n_documents(feature_set, cluster_type, k, atom_type, n, min_len=min_len, cheating=cheating)
     end = time.time()
 
     time_elapsed = end - start
@@ -129,7 +133,8 @@ def run_one_trial(feature_set, atom_type, cluster_type, k, first_doc_num, n, min
         'figure_path' : os.path.basename(path),
         'version_number' : version_number,
         'time_elapsed' : time_elapsed,
-        'auc' : auc
+        'auc' : auc,
+        'cheating' : cheating
     }
     trial = IntrinsicTrial(**trial_results)
     session.add(trial)
@@ -141,7 +146,7 @@ def run_one_trial(feature_set, atom_type, cluster_type, k, first_doc_num, n, min
     return path, auc
 
 
-def run_one_trial_weighted(feature_set, feature_set_weights, feature_weights_filename, atom_type, cluster_type, k, first_doc_num, n, min_len):
+def run_one_trial_weighted(feature_set, feature_set_weights, feature_weights_filename, atom_type, cluster_type, k, first_doc_num, n, min_len, cheating):
     '''
     Runs <evaluate_n_documents> using the given raw feature weights or confidence
     weights, and saves trail to DB.
@@ -150,9 +155,9 @@ def run_one_trial_weighted(feature_set, feature_set_weights, feature_weights_fil
 
     start = time.time()
     if cluster_type == "combine_confidences":
-        path, auc = evaluate_n_documents(feature_set, cluster_type, k, atom_type, n, min_len=min_len, feature_confidence_weights=feature_set_weights)
+        path, auc = evaluate_n_documents(feature_set, cluster_type, k, atom_type, n, min_len=min_len, feature_confidence_weights=feature_set_weights, cheating=cheating)
     else:
-        path, auc = evaluate_n_documents(feature_set, cluster_type, k, atom_type, n, min_len=min_len, feature_weights=feature_set_weights)
+        path, auc = evaluate_n_documents(feature_set, cluster_type, k, atom_type, n, min_len=min_len, feature_weights=feature_set_weights, cheating=cheating)
     end = time.time()
 
     time_elapsed = end - start
@@ -169,7 +174,8 @@ def run_one_trial_weighted(feature_set, feature_set_weights, feature_weights_fil
         'figure_path' : os.path.basename(path),
         'version_number' : version_number,
         'time_elapsed' : time_elapsed,
-        'auc' : auc
+        'auc' : auc,
+        'cheating' : cheating
     }
     trial = IntrinsicTrial(**trial_results)
     session.add(trial)
@@ -181,19 +187,23 @@ def run_one_trial_weighted(feature_set, feature_set_weights, feature_weights_fil
     return trial
 
 
-def run_all_dashboard(num_files):
+def run_all_dashboard(num_files, cheating=False, feature_set=None):
     '''
     Runs through all parameter options as listed below, writing results to DB as it goes 
     '''
-    feature_set_options = get_feature_sets()
+    if feature_set:
+        feature_set_options = feature_set
+    else:
+        feature_set_options = get_feature_sets()
+
     atom_type_options = [
         'nchars',
-        'paragraph'
+        # 'paragraph'
     ]
 
     cluster_type_options = [
         'outlier',
-        'kmeans'
+        # 'kmeans'
     ]
 
     # For now, test on all documents (not just "long" ones)
@@ -210,14 +220,15 @@ def run_all_dashboard(num_files):
             'n' : num_files,
             'min_len' : min_len,
             'k' : 2,
+            'cheating' : cheating
         }
 
         trial = run_one_trial(**params)
 
-    run_all_weighting_schemes(num_files, atom_type_options, cluster_type_options, min_len_options)
+    # run_all_weighting_schemes(num_files, atom_type_options, cluster_type_options, min_len_options, cheating)
 
 
-def run_all_weighting_schemes(num_files, atom_types, cluster_types, min_len_options):
+def run_all_weighting_schemes(num_files, atom_types, cluster_types, min_len_options, cheating):
     '''
     Reads the weighting schemes from 'feature_weights.txt' and write the results to DB.
     '''
@@ -252,11 +263,182 @@ def run_all_weighting_schemes(num_files, atom_types, cluster_types, min_len_opti
                 'first_doc_num' : 0,
                 'n' : num_files,
                 'min_len' : min_len,
-                'k' : 2
+                'k' : 2,
+                'cheating' : cheating
             }
             print
 
             trial = run_one_trial_weighted(**params)
+
+def get_latest_dashboard():
+    '''
+    TODO finish this -- should grab/display latest dashboard runs broken
+    down by various params. Perhaps like:
+    |    PARAGRAPH     |       NCHARS     |
+    | kmeans | outlier | kmeans | outlier |
+    '''
+    feature_set_options = get_feature_sets()
+    atom_type_options = [
+        'nchars',
+        'paragraph'
+    ]
+
+    cluster_type_options = [
+        'outlier',
+        'kmeans'
+    ]
+
+    for feature_set, atom_type, cluster_type, min_len in \
+            itertools.product(feature_set_options, atom_type_options, cluster_type_options, min_len_options):
+        print feature_set, atom_type, cluster_type, min_len
+        try:
+            q = session.query(IntrinsicTrial).filter(
+                and_(IntrinsicTrial.atom_type == atom_type,
+                     IntrinsicTrial.cluster_type == cluster_type,
+                     IntrinsicTrial.features == feature_set,
+                     IntrinsicTrial.min_len == min_len)).order_by(IntrinsicTrial.timestamp)
+
+            latest_matching_trial = q.first()
+        except sqlalchemy.orm.exc.NoResultFound, e:
+            print 'Didn\'t find a trial for %s, %s, min_len = %i' % (atom_type, cluster_type, )
+            print 'Using' 
+
+def get_pairwise_results(atom_type, cluster_type, n, min_len, feature_set=None, cheating=False):
+    '''
+    Generates a table for the results of all feature pairs.
+    '''
+    all_features = FeatureExtractor.get_all_feature_function_names()
+    if not feature_set:
+        feature_set = list(itertools.combinations(all_features, 2))
+        feature_set += [(x,x) for x in all_features]
+    session = Session()
+
+    values = []
+    results = {}
+    for feature_pair in feature_set:
+        if feature_pair[0] == feature_pair[1]:
+            feature_pair = [feature_pair[0]]
+        trial = _get_latest_trial(atom_type, cluster_type, n, min_len, list(feature_pair), cheating, session)
+        if trial:
+            results[tuple(feature_pair)] = round(trial.auc, 4)
+            values.append(trial.auc)
+        else:
+            results[tuple(feature_pair)] = "n/a"
+
+    mean = numpy.array(values).mean()
+    stdev = numpy.array(values).std()
+
+    columns = all_features
+    rows = all_features
+
+    cells = []
+    for feature_a in rows:
+        row = []
+        for feature_b in columns:
+            if feature_a == feature_b:
+                row.append(results[tuple([feature_a])])
+            else:
+                if (feature_a, feature_b) in results:
+                    row.append(results[(feature_a, feature_b)])
+                elif (feature_b, feature_a) in results:
+                    row.append(results[(feature_b, feature_a)])
+                else:
+                    row.append('???')
+        cells.append(row)
+
+    # Is html table the best way to view it?
+    html = '<html><head></head><body>'
+    html += '<h1>Pairwise Feature Results</h1>'
+    html += '<p>DASHBOARD_VERSION = ' + str(DASHBOARD_VERSION) + '</p>'
+    html += '<p>cheating = ' + str(cheating) + '</p>'
+    html += '<p>atom_type = ' + str(atom_type) + '</p>'
+    html += '<p>cluster_type = ' + str(cluster_type) + '</p>'
+    html += '<p>n >= ' + str(n) + '</p>'
+    html += '<p>min_len = ' + str(min_len) + '</p>'
+    html += '<p>auc mean = ' + str(round(mean, 4)) + ', stdev = ' + str(round(stdev, 4)) + '</p>'
+    html += '<table border="1">'
+    html += '<tr>'
+    html += '<td></td>'
+    for feature in columns:
+        html += '<td style="font-size: 0.7em">' + feature + '</td>'
+    html += '</tr>'
+    for i, feature_a in enumerate(rows, 0):
+        html += '<tr>'
+        html += '<td>' + feature_a + '</td>'
+        for j, feature_b in enumerate(columns, 0):
+            # set bg color of table cell to help visualize good features
+            if type(cells[i][j]) == float:
+                val = cells[i][j]
+                z_score = (val - mean) / stdev
+                if z_score > 3:
+                    bgcolor = '#00FF00'
+                elif z_score > 2:
+                    bgcolor = '#AAFFAA'
+                elif z_score > 1:
+                    bgcolor = '#DDFFDD'
+                elif z_score > -1:
+                    bgcolor = '#FFFFFF'
+                elif z_score > -2:
+                    bgcolor = '#FFDDDD'
+                elif z_score > -3:
+                    bgcolor = '#FFAAAA'
+                else:
+                    bgcolor = '#FF0000'
+            else:
+                bgcolor = '#888888'
+
+            html += '<td style="background-color: ' + bgcolor + '">' + str(cells[i][j]) + '</td>'
+        html += '</tr>'
+
+    html += '</table></body></html>'
+    
+    html_path = os.path.join(os.path.dirname(__file__), "../figures/dashboard_pairwise_table_"+str(DASHBOARD_VERSION)+"_"+str(time.time())+".html")
+    with open(html_path, 'w') as f:
+        f.write(html)
+    print 'Saved pairwise feature table to ' + html_path
+
+
+def measure_cheating_improvement(n, feature_set_options, min_len=0):
+    '''
+    Compare each method using both cheating and non-cheating.
+    '''
+    session = Session()
+
+    atom_types = ['nchars']
+    cluster_types = ['outlier']
+
+    differences = []
+    for atom_type, cluster_type, feature_set in itertools.product(atom_types, cluster_types, feature_set_options):
+        cheating_trial = _get_latest_trial(atom_type, cluster_type, n, min_len, feature_set, True, session)
+        honest_trial = _get_latest_trial(atom_type, cluster_type, n, min_len, feature_set, False, session)
+        print cheating_trial, honest_trial
+        if not (cheating_trial and honest_trial):
+            print 'At least one of the trials is not in the database:', atom_type, cluster_type, feature_set
+            continue
+        diff = cheating_trial.auc - honest_trial.auc
+        differences.append(diff)
+
+    print 'Average ROC auc gain:', sum(differences) / len(differences)
+
+
+def _get_latest_trial(atom_type, cluster_type, n, min_len, feature_set, cheating, session):
+    '''
+    Helper that queries that database for the latest version of the trials with the
+    given parameters.
+    '''
+    try:
+        q = session.query(IntrinsicTrial).filter(
+            and_(IntrinsicTrial.atom_type == atom_type,
+                 IntrinsicTrial.cluster_type == cluster_type,
+                 IntrinsicTrial.features == cast(feature_set, ARRAY(String)),
+                 IntrinsicTrial.n >= n,
+                 IntrinsicTrial.min_len == min_len,
+                 IntrinsicTrial.cheating == cheating)).order_by(IntrinsicTrial.timestamp)
+        latest_matching_trial = q.first()
+    except sqlalchemy.orm.exc.NoResultFound, e:
+        print 'Didn\'t find a trial for params:', atom_type, cluster_type, feature_set, n, min_len
+        latest_matching_trial = None
+    return latest_matching_trial
 
 
 # an Engine, which the Session will use for connection resources
@@ -268,5 +450,27 @@ Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 
 if __name__ == '__main__':
+    # measure_cheating_improvement(500, all_k_sets_of_features(k=2))
+    # get_pairwise_results('nchars', 'outlier', 500, 0, cheating=True)
+
+    # good_features = ['average_sentence_length',
+    #                 'average_syllables_per_word',
+    #                 'avg_external_word_freq_class',
+    #                 'avg_internal_word_freq_class',
+    #                 'gunning_fog_index',
+    #                 'honore_r_measure',
+    #                 'num_chars',
+    #                 'punctuation_percentage',
+    #                 'syntactic_complexity',
+    #                 'vowelness_trigram,C,V,C',
+    #                 'vowelness_trigram,C,V,V',
+    #                 'word_unigram,of',
+    #                 'word_unigram,the']
+    # feature_set_options = []
+    # for i in xrange(3, len(good_features)+1):
+    #     for x in itertools.combinations(good_features, i):
+    #         feature_set_options.append(x)
+    # feature_set_options = feature_set_options[50:]
+
     n = 500
-    run_all_dashboard(n)
+    run_all_dashboard(n, cheating=False, feature_set=feature_set_options)
