@@ -82,7 +82,7 @@ class ExtrinsicTester:
         '''
         trials, Treference, actuals, Areference = self._get_trials()
     
-        self.analyze_fpr_fnr(Treference, Areference)
+        #self.analyze_fpr_fnr(Treference, Areference)
 
         # actuals is a list of ground truth classifications for passages
 
@@ -179,21 +179,34 @@ if __name__ == "__main__":
     # print fp.get_fingerprints(session)
     
     util = ExtrinsicUtility()
-    num_files = 3
+    num_files = 40
 
     source_file_list, suspect_file_list = util.get_n_training_files(n=num_files, include_txt_extension=False)
 
     print 'Testing first', num_files, ' suspect files using a corpus of', len(source_file_list), 'source documents:'
     print 'Suspect filenames:', suspect_file_list
 
-    atom_type = "paragraph" # ["paragraph", "full"]
-    method = "kth_in_sent" # ["kth_in_sent", "anchor", "full"]
-    n = 4
-    k = 5
-    confidence_method = "containment" # ["containment", "jaccard"]
+    # atom_type = "paragraph" # ["paragraph", "full"]
+    # method = "kth_in_sent" # ["kth_in_sent", "anchor", "full", "winnow-k"]
+    # n = 4
+    # k = 5
+    #confidence_method = "containment" # ["containment", "jaccard"]
 
     #tester = ExtrinsicTester(atom_type, "winnow-k", 6, 15, confidence_method, suspect_file_list, source_file_list)
     #tester.plot_ROC_curve()
 
-    tester = ExtrinsicTester(atom_type, method, n, k, confidence_method, suspect_file_list, source_file_list)
-    tester.plot_ROC_curve()
+    for atom_type in ["nchars"]:
+    	for fp_method in ["kth_in_sent", "winnow-k", "anchor", "full"]:
+    		if fp_method == "winnow-k":
+    			for n in [5,6,7]:
+    				for confidence_method in ["containment", "jaccard"]:
+    					tester = ExtrinsicTester(atom_type, fp_method, n, 13, confidence_method, suspect_file_list, source_file_list)
+    					tester.plot_ROC_curve()
+    		else:
+    			for n in [3,4,5]:
+    				for confidence_method in ["containment", "jaccard"]:
+    					tester = ExtrinsicTester(atom_type, fp_method, n, 5, confidence_method, suspect_file_list, source_file_list)
+    					tester.plot_ROC_curve()
+
+    #tester = ExtrinsicTester(atom_type, method, n, k, confidence_method, suspect_file_list, source_file_list)
+    #tester.plot_ROC_curve()
