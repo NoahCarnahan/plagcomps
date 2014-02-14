@@ -248,7 +248,7 @@ class ExtrinsicUtility(BaseUtility):
         
         If path_type is "name" then just /part1/suspicious-file-XXXXX is returned.
         '''
-        loc = os.path.join(os.path.dirname(__file__), "..", "extrinsic_corpus_partition/var_corp.txt")
+        loc = os.path.join(os.path.dirname(__file__), "..", "extrinsic_corpus_partition/crisp_var_corp.txt")
         f = open(loc, "r")
         lines = f.readlines()
         f.close()

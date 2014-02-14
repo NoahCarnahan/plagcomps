@@ -14,6 +14,10 @@ in the number of new files that need to be populated.
 from plagcomps.shared.util import ExtrinsicUtility
 import os.path
 
+SUSPECT_FILE_NAME = "crisp_corpus_suspect_files.txt"
+SOURCE_FILE_NAME = "crisp_corpus_source_files.txt"
+OUT_FILE_NAME = "crips_var_corp.txt"
+
 def get_source_files(suspect):
     '''
     Returns a set containing all of the documents that this suspect has plagiarism from.
@@ -32,18 +36,20 @@ source_files = []
 source_cutoff = []
 
 # Build the suspicious_files list by reading in extrinsic_training_suspect_files.txt
-loc = os.path.join(os.path.dirname(__file__), "extrinsic_training_suspect_files.txt")
+loc = os.path.join(os.path.dirname(__file__), SUSPECT_FILE_NAME)
 f = open(loc, "r")
 for line in f:
     suspicious_files.append("/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents"+line.strip()+".txt")
 f.close()
 
 # Initialize the source_files list by reading in extrinsic_training_source_files.txt
-loc = os.path.join(os.path.dirname(__file__), "extrinsic_training_source_files.txt")
+loc = os.path.join(os.path.dirname(__file__), SOURCE_FILE_NAME)
 f = open(loc, "r")
 for line in f:
     source_files.append("/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/source-documents"+line.strip()+".txt")
 f.close()
+
+print source_files
 
 # Rearrange source_files and build the source_cutoff list
 first_unarranged_spot = 0
@@ -65,7 +71,7 @@ for suspect in suspicious_files:
     i += 1
 
 # Write the lists to var_corp.txt
-loc = os.path.join(os.path.dirname(__file__), "var_corp.txt")
+loc = os.path.join(os.path.dirname(__file__), OUT_FILE_NAME)
 f = open(loc, "w")
 f.write(str(suspicious_files)+"\n"+str(source_files)+"\n"+str(source_cutoff)+"\n")
 f.close()

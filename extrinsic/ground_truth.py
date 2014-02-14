@@ -52,6 +52,7 @@ class GroundTruth(Base):
         '''
         initializes FingerPrint
         '''
+        
         self.document_name = doc
         if base_path in self.document_name:
             self._doc_path = self.document_name + ".txt"
@@ -71,9 +72,11 @@ class GroundTruth(Base):
         Instantiates the ground truth values for this document's paragraphs
         if it isn't in the database, yet. Returns the ground truth list.
         '''
+        
+        
         if self.ground_truth == None:
             doc_text = open(self._doc_path, 'r')
-            spans = tokenization.tokenize(doc_text.read(), self.atom_type)
+            spans = tokenization.tokenize(doc_text.read(), self.atom_type, n=5000)
             doc_text.close()
             
             plag_spans = ExtrinsicUtility().get_plagiarized_spans(self._doc_xml_path)

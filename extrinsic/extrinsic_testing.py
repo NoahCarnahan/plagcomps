@@ -14,6 +14,13 @@ import ground_truth
 from ..shared.util import ExtrinsicUtility
 from ..tokenization import *
 
+from ..dbconstants import username, password, dbname
+import sqlalchemy
+
+url = "postgresql://%s:%s@%s" % (username, password, dbname)
+engine = sqlalchemy.create_engine(url)
+Session = sqlalchemy.orm.sessionmaker(bind=engine)
+
 class ExtrinsicTester:
 
     def __init__(self, atom_type, fingerprint_method, n, k, hash_len, confidence_method, suspect_file_list, source_file_list):
@@ -38,9 +45,9 @@ class ExtrinsicTester:
         of the ground truths for each atom of each document.
         '''
         classifications = []
-        classificationsDocNames = {}
-        actualConfidences = []
+        actuals = []
         actualDocNames = {}
+        
         for f in self.suspect_file_list:
             doc_classifications = []
             suspicious_document = open(f + '.txt')
@@ -50,8 +57,8 @@ class ExtrinsicTester:
             doc_name = f.replace(self.suspicious_path_start, "")
 
             acts = ground_truth._query_ground_truth(f, self.atom_type, session, self.suspicious_path_start).get_ground_truth(session)
-            actualConfidences += acts
-            actualDocNames[f] = actualConfidences
+            actuals += acts
+            actualDocNames[f] = actuals
 
             print f
             print 'Classifying', doc_name
@@ -65,7 +72,7 @@ class ExtrinsicTester:
                 print 'atom index:', str(atom_index+1) + '/' + str(len(acts))
                 print 'confidence (actual, guess):', acts[atom_index], atom_classifications[0][1]
 
-        return classifications, actualConfidences
+        return classifications, actuals
 
 
     def plot_ROC_curve(self, sess):
@@ -75,12 +82,20 @@ class ExtrinsicTester:
         '''
         trials, actuals = self._get_trials(sess)
     
-        #self.analyze_fpr_fnr(Treference, Areference)
-
         # actuals is a list of ground truth classifications for passages
 
         # trials is a list consisting of 0s and 1s. 1 means we think the atom is plagiarized
+        print "trials:"
+        print trials
+        print "actuals:"
+        print actuals
         fpr, tpr, thresholds = sklearn.metrics.roc_curve(actuals, trials, pos_label=1)
+        print "fpr:"
+        print fpr
+        print "tpr:"
+        print tpr
+        print "thresholds:"
+        print thresholds
         roc_auc = sklearn.metrics.auc(fpr, tpr)
 
         # The following code is from http://scikit-learn.org/stable/auto_examples/plot_roc.html
@@ -99,20 +114,22 @@ class ExtrinsicTester:
 
         return roc_auc, path
 
-def evaluate(method, n, k, atom_type, hash_len, confidence_method, num_files="all"):
+def evaluate(method, n, k, atom_type, hash_size, confidence_method, num_files="all"):
     '''
     Run our tool with the given parameters and return the area under the roc.
     If a num_files is given, only run on the first num_file suspicious documents,
     otherwise run on all of them.
     '''
     
+    session = Session()
+    
     source_file_list, suspect_file_list = ExtrinsicUtility().get_training_files(n = num_files, include_txt_extension = False)
 
     print suspect_file_list    
     print "Testing first", len(suspect_file_list), "suspect files against how ever many source documents have been populated."
    
-    tester = ExtrinsicTester(atom_type, method, n, k, hash_len, confidence_method, suspect_file_list, source_file_list)
-    print tester.plot_ROC_curve(None)
+    tester = ExtrinsicTester(atom_type, method, n, k, hash_size, confidence_method, suspect_file_list, source_file_list)
+    print tester.plot_ROC_curve(session)
 
 
 def analyze_fpr_fnr(self, trials, actuals):
@@ -183,4 +200,5 @@ def analyze_fpr_fnr(self, trials, actuals):
         
     
 if __name__ == "__main__":
-    evaluate("kth_in_sent", 5, 5, "paragraph", 50000, "jaccard", num_files=10)
+    #evaluate("kth_in_sent", 5, 5, "paragraph", 50000, "jaccard", num_files=10)
+    evaluate("kth_in_sent", 5, 0, "nchars", 10000000, "jaccard", num_files=10)
