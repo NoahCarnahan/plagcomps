@@ -113,17 +113,11 @@ def density_based(stylo_vectors, center_at_mean=True, num_to_ignore=1, impurity=
 
         #confidences.append(_combine_feature_probs(featurewise_confs))
             
-    scaled = _scale_confidences(confidences)
-    for s in scaled:
-        if math.isnan(s) or math.isinf(s):
-            print 'WHERE DID IT COME FROM?'
-            print featurewise_plag_prob
-            print featurewise_nonplag_prob
-            print zip(confidences, scaled)
-            print '-'*40 
+    # No more scaling -- we're already returning probs between 0 and 1, so should be all good
+    # scaled = _scale_confidences(confidences)
+    # return scaled
 
-
-    return scaled
+    return confidences
 
 def _combine_feature_probs(prob_vector):
     '''
@@ -162,6 +156,9 @@ def _get_confidence(plag_prob, non_plag_prob):
 
 def _scale_confidences(confs):
     '''
+    NOT BEING USED ANYMORE. The way we combine combine plag/non-plag probs 
+    should already give confs between 0 and 1.
+
     Scales all "confidences" to (0, 1) interval simply by dividing by 
     the maximum "confidence"
 
