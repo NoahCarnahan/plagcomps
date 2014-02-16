@@ -172,17 +172,56 @@ class FingerprintExtractor:
         return fingerprint
 
     def _get_winnow_k(self, document, k, t):
+        '''
+        Takes as arguements a k to be used for k-grams and a noise threshold, t.
+
+        Produces a full hash of the k-grams of the text given and selects the minimum hash from
+        each window where window size is t-k+1 if it is a new minimum.
+
+        Example:
+
+        for string: "They can't burn it down if we burn it down first."
+        	k: 8
+        	t: 14
+
+        produces k grams from theycantburnitdownifweburnitdownfirst of size 8 and hashes them:
+
+        theycant = 77
+        heycantb = 64
+        eycantbu = 18
+        ...
+
+        selects from all hashes the minimum within the window w = t-k+1 = 14-8+1 = 7
+
+        window1:
+        [77, 64, 18, 15, 98, 87, 45], 12, 15, 84, 65, 75, 35, ... ; selects 15
+
+        window2:
+        77, [64, 18, 15, 98, 87, 45, 12], 15, 84, 65, 75, 35, ... ; 15 already selected so nothing selected.
+
+        End Example.
+        '''
+
+        if t < k:
+            raise Exception("Invalid input--noise threshold <t> must be bigger than <k>")
+
         document = "".join(self._strip_punctuation(document).lower().split())
         fingerprint = []
         document_hash = []
+        
+        # set window size
         w = t-k+1
 
+        # produce k-grams
         for i in xrange(len(document)-k+1):
             document_hash.append(self._gen_string_hash(document[i:i+k]))
+
         if len(document_hash) == 0:
             return []
+
         first_min = document_hash[0]
 
+        # select minimums from windows
         for i in xrange(len(document_hash)-w+1):
             window = document_hash[i:i+w]
             second_min = min(window)
@@ -194,6 +233,7 @@ class FingerprintExtractor:
             else:
                 first_min = second_min
                 fingerprint.append(first_min)
+
         return fingerprint
 
     def _strip_punctuation(self, document):
