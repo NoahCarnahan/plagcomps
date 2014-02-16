@@ -239,6 +239,7 @@ class ExtrinsicUtility(BaseUtility):
     
     CORPUS_SRC_LOC = '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/source-documents'
     CORPUS_SUSPECT_LOC = '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents'
+    TRAINING_CORP_LOC = 'extrinsic_corpus_partition/var_corp.txt'
 
     def get_training_files(self, n="all", path_type="absolute", file_type='both', include_txt_extension=True):
         '''
@@ -248,7 +249,8 @@ class ExtrinsicUtility(BaseUtility):
         
         If path_type is "name" then just /part1/suspicious-file-XXXXX is returned.
         '''
-        loc = os.path.join(os.path.dirname(__file__), "..", "extrinsic_corpus_partition/var_corp.txt")
+
+        loc = os.path.join(os.path.dirname(__file__), "..", ExtrinsicUtility.TRAINING_CORP_LOC)
         f = open(loc, "r")
         lines = f.readlines()
         f.close()
@@ -292,7 +294,27 @@ class ExtrinsicUtility(BaseUtility):
                 full_path = self.get_src_abs_path(src)
                 sources.add(full_path)
 
-        return sources    
+        return sources
+
+
+    def get_plagiarized_spans(self, xml_path):
+        '''
+        Using the ground truth, return a list of spans representing the passages of the
+        text that are plagiarized.  Also return the names of the source documents from 
+        which the spans are plagiarized.
+        '''
+        spans = []
+        source_filepaths = []
+        tree = xml.etree.ElementTree.parse(xml_path)
+
+        for feature in tree.iter("feature"):
+            if feature.get("name") == "artificial-plagiarism":
+                start = int(feature.get("this_offset"))
+                end = start + int(feature.get("this_length"))
+                spans.append((start, end))
+                source_filepaths.append(self.get_src_abs_path(feature.get("source_reference")))
+        return spans, source_filepaths
+
 
     def get_src_abs_path(self, doc_name):
         '''

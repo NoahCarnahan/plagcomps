@@ -66,12 +66,16 @@ class ExtrinsicTester:
             
             for atom_index in xrange(len(acts)):    
                 atom_classifications = self.evaluator.classify_document(doc_name, self.atom_type, atom_index, self.fingerprint_method, self.n, self.k, self.hash_len, self.confidence_method, self.mid)
-                #print atom_classifications
-                # just take the most similar source document's similarity as the confidence of plagiarism for now.
-                classifications.append(atom_classifications[0][1])
+                # print atom_classifications
+                # top_source is a tuple with the form ((source_doc_name, atom_index), confidence)
+                top_source = atom_classifications[0]
+                source_filename, source_atom_index = top_source[0]
+                confidence = top_source[1]
+
+                classifications.append(top_source)
                 
                 print 'atom index:', str(atom_index+1) + '/' + str(len(acts))
-                print 'confidence (actual, guess):', acts[atom_index], atom_classifications[0][1]
+                print 'confidence (actual, guess):', acts[atom_index][0], (confidence, source_filename, source_atom_index)
 
         return classifications, actuals
 
@@ -81,16 +85,36 @@ class ExtrinsicTester:
         Outputs an ROC figure based on our plagiarism classifications and the 
         ground truth of each atom.
         '''
-        trials, actuals = self._get_trials(sess)
+        trials, ground_truths = self._get_trials(sess)
+
+        print 'Computing source accuracy...'
+        num_plagiarized = 0
+        num_correctly_identified = 0
+        incorrectly_identified = []
+
+        for trial, ground_truth in zip(trials, ground_truths):
+            if ground_truth[0] == 1:
+                num_plagiarized += 1
+                if trial[0][0] in ground_truth[1]:
+                    num_correctly_identified += 1
+                else:
+                    incorrectly_identified.append([trial, ground_truth])
+        source_accuracy = float(num_correctly_identified) / num_plagiarized
+        # print num_plagiarized, num_correctly_identified, source_accuracy
+        # for x in incorrectly_identified:
+        #     print x
+
+        confidences = [x[1] for x in trials]
+        actuals = [x[0] for x in ground_truths]
     
         # actuals is a list of ground truth classifications for passages
 
         # trials is a list consisting of 0s and 1s. 1 means we think the atom is plagiarized
-        print "trials:"
-        print trials
-        print "actuals:"
-        print actuals
-        fpr, tpr, thresholds = sklearn.metrics.roc_curve(actuals, trials, pos_label=1)
+        # print "trials:"
+        # print trials
+        # print "actuals:"
+        # print actuals'
+        fpr, tpr, thresholds = sklearn.metrics.roc_curve(actuals, confidences, pos_label=1)
         print "fpr:"
         print fpr
         print "tpr:"
@@ -113,7 +137,7 @@ class ExtrinsicTester:
         path = os.path.join(os.path.dirname(__file__), "../figures/roc_extrinsic_"+str(time.time())+"_"+self.fingerprint_method+".pdf")
         pyplot.savefig(path)
 
-        return roc_auc, path
+        return roc_auc, path, source_accuracy
 
 def evaluate(method, n, k, atom_type, hash_size, confidence_method, num_files="all"):
     '''
@@ -125,6 +149,8 @@ def evaluate(method, n, k, atom_type, hash_size, confidence_method, num_files="a
     session = Session()
     
     source_file_list, suspect_file_list = ExtrinsicUtility().get_training_files(n = num_files, include_txt_extension = False)
+    # TODO: get rid of this...
+    # suspect_file_list = ['/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents/part5/suspicious-document09634']
 
     print suspect_file_list    
     print "Testing first", len(suspect_file_list), "suspect files against how ever many source documents have been populated."
@@ -201,5 +227,5 @@ def analyze_fpr_fnr(self, trials, actuals):
         
     
 if __name__ == "__main__":
-    evaluate("kth_in_sent", 3, 3, "paragraph", 10000000, "jaccard", num_files=10)
+    evaluate("kth_in_sent", 3, 3, "paragraph", 10000000, "jaccard", num_files=3)
     #evaluate("kth_in_sent", 5, 3, "full", 10000000, "jaccard", num_files=10)
