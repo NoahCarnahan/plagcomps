@@ -59,7 +59,7 @@ from ..tokenization import tokenize
 
 TMP_LOAD_FILE = "/tmp/dbimport.txt"
 DEBUG = True
-DEV_MODE = True
+DEV_MODE = False
 
 def populate_database(files, method_name, n, k, atom_type, hash_size, check_for_duplicate=True):
     '''
@@ -475,24 +475,29 @@ def _populate_variety_of_params():
     
     srs, sus = ExtrinsicUtility().get_training_files(n=20)
 
-    populate_database(sus+srs, "kth_in_sent", 5, 3, "full", 10000000, check_for_duplicate=False)
-    populate_database(sus+srs, "kth_in_sent", 3, 3, "full", 10000000, check_for_duplicate=False)
-    populate_database(sus+srs, "kth_in_sent", 5, 3, "nchars", 10000000, check_for_duplicate=False)
-    populate_database(sus+srs, "kth_in_sent", 3, 3, "nchars", 10000000, check_for_duplicate=False)
-    populate_database(sus+srs, "kth_in_sent", 5, 3, "paragraph", 10000000, check_for_duplicate=False)
-    populate_database(sus+srs, "kth_in_sent", 3, 3, "paragraph", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "kth_in_sent", 5, 3, "full", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "kth_in_sent", 3, 3, "full", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "kth_in_sent", 5, 3, "nchars", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "kth_in_sent", 3, 3, "nchars", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "kth_in_sent", 5, 3, "paragraph", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "kth_in_sent", 3, 3, "paragraph", 10000000, check_for_duplicate=False)
     
-    populate_database(sus+srs, "anchor", 5, 0, "full", 10000000, check_for_duplicate=False)
-    populate_database(sus+srs, "anchor", 5, 0, "nchars", 10000000, check_for_duplicate=False)
-    populate_database(sus+srs, "anchor", 5, 0, "paragraph", 10000000, check_for_duplicate=False)
-    populate_database(sus+srs, "anchor", 3, 0, "full", 10000000, check_for_duplicate=False)
-    populate_database(sus+srs, "anchor", 3, 0, "nchars", 10000000, check_for_duplicate=False)
-    populate_database(sus+srs, "anchor", 3, 0, "paragraph", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "anchor", 5, 0, "full", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "anchor", 5, 0, "nchars", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "anchor", 5, 0, "paragraph", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "anchor", 3, 0, "full", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "anchor", 3, 0, "nchars", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "anchor", 3, 0, "paragraph", 10000000, check_for_duplicate=False)
+    
+    
+def _tony_fix_this():
+    srs, sus = ExtrinsicUtility().get_training_files(n=20)
+    populate_database(sus+srs, "winnow-k", 5, 3, "full", 10000000, check_for_duplicate=False)
 
 if __name__ == "__main__":
     print 'DEV_MODE is set to', DEV_MODE
     #_populate_variety_of_params()
-    _test()
-    _test_get_fp_query()
-    _test_reverse_lookup()
+    #_test()
+    #_test_get_fp_query()
+    #_test_reverse_lookup()
     

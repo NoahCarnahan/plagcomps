@@ -226,5 +226,4 @@ def analyze_fpr_fnr(self, trials, actuals):
     fileFNR.close()
         
 if __name__ == "__main__":
-    evaluate("kth_in_sent", 3, 3, "paragraph", 10000000, "jaccard", num_files=3)
-    #evaluate("kth_in_sent", 5, 3, "full", 10000000, "jaccard", num_files=10)
+    evaluate("kth_in_sent", 5, 3, "full", 10000000, "jaccard", num_files=20)
