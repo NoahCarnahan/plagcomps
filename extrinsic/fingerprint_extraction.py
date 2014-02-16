@@ -7,16 +7,34 @@ import os
 import string, random, re, operator
 from .. import tokenization
 from ..shared.util import ExtrinsicUtility
-import reverse_index
-import extrinsic_processing
+
+import psycopg2
+from ..dbconstants import username, password, dbname
+import fingerprintstorage
 
 # TODO: omit words tokenized by nltk that are just puncuation
 
+
+class Passage:
+    def __init__(self, id, doc_name, doc_path, doc_xml_path, method, n, k, hash_len, atom_type, atom_number, is_source, hash_values):
+        self.id = id
+        self.doc_name = doc_name
+        self._doc_path = doc_path
+        self._doc_xml_path = doc_xml_path
+        self.method = method
+        self.n = n
+        self.k = k
+        self.hash_len = hash_len
+        self.atom_type = atom_type
+        self.atom_number = atom_number
+        self.is_source = is_source
+        self.hash_values = hash_values
+
 class FingerprintExtractor:
 
-    def __init__(self):
+    def __init__(self, hash_span=10000):
         self.anchors = ['ul', 'ay', 'oo', 'yo', 'si', 'ca', 'am', 'ie', 'mo', 'rt']
-        self.hash_span = 10000
+        self.hash_span = hash_span
 
     def _gen_string_hash(self, in_string):
         '''
@@ -191,46 +209,49 @@ class FingerprintEvaluator:
         self.fingerprint_method = fingerprint_method
         self.source_filenames = source_filenames
 
-    def _get_fingerprint(self, filename, atom_type, session, base_path):
-        fp = extrinsic_processing._query_fingerprint(filename, self.fingerprint_method, self.n, self.k, atom_type, session, base_path)
-        return fp
+    #def _get_fingerprint(self, filename, atom_type, session, base_path):
+    #    fp = extrinsic_processing.query_fingerprint(filename, self.fingerprint_method, self.n, self.k, atom_type, session, base_path)
+    #    return fp
 
-    def classify_document(self, filename, atom_type, atom_index, fingerprint_method, n, k, confidence_method, session):
+    def classify_document(self, filename, atom_type, atom_index, fingerprint_method, n, k, hash_len, confidence_method, mid):
         '''
         Returns a list of (source_filename, similarity) tuples sorted in decreasing similarity to the 
         input document.
         '''
-        fp = self._get_fingerprint(filename, atom_type, session, ExtrinsicUtility.CORPUS_SUSPECT_LOC)
+        
+        # sanitize atom_index
         if atom_type == "full":
-            fingerprint = fp.get_fingerprints(session)
-        else:
-            fingerprint = fp.get_fingerprints(session)[atom_index]
-
-        source_documents = {}
-        # get the list of fingerprint ids for each minutia in the fingerprint
-        for minutia in fingerprint:
-            if minutia == 0: # every document has 0, so minutia = 0 is basically useless
-                continue
-            ri = reverse_index._query_reverse_index(minutia, n, k, fingerprint_method, session)
-            for fingerprint_id_pair in ri.fingerprint_ids:
-                fingerprint_id = fingerprint_id_pair[0]
-                fingerprint_atom_index = fingerprint_id_pair[1]
+            atom_index = 0
+        
+         # Get the full path from the filename and base_path
+        full_path = ExtrinsicUtility.CORPUS_SUSPECT_LOC + filename + ".txt"
+        
+        # Get the fingerprint of the passage in question
+        fingerprint = fingerprintstorage.get_passage_fingerprint(full_path, atom_index, atom_type, mid)
+        
+        with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) as conn:
+            conn.autocommit = True
+            
+            source_passages = {}
+            for hash_value in fingerprint:
                 
-                fp = extrinsic_processing._query_fingerprint_from_id(fingerprint_id, session)
-                source_fp = fp.get_fingerprints(session)
-
-                if len(source_fp) > 0 and type(source_fp[0]) == list: # is fp at a paragraph granularity?
-                    if len(source_fp[fingerprint_atom_index]): # make sure it's not an empty fingerprint
-                        source_documents[(fp.document_name, fingerprint_atom_index)] = get_plagiarism_confidence(fingerprint, source_fp[fingerprint_atom_index], confidence_method)
-                    else:
-                        source_documents[(fp.document_name, fingerprint_atom_index)] = 0
-                else: # full document granularity
-                    source_documents[(fp.document_name, 0)] = get_plagiarism_confidence(fingerprint, source_fp, confidence_method)
-
-        if not len(source_documents): # insert dummy for now...
-            source_documents[('dummy', 0)] = 0
-
-        return sorted(source_documents.items() , key = operator.itemgetter(1), reverse=True)
+                if hash_value == 0: # There may be a bug with fingerprinting whereby most passages have 0 in their fingerprint.
+                    continue
+                
+                matching_source_passages = fingerprintstorage.get_matching_passages(hash_value, mid, conn)
+                for passage in matching_source_passages:
+                    if (passage["doc_name"], passage["atom_number"]) not in source_passages:
+                    
+                        source_passage_fp = fingerprintstorage.get_passage_fingerprint_by_id(passage["pid"], mid, conn)
+                        if len(source_passage_fp):# make sure its not an empty fingerprint
+                            source_passages[(passage["doc_name"], passage["atom_number"])] = get_plagiarism_confidence(fingerprint, source_passage_fp, confidence_method)
+                        else:
+                            source_passages[(fp["doc_name"], fp["atom_number"])] = 0
+                            
+        if not len(source_passages):
+            source_passages[('dummy', 0)] = 0
+            
+        return sorted(source_passages.items() , key = operator.itemgetter(1), reverse=True)
 
     def classify_and_display(self, doc):
         '''
@@ -283,6 +304,7 @@ def anchor_test():
     ex = FingerprintExtractor()
     print ex.get_fingerprint(text, 4, method='anchor')
 
+
 if __name__ == '__main__':
     '''ex = FingerprintExtractor()
     corp = nltk.corpus.gutenberg
@@ -295,5 +317,8 @@ if __name__ == '__main__':
     anchor = FingerprintEvaluator(sources, "anchor")
     '''
     ex = FingerprintExtractor()
-    document = "Hi my name is Marcus and I'm working in the CMC. Why does our project have to be so ridiculous."
-    print ex.get_fingerprint(document, 3, method="anchor")
+    #text = "Hi my name is Marcus and I'm working in the CMC. Why does our project have to be so ridiculous."
+    f = open("/copyCats/itty-bitty-corpus/suspicious/einstein.txt","r")
+    text = f.read()
+    f.close()
+    print ex.get_fingerprint(text, 5, "kth_in_sent", 5)
