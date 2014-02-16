@@ -230,6 +230,7 @@ def get_mid(method, n, k, atom_type, hash_size):
     '''
     with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) \
             as conn:
+        conn.autocommit = True
         with conn.cursor() as cur:
             if DEV_MODE:
                 query = "SELECT mid FROM dev_methods WHERE atom_type = %s AND method_name = %s AND n = %s AND k = %s AND hash_size = %s;"
@@ -259,7 +260,7 @@ def get_matching_passages(target_hash_value, mid, conn):
                         dev_hashes.mid = %s AND
                         dev_hashes.is_source = 't';'''
     else:
-        reverse_query = '''SELECT hashes.pid, documents.name, passages.atom_num FROM hashes,  documents, passages WHERE
+        reverse_query = '''SELECT hashes.pid, documents.name, passages.atom_num FROM hashes, documents, passages WHERE
                         documents.did = passages.did AND
                         passages.pid = hashes.pid AND
                         hashes.hash_value = %s AND
@@ -287,55 +288,13 @@ def get_matching_passages_with_fingerprints(target_hash_value, mid):
     
     with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) \
         as conn:
+        conn.autocommit = True
         
         passages = get_matching_passages(target_hash_value, mid, conn)    
         for i in range(len(passages)):
             passages[i]["fingerprint"] = get_passage_fingerprint_by_id(passages[i]["pid"], mid, conn)
     
     return passages
-    
-    """
-    with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) \
-            as conn:
-        
-        # Get passages (and their atom_numbers and doc_names) with target_hash_value and mid            
-        if DEV_MODE:
-            reverse_query = '''SELECT dev_hashes.pid, dev_documents.name, dev_passages.atom_num FROM dev_hashes, dev_documents, dev_passages WHERE
-                            dev_documents.did = dev_passages.did AND
-                            dev_passages.pid = dev_hashes.pid AND
-                            dev_hashes.hash_value = %s AND
-                            dev_hashes.mid = %s AND
-                            dev_hashes.is_source = 't';'''
-        else:
-            reverse_query = '''SELECT hashes.pid, documents.name, passages.atom_num FROM hashes,  documents, passages WHERE
-                            documents.did = passages.did AND
-                            passages.pid = hashes.pid AND
-                            hashes.hash_value = %s AND
-                            hashes.mid = %s AND
-                            hashes.is_source = 't';'''
-                            
-        reverse_args = (target_hash_value, mid)
-
-        # With statement cleans up the cursor no matter what
-        with conn.cursor() as cur:
-            cur.execute(reverse_query, reverse_args)
-            matching_passages = cur.fetchall()
-
-        passages = [{"pid":passage[0], "doc_name":passage[1], "atom_number":passage[2]} for passage in matching_passages]
-        
-        # Now get the fingerprints for each passage:
-        for i in range(len(passages)):
-            if DEV_MODE:
-                fp_query = "SELECT dev_hashes.hash_value FROM dev_hashes WHERE dev_hashes.pid = %s AND dev_hashes.mid = %s;"
-            else:
-                fp_query = "SELECT hashes.hash_value FROM hashes WHERE hashes.pid = %s AND hashes.mid = %s;"
-            with conn.cursor() as cur:
-                cur.execute(fp_query, (passages[i]["pid"], mid))
-                fingerprint = cur.fetchall()
-                passages[i]["fingerprint"] = [row[0] for row in fingerprint]
-
-    return passages
-    """
 
 def get_passage_ids_by_hash(target_hash_value, mid):
     '''
@@ -345,6 +304,8 @@ def get_passage_ids_by_hash(target_hash_value, mid):
 
     with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) \
             as conn:
+        conn.autocommit = True
+        
         if DEV_MODE:
             query = '''SELECT pid FROM dev_hashes WHERE hash_value = %s AND mid = %s AND is_source = 't';'''
         else:
@@ -407,6 +368,7 @@ def _row_already_exists(pid, mid):
     '''
     with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) \
             as conn:
+        conn.autocommit = True
         if DEV_MODE:
             existence_query = "SELECT * FROM dev_hashes WHERE pid = %s AND mid = %s LIMIT 1;"
         else:
@@ -492,10 +454,12 @@ def _test_reverse_lookup():
         print '-'*40
 
 def _populate_variety_of_params():
-    srs, sus = ExtrinsicUtility().get_training_files(n=400)
     # After you populate the database, leave its line here, but commented out. This way we can easily see what
     # is already in it. Yes I am aware this is an extremely error prone and stupid way to
     # keep track of this.
+    
+    srs, sus = ExtrinsicUtility().get_training_files(n=400)
+
     #populate_database(sus+srs, "kth_in_sent", 5, 3, "full", 10000000, check_for_duplicate=False)
     #populate_database(sus+srs, "kth_in_sent", 5, 3, "nchars", 10000000, check_for_duplicate=False)
     #populate_database(sus+srs, "kth_in_sent", 5, 3, "paragraph", 10000000, check_for_duplicate=False)

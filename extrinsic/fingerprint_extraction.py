@@ -229,9 +229,9 @@ class FingerprintEvaluator:
         # Get the fingerprint of the passage in question
         fingerprint = fingerprintstorage2.get_passage_fingerprint(full_path, atom_index, atom_type, mid)
         
-        
         with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) as conn:
-        
+            conn.autocommit = True
+            
             source_passages = {}
             for hash_value in fingerprint:
                 
@@ -249,7 +249,7 @@ class FingerprintEvaluator:
                             source_passages[(fp["doc_name"], fp["atom_number"])] = 0
                             
         if not len(source_passages):
-            source_documents[('dummy', 0)] = 0
+            source_passages[('dummy', 0)] = 0
             
         return sorted(source_passages.items() , key = operator.itemgetter(1), reverse=True)
 
