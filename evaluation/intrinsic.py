@@ -1,11 +1,12 @@
 from ..intrinsic.featureextraction import FeatureExtractor
-from ..shared.util import IntrinsicUtility, ExtrinsicUtility
+from ..shared.util import BaseUtility, IntrinsicUtility, ExtrinsicUtility
 from ..shared.util import BaseUtility
 from ..dbconstants import username
 from ..dbconstants import password
 from ..dbconstants import dbname
 from plagcomps.intrinsic.cluster import cluster
 from ..tokenization import tokenize
+from plagcomps.evaluation.precrecall import prec_recall_evaluate
 
 import datetime
 import numpy.random
@@ -86,7 +87,7 @@ def populate_database(atom_types, num, features=None, corpus='intrinsic'):
 
     session.close()
 
-def evaluate_n_documents(features, cluster_type, k, atom_type, n, corpus='intrinsic', save_roc_figure=True, min_len=None,
+def evaluate_n_documents(features, cluster_type, k, atom_type, n, eval_method = 'roc', corpus='intrinsic', save_roc_figure=True, min_len=None,
                         first_doc_num=0, feature_weights=None, feature_confidence_weights=None, cheating=False, cheating_min_len=5000):
     '''
     Return the evaluation (roc curve path, area under the roc curve) of the first n training
@@ -107,18 +108,40 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n, corpus='intrin
         'first_doc_num' : first_doc_num
     }
 
-    roc_path, roc_auc, _ = evaluate(features, cluster_type, k, atom_type, first_training_files, corpus=corpus, save_roc_figure=save_roc_figure, 
-                                    feature_vector_weights=feature_weights, feature_confidence_weights=feature_confidence_weights, metadata=metadata,
-                                    cheating=cheating, cheating_min_len=cheating_min_len)
-    
-    # Store the figures in the database
-    # session = Session()
-    # f = _Figure(roc_path, "roc", roc_auc, sorted(features), cluster_type, k, atom_type, n)
-    # session.add(f)
-    # session.commit()
-    # session.close()
-    
-    return roc_path, roc_auc
+    if eval_method == 'roc':
+        roc_path, roc_auc, _ = evaluate(features, cluster_type, k, atom_type, first_training_files, corpus=corpus, save_roc_figure=save_roc_figure, 
+                                        feature_vector_weights=feature_weights, feature_confidence_weights=feature_confidence_weights, metadata=metadata,
+                                        cheating=cheating, cheating_min_len=cheating_min_len)
+        return roc_path, roc_auc
+
+    elif eval_method == 'prec_recall':
+        # (nj) in order to keep DB logic out of precrecall.py, create the session
+        # and grab the reduced docs first and pass them
+        session = Session()
+        reduced_docs = _get_reduced_docs(atom_type, first_training_files, session, corpus=corpus)
+
+        doc_to_thresh_to_result, thresh_prec_avgs, thresh_recall_avgs = prec_recall_evaluate(reduced_docs, session, features, cluster_type, k, 
+                                                                        atom_type, corpus=corpus, feature_vector_weights=feature_weights, 
+                                                                        metadata=metadata, cheating=cheating, cheating_min_len=cheating_min_len)
+
+        print '-----'
+        print 'features:', features
+        print 'cluster_type:', cluster_type
+        print 'atom_type:', atom_type
+        print 'n:', n
+
+        print 
+        for thresh in sorted(thresh_prec_avgs.keys()):
+            print thresh
+            print 'Prec:', thresh_prec_avgs[thresh]
+            print 'Recall:', thresh_recall_avgs[thresh]
+
+        
+        print 'PREC:', thresh_prec_avgs
+        print 'RECALL:', thresh_recall_avgs
+        session.close()
+
+        return doc_to_thresh_to_result
 
 
 def evaluate(features, cluster_type, k, atom_type, docs, corpus='intrinsic', save_roc_figure=True, reduced_docs=None, feature_vector_weights=None, 
@@ -557,6 +580,12 @@ class ReducedDoc(Base):
             else:
                 return [s for s in self._spans if not self.cheating_excludes_span(s, cheating_min_len)]
 
+    def get_plag_spans(self):
+        '''
+        Returns list of lists, where the ith lisst contains the start and end characters for
+        the ith PLAGIARIZED pasage in this document
+        '''
+        return self._plagiarized_spans
 
     def cheating_excludes_span(self, span, min_chars):
         '''
@@ -809,22 +838,27 @@ def run_individual_features(features, cluster_type, k, atom_type, n, min_len=Non
 # ls -t | grep json | xargs grep auc | awk '{print $1, $3; }' | sort -gk 2 | tail -n 20
 # Replace the 20 with a larger number to see more results
 if __name__ == "__main__":
-    features = FeatureExtractor.get_all_feature_function_names()
-    features_nested = FeatureExtractor.get_all_feature_function_names(True)
-    # populate_database(['paragraph', 'nchars'], None, features=features, corpus='extrinsic')
+    # features = [
+    #     'punctuation_percentage',
+    #     'gunning_fog_index',
+    #     'syntactic_complexity',
+    #     'num_chars',
+    #     'vowelness_trigram,C,V,C',
+    #     'avg_internal_word_freq_class'
+    # ]
+    # features = FeatureExtractor.get_all_feature_function_names()
+    # features = [f for f in features if 'evolved' not in f]
+    features = [
+        'gunning_fog_index',
+        'syntactic_complexity',
+        'word_unigram,is',
+        'average_syllables_per_word'
+    ]
+    cluster_type = 'outlier'
+    atom_type = 'nchars'
+    n = 401
+    evaluate_n_documents(features, cluster_type, 2, atom_type, n, eval_method = 'prec_recall')
 
-    # _test()
-
-    #features = ['punctuation_percentage', 'gunning_fog_index','syntactic_complexity', 'num_chars', 'vowelness_trigram,C,V,C', 'avg_internal_word_freq_class']
                  
-    #feature_confidence_weights = [0.6492269039473438, 0.08020730166391861, 1.0, 0.7481609037593294, 0.00001, 0.07811654825143369, 0.272335107617069, 0.06299892339329263, 0.05524606112540992]
-    #print evaluate_n_documents(features, 'combine_confidences', 2, 'paragraph', 50, feature_confidence_weights=feature_confidence_weights, first_doc_num=0, min_len=0)
-
-
-    # zach test
-    print features_nested, len(features_nested)
-
-    print evaluate_n_documents(features_nested, "kmeans", 2, "paragraph", 550, first_doc_num=0)
-
     #print evaluate_n_documents(features, "outlier", 2, "nchars", 500, cheating=True, save_roc_figure=True)
     #print evaluate_n_documents(features, "outlier", 2, "nchars", 3, cheating=True, cheating_min_len=5000, save_roc_figure=True)

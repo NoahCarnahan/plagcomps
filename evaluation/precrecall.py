@@ -14,7 +14,7 @@ def prec_recall_evaluate(reduced_docs, session, features, cluster_type, k, atom_
     # From a few runs, looks like prec. is almost always bad (and doesn't improve
     # much with greater thresholds). So we might as well use lower thresholds
     # to bump up our recall (without hurting prec. very much)
-    thresholds = [.001, .005, .01, .05, .1, .15, .2, .25, .35, .6, .8, .99]
+    thresholds = [.01, .05, .2, .35, .5, .65, .8, .9, 1.1]
     thresh_to_prec = {}
     thresh_to_recall = {}
 
@@ -68,10 +68,6 @@ def _one_doc_precision_and_recall(doc, plag_likelihoods, prob_thresh, cheating=F
 
     # Keep the spans above <prob_thresh>
     detected_spans = [spans[i] for i in xrange(len(spans)) if plag_likelihoods[i] > prob_thresh]
-    # if prob_thresh > .98:
-    #     print detected_spans
-    #     print plag_likelihoods
-    #     print '-'*40
     prec, recall = _benno_precision_and_recall(actual_plag_spans, detected_spans)
 
     return prec, recall
@@ -86,12 +82,14 @@ def _benno_precision_and_recall(plag_spans, detected_spans):
     recall_sum = 0.0
 
     if len(plag_spans) == 0:
-        # No plagiarism and we detected none -- recall of 1.0
-        if len(detected_spans) == 0:
-            recall = 1.0
-        # No plagiarism, but we detected some -- recall of 0.0
-        else:
-            recall = 0.0
+        recall = 1.0
+        # TODO -- which of these is the correct definition?
+        # # No plagiarism and we detected none -- recall of 1.0
+        # if len(detected_spans) == 0:
+        #     recall = 1.0
+        # # No plagiarism, but we detected some -- recall of 0.0
+        # else:
+        #     recall = 0.0
     else:
         # recall defined over all plag spans
         for pspan in plag_spans:
@@ -104,12 +102,14 @@ def _benno_precision_and_recall(plag_spans, detected_spans):
         recall = recall_sum / len(plag_spans)
 
     if len(detected_spans) == 0:
-        # Detected no plag., and there wasn't any. precision is 1.0
-        if len(plag_spans) == 0:
-            prec = 1.0
-        # Detected no plag., but there was some! precision is 0
-        else:
-            prec = 0.0
+        prec = 1.0
+        # TODO -- which of these is the correct definition?
+        # # Detected no plag., and there wasn't any. precision is 1.0
+        # if len(plag_spans) == 0:
+        #     prec = 1.0
+        # # Detected no plag., but there was some! precision is 0
+        # else:
+        #     prec = 0.0
     else:
         prec_sum = 0.0
         for dspan in detected_spans:
