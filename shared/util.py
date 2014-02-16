@@ -140,7 +140,7 @@ class BaseUtility:
         '''
         start_overlap = max(interval1[0], interval2[0])
         end_overlap = min(interval1[1], interval2[1])
-        diff = end_overlap - start_overlap - 1
+        diff = end_overlap - start_overlap
 
         overlap_length = max(0, diff)
 
