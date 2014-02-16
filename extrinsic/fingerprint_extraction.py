@@ -10,7 +10,7 @@ from ..shared.util import ExtrinsicUtility
 
 import psycopg2
 from ..dbconstants import username, password, dbname
-import fingerprintstorage2
+import fingerprintstorage
 
 # TODO: omit words tokenized by nltk that are just puncuation
 
@@ -227,7 +227,7 @@ class FingerprintEvaluator:
         full_path = ExtrinsicUtility.CORPUS_SUSPECT_LOC + filename + ".txt"
         
         # Get the fingerprint of the passage in question
-        fingerprint = fingerprintstorage2.get_passage_fingerprint(full_path, atom_index, atom_type, mid)
+        fingerprint = fingerprintstorage.get_passage_fingerprint(full_path, atom_index, atom_type, mid)
         
         with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) as conn:
             conn.autocommit = True
@@ -238,11 +238,11 @@ class FingerprintEvaluator:
                 if hash_value == 0: # There may be a bug with fingerprinting whereby most passages have 0 in their fingerprint.
                     continue
                 
-                matching_source_passages = fingerprintstorage2.get_matching_passages(hash_value, mid, conn)
+                matching_source_passages = fingerprintstorage.get_matching_passages(hash_value, mid, conn)
                 for passage in matching_source_passages:
                     if (passage["doc_name"], passage["atom_number"]) not in source_passages:
                     
-                        source_passage_fp = fingerprintstorage2.get_passage_fingerprint_by_id(passage["pid"], mid, conn)
+                        source_passage_fp = fingerprintstorage.get_passage_fingerprint_by_id(passage["pid"], mid, conn)
                         if len(source_passage_fp):# make sure its not an empty fingerprint
                             source_passages[(passage["doc_name"], passage["atom_number"])] = get_plagiarism_confidence(fingerprint, source_passage_fp, confidence_method)
                         else:

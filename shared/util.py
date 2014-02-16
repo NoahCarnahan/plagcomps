@@ -244,7 +244,7 @@ class ExtrinsicUtility(BaseUtility):
     
     CORPUS_SRC_LOC = '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/source-documents'
     CORPUS_SUSPECT_LOC = '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents'
-    TRAINING_CORP_LOC = 'extrinsic_corpus_partition/var_corp.txt'
+    TRAINING_CORP_LOC = 'extrinsic_corpus_partition/crisp_var_corp.txt'
 
     def get_training_files(self, n="all", path_type="absolute", file_type='both', include_txt_extension=True):
         '''

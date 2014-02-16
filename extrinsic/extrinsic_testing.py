@@ -9,7 +9,7 @@ import matplotlib.pyplot as pyplot
 import os
 import time
 import fingerprint_extraction
-import fingerprintstorage2
+import fingerprintstorage
 import ground_truth
 from ..shared.util import ExtrinsicUtility
 from ..tokenization import *
@@ -28,7 +28,7 @@ class ExtrinsicTester:
         self.corpus_path_start = ExtrinsicUtility.CORPUS_SRC_LOC
         source_dirs = os.listdir(self.corpus_path_start)
         
-        self.mid = fingerprintstorage2.get_mid(fingerprint_method, n, k, atom_type, hash_len)
+        self.mid = fingerprintstorage.get_mid(fingerprint_method, n, k, atom_type, hash_len)
         self.atom_type = atom_type
         self.fingerprint_method = fingerprint_method
         self.n = n
