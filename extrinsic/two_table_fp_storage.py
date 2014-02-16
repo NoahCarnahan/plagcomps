@@ -401,7 +401,7 @@ def _test_reverse_lookup():
 def _populate_variety_of_params():
     srs, sus = ExtrinsicUtility().get_training_files(n=400)
     #populate_database(sus+srs, "kth_in_sent", 5, 0, "full", 10000000, check_for_duplicate=True)
-    populate_database(sus+srs, "kth_in_sent", 5, 0, "nchars", 10000000, check_for_duplicate=False)
+    populate_database(sus+srs, "kth_in_sent", 5, 0, "nchars", 10000000, check_for_duplicate=True)
     
     #hash_len = 10000
     # method, n, k, atom_type

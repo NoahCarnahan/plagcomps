@@ -9,7 +9,7 @@ import matplotlib.pyplot as pyplot
 import os
 import time
 import fingerprint_extraction
-import fingerprintstorage
+import fingerprintstorage2
 import ground_truth
 from ..shared.util import ExtrinsicUtility
 from ..tokenization import *
@@ -27,7 +27,8 @@ class ExtrinsicTester:
         self.suspicious_path_start = ExtrinsicUtility.CORPUS_SUSPECT_LOC
         self.corpus_path_start = ExtrinsicUtility.CORPUS_SRC_LOC
         source_dirs = os.listdir(self.corpus_path_start)
-            
+        
+        self.mid = fingerprintstorage2.get_mid(fingerprint_method, n, k, atom_type, hash_len)
         self.atom_type = atom_type
         self.fingerprint_method = fingerprint_method
         self.n = n
@@ -64,7 +65,7 @@ class ExtrinsicTester:
             print 'Classifying', doc_name
             
             for atom_index in xrange(len(acts)):    
-                atom_classifications = self.evaluator.classify_document(doc_name, self.atom_type, atom_index, self.fingerprint_method, self.n, self.k, self.hash_len, self.confidence_method)
+                atom_classifications = self.evaluator.classify_document(doc_name, self.atom_type, atom_index, self.fingerprint_method, self.n, self.k, self.hash_len, self.confidence_method, self.mid)
                 #print atom_classifications
                 # just take the most similar source document's similarity as the confidence of plagiarism for now.
                 classifications.append(atom_classifications[0][1])
@@ -200,5 +201,5 @@ def analyze_fpr_fnr(self, trials, actuals):
         
     
 if __name__ == "__main__":
-    #evaluate("kth_in_sent", 5, 5, "paragraph", 50000, "jaccard", num_files=10)
-    evaluate("kth_in_sent", 5, 0, "nchars", 10000000, "jaccard", num_files=10)
+    #evaluate("kth_in_sent", 5, 3, "paragraph", 10000000, "jaccard", num_files=10)
+    evaluate("kth_in_sent", 5, 3, "full", 10000000, "jaccard", num_files=10)

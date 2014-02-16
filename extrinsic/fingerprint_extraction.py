@@ -7,7 +7,10 @@ import os
 import string, random, re, operator
 from .. import tokenization
 from ..shared.util import ExtrinsicUtility
-import two_table_fp_storage
+
+import psycopg2
+from ..dbconstants import username, password, dbname
+import fingerprintstorage2
 
 # TODO: omit words tokenized by nltk that are just puncuation
 
@@ -210,41 +213,45 @@ class FingerprintEvaluator:
     #    fp = extrinsic_processing.query_fingerprint(filename, self.fingerprint_method, self.n, self.k, atom_type, session, base_path)
     #    return fp
 
-    def classify_document(self, filename, atom_type, atom_index, fingerprint_method, n, k, hash_len, confidence_method):
+    def classify_document(self, filename, atom_type, atom_index, fingerprint_method, n, k, hash_len, confidence_method, mid):
         '''
         Returns a list of (source_filename, similarity) tuples sorted in decreasing similarity to the 
         input document.
         '''
-        #fp = self._get_fingerprint(filename, atom_type, session, ExtrinsicUtility.CORPUS_SUSPECT_LOC)
-        #if atom_type == "full":
-        #    fingerprint = fp.get_print(session)
-        #else:
-        #    fingerprint = fp.get_print(session)[atom_index]
         
+        # sanitize atom_index
         if atom_type == "full":
             atom_index = 0
         
-        # Get the full path from the filename and base_path
+         # Get the full path from the filename and base_path
         full_path = ExtrinsicUtility.CORPUS_SUSPECT_LOC + filename + ".txt"
-        fingerprint = two_table_fp_storage.get_passage_fingerprint(full_path, atom_index, fingerprint_method, n, k, atom_type, hash_len)
-
-        source_documents = {}
-        # get the list of fingerprint ids for each minutia in the fingerprint
-        for minutia in fingerprint:
-            if minutia == 0: # every document has 0, so minutia = 0 is basically useless
-                continue
-            
-            source_fps = two_table_fp_storage.get_passages_with_fingerprints(minutia, fingerprint_method, n, k, atom_type, hash_len)
-            for fp in source_fps:
-                if len(fp["fingerprint"]): # make sure its not an empty fingerprint
-                    source_documents[(fp["doc_name"], fp["atom_number"])] = get_plagiarism_confidence(fingerprint, fp["fingerprint"], confidence_method)
-                else:
-                    source_documents[(fp["doc_name"], fp["atom_number"])] = 0
+        
+        # Get the fingerprint of the passage in question
+        fingerprint = fingerprintstorage2.get_passage_fingerprint(full_path, atom_index, atom_type, mid)
+        
+        
+        with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) as conn:
+        
+            source_passages = {}
+            for hash_value in fingerprint:
                 
-        if not len(source_documents): # insert dummy for now...
+                if hash_value == 0: # There may be a bug with fingerprinting whereby most passages have 0 in their fingerprint.
+                    continue
+                
+                matching_source_passages = fingerprintstorage2.get_matching_passages(hash_value, mid, conn)
+                for passage in matching_source_passages:
+                    if (passage["doc_name"], passage["atom_number"]) not in source_passages:
+                    
+                        source_passage_fp = fingerprintstorage2.get_passage_fingerprint_by_id(passage["pid"], mid, conn)
+                        if len(source_passage_fp):# make sure its not an empty fingerprint
+                            source_passages[(passage["doc_name"], passage["atom_number"])] = get_plagiarism_confidence(fingerprint, source_passage_fp, confidence_method)
+                        else:
+                            source_passages[(fp["doc_name"], fp["atom_number"])] = 0
+                            
+        if not len(source_passages):
             source_documents[('dummy', 0)] = 0
-
-        return sorted(source_documents.items() , key = operator.itemgetter(1), reverse=True)
+            
+        return sorted(source_passages.items() , key = operator.itemgetter(1), reverse=True)
 
     def classify_and_display(self, doc):
         '''
