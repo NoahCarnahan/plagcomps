@@ -55,6 +55,9 @@ class IntrinsicTrial(Base):
     # Actual results
     time_elapsed = Column(Float)
     auc = Column(Float)
+    precision = Column(Float)
+    recall = Column(Float)
+    threshold = Column(Float)
    
     def __init__(self, **args):
         '''
@@ -303,7 +306,7 @@ def get_latest_dashboard():
             print 'Didn\'t find a trial for %s, %s, min_len = %i' % (atom_type, cluster_type, )
             print 'Using' 
 
-def get_pairwise_results(atom_type, cluster_type, n, min_len, feature_set=None, cheating=False):
+def get_pairwise_results(atom_type, cluster_type, n, min_len, feature_set=None, cheating=False, write_output=False):
     '''
     Generates a table for the results of all feature pairs.
     '''
@@ -392,10 +395,13 @@ def get_pairwise_results(atom_type, cluster_type, n, min_len, feature_set=None, 
 
     html += '</table></body></html>'
     
-    html_path = os.path.join(os.path.dirname(__file__), "../figures/dashboard_pairwise_table_"+str(DASHBOARD_VERSION)+"_"+str(time.time())+".html")
-    with open(html_path, 'w') as f:
-        f.write(html)
-    print 'Saved pairwise feature table to ' + html_path
+    if write_output:
+        html_path = os.path.join(os.path.dirname(__file__), "../figures/dashboard_pairwise_table_"+str(DASHBOARD_VERSION)+"_"+str(time.time())+".html")
+        with open(html_path, 'w') as f:
+            f.write(html)
+        print 'Saved pairwise feature table to ' + html_path
+
+    return html
 
 
 def measure_cheating_improvement(n, feature_set_options, min_len=0):

@@ -1,8 +1,8 @@
 # ground_truth.py
 
-import pickle
+import cPickle
 from .. import tokenization
-from ..shared.util import ExtrinsicUtility
+from ..shared.util import ExtrinsicUtility, BaseUtility
 from ..dbconstants import username, password, dbname
 
 import xml
@@ -22,6 +22,8 @@ def _query_ground_truth(doc_name, atom_type, session, base_path):
     queries the database to see if the ground_truth in question exists in the database.
     If it does, it will be returned, otherwise it is created and added to the database.
     '''
+    if session == None:
+        session = Session()
     try:
         q = session.query(GroundTruth).filter(and_(GroundTruth.document_name == doc_name, GroundTruth.atom_type == atom_type))
         gt = q.one()
@@ -50,6 +52,7 @@ class GroundTruth(Base):
         '''
         initializes FingerPrint
         '''
+        
         self.document_name = doc
         if base_path in self.document_name:
             self._doc_path = self.document_name + ".txt"
@@ -71,56 +74,51 @@ class GroundTruth(Base):
         '''
         if self.ground_truth == None:
             doc_text = open(self._doc_path, 'r')
-            spans = tokenization.tokenize(doc_text.read(), self.atom_type)
+            spans = tokenization.tokenize(doc_text.read(), self.atom_type, n=5000)
             doc_text.close()
             
-            plag_spans = ExtrinsicUtility().get_plagiarized_spans(self._doc_xml_path)
+            plag_spans, source_filepaths = ExtrinsicUtility().get_plagiarized_spans(self._doc_xml_path)
             
             _ground_truth = []
             for s in spans:
                 truth = 0
-                for ps in plag_spans:
-                    if s[0] >= ps[0] and s[0] < ps[1]:
+                filepaths = []
+                plagiarized_spans = []
+                for ps, filepath in zip(plag_spans, source_filepaths):
+                    if BaseUtility().overlap(s, ps) > 0:
+                        filepath = filepath.replace(".txt", '')
+                        filepath = filepath.replace(ExtrinsicUtility.CORPUS_SRC_LOC, '')
+                        filepaths.append(filepath)
+                        plagiarized_spans.append(ps)
                         truth = 1
-                        break
-                _ground_truth.append(truth)
+                _ground_truth.append((truth, filepaths, plagiarized_spans))
             
-            self.ground_truth = pickle.dumps(_ground_truth)
+            self.ground_truth = cPickle.dumps(_ground_truth)
             session.commit()
             return _ground_truth
         else:
-            return pickle.loads(str(self.ground_truth))
+            return cPickle.loads(str(self.ground_truth))
 
 def populate_database():
     session = Session()
 
-    test_file_listing = file(ExtrinsicUtility.TRAINING_SUSPECT_LOC)
-    all_suspect_files = [f.strip() for f in test_file_listing.readlines()]
-    test_file_listing.close()
-    
-    source_file_listing = file(ExtrinsicUtility.TRAINING_SRC_LOC)
-    all_source_files = [f.strip() for f in source_file_listing.readlines()]
-    source_file_listing.close()
+    _, suspect_filenames = ExtrinsicUtility().get_training_files()
     
     counter = 0
-    for filename in all_suspect_files:
+    for filename in suspect_filenames[:5]:
+        filename = filename.rstrip(".txt")
+        print 'filename:', filename
         for atom_type in ["full", "paragraph"]:
             fp = _query_ground_truth(filename, atom_type, session, ExtrinsicUtility.CORPUS_SUSPECT_LOC)
             fp.get_ground_truth(session)
+            print fp.get_ground_truth(session)
         counter += 1
         if counter%10 == 0:
-            print str(counter) + '/' + str(len(all_suspect_files))
-            print "Progress on suspect files: ", counter/float(len(all_suspect_files))
-    
-    counter = 0
-    for filename in all_source_files:
-        for atom_type in ["full", "paragraph"]:
-            fp = _query_ground_truth(filename, atom_type, session, ExtrinsicUtility.CORPUS_SRC_LOC)
-            fp.get_ground_truth(session)
-        counter += 1
-        if counter%10 == 0:
-            print str(counter) + '/' + str(len(all_source_files))
-            print "Progress on suspect files: ", counter/float(len(all_source_files))
+            print str(counter) + '/' + str(len(suspect_filenames))
+            print "Progress on suspect files: ", counter/float(len(suspect_filenames))
+
+
+
 
 url = "postgresql://%s:%s@%s" % (username, password, dbname)
 engine = sqlalchemy.create_engine(url)
