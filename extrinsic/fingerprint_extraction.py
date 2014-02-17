@@ -253,7 +253,7 @@ class FingerprintEvaluator:
     #    fp = extrinsic_processing.query_fingerprint(filename, self.fingerprint_method, self.n, self.k, atom_type, session, base_path)
     #    return fp
 
-    def classify_document(self, filename, atom_type, atom_index, fingerprint_method, n, k, hash_len, confidence_method, mid):
+    def classify_passage(self, filename, atom_type, atom_index, fingerprint_method, n, k, hash_len, confidence_method, mid, dids=None):
         '''
         Returns a list of (source_filename, similarity) tuples sorted in decreasing similarity to the 
         input document.
@@ -274,29 +274,26 @@ class FingerprintEvaluator:
             
             source_passages = {}
             for hash_value in fingerprint:
-                
                 if hash_value == 0: # There may be a bug with fingerprinting whereby most passages have 0 in their fingerprint.
                     continue
-                
-                matching_source_passages = fingerprintstorage.get_matching_passages(hash_value, mid, conn)
+                matching_source_passages = fingerprintstorage.get_matching_passages(hash_value, mid, conn, dids=dids)
                 for passage in matching_source_passages:
                     if (passage["doc_name"], passage["atom_number"]) not in source_passages:
-                    
                         source_passage_fp = fingerprintstorage.get_passage_fingerprint_by_id(passage["pid"], mid, conn)
                         if len(source_passage_fp):# make sure its not an empty fingerprint
-                            source_passages[(passage["doc_name"], passage["atom_number"])] = get_plagiarism_confidence(fingerprint, source_passage_fp, confidence_method)
+                            source_passages[(passage["doc_name"], passage["atom_number"], passage["did"], filename)] = get_plagiarism_confidence(fingerprint, source_passage_fp, confidence_method)
                         else:
-                            source_passages[(fp["doc_name"], fp["atom_number"])] = 0
+                            source_passages[(passage["doc_name"], passage["atom_number"], passage["did"], filename)] = 0
                             
         if not len(source_passages):
-            source_passages[('dummy', 0)] = 0
+            source_passages[('dummy', 0, 0, 'dummy')] = 0
             
         return sorted(source_passages.items() , key = operator.itemgetter(1), reverse=True)
 
     def classify_and_display(self, doc):
         '''
         '''
-        result = self.classify_document(doc)
+        result = self.classify_passage(doc)
         print 'Using', self.fingerprint_method
 
         for src, sim in result:
