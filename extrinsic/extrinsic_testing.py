@@ -295,4 +295,6 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
         
 if __name__ == "__main__":
 
-    test("anchor", 5, 0, "paragraph", 10000000, "jaccard", num_files=3, log_search=False, log_search_n=1)
+    test("kth_in_sent", 5, 3, "nchars", 10000000, "containment", num_files=20, log_search=False, log_search_n=1)
+    test("anchor", 5, 0, "nchars", 10000000, "containment", num_files=20, log_search=False, log_search_n=1)
+    test("winnow-k", 8, 13, "nchars", 10000000, "containment", num_files=20, log_search=False, log_search_n=1)
