@@ -549,6 +549,9 @@ def _populate_variety_of_params():
     #populate_database(sus+srs, "kth_in_sent", 5, 3, "full", 1000000, check_for_duplicate=False)
     #populate_database(sus+srs, "kth_in_sent", 5, 3, "nchars", 1000000, check_for_duplicate=False)
     #populate_database(sus+srs, "kth_in_sent", 5, 3, "paragraph", 1000000, check_for_duplicate=False)
+    
+    # Way smaller hash_size
+    #populate_database(sus+srs, "kth_in_sent", 5, 3, "nchars", 10000, check_for_duplicate=False)
 
 if __name__ == "__main__":
     print 'DEV_MODE is set to', DEV_MODE

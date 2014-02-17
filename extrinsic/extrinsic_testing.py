@@ -295,6 +295,12 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
         
 if __name__ == "__main__":
 
-    test("kth_in_sent", 5, 3, "nchars", 10000000, "containment", num_files=20, log_search=False, log_search_n=1)
-    test("anchor", 5, 0, "nchars", 10000000, "containment", num_files=20, log_search=False, log_search_n=1)
-    test("winnow-k", 8, 13, "nchars", 10000000, "containment", num_files=20, log_search=False, log_search_n=1)
+	test("kth_in_sent", 5, 3, "nchars", 100000000, "containment", num_files=20, log_search=False, log_search_n=1)
+	test("kth_in_sent", 5, 3, "paragraph", 100000000, "containment", num_files=20, log_search=False, log_search_n=1)
+	test("kth_in_sent", 5, 3, "nchars", 100000000, "jaccard", num_files=20, log_search=False, log_search_n=1)
+	test("kth_in_sent", 5, 3, "paragraph", 100000000, "jaccard", num_files=20, log_search=False, log_search_n=1)
+	
+	test("kth_in_sent", 5, 3, "nchars", 1000000, "containment", num_files=20, log_search=False, log_search_n=1)
+	test("kth_in_sent", 5, 3, "paragraph", 1000000, "containment", num_files=20, log_search=False, log_search_n=1)
+	test("kth_in_sent", 5, 3, "nchars", 1000000, "jaccard", num_files=20, log_search=False, log_search_n=1)
+	test("kth_in_sent", 5, 3, "paragraph", 1000000, "jaccard", num_files=20, log_search=False, log_search_n=1)
