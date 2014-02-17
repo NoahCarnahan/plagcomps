@@ -15,6 +15,7 @@ from ..shared.util import ExtrinsicUtility
 from ..tokenization import *
 
 from ..dbconstants import username, password, dbname
+import psycopg2
 import sqlalchemy
 
 url = "postgresql://%s:%s@%s" % (username, password, dbname)
@@ -156,7 +157,18 @@ def evaluate(method, n, k, atom_type, hash_size, confidence_method, num_files="a
     print "Testing first", len(suspect_file_list), "suspect files against how ever many source documents have been populated."
    
     tester = ExtrinsicTester(atom_type, method, n, k, hash_size, confidence_method, suspect_file_list, source_file_list)
-    print tester.plot_ROC_curve(session)
+    auc, figure_path, source_accuracy = tester.plot_ROC_curve(session)
+    
+    # Save the reult
+    with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) as conn:
+        conn.autocommit = True    
+        with conn.cursor() as cur:
+            num_sources = fingerprintstorage.get_number_sources(fingerprintstorage.get_mid(method, n, k, atom_type, hash_size))
+            query = "INSERT INTO extrinsic_results (method_name, n, k, atom_type, hash_size, simmilarity_method, suspect_files, source_files, auc, source_accuracy) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
+            args = (method, n, k, atom_type, hash_size, confidence_method, num_files, num_sources, auc, source_accuracy)
+            cur.execute(query, args)
+    
+    print auc, figure_path, source_accuracy
 
 
 def analyze_fpr_fnr(self, trials, actuals):
@@ -226,4 +238,4 @@ def analyze_fpr_fnr(self, trials, actuals):
     fileFNR.close()
         
 if __name__ == "__main__":
-    evaluate("kth_in_sent", 5, 3, "full", 10000000, "jaccard", num_files=20)
+    evaluate("kth_in_sent", 5, 3, "nchars", 10000000, "jaccard", num_files=20)

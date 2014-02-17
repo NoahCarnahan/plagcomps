@@ -179,6 +179,24 @@ def populate_database(files, method_name, n, k, atom_type, hash_size, check_for_
 
 
 
+def get_number_sources(mid):
+    with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) as conn:
+        conn.autocommit = True
+        
+        if DEV_MODE:
+            query = ''' SELECT COUNT(DISTINCT(dev_passages.did)) FROM dev_hashes, dev_passages WHERE
+                            dev_hashes.mid = %s AND
+                            dev_hashes.pid = dev_passages.pid AND
+                            dev_hashes.is_source = TRUE; '''
+        else:
+            query = ''' SELECT COUNT(DISTINCT(crisp_passages.did)) FROM crisp_hashes, crisp_passages WHERE
+                            crisp_hashes.mid = %s AND
+                            crisp_hashes.pid = crisp_passages.pid AND
+                            crisp_hashes.is_source = TRUE; '''
+        with conn.cursor() as cur:
+            cur.execute(query, (mid,))
+            return cur.fetchone()
+
 def get_passage_fingerprint(full_path, passage_num, atom_type, mid):
     '''
     Return the fingerprint (list of hash values) of the <passage_num>th passage in <file_name>
@@ -275,7 +293,7 @@ def get_matching_passages(target_hash_value, mid, conn):
                         dev_hashes.mid = %s AND
                         dev_hashes.is_source = 't';'''
     else:
-        reverse_query = '''SELECT crisp_hashes.pid, crisp_documents.name, crisp_passages.atom_num FROM hashes, documents, passages WHERE
+        reverse_query = '''SELECT crisp_hashes.pid, crisp_documents.name, crisp_passages.atom_num FROM crisp_hashes, crisp_documents, crisp_passages WHERE
                         crisp_documents.did = crisp_passages.did AND
                         crisp_passages.pid = crisp_hashes.pid AND
                         crisp_hashes.hash_value = %s AND
