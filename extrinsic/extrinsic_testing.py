@@ -1,5 +1,5 @@
 # extrinsic_testing.py
-
+import re
 import scipy
 import sklearn
 import sklearn.metrics
@@ -24,13 +24,12 @@ Session = sqlalchemy.orm.sessionmaker(bind=engine)
 
 class ExtrinsicTester:
 
-    def __init__(self, atom_type, fingerprint_method, n, k, hash_len, confidence_method, suspect_file_list, source_file_list):
+    def __init__(self, atom_type, fingerprint_method, n, k, hash_len, confidence_method, suspect_file_list, source_file_list, log_search, log_search_n):
         self.suspicious_path_start = ExtrinsicUtility.CORPUS_SUSPECT_LOC
         self.corpus_path_start = ExtrinsicUtility.CORPUS_SRC_LOC
         source_dirs = os.listdir(self.corpus_path_start)
-        
         self.mid = fingerprintstorage.get_mid(fingerprint_method, n, k, atom_type, hash_len)
-        self.atom_type = atom_type
+        self.base_atom_type = atom_type
         self.fingerprint_method = fingerprint_method
         self.n = n
         self.k = k
@@ -39,8 +38,11 @@ class ExtrinsicTester:
         self.suspect_file_list = suspect_file_list
         self.source_file_list = source_file_list
         self.evaluator = fingerprint_extraction.FingerprintEvaluator(source_file_list, fingerprint_method, self.n, self.k)
+        self.log_search = log_search
+        self.log_search_n = log_search_n
 
-    def _get_trials(self, session):
+
+    def get_trials(self, session):
         '''
         For each suspect document, split the document into atoms and classify each atom
         as plagiarized or not-plagiarized. Build a list of classifications and a list
@@ -48,73 +50,75 @@ class ExtrinsicTester:
         '''
         classifications = []
         actuals = []
-        actualDocNames = {}
         
-        for f in self.suspect_file_list:
-            doc_classifications = []
-            suspicious_document = open(f + '.txt')
-            doc = suspicious_document.read()
-            suspicious_document.close()
-            
-            doc_name = f.replace(self.suspicious_path_start, "")
+        for fi, f in enumerate(self.suspect_file_list, 1):
+            print
+            if self.log_search:
+                doc_name = f.replace(self.suspicious_path_start, "")
+                print '%d/%d Classifying %s (log search)' % (fi, len(self.suspect_file_list), doc_name)
 
-            acts = ground_truth._query_ground_truth(f, self.atom_type, session, self.suspicious_path_start).get_ground_truth(session)
-            actuals += acts
-            actualDocNames[f] = actuals
+                acts = ground_truth._query_ground_truth(f, "paragraph", session, self.suspicious_path_start).get_ground_truth(session)
+                actuals += acts
 
-            print f
-            print 'Classifying', doc_name
-            
-            for atom_index in xrange(len(acts)):    
-                atom_classifications = self.evaluator.classify_document(doc_name, self.atom_type, atom_index, self.fingerprint_method, self.n, self.k, self.hash_len, self.confidence_method, self.mid)
-                # print atom_classifications
-                # top_source is a tuple with the form ((source_doc_name, atom_index), confidence)
-                top_source = atom_classifications[0]
-                source_filename, source_atom_index = top_source[0]
-                confidence = top_source[1]
+                # first, get a list of the most similar full documents to this document
+                atom_classifications = self.evaluator.classify_passage(doc_name, "full", 0, self.fingerprint_method, 
+                    self.n, self.k, self.hash_len, "containment", 
+                    fingerprintstorage.get_mid(self.fingerprint_method, self.n, self.k, "full", self.hash_len))
 
-                classifications.append(top_source)
+                top_docs = atom_classifications[:self.log_search_n]
+                dids = [x[0][2] for x in top_docs]
                 
-                print 'atom index:', str(atom_index+1) + '/' + str(len(acts))
-                print 'confidence (actual, guess):', acts[atom_index][0], (confidence, source_filename, source_atom_index)
+                # now, compare all paragraphs in the most similar documents to this paragraph
+                for atom_index in xrange(len(acts)):
+                    atom_classifications = self.evaluator.classify_passage(doc_name, "paragraph", atom_index, 
+                        self.fingerprint_method, self.n, self.k, self.hash_len, self.confidence_method, self.mid, dids=dids)
+                    # print 'atom_classifications:', atom_classifications
+                    # top_source is a tuple with the form ((source_doc_name, atom_index), confidence, suspect_filename)
+                    top_source = atom_classifications[0]
+                    source_filename, source_atom_index, did, suspect_filename = top_source[0]
+                    confidence = top_source[1]
+
+                    classifications.append(top_source)
+
+                    print 'atom index:', str(atom_index+1) + '/' + str(len(acts))
+                    print 'confidence (actual, guess):', acts[atom_index], (confidence, source_filename, source_atom_index)
+            else:
+                doc_name = f.replace(self.suspicious_path_start, "")
+
+                acts = ground_truth._query_ground_truth(f, self.base_atom_type, session, self.suspicious_path_start).get_ground_truth(session)
+                actuals += acts
+
+                print f
+                print '%d/%d Classifying %s' % (fi, len(self.suspect_file_list), doc_name)
+                
+                for atom_index in xrange(len(acts)):
+                    atom_classifications = self.evaluator.classify_passage(doc_name, self.base_atom_type, atom_index, self.fingerprint_method, self.n, self.k, self.hash_len, self.confidence_method, self.mid)
+                    # print atom_classifications
+                    # top_source is a tuple with the form ((source_doc_name, atom_index), confidence)
+                    top_source = atom_classifications[0]
+                    source_filename, source_atom_index, did, suspect_filename = top_source[0]
+                    confidence = top_source[1]
+
+                    classifications.append(top_source)
+                    
+                    print 'atom index:', str(atom_index+1) + '/' + str(len(acts))
+                    print 'confidence (actual, guess):', acts[atom_index][0], (confidence, source_filename, source_atom_index)
 
         return classifications, actuals
 
 
-    def plot_ROC_curve(self, sess):
+    def plot_ROC_curve(self, confidences, actuals):
         '''
         Outputs an ROC figure based on our plagiarism classifications and the 
         ground truth of each atom.
         '''
-        trials, ground_truths = self._get_trials(sess)
-
-        print 'Computing source accuracy...'
-        num_plagiarized = 0
-        num_correctly_identified = 0
-        incorrectly_identified = []
-
-        for trial, ground_truth in zip(trials, ground_truths):
-            if ground_truth[0] == 1:
-                num_plagiarized += 1
-                if trial[0][0] in ground_truth[1]:
-                    num_correctly_identified += 1
-                else:
-                    incorrectly_identified.append([trial, ground_truth])
-        source_accuracy = float(num_correctly_identified) / num_plagiarized
-        # print num_plagiarized, num_correctly_identified, source_accuracy
-        # for x in incorrectly_identified:
-        #     print x
-
-        confidences = [x[1] for x in trials]
-        actuals = [x[0] for x in ground_truths]
-    
         # actuals is a list of ground truth classifications for passages
 
         # trials is a list consisting of 0s and 1s. 1 means we think the atom is plagiarized
-        # print "trials:"
-        # print trials
         # print "actuals:"
-        # print actuals'
+        # print actuals
+        # print "confidences:"
+        # print confidences
         fpr, tpr, thresholds = sklearn.metrics.roc_curve(actuals, confidences, pos_label=1)
         print "fpr:"
         print fpr
@@ -138,38 +142,60 @@ class ExtrinsicTester:
         path = os.path.join(os.path.dirname(__file__), "../figures/roc_extrinsic_"+str(time.time())+"_"+self.fingerprint_method+".pdf")
         pyplot.savefig(path)
 
-        return roc_auc, path, source_accuracy
+        return roc_auc, path
 
-def evaluate(method, n, k, atom_type, hash_size, confidence_method, num_files="all"):
-    '''
-    Run our tool with the given parameters and return the area under the roc.
-    If a num_files is given, only run on the first num_file suspicious documents,
-    otherwise run on all of them.
-    '''
-    
-    session = Session()
-    
-    source_file_list, suspect_file_list = ExtrinsicUtility().get_training_files(n = num_files, include_txt_extension = False)
-    # TODO: get rid of this...
-    # suspect_file_list = ['/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents/part5/suspicious-document09634']
+    def evaluate(self, session):
+        '''
+        Run our tool with the given parameters and return the area under the roc.
+        If a num_files is given, only run on the first num_file suspicious documents,
+        otherwise run on all of them.
+        '''
+        trials, ground_truths = self.get_trials(session)
 
-    print suspect_file_list    
-    print "Testing first", len(suspect_file_list), "suspect files against how ever many source documents have been populated."
-   
-    tester = ExtrinsicTester(atom_type, method, n, k, hash_size, confidence_method, suspect_file_list, source_file_list)
-    auc, figure_path, source_accuracy = tester.plot_ROC_curve(session)
-    
-    # Save the reult
-    with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) as conn:
-        conn.autocommit = True    
-        with conn.cursor() as cur:
-            num_sources = fingerprintstorage.get_number_sources(fingerprintstorage.get_mid(method, n, k, atom_type, hash_size))
-            query = "INSERT INTO extrinsic_results (method_name, n, k, atom_type, hash_size, simmilarity_method, suspect_files, source_files, auc, true_source_accuracy) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
-            args = (method, n, k, atom_type, hash_size, confidence_method, num_files, num_sources, auc, source_accuracy)
-            cur.execute(query, args)
-    
-    print auc, figure_path, source_accuracy
+        print 'Computing source accuracy...'
+        num_plagiarized = 0
+        num_called_plagiarized = 0
+        num_correctly_identified = 0
+        incorrectly_identified = []
 
+        for trial, ground_truth in zip(trials, ground_truths):
+            guessed_doc_name = trial[0][0]
+            if ground_truth[0] == 1:
+                num_plagiarized += 1
+                if guessed_doc_name in ground_truth[1]:
+                    num_correctly_identified += 1
+                else:
+                    incorrectly_identified.append([trial, ground_truth])
+                if guessed_doc_name != 'dummy':
+                    num_called_plagiarized += 1
+
+        source_accuracy = float(num_correctly_identified) / num_called_plagiarized
+        true_source_accuracy = float(num_correctly_identified) / num_plagiarized
+        # uncomment the following lines to print the incorrectly identified passages
+        print num_plagiarized, num_correctly_identified, source_accuracy
+        # print
+        # print 'Incorrect Guesses'
+        # print '================='
+        # for x in incorrectly_identified:
+        #     susppect_name = re.sub(r'/part\d*/', '', x[1][1][0]) + '.txt'
+        #     susupect_path = ExtrinsicUtility().get_src_abs_path(source_name)
+        #     print source_path
+        #     span = x[1][2][0]
+        #     print span
+        #     f = open(source_path, 'r')
+        #     text = f.read()
+        #     f.close()
+        #     print x
+        #     print 'text[%d : %d]:' % (span[0], span[1])
+        #     print text[span[0] : span[1]]
+        #     print
+
+        # build list of plain confidences and actuals values
+        confidences = [x[1] for x in trials]
+        actuals = [x[0] for x in ground_truths]
+
+        roc_auc, path = self.plot_ROC_curve(confidences, actuals)
+        return roc_auc, source_accuracy, true_source_accuracy
 
 def analyze_fpr_fnr(self, trials, actuals):
 
@@ -197,7 +223,7 @@ def analyze_fpr_fnr(self, trials, actuals):
         file = open(f + ".txt")
         text = file.read()
         file.close()
-        paragraph_spans = tokenize(text, self.atom_type)
+        paragraph_spans = tokenize(text, self.base_atom_type)
 
         print "These are the spans: " , paragraph_spans
     
@@ -223,7 +249,7 @@ def analyze_fpr_fnr(self, trials, actuals):
         file = open(f + ".txt")
         text = file.read()
         file.close()
-        paragraph_spans = tokenize(text, self.atom_type)
+        paragraph_spans = tokenize(text, self.base_atom_type)
 
         for index in falseNegatives.keys():
             paragraph = text[paragraph_spans[index][0]:paragraph_spans[index][1]]
@@ -236,17 +262,37 @@ def analyze_fpr_fnr(self, trials, actuals):
             fileFNR.write("--"*20 + "\n")
 
     fileFNR.close()
+
+
+def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all", log_search=True, log_search_n=5):
+    session = Session()
+        
+    source_file_list, suspect_file_list = ExtrinsicUtility().get_training_files(n = num_files, include_txt_extension = False)
+    # TODO: get rid of this...
+    # suspect_file_list = ['/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents/part5/suspicious-document09634']
+    print suspect_file_list    
+    print "Testing first", len(suspect_file_list), "suspect files against how ever many source documents have been populated."
+       
+    
+    
+    tester = ExtrinsicTester(atom_type, method, n, k, hash_size, confidence_method, suspect_file_list, source_file_list, log_search, log_search_n)
+    roc_auc, source_accuracy, true_source_accuracy = tester.evaluate(session)
+    
+    # Save the reult
+    if not log_search:
+        with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) as conn:
+            conn.autocommit = True    
+            with conn.cursor() as cur:
+                num_sources = fingerprintstorage.get_number_sources(fingerprintstorage.get_mid(method, n, k, atom_type, hash_size))
+                query = "INSERT INTO extrinsic_results (method_name, n, k, atom_type, hash_size, simmilarity_method, suspect_files, source_files, auc, true_source_accuracy) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
+                args = (method, n, k, atom_type, hash_size, confidence_method, num_files, num_sources, roc_auc, true_source_accuracy)
+                cur.execute(query, args)
+    
+    print 'ROC auc:', roc_auc
+    print 'Source Accuracy:', source_accuracy
+    print 'True Source Accuracy:', true_source_accuracy
+
         
 if __name__ == "__main__":
 
-    evaluate("winnow-k", 6, 15, "nchars", 10000000, "jaccard", num_files=20)
-    evaluate("winnow-k", 6, 13, "nchars", 10000000, "jaccard", num_files=20)
-    evaluate("winnow-k", 8, 15, "nchars", 10000000, "jaccard", num_files=20)
-    evaluate("winnow-k", 8, 13, "nchars", 10000000, "jaccard", num_files=20)
-    
-    evaluate("winnow-k", 6, 15, "paragraph", 10000000, "jaccard", num_files=20)
-    evaluate("winnow-k", 6, 13, "paragraph", 10000000, "jaccard", num_files=20)
-    evaluate("winnow-k", 8, 15, "paragraph", 10000000, "jaccard", num_files=20)
-    evaluate("winnow-k", 8, 13, "paragraph", 10000000, "jaccard", num_files=20)
-
-   
+    test("anchor", 5, 0, "paragraph", 10000000, "jaccard", num_files=3, log_search=False, log_search_n=1)
