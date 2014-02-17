@@ -164,7 +164,7 @@ def evaluate(method, n, k, atom_type, hash_size, confidence_method, num_files="a
         conn.autocommit = True    
         with conn.cursor() as cur:
             num_sources = fingerprintstorage.get_number_sources(fingerprintstorage.get_mid(method, n, k, atom_type, hash_size))
-            query = "INSERT INTO extrinsic_results (method_name, n, k, atom_type, hash_size, simmilarity_method, suspect_files, source_files, auc, source_accuracy) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
+            query = "INSERT INTO extrinsic_results (method_name, n, k, atom_type, hash_size, simmilarity_method, suspect_files, source_files, auc, true_source_accuracy) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
             args = (method, n, k, atom_type, hash_size, confidence_method, num_files, num_sources, auc, source_accuracy)
             cur.execute(query, args)
     
@@ -238,4 +238,15 @@ def analyze_fpr_fnr(self, trials, actuals):
     fileFNR.close()
         
 if __name__ == "__main__":
-    evaluate("kth_in_sent", 5, 3, "nchars", 10000000, "jaccard", num_files=20)
+
+    evaluate("winnow-k", 6, 15, "nchars", 10000000, "jaccard", num_files=20)
+    evaluate("winnow-k", 6, 13, "nchars", 10000000, "jaccard", num_files=20)
+    evaluate("winnow-k", 8, 15, "nchars", 10000000, "jaccard", num_files=20)
+    evaluate("winnow-k", 8, 13, "nchars", 10000000, "jaccard", num_files=20)
+    
+    evaluate("winnow-k", 6, 15, "paragraph", 10000000, "jaccard", num_files=20)
+    evaluate("winnow-k", 6, 13, "paragraph", 10000000, "jaccard", num_files=20)
+    evaluate("winnow-k", 8, 15, "paragraph", 10000000, "jaccard", num_files=20)
+    evaluate("winnow-k", 8, 13, "paragraph", 10000000, "jaccard", num_files=20)
+
+   
