@@ -17,6 +17,7 @@ def prec_recall_evaluate(reduced_docs, session, features, cluster_type, k, atom_
     thresholds = [.01, .05, .2, .35, .5, .65, .8, .9, 1.1]
     thresh_to_prec = {}
     thresh_to_recall = {}
+    thresh_to_fmeasure = {}
 
     # doc_to_thresh_to_result[i] = {thresh -> (prec, recall)}
     doc_to_thresh_to_result = []
@@ -47,15 +48,17 @@ def prec_recall_evaluate(reduced_docs, session, features, cluster_type, k, atom_
         # Cluster to get plag probs
         plag_likelihoods = cluster(cluster_type, k, feature_vecs, **clusterargs)
         for thresh in thresholds:
-            prec, rec = _one_doc_precision_and_recall(d, plag_likelihoods, thresh)
+            prec, rec, fmeasure = _one_doc_precision_and_recall(d, plag_likelihoods, thresh)
             thresh_to_prec.setdefault(thresh, []).append(prec)
             thresh_to_recall.setdefault(thresh, []).append(rec)
+            thresh_to_fmeasure.setdefault(thresh, []).append(fmeasure)
             doc_to_thresh_to_result[i][thresh] = (prec, rec)
 
     thresh_prec_avgs = {t : sum(l) / len(l) for t, l in thresh_to_prec.iteritems()}
     thresh_recall_avgs = {t : sum(l) / len(l) for t, l in thresh_to_recall.iteritems()}
+    thresh_to_fmeasure = {t : sum(l) / len(l) for t, l in thresh_to_fmeasure.iteritems()}
 
-    return doc_to_thresh_to_result, thresh_prec_avgs, thresh_recall_avgs
+    return thresh_prec_avgs, thresh_recall_avgs, thresh_to_fmeasure
 
 def _one_doc_precision_and_recall(doc, plag_likelihoods, prob_thresh, cheating=False, cheating_min_len=5000, **metadata):
     '''
@@ -70,7 +73,13 @@ def _one_doc_precision_and_recall(doc, plag_likelihoods, prob_thresh, cheating=F
     detected_spans = [spans[i] for i in xrange(len(spans)) if plag_likelihoods[i] > prob_thresh]
     prec, recall = _benno_precision_and_recall(actual_plag_spans, detected_spans)
 
-    return prec, recall
+    # TODO how is F-Measure defined when both are 0?
+    if (prec + recall) == 0.0:
+        fmeasure = 0.0
+    else:
+        fmeasure = (2 * prec * recall) / (prec + recall)
+
+    return prec, recall, fmeasure
 
 def _benno_precision_and_recall(plag_spans, detected_spans):
     '''
@@ -122,6 +131,9 @@ def _benno_precision_and_recall(plag_spans, detected_spans):
         prec = prec_sum / len(detected_spans)
 
     return prec, recall
+
+def _benno_granularity(plag_spans, detected_spans):
+    pass
 
 def _test():
     plag_spans = [

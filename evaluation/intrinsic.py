@@ -120,7 +120,7 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n, eval_method = 
         session = Session()
         reduced_docs = _get_reduced_docs(atom_type, first_training_files, session, corpus=corpus)
 
-        doc_to_thresh_to_result, thresh_prec_avgs, thresh_recall_avgs = prec_recall_evaluate(reduced_docs, session, features, cluster_type, k, 
+        thresh_prec_avgs, thresh_recall_avgs, thresh_fmeasure_avgs = prec_recall_evaluate(reduced_docs, session, features, cluster_type, k, 
                                                                         atom_type, corpus=corpus, feature_vector_weights=feature_weights, 
                                                                         metadata=metadata, cheating=cheating, cheating_min_len=cheating_min_len)
 
@@ -135,13 +135,15 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n, eval_method = 
             print thresh
             print 'Prec:', thresh_prec_avgs[thresh]
             print 'Recall:', thresh_recall_avgs[thresh]
+            print 'F-Measure:', thresh_fmeasure_avgs[thresh]
 
         
         print 'PREC:', thresh_prec_avgs
         print 'RECALL:', thresh_recall_avgs
+        print 'F:', thresh_fmeasure_avgs
         session.close()
 
-        return doc_to_thresh_to_result
+        return thresh_prec_avgs, thresh_recall_avgs, thresh_fmeasure_avgs
 
 
 def evaluate(features, cluster_type, k, atom_type, docs, corpus='intrinsic', save_roc_figure=True, reduced_docs=None, feature_vector_weights=None, 
