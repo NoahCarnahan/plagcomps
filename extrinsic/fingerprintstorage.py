@@ -519,17 +519,11 @@ def _populate_variety_of_params():
     populate_database(sus+srs, "winnow-k", 8, 15, "paragraph", 10000000, check_for_duplicate=False)
     populate_database(sus+srs, "winnow-k", 6, 15, "nchars", 10000000, check_for_duplicate=False)
     populate_database(sus+srs, "winnow-k", 8, 15, "nchars", 10000000, check_for_duplicate=False)
-    
-    
-def _tony_fix_this():
-    srs, sus = ExtrinsicUtility().get_training_files(n=20)
-    populate_database(sus+srs, "winnow-k", 8, 13, "full", 10000000, check_for_duplicate=False)
 
 if __name__ == "__main__":
     print 'DEV_MODE is set to', DEV_MODE
-    _populate_variety_of_params()
+    #_populate_variety_of_params()
     #_test()
     #_test_get_fp_query()
     #_test_reverse_lookup()
-    # _tony_fix_this()
     
