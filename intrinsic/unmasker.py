@@ -16,7 +16,10 @@ from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.ext.associationproxy import association_proxy
 
 import matplotlib.pyplot as plt
+import random
+import numpy as np
 
+from scipy.cluster.vq import kmeans2, whiten
 
 Base = declarative_base()
 plt.ion()
@@ -69,6 +72,7 @@ def evaluate_confidences(features, cluster_type, k, atom_type, docs, corpus='int
     count = 0
     for d in reduced_docs:
         feature_vecs = d.get_feature_vectors(features, session)
+        kMeans_cluster(feature_vecs, 2)
         likelihood = cluster(cluster_type, k, feature_vecs, **clusterargs)
         # print likelihood
         doc_plag_assignments[d] = likelihood
@@ -82,27 +86,58 @@ def evaluate_confidences(features, cluster_type, k, atom_type, docs, corpus='int
     return float(point[0])/float(point[1])
 
 def classify(confidences):
-	plag = 0
-	non_plag = 0
-	for confidence in confidences:
-		if confidence > .50:
-			plag += 1
-		else:
-			non_plag += 1
-	return (plag, non_plag)
+    plag = 0
+    non_plag = 0
+    total = 0
+    for confidence in confidences:
+        if confidence > .50:
+            plag += 1
+        else:
+            non_plag += 1
+        total += 1
+    return (plag, total)
 
+# def kMeans_cluster(feature_vecs, k):
+#     feature_mat = np.array(feature_vecs)
+#     # print feature_mat.shape
+#     normalized_features = whiten(feature_mat)
+
+#     initialCentroids = initiate_centroids(k, feature_mat.shape[1])
+
+#     assignments = []
+#     # for vector in feature_vecs:
+#         # calculateDist(centroids)
+
+#     # print feature_vecs
+#     # print initialCentroids
+
+# def initiate_centroids(k, size):
+#     random.seed(1)
+#     centroids = np.empty((k, size))
+
+#     for i in xrange(k):
+#         for j in xrange(size):
+#             centroids[i][j] = random.random()
+
+#     return centroids
 
 def visualize(dataset):
-	x = []
-	y = []
-	i = 0
-	for key in dataset.keys():
-		x.append(i)
-		y.append(dataset[key])
-		i+=1
-	plt.plot(y)
-	plt.axis([0, 25, 0, 1])
-	plt.show(block=True)
+    x = []
+    y = []
+    i = 0
+    for key in dataset.keys():
+        x.append(i)
+        y.append(dataset[key])
+        i+=1
+
+    plt.plot(x,y)
+    plt.axis([0, 25, 0, 1])
+
+    i = 0
+    for key in dataset.keys():
+        plt.annotate(key, xy=(x[i],y[i]), xytext=(x[i],y[i]))
+        i+=1
+    plt.show(block=True)
 
 
 if __name__ == "__main__":
@@ -120,5 +155,5 @@ if __name__ == "__main__":
         # 'pos_trigram,VB,IN,DT',
 
     # Unmask(["average_sentence_length", "pos_trigram,NNS,IN,DT", "word_unigram,of"], "kmeans", 2, "paragraph", 10)
-    Unmask(features, "kmeans", 2, "paragraph", 10)
+    Unmask(features, "kmeans", 2, "paragraph", 1)
     visualize(dataPoints)
