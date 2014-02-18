@@ -263,7 +263,7 @@ class FingerprintEvaluator:
         if atom_type == "full":
             atom_index = 0
         
-         # Get the full path from the filename and base_path
+        # Get the full path from the filename and base_path
         full_path = ExtrinsicUtility.CORPUS_SUSPECT_LOC + filename + ".txt"
         
         # Get the fingerprint of the passage in question

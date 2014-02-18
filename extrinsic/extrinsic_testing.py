@@ -51,6 +51,8 @@ class ExtrinsicTester:
         classifications = []
         actuals = []
         
+        outer_search_level_mid = fingerprintstorage.get_mid(self.fingerprint_method, self.n, self.k, "full", self.hash_len)
+        
         for fi, f in enumerate(self.suspect_file_list, 1):
             print
             if self.log_search:
@@ -61,9 +63,8 @@ class ExtrinsicTester:
                 actuals += acts
 
                 # first, get a list of the most similar full documents to this document
-                atom_classifications = self.evaluator.classify_passage(doc_name, "full", 0, self.fingerprint_method, 
-                    self.n, self.k, self.hash_len, "containment", 
-                    fingerprintstorage.get_mid(self.fingerprint_method, self.n, self.k, "full", self.hash_len))
+                atom_classifications = self.evaluator.classify_passage(doc_name, "full", 0, self.fingerprint_method,
+                    self.n, self.k, self.hash_len, "containment", outer_search_level_mid)
 
                 top_docs = atom_classifications[:self.log_search_n]
                 dids = [x[0][2] for x in top_docs]
@@ -295,12 +296,4 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
         
 if __name__ == "__main__":
 
-	test("kth_in_sent", 5, 3, "nchars", 100000000, "containment", num_files=20, log_search=False, log_search_n=1)
-	test("kth_in_sent", 5, 3, "paragraph", 100000000, "containment", num_files=20, log_search=False, log_search_n=1)
-	test("kth_in_sent", 5, 3, "nchars", 100000000, "jaccard", num_files=20, log_search=False, log_search_n=1)
-	test("kth_in_sent", 5, 3, "paragraph", 100000000, "jaccard", num_files=20, log_search=False, log_search_n=1)
-	
-	test("kth_in_sent", 5, 3, "nchars", 1000000, "containment", num_files=20, log_search=False, log_search_n=1)
-	test("kth_in_sent", 5, 3, "paragraph", 1000000, "containment", num_files=20, log_search=False, log_search_n=1)
-	test("kth_in_sent", 5, 3, "nchars", 1000000, "jaccard", num_files=20, log_search=False, log_search_n=1)
-	test("kth_in_sent", 5, 3, "paragraph", 1000000, "jaccard", num_files=20, log_search=False, log_search_n=1)
+    pass
