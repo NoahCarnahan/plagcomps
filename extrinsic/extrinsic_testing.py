@@ -50,7 +50,10 @@ class ExtrinsicTester:
         '''
         classifications = []
         actuals = []
-        
+        classifications_dict = {}
+        actuals_dict = {}
+
+
         for fi, f in enumerate(self.suspect_file_list, 1):
             print
             if self.log_search:
@@ -60,6 +63,8 @@ class ExtrinsicTester:
                 acts = ground_truth._query_ground_truth(f, "paragraph", session, self.suspicious_path_start).get_ground_truth(session)
                 actuals += acts
 
+                actuals_dict[f] = acts
+
                 # first, get a list of the most similar full documents to this document
                 atom_classifications = self.evaluator.classify_passage(doc_name, "full", 0, self.fingerprint_method, 
                     self.n, self.k, self.hash_len, "containment", 
@@ -68,6 +73,8 @@ class ExtrinsicTester:
                 top_docs = atom_classifications[:self.log_search_n]
                 dids = [x[0][2] for x in top_docs]
                 
+                doc_classifications = []
+
                 # now, compare all paragraphs in the most similar documents to this paragraph
                 for atom_index in xrange(len(acts)):
                     atom_classifications = self.evaluator.classify_passage(doc_name, "paragraph", atom_index, 
@@ -80,16 +87,25 @@ class ExtrinsicTester:
 
                     classifications.append(top_source)
 
+                    doc_classifications.append(top_source)
+
                     print 'atom index:', str(atom_index+1) + '/' + str(len(acts))
                     print 'confidence (actual, guess):', acts[atom_index], (confidence, source_filename, source_atom_index)
+
+                classifications_dict[f] = doc_classifications
+
             else:
                 doc_name = f.replace(self.suspicious_path_start, "")
 
                 acts = ground_truth._query_ground_truth(f, self.base_atom_type, session, self.suspicious_path_start).get_ground_truth(session)
                 actuals += acts
 
+                actuals_dict[f] = acts
+
                 print f
                 print '%d/%d Classifying %s' % (fi, len(self.suspect_file_list), doc_name)
+
+                doc_classifications = []
                 
                 for atom_index in xrange(len(acts)):
                     atom_classifications = self.evaluator.classify_passage(doc_name, self.base_atom_type, atom_index, self.fingerprint_method, self.n, self.k, self.hash_len, self.confidence_method, self.mid)
@@ -100,11 +116,15 @@ class ExtrinsicTester:
                     confidence = top_source[1]
 
                     classifications.append(top_source)
+
+                    doc_classifications.append(top_source)
                     
                     print 'atom index:', str(atom_index+1) + '/' + str(len(acts))
                     print 'confidence (actual, guess):', acts[atom_index][0], (confidence, source_filename, source_atom_index)
 
-        return classifications, actuals
+                classifications_dict[f] = doc_classifications
+
+        return classifications, actuals, classifications_dict, actuals_dict
 
 
     def plot_ROC_curve(self, confidences, actuals):
@@ -150,7 +170,7 @@ class ExtrinsicTester:
         If a num_files is given, only run on the first num_file suspicious documents,
         otherwise run on all of them.
         '''
-        trials, ground_truths = self.get_trials(session)
+        trials, ground_truths, trials_dict, actuals_dict = self.get_trials(session)
 
         print 'Computing source accuracy...'
         num_plagiarized = 0
@@ -193,75 +213,100 @@ class ExtrinsicTester:
         # build list of plain confidences and actuals values
         confidences = [x[1] for x in trials]
         actuals = [x[0] for x in ground_truths]
-
+        # UNCOMMENT NEXT LINE TO GET FALSEPOSITIVES AND FALSENEGATIVES
+        # self.analyze_fpr_fnr(trials_dict, actuals_dict, 0.50)
         roc_auc, path = self.plot_ROC_curve(confidences, actuals)
         return roc_auc, source_accuracy, true_source_accuracy
 
-def analyze_fpr_fnr(self, trials, actuals):
+    def analyze_fpr_fnr(self, trials, actuals, threshold):
+        '''
+        Takes as arguements two dictionaries of format:
 
-    falsePositives = {}
-    falseNegatives = {}
+        trials = {doc_name: [list of atoms with reported confidence ... an element looks like: (0, 'dummy', 0)]}
+        actuals = {doc_name: [list of 0's and 1's where index specifies atom index]}
 
-    for key in trials.keys():
-        for i in xrange(len(trials[key])):
-            if trials[key][i] >=  0.50:
-                if actuals[key][i] == 0:
-                    try:
-                        falsePositives[key].append(i)
-                    except:
-                        falsePositives[key] = [i]
-            else:
-                if actuals[key][i] == 1:
-                    try:
-                        falseNegatives[key].append(i)
-                    except:
-                        falseNegatives[key] = [i]
+        Creates two files in plagcomps/extrinsic/FPR_FNR/... that reports the falsePositives and falseNegatives
+        based on a given threshold.
+        '''
 
-    fileFPR = open("plagcomps/extrinsic/FPR_FNR/falsePositives" + str(time.time()) + "-" + self.fingerprint_method + ".txt", "w")
-    
-    for f in falsePositives.keys():
-        file = open(f + ".txt")
-        text = file.read()
-        file.close()
-        paragraph_spans = tokenize(text, self.base_atom_type)
+        falsePositives = {}
+        falseNegatives = {}
+        # CHOOSE DETECTION THRESHOLD HERE!!
+        if threshold > 1.0 || threshold < 0.0:
+            print "INVALID THREHOLD VALUE. THRESHOLD MUST BE BETWEEN 0.0 and 1.0"
 
-        print "These are the spans: " , paragraph_spans
-    
-        print falsePositives[f]    
+        # Gets atom indexes for falsePositives and falseNegatives and maps them to the appropriate document in the 
+        # appropriate dictionary
+        for key in trials.keys():
+            for i in xrange(len(trials[key])):
+                print trials[key][i][1]
+                if trials[key][i][1] >=  threshold:
+                    if actuals[key][i][0] == 0:
+                        try:
+                            falsePositives[key].append(i)
+                        except:
+                            falsePositives[key] = [i]
+                else:
+                    if actuals[key][i][0] == 1:
+                        try:
+                            falseNegatives[key].append(i)
+                        except:
+                            falseNegatives[key] = [i]
 
-        for index in falsePositives[f]:
-            print "Index Number: ", index
-            print "On span start: ", paragraph_spans[index][0]
-            print "On span end: ", paragraph_spans[index][1]
-            paragraph = text[paragraph_spans[index][0]:paragraph_spans[index][1]]
-            fileFPR.write("Document Name: " + f + "\n")
-            fileFPR.write("Paragraph Index: " + str(index) + "\n")
-            fileFPR.write("Detected Confidence: " + str(trials[f][index]) + "\n")
-            fileFPR.write("Fingerprint Technique: " + self.fingerprint_method + str(self.n) + "\n")
-            fileFPR.write("\n")
-            fileFPR.write(paragraph + "\n")
-            fileFPR.write("--"*20 + "\n")
 
-    fileFPR.close()
-    fileFNR = open("plagcomps/extrinsic/FPR_FNR/falseNegatives" + str(time.time()) + "-" + self.fingerprint_method + ".txt", "w")
+        if not falsePositives:
+            print "Found no FalsePositives!"
 
-    for f in falseNegatives.keys():
-        file = open(f + ".txt")
-        text = file.read()
-        file.close()
-        paragraph_spans = tokenize(text, self.base_atom_type)
+        else:
+            print "Beginning to print falsePositives to file."
+            filename = "plagcomps/extrinsic/FPR_FNR/falsePositives" + str(time.time()) + "-" + self.fingerprint_method + ".txt", "w"
+            fileFPR = open(filename)
+            
+            for f in falsePositives.keys():
+                file = open(f + ".txt")
+                text = file.read()
+                file.close()
+                paragraph_spans = tokenize(text, self.base_atom_type)
 
-        for index in falseNegatives.keys():
-            paragraph = text[paragraph_spans[index][0]:paragraph_spans[index][1]]
-            fileFNR.write("Document Name: " + f + "\n")
-            fileFNR.write("Paragraph Index: " + str(index) + "\n")
-            fileFNR.write("Detected Confidence: " + str(trials[f][index]) + "\n")
-            fileFNR.write("Fingerprint Technique: " + self.fingerprint_method + "-" + str(self.n) + "\n")
-            fileFNR.write("\n")
-            fileFNR.write(paragraph + "\n")
-            fileFNR.write("--"*20 + "\n")
+                for index in falsePositives[f]:
+                    paragraph = text[paragraph_spans[index][0]:paragraph_spans[index][1]]
+                    fileFPR.write("Document Name: " + f + "\n")
+                    fileFPR.write("Paragraph Index: " + str(index) + "\n")
+                    fileFPR.write("Detected Confidence: " + str(trials[f][index]) + "\n")
+                    fileFPR.write("Fingerprint Technique: " + self.fingerprint_method + str(self.n) + "\n")
+                    fileFPR.write("\n")
+                    fileFPR.write(paragraph + "\n\n")
+                    fileFPR.write("--"*20 + "\n\n")
 
-    fileFNR.close()
+            print "Output for falsePositives is in:" + filename
+            fileFPR.close()
+
+        if not falseNegatives:
+            print "Found no FalseNegatives!"
+
+        else:
+            print "Beginning to print falseNegatives to file."
+            filename = "plagcomps/extrinsic/FPR_FNR/falseNegatives" + str(time.time()) + "-" + self.fingerprint_method + ".txt", "w"
+            fileFNR = open(filename)
+
+            for f in falseNegatives.keys():
+                file = open(f + ".txt")
+                text = file.read()
+                file.close()
+                paragraph_spans = tokenize(text, self.base_atom_type)
+
+                for index in falseNegatives[f]: 
+                    paragraph = text[paragraph_spans[index][0]:paragraph_spans[index][1]]
+                    fileFNR.write("Document Name: " + f + "\n")
+                    fileFNR.write("Paragraph Index: " + str(index) + "\n")
+                    fileFNR.write("Detected Confidence: " + str(trials[f][index]) + "\n")
+                    fileFNR.write("Fingerprint Technique: " + self.fingerprint_method + str(self.n) + "\n")
+                    fileFNR.write("\n")
+                    fileFNR.write(paragraph + "\n\n")
+                    fileFNR.write("--"*20 + "\n\n")
+
+            print "Output for falseNegatives is in:" + filename
+            fileFNR.close()
 
 
 def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all", log_search=True, log_search_n=5):
@@ -277,6 +322,7 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
     
     tester = ExtrinsicTester(atom_type, method, n, k, hash_size, confidence_method, suspect_file_list, source_file_list, log_search, log_search_n)
     roc_auc, source_accuracy, true_source_accuracy = tester.evaluate(session)
+    tester.evaluate(session)
     
     # Save the reult
     if not log_search:
@@ -295,12 +341,12 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
         
 if __name__ == "__main__":
 
-	test("kth_in_sent", 5, 3, "nchars", 100000000, "containment", num_files=20, log_search=False, log_search_n=1)
-	test("kth_in_sent", 5, 3, "paragraph", 100000000, "containment", num_files=20, log_search=False, log_search_n=1)
-	test("kth_in_sent", 5, 3, "nchars", 100000000, "jaccard", num_files=20, log_search=False, log_search_n=1)
-	test("kth_in_sent", 5, 3, "paragraph", 100000000, "jaccard", num_files=20, log_search=False, log_search_n=1)
+	# test("kth_in_sent", 5, 3, "nchars", 100000000, "containment", num_files=20, log_search=False, log_search_n=1)
+	test("kth_in_sent", 5, 3, "paragraph", 100000000, "containment", num_files=2, log_search=False, log_search_n=1)
+	# test("kth_in_sent", 5, 3, "nchars", 100000000, "jaccard", num_files=20, log_search=False, log_search_n=1)
+	# test("kth_in_sent", 5, 3, "paragraph", 100000000, "jaccard", num_files=20, log_search=False, log_search_n=1)
 	
-	test("kth_in_sent", 5, 3, "nchars", 1000000, "containment", num_files=20, log_search=False, log_search_n=1)
-	test("kth_in_sent", 5, 3, "paragraph", 1000000, "containment", num_files=20, log_search=False, log_search_n=1)
-	test("kth_in_sent", 5, 3, "nchars", 1000000, "jaccard", num_files=20, log_search=False, log_search_n=1)
-	test("kth_in_sent", 5, 3, "paragraph", 1000000, "jaccard", num_files=20, log_search=False, log_search_n=1)
+	# test("kth_in_sent", 5, 3, "nchars", 1000000, "containment", num_files=20, log_search=False, log_search_n=1)
+	# test("kth_in_sent", 5, 3, "paragraph", 1000000, "containment", num_files=20, log_search=False, log_search_n=1)
+	# test("kth_in_sent", 5, 3, "nchars", 1000000, "jaccard", num_files=20, log_search=False, log_search_n=1)
+	# test("kth_in_sent", 5, 3, "paragraph", 1000000, "jaccard", num_files=20, log_search=False, log_search_n=1)
