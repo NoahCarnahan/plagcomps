@@ -296,7 +296,7 @@ def analyze_fpr_fnr(self, trials, actuals):
     fileFNR.close()
 
 
-def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all", search_method='normal', search_n=5):
+def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all", search_method='normal', search_n=5, save_to_db=True):
     session = Session()
         
     source_file_list, suspect_file_list = ExtrinsicUtility().get_training_files(n = num_files, include_txt_extension = False)
@@ -311,7 +311,7 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
     roc_auc, source_accuracy, true_source_accuracy = tester.evaluate(session)
     
     # Save the reult
-    if not log_search:
+    if save_to_db:
         with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) as conn:
             conn.autocommit = True    
             with conn.cursor() as cur:
@@ -319,22 +319,22 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
                 query = "INSERT INTO extrinsic_results (method_name, n, k, atom_type, hash_size, simmilarity_method, suspect_files, source_files, auc, true_source_accuracy) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
                 args = (method, n, k, atom_type, hash_size, confidence_method, num_files, num_sources, roc_auc, true_source_accuracy)
                 cur.execute(query, args)
-    
+
     print 'ROC auc:', roc_auc
     print 'Source Accuracy:', source_accuracy
     print 'True Source Accuracy:', true_source_accuracy
 
         
 if __name__ == "__main__":
-    test("anchor", 5, 0, "paragraph", 10000000, "containment", num_files=3, search_method='normal', search_n=1)
+    test("anchor", 5, 0, "paragraph", 10000000, "containment", num_files=3, search_method='normal', search_n=1, save_to_db=False)
     #evaluate("kth_in_sent", 5, 3, "full", 10000000, "jaccard", num_files=10)
 
-	# test("kth_in_sent", 5, 3, "nchars", 100000000, "containment", num_files=20, log_search=False, log_search_n=1)
-	# test("kth_in_sent", 5, 3, "paragraph", 100000000, "containment", num_files=20, log_search=False, log_search_n=1)
-	# test("kth_in_sent", 5, 3, "nchars", 100000000, "jaccard", num_files=20, log_search=False, log_search_n=1)
-	# test("kth_in_sent", 5, 3, "paragraph", 100000000, "jaccard", num_files=20, log_search=False, log_search_n=1)
+	# test("kth_in_sent", 5, 3, "nchars", 100000000, "containment", num_files=20, search_method=False, search_n=1)
+	# test("kth_in_sent", 5, 3, "paragraph", 100000000, "containment", num_files=20, search_method=False, search_n=1)
+	# test("kth_in_sent", 5, 3, "nchars", 100000000, "jaccard", num_files=20, search_method=False, search_n=1)
+	# test("kth_in_sent", 5, 3, "paragraph", 100000000, "jaccard", num_files=20, search_method=False, search_n=1)
 	
-	# test("kth_in_sent", 5, 3, "nchars", 1000000, "containment", num_files=20, log_search=False, log_search_n=1)
-	# test("kth_in_sent", 5, 3, "paragraph", 1000000, "containment", num_files=20, log_search=False, log_search_n=1)
-	# test("kth_in_sent", 5, 3, "nchars", 1000000, "jaccard", num_files=20, log_search=False, log_search_n=1)
-	# test("kth_in_sent", 5, 3, "paragraph", 1000000, "jaccard", num_files=20, log_search=False, log_search_n=1)
+	# test("kth_in_sent", 5, 3, "nchars", 1000000, "containment", num_files=20, search_method=False, search_n=1)
+	# test("kth_in_sent", 5, 3, "paragraph", 1000000, "containment", num_files=20, search_method=False, search_n=1)
+	# test("kth_in_sent", 5, 3, "nchars", 1000000, "jaccard", num_files=20, search_method=False, search_n=1)
+	# test("kth_in_sent", 5, 3, "paragraph", 1000000, "jaccard", num_files=20, search_method=False, search_n=1)
