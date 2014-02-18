@@ -280,14 +280,13 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
     roc_auc, source_accuracy, true_source_accuracy = tester.evaluate(session)
     
     # Save the reult
-    if not log_search:
-        with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) as conn:
-            conn.autocommit = True    
-            with conn.cursor() as cur:
-                num_sources = fingerprintstorage.get_number_sources(fingerprintstorage.get_mid(method, n, k, atom_type, hash_size))
-                query = "INSERT INTO extrinsic_results (method_name, n, k, atom_type, hash_size, simmilarity_method, suspect_files, source_files, auc, true_source_accuracy) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
-                args = (method, n, k, atom_type, hash_size, confidence_method, num_files, num_sources, roc_auc, true_source_accuracy)
-                cur.execute(query, args)
+    with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) as conn:
+        conn.autocommit = True    
+        with conn.cursor() as cur:
+            num_sources = fingerprintstorage.get_number_sources(fingerprintstorage.get_mid(method, n, k, atom_type, hash_size))
+            query = "INSERT INTO extrinsic_results (method_name, n, k, atom_type, hash_size, simmilarity_method, suspect_files, source_files, auc, true_source_accuracy, source_accuracy, search_method, search_n) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
+            args = (method, n, k, atom_type, hash_size, confidence_method, num_files, num_sources, roc_auc, true_source_accuracy, source_accuracy, log_search, log_search_n)
+            cur.execute(query, args)
     
     print 'ROC auc:', roc_auc
     print 'Source Accuracy:', source_accuracy
@@ -296,4 +295,5 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
         
 if __name__ == "__main__":
 
-    pass
+    test("kth_in_sent", 5, 3, "paragraph", 10000000, "containment", num_files=2, log_search=False, log_search_n=1)
+    test("kth_in_sent", 5, 3, "paragraph", 10000000, "containment", num_files=2, log_search=True, log_search_n=4)
