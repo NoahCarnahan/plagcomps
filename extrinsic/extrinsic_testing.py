@@ -52,14 +52,17 @@ class ExtrinsicTester:
         actuals = []
         
         outer_search_level_mid = fingerprintstorage.get_mid(self.fingerprint_method, self.n, self.k, "full", self.hash_len)
+
         
         for fi, f in enumerate(self.suspect_file_list, 1):
             print
             doc_name = f.replace(self.suspicious_path_start, "")
+            if ".txt" in doc_name:
+                doc_name = doc_name.replace(".txt", "")
             if self.search_method == 'two_level_ff':
                 print '%d/%d Classifying %s (%s)' % (fi, len(self.suspect_file_list), doc_name, self.search_method)
 
-                acts = ground_truth._query_ground_truth(f, "paragraph", session, self.suspicious_path_start).get_ground_truth(session)
+                acts = ground_truth._query_ground_truth(doc_name, "paragraph", session, self.suspicious_path_start).get_ground_truth(session)
                 actuals += acts
 
                 # first, get a list of the most similar full documents to this document
@@ -85,7 +88,7 @@ class ExtrinsicTester:
                     print 'confidence (actual, guess):', acts[atom_index], (confidence, source_filename, source_atom_index)
             elif self.search_method == 'two_level_pf':
                 print '%d/%d Classifying %s (%s)' % (fi, len(self.suspect_file_list), doc_name, self.search_method)
-                acts = ground_truth._query_ground_truth(f, "paragraph", session, self.suspicious_path_start).get_ground_truth(session)
+                acts = ground_truth._query_ground_truth(doc_name, "paragraph", session, self.suspicious_path_start).get_ground_truth(session)
                 actuals += acts
 
                 for atom_index in xrange(len(acts)):
@@ -118,11 +121,11 @@ class ExtrinsicTester:
                     print 'atom index:', str(atom_index+1) + '/' + str(len(acts))
                     print 'confidence (actual, guess):', acts[atom_index], (confidence, source_filename, source_atom_index)
             else:
-                acts = ground_truth._query_ground_truth(f, self.base_atom_type, session, self.suspicious_path_start).get_ground_truth(session)
-                actuals += acts
-
                 print f
                 print '%d/%d Classifying %s' % (fi, len(self.suspect_file_list), doc_name)
+                acts = ground_truth._query_ground_truth(doc_name, self.base_atom_type, session, self.suspicious_path_start).get_ground_truth(session)
+                actuals += acts
+
                 
                 for atom_index in xrange(len(acts)):
                     atom_classifications = self.evaluator.classify_passage(doc_name, self.base_atom_type, atom_index, self.fingerprint_method, self.n, self.k, self.hash_len, self.confidence_method, self.mid)

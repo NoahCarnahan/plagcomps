@@ -1,6 +1,5 @@
 from ..intrinsic.featureextraction import FeatureExtractor
 from ..shared.util import BaseUtility, IntrinsicUtility, ExtrinsicUtility
-from ..shared.util import BaseUtility
 from ..dbconstants import username
 from ..dbconstants import password
 from ..dbconstants import dbname
@@ -207,8 +206,7 @@ def evaluate(features, cluster_type, k, atom_type, docs, corpus='intrinsic', sav
     # Return reduced_docs for caching in case we call <evaluate> multiple times
     return roc_path, roc_auc, reduced_docs
 
-def get_confidences_actuals(session, features, cluster_type, k, atom_type, docs, corpus='intrinsic', save_roc_figure=True, reduced_docs=None, feature_vector_weights=None, 
-            metadata={}, cheating=False, cheating_min_len=5000, **clusterargs):
+def get_confidences_actuals(session, features, cluster_type, k, atom_type, docs, corpus='intrinsic', save_roc_figure=True, reduced_docs=None, feature_vector_weights=None, metadata={}, cheating=False, cheating_min_len=5000, **clusterargs):
     '''
     Return the confidences and acutals for the given list of documents parsed
     by atom_type, using the given features, cluster_type, and number of clusters k.
@@ -224,7 +222,7 @@ def get_confidences_actuals(session, features, cluster_type, k, atom_type, docs,
     if not reduced_docs:
         reduced_docs = _get_reduced_docs(atom_type, docs, session, corpus=corpus)
     plag_likelihoods = []
-    doc_plag_assignments = {}
+    actuals = []
     
     count = 0
     valid_reduced_docs = []
@@ -239,6 +237,12 @@ def get_confidences_actuals(session, features, cluster_type, k, atom_type, docs,
             continue
         valid_reduced_docs.append(d)
 
+       # add to actuals
+        spans = d.get_spans()
+        for i in xrange(len(spans)):
+            span = spans[i]
+            actuals.append(1 if d.span_is_plagiarized(span) else 0)
+ 
         if feature_vector_weights:
             weighted_vecs = []
             for vec in feature_vecs:
@@ -249,12 +253,15 @@ def get_confidences_actuals(session, features, cluster_type, k, atom_type, docs,
             feature_vecs = weighted_vecs
 
         likelihood = cluster(cluster_type, k, feature_vecs, **clusterargs)
-        doc_plag_assignments[d] = likelihood
         plag_likelihoods.append(likelihood)
     
     session.close()
 
-    return plag_likelihoods, None
+    all_confidences = []
+    for likelihood_list in plag_likelihoods:
+        all_confidences += likelihood_list
+
+    return all_confidences, actuals
 
     
 def _output_to_file(assignment_dict, atom_type, cluster_type):
@@ -581,7 +588,7 @@ class ReducedDoc(Base):
             self._full_xml_path = path[:-3] + "xml"
         elif corpus == "extrinsic":
             self._full_xml_path = path + ".xml"
-        print "full_xml_path", self._full_xml_path
+
         # 'intrinsic' or 'extrinsic'
         self.corpus = corpus
         
