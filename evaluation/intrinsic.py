@@ -76,7 +76,7 @@ def populate_database(atom_types, num, features=None, corpus='intrinsic'):
     print first_training_files
 
     if features == None:
-        features = FeatureExtractor.get_all_feature_function_names()
+        features = FeatureExtractor.get_all_feature_function_names(include_nested=True)
         
     i = 0
     for doc in first_training_files:
