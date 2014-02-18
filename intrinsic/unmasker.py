@@ -21,6 +21,8 @@ import numpy as np
 
 from scipy.cluster.vq import kmeans2, whiten
 
+from sys import maxint
+
 Base = declarative_base()
 plt.ion()
 
@@ -97,29 +99,42 @@ def classify(confidences):
         total += 1
     return (plag, total)
 
-# def kMeans_cluster(feature_vecs, k):
-#     feature_mat = np.array(feature_vecs)
-#     # print feature_mat.shape
-#     normalized_features = whiten(feature_mat)
+def kMeans_cluster(feature_vecs, k):
+    feature_mat = np.array(feature_vecs)
+    # print feature_mat.shape
+    normalized_features = whiten(feature_mat)
 
-#     initialCentroids = initiate_centroids(k, feature_mat.shape[1])
+    ranges = []
+    for i in xrange(normalized_features.shape[1]):
+        max = 0
+        min = maxint
+        for j in xrange(normalized_features.shape[0]):
+            if normalized_features[j][i] > max:
+                max = normalized_features[j][i]
+            if normalized_features[j][i] < min:
+                min = normalized_features[j][i]
+        ranges.append((min,max))
 
-#     assignments = []
-#     # for vector in feature_vecs:
-#         # calculateDist(centroids)
+    initialCentroids = initiate_centroids(k, feature_mat.shape[1], ranges)
 
-#     # print feature_vecs
-#     # print initialCentroids
+    print initialCentroids
 
-# def initiate_centroids(k, size):
-#     random.seed(1)
-#     centroids = np.empty((k, size))
+    assignments = []
+    # for vector in feature_vecs:
+        # calculateDist(centroids)
 
-#     for i in xrange(k):
-#         for j in xrange(size):
-#             centroids[i][j] = random.random()
+    # print feature_vecs
+    # print initialCentroids
 
-#     return centroids
+def initiate_centroids(k, size, ranges):
+    random.seed(1)
+    centroids = np.empty((k, size))
+
+    for i in xrange(k):
+        for j in xrange(size):
+            centroids[i][j] = random.randint(int(ranges[j][0]), int(ranges[j][1]))
+
+    return centroids
 
 def visualize(dataset):
     x = []
