@@ -176,7 +176,6 @@ class ExtrinsicTester:
 
         return roc_auc, path
 
-
     def evaluate(self, session):
         '''
         Run our tool with the given parameters and return the area under the roc.
@@ -229,7 +228,6 @@ class ExtrinsicTester:
 
         roc_auc, path = self.plot_ROC_curve(confidences, actuals)
         return roc_auc, source_accuracy, true_source_accuracy
-
 
 def analyze_fpr_fnr(self, trials, actuals):
 
@@ -307,17 +305,21 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
     print suspect_file_list    
     print "Testing first", len(suspect_file_list), "suspect files against how ever many source documents have been populated."
        
-    # # Save the reult
-    # with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) as conn:
-    #     conn.autocommit = True    
-    #     with conn.cursor() as cur:
-    #         num_sources = fingerprintstorage.get_number_sources(fingerprintstorage.get_mid(method, n, k, atom_type, hash_size))
-    #         query = "INSERT INTO extrinsic_results (method_name, n, k, atom_type, hash_size, simmilarity_method, suspect_files, source_files, auc, source_accuracy) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
-    #         args = (method, n, k, atom_type, hash_size, confidence_method, num_files, num_sources, auc, source_accuracy)
-    #         cur.execute(query, args)
+    
     
     tester = ExtrinsicTester(atom_type, method, n, k, hash_size, confidence_method, suspect_file_list, source_file_list, search_method, search_n)
     roc_auc, source_accuracy, true_source_accuracy = tester.evaluate(session)
+    
+    # Save the reult
+    if not log_search:
+        with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) as conn:
+            conn.autocommit = True    
+            with conn.cursor() as cur:
+                num_sources = fingerprintstorage.get_number_sources(fingerprintstorage.get_mid(method, n, k, atom_type, hash_size))
+                query = "INSERT INTO extrinsic_results (method_name, n, k, atom_type, hash_size, simmilarity_method, suspect_files, source_files, auc, true_source_accuracy) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
+                args = (method, n, k, atom_type, hash_size, confidence_method, num_files, num_sources, roc_auc, true_source_accuracy)
+                cur.execute(query, args)
+    
     print 'ROC auc:', roc_auc
     print 'Source Accuracy:', source_accuracy
     print 'True Source Accuracy:', true_source_accuracy
@@ -326,3 +328,13 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
 if __name__ == "__main__":
     test("anchor", 5, 0, "paragraph", 10000000, "containment", num_files=3, search_method='normal', search_n=1)
     #evaluate("kth_in_sent", 5, 3, "full", 10000000, "jaccard", num_files=10)
+
+	# test("kth_in_sent", 5, 3, "nchars", 100000000, "containment", num_files=20, log_search=False, log_search_n=1)
+	# test("kth_in_sent", 5, 3, "paragraph", 100000000, "containment", num_files=20, log_search=False, log_search_n=1)
+	# test("kth_in_sent", 5, 3, "nchars", 100000000, "jaccard", num_files=20, log_search=False, log_search_n=1)
+	# test("kth_in_sent", 5, 3, "paragraph", 100000000, "jaccard", num_files=20, log_search=False, log_search_n=1)
+	
+	# test("kth_in_sent", 5, 3, "nchars", 1000000, "containment", num_files=20, log_search=False, log_search_n=1)
+	# test("kth_in_sent", 5, 3, "paragraph", 1000000, "containment", num_files=20, log_search=False, log_search_n=1)
+	# test("kth_in_sent", 5, 3, "nchars", 1000000, "jaccard", num_files=20, log_search=False, log_search_n=1)
+	# test("kth_in_sent", 5, 3, "paragraph", 1000000, "jaccard", num_files=20, log_search=False, log_search_n=1)

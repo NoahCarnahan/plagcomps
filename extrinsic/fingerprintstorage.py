@@ -527,18 +527,31 @@ def _populate_variety_of_params():
     #populate_database(sus+srs, "anchor", 3, 0, "nchars", 10000000, check_for_duplicate=False)
     #populate_database(sus+srs, "anchor", 3, 0, "paragraph", 10000000, check_for_duplicate=False)
 
-    populate_database(sus+srs, "winnow-k", 6, 13, "full", 10000000, check_for_duplicate=False)
-    populate_database(sus+srs, "winnow-k", 8, 13, "full", 10000000, check_for_duplicate=False)
-    populate_database(sus+srs, "winnow-k", 6, 13, "paragraph", 10000000, check_for_duplicate=False)
-    populate_database(sus+srs, "winnow-k", 8, 13, "paragraph", 10000000, check_for_duplicate=False)
-    populate_database(sus+srs, "winnow-k", 6, 13, "nchars", 10000000, check_for_duplicate=False)
-    populate_database(sus+srs, "winnow-k", 8, 13, "nchars", 10000000, check_for_duplicate=False)
-    populate_database(sus+srs, "winnow-k", 6, 15, "full", 10000000, check_for_duplicate=False)
-    populate_database(sus+srs, "winnow-k", 8, 15, "full", 10000000, check_for_duplicate=False)
-    populate_database(sus+srs, "winnow-k", 6, 15, "paragraph", 10000000, check_for_duplicate=False)
-    populate_database(sus+srs, "winnow-k", 8, 15, "paragraph", 10000000, check_for_duplicate=False)
-    populate_database(sus+srs, "winnow-k", 6, 15, "nchars", 10000000, check_for_duplicate=False)
-    populate_database(sus+srs, "winnow-k", 8, 15, "nchars", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "winnow-k", 6, 13, "full", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "winnow-k", 8, 13, "full", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "winnow-k", 6, 13, "paragraph", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "winnow-k", 8, 13, "paragraph", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "winnow-k", 6, 13, "nchars", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "winnow-k", 8, 13, "nchars", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "winnow-k", 6, 15, "full", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "winnow-k", 8, 15, "full", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "winnow-k", 6, 15, "paragraph", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "winnow-k", 8, 15, "paragraph", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "winnow-k", 6, 15, "nchars", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "winnow-k", 8, 15, "nchars", 10000000, check_for_duplicate=False)
+
+    # Ten times bigger hash_size
+    #populate_database(sus+srs, "kth_in_sent", 5, 3, "full", 100000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "kth_in_sent", 5, 3, "nchars", 100000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "kth_in_sent", 5, 3, "paragraph", 100000000, check_for_duplicate=False)
+    
+    # Ten times smaller hash_size
+    #populate_database(sus+srs, "kth_in_sent", 5, 3, "full", 1000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "kth_in_sent", 5, 3, "nchars", 1000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "kth_in_sent", 5, 3, "paragraph", 1000000, check_for_duplicate=False)
+    
+    # Way smaller hash_size
+    #populate_database(sus+srs, "kth_in_sent", 5, 3, "nchars", 10000, check_for_duplicate=False)
 
 if __name__ == "__main__":
     print 'DEV_MODE is set to', DEV_MODE
