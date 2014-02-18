@@ -24,7 +24,7 @@ Session = sqlalchemy.orm.sessionmaker(bind=engine)
 
 class ExtrinsicTester:
 
-    def __init__(self, atom_type, fingerprint_method, n, k, hash_len, confidence_method, suspect_file_list, source_file_list, log_search, log_search_n):
+    def __init__(self, atom_type, fingerprint_method, n, k, hash_len, confidence_method, suspect_file_list, source_file_list, search_method, search_n=1):
         self.suspicious_path_start = ExtrinsicUtility.CORPUS_SUSPECT_LOC
         self.corpus_path_start = ExtrinsicUtility.CORPUS_SRC_LOC
         source_dirs = os.listdir(self.corpus_path_start)
@@ -38,8 +38,8 @@ class ExtrinsicTester:
         self.suspect_file_list = suspect_file_list
         self.source_file_list = source_file_list
         self.evaluator = fingerprint_extraction.FingerprintEvaluator(source_file_list, fingerprint_method, self.n, self.k)
-        self.log_search = log_search
-        self.log_search_n = log_search_n
+        self.search_method = search_method
+        self.search_n = search_n
 
 
     def get_trials(self, session):
@@ -53,12 +53,13 @@ class ExtrinsicTester:
         classifications_dict = {}
         actuals_dict = {}
 
+        outer_search_level_mid = fingerprintstorage.get_mid(self.fingerprint_method, self.n, self.k, "full", self.hash_len)
 
         for fi, f in enumerate(self.suspect_file_list, 1):
             print
-            if self.log_search:
-                doc_name = f.replace(self.suspicious_path_start, "")
-                print '%d/%d Classifying %s (log search)' % (fi, len(self.suspect_file_list), doc_name)
+            doc_name = f.replace(self.suspicious_path_start, "")
+            if self.search_method == 'two_level_ff':
+                print '%d/%d Classifying %s (%s)' % (fi, len(self.suspect_file_list), doc_name, self.search_method)
 
                 acts = ground_truth._query_ground_truth(f, "paragraph", session, self.suspicious_path_start).get_ground_truth(session)
                 actuals += acts
@@ -66,11 +67,10 @@ class ExtrinsicTester:
                 actuals_dict[f] = acts
 
                 # first, get a list of the most similar full documents to this document
-                atom_classifications = self.evaluator.classify_passage(doc_name, "full", 0, self.fingerprint_method, 
-                    self.n, self.k, self.hash_len, "containment", 
-                    fingerprintstorage.get_mid(self.fingerprint_method, self.n, self.k, "full", self.hash_len))
+                atom_classifications = self.evaluator.classify_passage(doc_name, "full", 0, self.fingerprint_method,
+                    self.n, self.k, self.hash_len, "containment", outer_search_level_mid)
 
-                top_docs = atom_classifications[:self.log_search_n]
+                top_docs = full_atom_classifications[:self.search_n]
                 dids = [x[0][2] for x in top_docs]
                 
                 doc_classifications = []
@@ -94,9 +94,46 @@ class ExtrinsicTester:
 
                 classifications_dict[f] = doc_classifications
 
-            else:
-                doc_name = f.replace(self.suspicious_path_start, "")
+            elif self.search_method == 'two_level_pf':
+                print '%d/%d Classifying %s (%s)' % (fi, len(self.suspect_file_list), doc_name, self.search_method)
+                acts = ground_truth._query_ground_truth(f, "paragraph", session, self.suspicious_path_start).get_ground_truth(session)
+                actuals += acts
 
+                for atom_index in xrange(len(acts)):
+                    # first, find most similar documents to this paragraph
+                    full_atom_classifications = self.evaluator.classify_passage(doc_name, "full", atom_index,
+                        self.fingerprint_method, self.n, self.k, self.hash_len, "containment",
+                        fingerprintstorage.get_mid(self.fingerprint_method, self.n, self.k, "full", self.hash_len),
+                        passage_atom_type="paragraph",
+                        passage_mid=fingerprintstorage.get_mid(self.fingerprint_method, self.n, self.k, "paragraph", self.hash_len))
+
+                    top_docs = full_atom_classifications[:self.search_n]
+                    dids = [x[0][2] for x in top_docs]
+
+                    # don't compare at the paragraph level if no full documents had any similarity to the paragraph
+                    if top_docs[0][1] == 0:
+                        top_source = top_docs[0]
+                    else:
+                        # now, compare this paragraph to all paragraphs in <top_docs>
+                        atom_classifications = self.evaluator.classify_passage(doc_name, "paragraph", atom_index, 
+                            self.fingerprint_method, self.n, self.k, self.hash_len, self.confidence_method, self.mid, dids=dids)
+                        # print 'atom_classifications:', atom_classifications
+                        # top_source is a tuple with the form ((source_doc_name, atom_index), confidence, suspect_filename)
+                        top_source = atom_classifications[0]
+                    
+                    source_filename, source_atom_index, did, suspect_filename = top_source[0]
+                    confidence = top_source[1]
+
+                    classifications.append(top_source)
+
+                    doc_classifications.append(top_source)
+
+                    print 'atom index:', str(atom_index+1) + '/' + str(len(acts))
+                    print 'confidence (actual, guess):', acts[atom_index], (confidence, source_filename, source_atom_index)
+
+                classifications_dict[f] = doc_classifications
+                
+            else:
                 acts = ground_truth._query_ground_truth(f, self.base_atom_type, session, self.suspicious_path_start).get_ground_truth(session)
                 actuals += acts
 
@@ -309,7 +346,7 @@ class ExtrinsicTester:
             fileFNR.close()
 
 
-def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all", log_search=True, log_search_n=5):
+def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all", search_method='normal', search_n=5, save_to_db=True):
     session = Session()
         
     source_file_list, suspect_file_list = ExtrinsicUtility().get_training_files(n = num_files, include_txt_extension = False)
@@ -320,18 +357,18 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
        
     
     
-    tester = ExtrinsicTester(atom_type, method, n, k, hash_size, confidence_method, suspect_file_list, source_file_list, log_search, log_search_n)
+    tester = ExtrinsicTester(atom_type, method, n, k, hash_size, confidence_method, suspect_file_list, source_file_list, search_method, search_n)
     roc_auc, source_accuracy, true_source_accuracy = tester.evaluate(session)
     tester.evaluate(session)
     
     # Save the reult
-    if not log_search:
+    if save_to_db:
         with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) as conn:
             conn.autocommit = True    
             with conn.cursor() as cur:
                 num_sources = fingerprintstorage.get_number_sources(fingerprintstorage.get_mid(method, n, k, atom_type, hash_size))
-                query = "INSERT INTO extrinsic_results (method_name, n, k, atom_type, hash_size, simmilarity_method, suspect_files, source_files, auc, true_source_accuracy) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
-                args = (method, n, k, atom_type, hash_size, confidence_method, num_files, num_sources, roc_auc, true_source_accuracy)
+                query = "INSERT INTO extrinsic_results (method_name, n, k, atom_type, hash_size, simmilarity_method, suspect_files, source_files, auc, true_source_accuracy, source_accuracy, search_method, search_n) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
+                args = (method, n, k, atom_type, hash_size, confidence_method, num_files, num_sources, roc_auc, true_source_accuracy, source_accuracy, search_method, search_n)
                 cur.execute(query, args)
     
     print 'ROC auc:', roc_auc
@@ -340,7 +377,10 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
 
         
 if __name__ == "__main__":
+    test("anchor", 5, 0, "paragraph", 10000000, "containment", num_files=3, search_method='normal', search_n=1, save_to_db=True)
+    #evaluate("kth_in_sent", 5, 3, "full", 10000000, "jaccard", num_files=10)
 
+<<<<<<< HEAD
 	# test("kth_in_sent", 5, 3, "nchars", 100000000, "containment", num_files=20, log_search=False, log_search_n=1)
 	test("kth_in_sent", 5, 3, "paragraph", 100000000, "containment", num_files=2, log_search=False, log_search_n=1)
 	# test("kth_in_sent", 5, 3, "nchars", 100000000, "jaccard", num_files=20, log_search=False, log_search_n=1)
@@ -350,3 +390,5 @@ if __name__ == "__main__":
 	# test("kth_in_sent", 5, 3, "paragraph", 1000000, "containment", num_files=20, log_search=False, log_search_n=1)
 	# test("kth_in_sent", 5, 3, "nchars", 1000000, "jaccard", num_files=20, log_search=False, log_search_n=1)
 	# test("kth_in_sent", 5, 3, "paragraph", 1000000, "jaccard", num_files=20, log_search=False, log_search_n=1)
+=======
+>>>>>>> 9deed48bb06e0e011dd7cebfda524bf6c3517d82

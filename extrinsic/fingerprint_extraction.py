@@ -258,21 +258,23 @@ class FingerprintEvaluator:
     #    fp = extrinsic_processing.query_fingerprint(filename, self.fingerprint_method, self.n, self.k, atom_type, session, base_path)
     #    return fp
 
-    def classify_passage(self, filename, atom_type, atom_index, fingerprint_method, n, k, hash_len, confidence_method, mid, dids=None):
+    def classify_passage(self, filename, atom_type, atom_index, fingerprint_method, n, k, hash_len, confidence_method, mid, dids=None, passage_atom_type=None, passage_mid=None):
         '''
         Returns a list of (source_filename, similarity) tuples sorted in decreasing similarity to the 
         input document.
         '''
-        
-        # sanitize atom_index
-        if atom_type == "full":
-            atom_index = 0
-        
          # Get the full path from the filename and base_path
         full_path = ExtrinsicUtility.CORPUS_SUSPECT_LOC + filename + ".txt"
         
+        # allow for different atom_types to be compared
+        if not passage_atom_type:
+            passage_atom_type = atom_type
+
+        if not passage_mid:
+            passage_mid = mid
+
         # Get the fingerprint of the passage in question
-        fingerprint = fingerprintstorage.get_passage_fingerprint(full_path, atom_index, atom_type, mid)
+        fingerprint = fingerprintstorage.get_passage_fingerprint(full_path, atom_index, passage_atom_type, passage_mid)
         
         with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) as conn:
             conn.autocommit = True

@@ -326,7 +326,7 @@ def get_matching_passages(target_hash_value, mid, conn, dids=None):
     with conn.cursor() as cur:
         cur.execute(reverse_query, reverse_args)
         matching_passages = cur.fetchall()
-
+        
     passages = [{"pid":passage[0], "doc_name":passage[1], "did":passage[2], "atom_number":passage[3]} for passage in matching_passages]
 
     return passages

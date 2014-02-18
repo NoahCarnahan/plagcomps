@@ -69,21 +69,24 @@ def populate_database(atom_types, num, features=None, corpus='intrinsic'):
         first_training_files = util.get_n_training_files(num)
     elif corpus == 'extrinsic':
         util = ExtrinsicUtility()
-        first_training_files = util.get_n_training_files(n=num, file_type='suspect', include_txt_extension=True)
+        first_training_files = util.get_training_files(n=num, path_type="absolute", file_type='suspect', include_txt_extension=True)
     else:
         raise Exception("Invalid corpus specified: " + str(corpus))
+        
+    print first_training_files
 
     if features == None:
-        features = FeatureExtractor.get_all_feature_function_names()
-    
+        features = FeatureExtractor.get_all_feature_function_names(include_nested=True)
+        
     i = 0
     for doc in first_training_files:
         i += 1
         for atom_type in atom_types:
             d = _get_reduced_docs(atom_type, [doc], session, corpus=corpus)[0]
             for feature in features:
-                print "Doc num " + str(i) + "/" + str(len(first_training_files)) + " Calculating", feature, "for", str(d), str(datetime.datetime.now())
-                d.get_feature_vectors([feature], session)
+                if 'evolved' not in feature:
+                    print "Doc num " + str(i) + "/" + str(len(first_training_files)) + " Calculating", feature, "for", str(d), str(datetime.datetime.now())
+                    d.get_feature_vectors([feature], session)
 
     session.close()
 
@@ -564,6 +567,8 @@ class ReducedDoc(Base):
         Initializes a ReducedDoc. No feature vectors will be calculated at instantiation time.
         get_feature_vectors triggers the lazy instantiation of these values.
         '''
+        if '.txt' in path or '.xml' in path:
+            path = path[:-4]
         if corpus == "intrinsic":
             self.full_path = path
         elif corpus == "extrinsic":
@@ -576,7 +581,7 @@ class ReducedDoc(Base):
             self._full_xml_path = path[:-3] + "xml"
         elif corpus == "extrinsic":
             self._full_xml_path = path + ".xml"
-        print "full_xml_path", self.full_xml_path
+        print "full_xml_path", self._full_xml_path
         # 'intrinsic' or 'extrinsic'
         self.corpus = corpus
         
@@ -898,6 +903,8 @@ def run_individual_features(features, cluster_type, k, atom_type, n, min_len=Non
 # ls -t | grep json | xargs grep auc | awk '{print $1, $3; }' | sort -gk 2 | tail -n 20
 # Replace the 20 with a larger number to see more results
 if __name__ == "__main__":
+    populate_database(['nchars', 'paragraph'], 550, features=None, corpus='extrinsic')
+
     # features = [
     #     'punctuation_percentage',
     #     'gunning_fog_index',
@@ -908,16 +915,16 @@ if __name__ == "__main__":
     # ]
     # features = FeatureExtractor.get_all_feature_function_names()
     # features = [f for f in features if 'evolved' not in f]
-    features = [
-        'gunning_fog_index',
-        'syntactic_complexity',
-        'word_unigram,is',
-        'average_syllables_per_word'
-    ]
-    cluster_type = 'outlier'
-    atom_type = 'nchars'
-    n = 401
-    evaluate_n_documents(features, cluster_type, 2, atom_type, n, eval_method = 'prec_recall')
+    # features = [
+    #    'gunning_fog_index',
+    #    'syntactic_complexity',
+    #    'word_unigram,is',
+    #    'average_syllables_per_word'
+    #]
+    #cluster_type = 'outlier'
+    #atom_type = 'nchars'
+    #n = 401
+    #evaluate_n_documents(features, cluster_type, 2, atom_type, n, eval_method = 'prec_recall')
 
                  
     #print evaluate_n_documents(features, "outlier", 2, "nchars", 500, cheating=True, save_roc_figure=True)
