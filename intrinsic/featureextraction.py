@@ -33,9 +33,9 @@ class FeatureExtractor:
         Returns the names of all functions which compute features by
         examining their arguments.
 
-        If <include_nested>, then functions like 'char_to_word_average',
-        'sentence_to_paragraph_average' and others which can be nested
-        are also returned.
+        If <include_nested>, then all possible nestings of functions
+        such as 'avg(num_chars)', 'std(num_chars)', 'avg(avg(avg(num_chars)))'
+        and so forth are also returned.
 
         By default, nested features are NOT returned
         '''
@@ -50,7 +50,9 @@ class FeatureExtractor:
 
         # all_methods[i] == (<func_name>, <unbound_method_obj>)
         all_methods = inspect.getmembers(FeatureExtractor, predicate=inspect.ismethod)
+        all_methods_names = [tup[0] for tup in all_methods]
 
+        print all_methods_names
         # We will track different kinds of features to include nested features
         char_features, word_features, sent_features = [], [], []
         not_nestable = ["word_unigram", "pos_trigram", "vowelness_trigram"]
@@ -59,6 +61,8 @@ class FeatureExtractor:
             func_args = set(inspect.getargspec(func).args)
 
             valid_func = len(feature_arg_options.intersection(func_args)) > 0
+            nestable = "_init_" + func_name in all_methods_names
+            #print func_name, nestable
 
 
             # Has overlap and is not a helper function for nested features
@@ -66,7 +70,7 @@ class FeatureExtractor:
                 feature_function_names.append(func_name)
 
                 # if we want nested features, save functions in their respective lists
-                if include_nested and func_name not in not_nestable:
+                if include_nested and nestable:
                     if "char_spans_index_start" in func_args:
                         char_features.append(func_name)
                     if "word_spans_index_start" in func_args:
@@ -520,7 +524,13 @@ class FeatureExtractor:
         u = float(sum_x[sentence_end] - sum_x[sentence_start]) / (sentence_end - sentence_start)
     
         x = square_sum - 2 * u * (sum_x[sentence_end] - sum_x[sentence_start]) + (sentence_end - sentence_start) * u * u
-        return math.sqrt(x / float(sentence_end - sentence_start))
+
+        try:
+            retval = math.sqrt(x / float(sentence_end - sentence_start))
+        except ValueError:
+            retval = 0
+
+        return retval
 
     def word_to_sentence_std(self, subfeatures, sent_spans_index_start, sent_spans_index_end):
         '''
@@ -549,7 +559,12 @@ class FeatureExtractor:
         u = float(sum_x[word_end] - sum_x[word_start]) / (word_end - word_start)
     
         x = square_sum - 2 * u * (sum_x[word_end] - sum_x[word_start]) + (word_end - word_start) * u * u
-        return math.sqrt(x / float(word_end - word_start))
+        try:
+            retval = math.sqrt(x / float(word_end - word_start))
+        except ValueError:
+            retval = 0
+
+        return retval
 
     def char_to_word_std(self, subfeatures, word_spans_index_start, word_spans_index_end):
         '''
@@ -575,7 +590,13 @@ class FeatureExtractor:
         u = float(sum_x[char_end] - sum_x[char_start]) / (char_end - char_start)
     
         x = square_sum - 2 * u * (sum_x[char_end] - sum_x[char_start]) + (char_end - char_start) * u * u
-        return math.sqrt(x / float(char_end - char_start))
+
+        try:
+            retval = math.sqrt(x / float(char_end - char_start))
+        except ValueError:
+            retval = 0
+
+        return retval
 
     def _init_lancaster_stemmer(self):
         '''
@@ -940,6 +961,9 @@ class FeatureExtractor:
         return float(total_punctuation) / max(num_chars, 1)
 
     def _init_syntactic_complexity(self):
+        if not self.pos_frequency_count_table_initialized:
+            self._init_pos_frequency_table()
+
         sum_table = [0]
         for start, end in self.word_spans:
             word_spans = spanutils.slice(self.word_spans, start, end, True)
@@ -988,8 +1012,6 @@ class FeatureExtractor:
         the original version accounts for Noun Phrases, which are not counted in the NLTK tagger, and so are ignored.
         '''
         # Note that this feature uses the same initialization that pos_percentage_vector does.
-        if not self.pos_frequency_count_table_initialized:
-            self._init_pos_frequency_table()
         if "syntactic_complexity" not in self.features:
             self._init_syntactic_complexity()
 

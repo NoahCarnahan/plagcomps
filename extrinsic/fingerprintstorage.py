@@ -179,6 +179,24 @@ def populate_database(files, method_name, n, k, atom_type, hash_size, check_for_
 
 
 
+def get_number_sources(mid):
+    with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) as conn:
+        conn.autocommit = True
+        
+        if DEV_MODE:
+            query = ''' SELECT COUNT(DISTINCT(dev_passages.did)) FROM dev_hashes, dev_passages WHERE
+                            dev_hashes.mid = %s AND
+                            dev_hashes.pid = dev_passages.pid AND
+                            dev_hashes.is_source = TRUE; '''
+        else:
+            query = ''' SELECT COUNT(DISTINCT(crisp_passages.did)) FROM crisp_hashes, crisp_passages WHERE
+                            crisp_hashes.mid = %s AND
+                            crisp_hashes.pid = crisp_passages.pid AND
+                            crisp_hashes.is_source = TRUE; '''
+        with conn.cursor() as cur:
+            cur.execute(query, (mid,))
+            return cur.fetchone()
+
 def get_passage_fingerprint(full_path, passage_num, atom_type, mid):
     '''
     Return the fingerprint (list of hash values) of the <passage_num>th passage in <file_name>
@@ -258,7 +276,7 @@ def get_mid(method, n, k, atom_type, hash_size):
     else:
         return result[0]
 
-def get_matching_passages(target_hash_value, mid, conn):
+def get_matching_passages(target_hash_value, mid, conn, dids=None):
     '''
     Returns a list of dictionaries like this:
     {"pid":1, "doc_name":"foo", "atom_number":34}, ...]
@@ -268,28 +286,48 @@ def get_matching_passages(target_hash_value, mid, conn):
         
     # Get passages (and their atom_numbers and doc_names) with target_hash_value and mid            
     if DEV_MODE:
-        reverse_query = '''SELECT dev_hashes.pid, dev_documents.name, dev_passages.atom_num FROM dev_hashes, dev_documents, dev_passages WHERE
-                        dev_documents.did = dev_passages.did AND
-                        dev_passages.pid = dev_hashes.pid AND
-                        dev_hashes.hash_value = %s AND
-                        dev_hashes.mid = %s AND
-                        dev_hashes.is_source = 't';'''
+        if dids:
+            reverse_query = '''SELECT dev_hashes.pid, dev_documents.name, dev_documents.did, dev_passages.atom_num FROM dev_hashes, dev_documents, dev_passages WHERE
+                            dev_documents.did = dev_passages.did AND
+                            dev_passages.pid = dev_hashes.pid AND
+                            dev_hashes.hash_value = %s AND
+                            dev_documents.did = ANY (%s) AND
+                            dev_hashes.mid = %s AND
+                            dev_hashes.is_source = 't';'''
+            reverse_args = (target_hash_value, dids, mid)
+        else:
+            reverse_query = '''SELECT dev_hashes.pid, dev_documents.name, dev_documents.did, dev_passages.atom_num FROM dev_hashes, dev_documents, dev_passages WHERE
+                            dev_documents.did = dev_passages.did AND
+                            dev_passages.pid = dev_hashes.pid AND
+                            dev_hashes.hash_value = %s AND
+                            dev_hashes.mid = %s AND
+                            dev_hashes.is_source = 't';'''
+            reverse_args = (target_hash_value, mid)
     else:
-        reverse_query = '''SELECT crisp_hashes.pid, crisp_documents.name, crisp_passages.atom_num FROM hashes, documents, passages WHERE
-                        crisp_documents.did = crisp_passages.did AND
-                        crisp_passages.pid = crisp_hashes.pid AND
-                        crisp_hashes.hash_value = %s AND
-                        crisp_hashes.mid = %s AND
-                        crisp_hashes.is_source = 't';'''
-                        
-    reverse_args = (target_hash_value, mid)
+        if dids:
+            reverse_query = '''SELECT crisp_hashes.pid, crisp_documents.name, crisp_documents.did, crisp_passages.atom_num FROM crisp_hashes, crisp_documents, crisp_passages WHERE
+                            crisp_documents.did = crisp_passages.did AND
+                            crisp_passages.pid = crisp_hashes.pid AND
+                            crisp_hashes.hash_value = %s AND
+                            crisp_documents.did = ANY (%s) AND
+                            crisp_hashes.mid = %s AND
+                            crisp_hashes.is_source = 't';'''
+            reverse_args = (target_hash_value, dids, mid)
+        else:
+            reverse_query = '''SELECT crisp_hashes.pid, crisp_documents.name, crisp_documents.did, crisp_passages.atom_num FROM crisp_hashes, crisp_documents, crisp_passages WHERE
+                            crisp_documents.did = crisp_passages.did AND
+                            crisp_passages.pid = crisp_hashes.pid AND
+                            crisp_hashes.hash_value = %s AND
+                            crisp_hashes.mid = %s AND
+                            crisp_hashes.is_source = 't';'''
+            reverse_args = (target_hash_value, mid)
 
     # With statement cleans up the cursor no matter what
     with conn.cursor() as cur:
         cur.execute(reverse_query, reverse_args)
         matching_passages = cur.fetchall()
 
-    passages = [{"pid":passage[0], "doc_name":passage[1], "atom_number":passage[2]} for passage in matching_passages]
+    passages = [{"pid":passage[0], "doc_name":passage[1], "did":passage[2], "atom_number":passage[3]} for passage in matching_passages]
 
     return passages
 
@@ -489,29 +527,36 @@ def _populate_variety_of_params():
     #populate_database(sus+srs, "anchor", 3, 0, "nchars", 10000000, check_for_duplicate=False)
     #populate_database(sus+srs, "anchor", 3, 0, "paragraph", 10000000, check_for_duplicate=False)
 
-    populate_database(sus+srs, "winnow-k", 6, 13, "full", 10000000, check_for_duplicate=False)
-    populate_database(sus+srs, "winnow-k", 8, 13, "full", 10000000, check_for_duplicate=False)
-    populate_database(sus+srs, "winnow-k", 6, 13, "paragraph", 10000000, check_for_duplicate=False)
-    populate_database(sus+srs, "winnow-k", 8, 13, "paragraph", 10000000, check_for_duplicate=False)
-    populate_database(sus+srs, "winnow-k", 6, 13, "nchars", 10000000, check_for_duplicate=False)
-    populate_database(sus+srs, "winnow-k", 8, 13, "nchars", 10000000, check_for_duplicate=False)
-    populate_database(sus+srs, "winnow-k", 6, 15, "full", 10000000, check_for_duplicate=False)
-    populate_database(sus+srs, "winnow-k", 8, 15, "full", 10000000, check_for_duplicate=False)
-    populate_database(sus+srs, "winnow-k", 6, 15, "paragraph", 10000000, check_for_duplicate=False)
-    populate_database(sus+srs, "winnow-k", 8, 15, "paragraph", 10000000, check_for_duplicate=False)
-    populate_database(sus+srs, "winnow-k", 6, 15, "nchars", 10000000, check_for_duplicate=False)
-    populate_database(sus+srs, "winnow-k", 8, 15, "nchars", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "winnow-k", 6, 13, "full", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "winnow-k", 8, 13, "full", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "winnow-k", 6, 13, "paragraph", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "winnow-k", 8, 13, "paragraph", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "winnow-k", 6, 13, "nchars", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "winnow-k", 8, 13, "nchars", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "winnow-k", 6, 15, "full", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "winnow-k", 8, 15, "full", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "winnow-k", 6, 15, "paragraph", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "winnow-k", 8, 15, "paragraph", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "winnow-k", 6, 15, "nchars", 10000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "winnow-k", 8, 15, "nchars", 10000000, check_for_duplicate=False)
+
+    # Ten times bigger hash_size
+    #populate_database(sus+srs, "kth_in_sent", 5, 3, "full", 100000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "kth_in_sent", 5, 3, "nchars", 100000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "kth_in_sent", 5, 3, "paragraph", 100000000, check_for_duplicate=False)
     
+    # Ten times smaller hash_size
+    #populate_database(sus+srs, "kth_in_sent", 5, 3, "full", 1000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "kth_in_sent", 5, 3, "nchars", 1000000, check_for_duplicate=False)
+    #populate_database(sus+srs, "kth_in_sent", 5, 3, "paragraph", 1000000, check_for_duplicate=False)
     
-def _tony_fix_this():
-    srs, sus = ExtrinsicUtility().get_training_files(n=20)
-    populate_database(sus+srs, "winnow-k", 8, 13, "full", 10000000, check_for_duplicate=False)
+    # Way smaller hash_size
+    #populate_database(sus+srs, "kth_in_sent", 5, 3, "nchars", 10000, check_for_duplicate=False)
 
 if __name__ == "__main__":
     print 'DEV_MODE is set to', DEV_MODE
-    _populate_variety_of_params()
+    #_populate_variety_of_params()
     #_test()
     #_test_get_fp_query()
     #_test_reverse_lookup()
-    # _tony_fix_this()
     

@@ -120,10 +120,9 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n, eval_method = 
         session = Session()
         reduced_docs = _get_reduced_docs(atom_type, first_training_files, session, corpus=corpus)
 
-        doc_to_thresh_to_result, thresh_prec_avgs, thresh_recall_avgs = prec_recall_evaluate(reduced_docs, session, features, cluster_type, k, 
+        thresh_prec_avgs, thresh_recall_avgs, thresh_fmeasure_avgs = prec_recall_evaluate(reduced_docs, session, features, cluster_type, k, 
                                                                         atom_type, corpus=corpus, feature_vector_weights=feature_weights, 
                                                                         metadata=metadata, cheating=cheating, cheating_min_len=cheating_min_len)
-
         print '-----'
         print 'features:', features
         print 'cluster_type:', cluster_type
@@ -135,13 +134,15 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n, eval_method = 
             print thresh
             print 'Prec:', thresh_prec_avgs[thresh]
             print 'Recall:', thresh_recall_avgs[thresh]
+            print 'F-Measure:', thresh_fmeasure_avgs[thresh]
 
         
         print 'PREC:', thresh_prec_avgs
         print 'RECALL:', thresh_recall_avgs
+        print 'F:', thresh_fmeasure_avgs
         session.close()
 
-        return doc_to_thresh_to_result
+        return thresh_prec_avgs, thresh_recall_avgs, thresh_fmeasure_avgs
 
 
 def evaluate(features, cluster_type, k, atom_type, docs, corpus='intrinsic', save_roc_figure=True, reduced_docs=None, feature_vector_weights=None, 
@@ -202,6 +203,56 @@ def evaluate(features, cluster_type, k, atom_type, docs, corpus='intrinsic', sav
 
     # Return reduced_docs for caching in case we call <evaluate> multiple times
     return roc_path, roc_auc, reduced_docs
+
+def get_confidences_actuals(session, features, cluster_type, k, atom_type, docs, corpus='intrinsic', save_roc_figure=True, reduced_docs=None, feature_vector_weights=None, 
+            metadata={}, cheating=False, cheating_min_len=5000, **clusterargs):
+    '''
+    Return the confidences and acutals for the given list of documents parsed
+    by atom_type, using the given features, cluster_type, and number of clusters k.
+    
+    features is a list of strings where each string is the name of a StylometricFeatureEvaluator method.
+    cluster_type is "kmeans", "hmm", or "agglom".
+    k is an integer.
+    atom_type is "word", "sentence", or "paragraph".
+    docs should be a list of full path strings.
+    '''
+    # TODO: Return more statistics, not just roc curve things.
+    # If previous call cached <reduced_docs>, don't re-query the DB
+    if not reduced_docs:
+        reduced_docs = _get_reduced_docs(atom_type, docs, session, corpus=corpus)
+    plag_likelihoods = []
+    doc_plag_assignments = {}
+    
+    count = 0
+    valid_reduced_docs = []
+    for d in reduced_docs:
+        count += 1
+        if DEBUG:
+            print "On document", d, ". The", count, "th document."
+
+        feature_vecs = d.get_feature_vectors(features, session, cheating=cheating, cheating_min_len=cheating_min_len)
+        # skip if there are no feature_vectors
+        if cheating and len(feature_vecs) < 7: # 7, because that's what Benno did
+            continue
+        valid_reduced_docs.append(d)
+
+        if feature_vector_weights:
+            weighted_vecs = []
+            for vec in feature_vecs:
+                cur_weight_vec = []
+                for i, weight in enumerate(feature_vector_weights, 0):
+                    cur_weight_vec.append(vec[i] * weight)
+                weighted_vecs.append(cur_weight_vec)
+            feature_vecs = weighted_vecs
+
+        likelihood = cluster(cluster_type, k, feature_vecs, **clusterargs)
+        doc_plag_assignments[d] = likelihood
+        plag_likelihoods.append(likelihood)
+    
+    session.close()
+
+    return plag_likelihoods, None
+
     
 def _output_to_file(assignment_dict, atom_type, cluster_type):
 
@@ -513,10 +564,19 @@ class ReducedDoc(Base):
         Initializes a ReducedDoc. No feature vectors will be calculated at instantiation time.
         get_feature_vectors triggers the lazy instantiation of these values.
         '''
-        self.full_path = path
+        if corpus == "intrinsic":
+            self.full_path = path
+        elif corpus == "extrinsic":
+            self.full_path = path + ".txt"
+
+        print "full_path", self.full_path
         # _short_name example: '/part1/suspicious-document00536'
         self._short_name = "/"+self.full_path.split("/")[-2] +"/"+ self.full_path.split("/")[-1] 
-        self._full_xml_path = path[:-3] + "xml"
+        if corpus == "intrinsic":
+            self._full_xml_path = path[:-3] + "xml"
+        elif corpus == "extrinsic":
+            self._full_xml_path = path + ".xml"
+        print "full_xml_path", self.full_xml_path
         # 'intrinsic' or 'extrinsic'
         self.corpus = corpus
         
