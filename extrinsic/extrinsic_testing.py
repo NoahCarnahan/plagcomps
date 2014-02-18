@@ -318,7 +318,7 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
             with conn.cursor() as cur:
                 num_sources = fingerprintstorage.get_number_sources(fingerprintstorage.get_mid(method, n, k, atom_type, hash_size))
                 query = "INSERT INTO extrinsic_results (method_name, n, k, atom_type, hash_size, simmilarity_method, suspect_files, source_files, auc, true_source_accuracy, source_accuracy, search_method, search_n) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
-                args = (method, n, k, atom_type, hash_size, confidence_method, num_files, num_sources, roc_auc, true_source_accuracy, source_accuracy, log_search, log_search_n)
+                args = (method, n, k, atom_type, hash_size, confidence_method, num_files, num_sources, roc_auc, true_source_accuracy, source_accuracy, search_method, search_n)
                 cur.execute(query, args)
     
     print 'ROC auc:', roc_auc
@@ -327,9 +327,6 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
 
         
 if __name__ == "__main__":
-    test("anchor", 5, 0, "paragraph", 10000000, "containment", num_files=3, search_method='normal', search_n=1, save_to_db=False)
+    test("anchor", 5, 0, "paragraph", 10000000, "containment", num_files=3, search_method='normal', search_n=1, save_to_db=True)
     #evaluate("kth_in_sent", 5, 3, "full", 10000000, "jaccard", num_files=10)
-
-    test("kth_in_sent", 5, 3, "paragraph", 10000000, "containment", num_files=2, log_search=False, log_search_n=1)
-    test("kth_in_sent", 5, 3, "paragraph", 10000000, "containment", num_files=2, log_search=True, log_search_n=4)
 
