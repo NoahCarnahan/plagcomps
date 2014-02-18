@@ -22,7 +22,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import sessionmaker
 
-DASHBOARD_VERSION = 2
+DASHBOARD_VERSION = 3
 DASHBOARD_WEIGHTING_FILENAME = 'weighting_schemes/scheme*.pkl'
 printer = pprint.PrettyPrinter(indent=3)
 

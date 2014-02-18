@@ -87,31 +87,15 @@ def density_based(stylo_vectors, center_at_mean=True, num_to_ignore=1, impurity=
                     cur_norm_prob = MIN_PROB
                     #print 'Norm prob was nan or 0: %f. Using MIN_PROB' % cur_norm_prob
 
-                featurewise_nonplag_prob.append(cur_norm_prob)
-
                 cur_unif_prob = _get_unif_prob(cur_val, cur_min, cur_max)
                 if math.isnan(cur_unif_prob) or cur_unif_prob == 0.0:
                     cur_unif_prob = MIN_PROB
                     print 'Unif prob was nan or 0: %f. Using MIN_PROB' % cur_unif_prob
 
-                featurewise_plag_prob.append(cur_unif_prob)
 
-                #featurewise_confs.append(_get_confidence(cur_unif_prob, cur_norm_prob))
+                featurewise_confs.append(_get_confidence(cur_unif_prob, cur_norm_prob))
             # TODO what happens if all points are in uncertainty interval??
-
-        
-        
-        # Sum up logs and exponentiate as opposed to multiplying lots of
-        # small numbers
-        # TODO could weight each feature differently
-        plag_prob = _combine_feature_probs(featurewise_plag_prob)
-        non_plag_prob = _combine_feature_probs(featurewise_nonplag_prob)
-
-        # TODO: How should we use calculated non_plag_prob or calculated plag_prob?
-        # A ratio of the two? i.e. (plag_prob / non_plag_prob)?
-        confidences.append(_get_confidence(plag_prob, non_plag_prob))
-
-        #confidences.append(_combine_feature_probs(featurewise_confs))
+        confidences.append(_combine_feature_probs(featurewise_confs))
             
     # No more scaling -- we're already returning probs between 0 and 1, so should be all good
     # scaled = _scale_confidences(confidences)
