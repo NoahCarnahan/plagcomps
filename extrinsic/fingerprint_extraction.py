@@ -175,7 +175,7 @@ class FingerprintExtractor:
         '''
         Takes as arguements a k to be used for k-grams and a noise threshold, t.
 
-        Produces a full hash of the k-grams of the text given and selects the minimum hash from
+        Produces a full hash using k-grams of the text given and selects the minimum hash from
         each window where window size is t-k+1 if it is a new minimum.
 
         Example:
@@ -197,7 +197,12 @@ class FingerprintExtractor:
         [77, 64, 18, 15, 98, 87, 45], 12, 15, 84, 65, 75, 35, ... ; selects 15
 
         window2:
-        77, [64, 18, 15, 98, 87, 45, 12], 15, 84, 65, 75, 35, ... ; 15 already selected so nothing selected.
+        77, [64, 18, 15, 98, 87, 45, 12], 15, 84, 65, 75, 35, ... ; selects 12
+
+        window3:
+        77, 64, [18, 15, 98, 87, 45, 12, 15], 84, 65, 75, 35, ... ; 12 already selected so nothing selected.
+
+        fingerprint = [15, 12, ... ]
 
         End Example.
         '''
@@ -208,7 +213,7 @@ class FingerprintExtractor:
         document = "".join(self._strip_punctuation(document).lower().split())
         fingerprint = []
         document_hash = []
-        
+
         # set window size
         w = t-k+1
 
