@@ -51,6 +51,8 @@ class ExtrinsicTester:
         classifications = []
         actuals = []
         
+        outer_search_level_mid = fingerprintstorage.get_mid(self.fingerprint_method, self.n, self.k, "full", self.hash_len)
+        
         for fi, f in enumerate(self.suspect_file_list, 1):
             print
             doc_name = f.replace(self.suspicious_path_start, "")
@@ -61,9 +63,8 @@ class ExtrinsicTester:
                 actuals += acts
 
                 # first, get a list of the most similar full documents to this document
-                full_atom_classifications = self.evaluator.classify_passage(doc_name, "full", 0, self.fingerprint_method, 
-                    self.n, self.k, self.hash_len, "containment", 
-                    fingerprintstorage.get_mid(self.fingerprint_method, self.n, self.k, "full", self.hash_len))
+                atom_classifications = self.evaluator.classify_passage(doc_name, "full", 0, self.fingerprint_method,
+                    self.n, self.k, self.hash_len, "containment", outer_search_level_mid)
 
                 top_docs = full_atom_classifications[:self.search_n]
                 dids = [x[0][2] for x in top_docs]
@@ -316,10 +317,10 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
             conn.autocommit = True    
             with conn.cursor() as cur:
                 num_sources = fingerprintstorage.get_number_sources(fingerprintstorage.get_mid(method, n, k, atom_type, hash_size))
-                query = "INSERT INTO extrinsic_results (method_name, n, k, atom_type, hash_size, simmilarity_method, suspect_files, source_files, auc, true_source_accuracy) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
-                args = (method, n, k, atom_type, hash_size, confidence_method, num_files, num_sources, roc_auc, true_source_accuracy)
+                query = "INSERT INTO extrinsic_results (method_name, n, k, atom_type, hash_size, simmilarity_method, suspect_files, source_files, auc, true_source_accuracy, source_accuracy, search_method, search_n) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
+                args = (method, n, k, atom_type, hash_size, confidence_method, num_files, num_sources, roc_auc, true_source_accuracy, source_accuracy, log_search, log_search_n)
                 cur.execute(query, args)
-
+    
     print 'ROC auc:', roc_auc
     print 'Source Accuracy:', source_accuracy
     print 'True Source Accuracy:', true_source_accuracy
@@ -329,12 +330,6 @@ if __name__ == "__main__":
     test("anchor", 5, 0, "paragraph", 10000000, "containment", num_files=3, search_method='normal', search_n=1, save_to_db=False)
     #evaluate("kth_in_sent", 5, 3, "full", 10000000, "jaccard", num_files=10)
 
-	# test("kth_in_sent", 5, 3, "nchars", 100000000, "containment", num_files=20, search_method=False, search_n=1)
-	# test("kth_in_sent", 5, 3, "paragraph", 100000000, "containment", num_files=20, search_method=False, search_n=1)
-	# test("kth_in_sent", 5, 3, "nchars", 100000000, "jaccard", num_files=20, search_method=False, search_n=1)
-	# test("kth_in_sent", 5, 3, "paragraph", 100000000, "jaccard", num_files=20, search_method=False, search_n=1)
-	
-	# test("kth_in_sent", 5, 3, "nchars", 1000000, "containment", num_files=20, search_method=False, search_n=1)
-	# test("kth_in_sent", 5, 3, "paragraph", 1000000, "containment", num_files=20, search_method=False, search_n=1)
-	# test("kth_in_sent", 5, 3, "nchars", 1000000, "jaccard", num_files=20, search_method=False, search_n=1)
-	# test("kth_in_sent", 5, 3, "paragraph", 1000000, "jaccard", num_files=20, search_method=False, search_n=1)
+    test("kth_in_sent", 5, 3, "paragraph", 10000000, "containment", num_files=2, log_search=False, log_search_n=1)
+    test("kth_in_sent", 5, 3, "paragraph", 10000000, "containment", num_files=2, log_search=True, log_search_n=4)
+

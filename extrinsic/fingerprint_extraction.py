@@ -258,7 +258,16 @@ class FingerprintEvaluator:
         Returns a list of (source_filename, similarity) tuples sorted in decreasing similarity to the 
         input document.
         '''
+<<<<<<< HEAD
+        
+        # sanitize atom_index
+        if atom_type == "full":
+            atom_index = 0
+        
+        # Get the full path from the filename and base_path
+=======
          # Get the full path from the filename and base_path
+>>>>>>> 10155a443af3597ac6fd85d4f51d840ead830e15
         full_path = ExtrinsicUtility.CORPUS_SUSPECT_LOC + filename + ".txt"
         
         # allow for different atom_types to be compared
