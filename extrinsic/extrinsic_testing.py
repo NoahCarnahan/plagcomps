@@ -251,8 +251,9 @@ class ExtrinsicTester:
         confidences = [x[1] for x in trials]
         actuals = [x[0] for x in ground_truths]
         # UNCOMMENT NEXT LINE TO GET FALSEPOSITIVES AND FALSENEGATIVES
-        # self.analyze_fpr_fnr(trials_dict, actuals_dict, 0.50)
-        roc_auc, path = self.plot_ROC_curve(confidences, actuals)
+        self.analyze_fpr_fnr(trials_dict, actuals_dict, 0.50)
+        roc_auc = None
+        # roc_auc, path = self.plot_ROC_curve(confidences, actuals)
         return roc_auc, source_accuracy, true_source_accuracy
 
     def analyze_fpr_fnr(self, trials, actuals, threshold):
@@ -269,7 +270,7 @@ class ExtrinsicTester:
         falsePositives = {}
         falseNegatives = {}
         # CHOOSE DETECTION THRESHOLD HERE!!
-        if threshold > 1.0 || threshold < 0.0:
+        if threshold > 1.0 or threshold < 0.0:
             print "INVALID THREHOLD VALUE. THRESHOLD MUST BE BETWEEN 0.0 and 1.0"
 
         # Gets atom indexes for falsePositives and falseNegatives and maps them to the appropriate document in the 
@@ -296,8 +297,9 @@ class ExtrinsicTester:
 
         else:
             print "Beginning to print falsePositives to file."
-            filename = "plagcomps/extrinsic/FPR_FNR/falsePositives" + str(time.time()) + "-" + self.fingerprint_method + ".txt", "w"
-            fileFPR = open(filename)
+            filename = "plagcomps/extrinsic/FPR_FNR/falsePositives" + str(time.time()) + "-" + self.fingerprint_method + ".txt"
+            print filename
+            fileFPR = open(filename, "w")
             
             for f in falsePositives.keys():
                 file = open(f + ".txt")
@@ -323,8 +325,8 @@ class ExtrinsicTester:
 
         else:
             print "Beginning to print falseNegatives to file."
-            filename = "plagcomps/extrinsic/FPR_FNR/falseNegatives" + str(time.time()) + "-" + self.fingerprint_method + ".txt", "w"
-            fileFNR = open(filename)
+            filename = "plagcomps/extrinsic/FPR_FNR/falseNegatives" + str(time.time()) + "-" + self.fingerprint_method + ".txt"
+            fileFNR = open(filename, "w")
 
             for f in falseNegatives.keys():
                 file = open(f + ".txt")
@@ -358,37 +360,27 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
     
     
     tester = ExtrinsicTester(atom_type, method, n, k, hash_size, confidence_method, suspect_file_list, source_file_list, search_method, search_n)
-    roc_auc, source_accuracy, true_source_accuracy = tester.evaluate(session)
+    # roc_auc, source_accuracy, true_source_accuracy = tester.evaluate(session)
     tester.evaluate(session)
     
-    # Save the reult
-    if save_to_db:
-        with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) as conn:
-            conn.autocommit = True    
-            with conn.cursor() as cur:
-                num_sources = fingerprintstorage.get_number_sources(fingerprintstorage.get_mid(method, n, k, atom_type, hash_size))
-                query = "INSERT INTO extrinsic_results (method_name, n, k, atom_type, hash_size, simmilarity_method, suspect_files, source_files, auc, true_source_accuracy, source_accuracy, search_method, search_n) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
-                args = (method, n, k, atom_type, hash_size, confidence_method, num_files, num_sources, roc_auc, true_source_accuracy, source_accuracy, search_method, search_n)
-                cur.execute(query, args)
+    # # Save the reult
+    # if save_to_db:
+    #     with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) as conn:
+    #         conn.autocommit = True    
+    #         with conn.cursor() as cur:
+    #             num_sources = fingerprintstorage.get_number_sources(fingerprintstorage.get_mid(method, n, k, atom_type, hash_size))
+    #             query = "INSERT INTO extrinsic_results (method_name, n, k, atom_type, hash_size, simmilarity_method, suspect_files, source_files, auc, true_source_accuracy, source_accuracy, search_method, search_n) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
+    #             args = (method, n, k, atom_type, hash_size, confidence_method, num_files, num_sources, roc_auc, true_source_accuracy, source_accuracy, search_method, search_n)
+    #             cur.execute(query, args)
     
-    print 'ROC auc:', roc_auc
-    print 'Source Accuracy:', source_accuracy
-    print 'True Source Accuracy:', true_source_accuracy
+    # print 'ROC auc:', roc_auc
+    # print 'Source Accuracy:', source_accuracy
+    # print 'True Source Accuracy:', true_source_accuracy
 
         
 if __name__ == "__main__":
-    test("anchor", 5, 0, "paragraph", 10000000, "containment", num_files=3, search_method='normal', search_n=1, save_to_db=True)
+    # test("anchor", 5, 0, "paragraph", 10000000, "containment", num_files=3, search_method='normal', search_n=1, save_to_db=True)
     #evaluate("kth_in_sent", 5, 3, "full", 10000000, "jaccard", num_files=10)
 
-<<<<<<< HEAD
-	# test("kth_in_sent", 5, 3, "nchars", 100000000, "containment", num_files=20, log_search=False, log_search_n=1)
-	test("kth_in_sent", 5, 3, "paragraph", 100000000, "containment", num_files=2, log_search=False, log_search_n=1)
-	# test("kth_in_sent", 5, 3, "nchars", 100000000, "jaccard", num_files=20, log_search=False, log_search_n=1)
-	# test("kth_in_sent", 5, 3, "paragraph", 100000000, "jaccard", num_files=20, log_search=False, log_search_n=1)
-	
-	# test("kth_in_sent", 5, 3, "nchars", 1000000, "containment", num_files=20, log_search=False, log_search_n=1)
-	# test("kth_in_sent", 5, 3, "paragraph", 1000000, "containment", num_files=20, log_search=False, log_search_n=1)
-	# test("kth_in_sent", 5, 3, "nchars", 1000000, "jaccard", num_files=20, log_search=False, log_search_n=1)
-	# test("kth_in_sent", 5, 3, "paragraph", 1000000, "jaccard", num_files=20, log_search=False, log_search_n=1)
-=======
->>>>>>> 9deed48bb06e0e011dd7cebfda524bf6c3517d82
+	test("kth_in_sent", 5, 3, "paragraph", 100000000, "containment", num_files=2, search_method='normal', search_n=1, save_to_db=True)
+
