@@ -69,14 +69,12 @@ class ExtrinsicTester:
                 actuals_dict[f] = acts
 
                 # first, get a list of the most similar full documents to this document
-                atom_classifications = self.evaluator.classify_passage(doc_name, "full", 0, self.fingerprint_method,
+                full_atom_classifications = self.evaluator.classify_passage(doc_name, "full", 0, self.fingerprint_method,
                     self.n, self.k, self.hash_len, "containment", outer_search_level_mid)
 
                 top_docs = full_atom_classifications[:self.search_n]
                 dids = [x[0][2] for x in top_docs]
                 
-                doc_classifications = []
-
                 # now, compare all paragraphs in the most similar documents to this paragraph
                 for atom_index in xrange(len(acts)):
                     atom_classifications = self.evaluator.classify_passage(doc_name, "paragraph", atom_index, 
@@ -89,12 +87,10 @@ class ExtrinsicTester:
 
                     classifications.append(top_source)
 
-                    doc_classifications.append(top_source)
-
                     print 'atom index:', str(atom_index+1) + '/' + str(len(acts))
                     print 'confidence (actual, guess):', acts[atom_index], (confidence, source_filename, source_atom_index)
 
-                classifications_dict[f] = doc_classifications
+                classifications_dict[f] = classifications
 
             elif self.search_method == 'two_level_pf':
                 print '%d/%d Classifying %s (%s)' % (fi, len(self.suspect_file_list), doc_name, self.search_method)
@@ -128,12 +124,10 @@ class ExtrinsicTester:
 
                     classifications.append(top_source)
 
-                    doc_classifications.append(top_source)
-
                     print 'atom index:', str(atom_index+1) + '/' + str(len(acts))
                     print 'confidence (actual, guess):', acts[atom_index], (confidence, source_filename, source_atom_index)
 
-                classifications_dict[f] = doc_classifications
+                classifications_dict[f] = classifications
                 
             else:
                 acts = ground_truth._query_ground_truth(f, self.base_atom_type, session, self.suspicious_path_start).get_ground_truth(session)
@@ -143,8 +137,6 @@ class ExtrinsicTester:
 
                 print f
                 print '%d/%d Classifying %s' % (fi, len(self.suspect_file_list), doc_name)
-
-                doc_classifications = []
                 
                 for atom_index in xrange(len(acts)):
                     atom_classifications = self.evaluator.classify_passage(doc_name, self.base_atom_type, atom_index, self.fingerprint_method, self.n, self.k, self.hash_len, self.confidence_method, self.mid)
@@ -155,13 +147,11 @@ class ExtrinsicTester:
                     confidence = top_source[1]
 
                     classifications.append(top_source)
-
-                    doc_classifications.append(top_source)
                     
                     print 'atom index:', str(atom_index+1) + '/' + str(len(acts))
                     print 'confidence (actual, guess):', acts[atom_index][0], (confidence, source_filename, source_atom_index)
 
-                classifications_dict[f] = doc_classifications
+                classifications_dict[f] = classifications
 
         return classifications, actuals, classifications_dict, actuals_dict
 
@@ -388,7 +378,7 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
     
     tester = ExtrinsicTester(atom_type, method, n, k, hash_size, confidence_method, suspect_file_list, source_file_list, search_method, search_n)
     roc_auc, source_accuracy, true_source_accuracy = tester.evaluate(session)
-    
+
     # Save the reult
     if save_to_db:
         with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) as conn:
