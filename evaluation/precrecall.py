@@ -1,5 +1,9 @@
 from plagcomps.shared.util import BaseUtility, IntrinsicUtility
-from plagcomps.intrinsic.cluster import cluster
+#from plagcomps.intrinsic.cluster import cluster
+
+import matplotlib.pyplot as plt
+import os
+import time
 
 import math
 DEBUG = False
@@ -273,6 +277,38 @@ def _deprecated_benno_precision_and_recall(plag_spans, detected_spans):
 
     return prec, recall
 
+
+def visualize_overlaps(plag_spans, detected_spans, **metadata):
+    plag_y = .51
+    detected_y = .49
+
+    for pspan_start, pspan_end in plag_spans:
+        width = pspan_end - pspan_start
+        plt.barh(plag_y, width, height=.01, align='center', left=pspan_start, color='blue')
+
+    for dspan_start, dspan_end in detected_spans:
+        width = dspan_end - dspan_start
+        plt.barh(detected_y, width, height=.01, align='center', left=dspan_start, color='red')
+    plt.yticks([.4, .6], ['plag', 'detected'])
+
+
+    # fig = plt.figure()
+    # ax = fig.add_subplot(111)
+    # ax.set_yticks((0, 1))
+    # ax.set_yticklabels(('Plag Spans', 'Detected Spans'))
+    # ax.set_ybound((-.2, 1.2))
+    # ax.set_xlabel('Span Index')
+
+    # for pspan_start, pspan_end in plag_spans:
+    #     ax.hlines(plag_y, pspan_start, pspan_end, colors ='blue', linewidths = 4)
+
+    # for dspan_start, dspan_end in detected_spans:
+    #     ax.hlines(detected_y, dspan_start, dspan_end, colors ='red', linewidths = 4)
+
+
+    path = os.path.join(os.path.dirname(__file__), "../figures/overlap_viz/"+str(time.time())+".pdf")
+    plt.savefig(path)
+
 def _test():
     plag_spans = [
         [10, 21],
@@ -299,6 +335,7 @@ def _test():
     print 'Fmeasure: expected %f, got %f' % (expected_fmeasure, fmeasure)
     print 'Granularity: exepected %f, got %f' % (expected_gran, gran)
     print 'Overall %f' % overall
+    visualize_overlaps(plag_spans, detected_spans)
 
 def _return_all_plag_test():
     plag_spans = [
@@ -320,5 +357,5 @@ def _return_all_plag_test():
 
 
 if __name__ == '__main__':
-    _return_all_plag_test()
-    #_test()
+    #_return_all_plag_test()
+    _test()
