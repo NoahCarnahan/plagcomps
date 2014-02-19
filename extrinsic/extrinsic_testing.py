@@ -351,8 +351,7 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
     
     tester = ExtrinsicTester(atom_type, method, n, k, hash_size, confidence_method, suspect_file_list, source_file_list, search_method, search_n)
     roc_auc, source_accuracy, true_source_accuracy = tester.evaluate(session)
-    tester.evaluate(session)
-    
+
     # Save the reult
     if save_to_db:
         with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) as conn:
