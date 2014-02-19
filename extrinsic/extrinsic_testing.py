@@ -69,7 +69,7 @@ class ExtrinsicTester:
                 actuals_dict[f] = acts
 
                 # first, get a list of the most similar full documents to this document
-                atom_classifications = self.evaluator.classify_passage(doc_name, "full", 0, self.fingerprint_method,
+                full_atom_classifications = self.evaluator.classify_passage(doc_name, "full", 0, self.fingerprint_method,
                     self.n, self.k, self.hash_len, "containment", outer_search_level_mid)
 
                 top_docs = full_atom_classifications[:self.search_n]
