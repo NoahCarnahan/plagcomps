@@ -98,8 +98,6 @@ class ExtrinsicTester:
                 print '%d/%d Classifying %s (%s)' % (fi, len(self.suspect_file_list), doc_name, self.search_method)
                 acts = ground_truth._query_ground_truth(doc_name, self.base_atom_type, session, self.suspicious_path_start).get_ground_truth(session)
                 actuals += acts
-                print "added actuals for ", doc_name, "with atom_type", self.base_atom_type
-                print acts
 
                 actuals_dict[f] = acts
                 doc_classifications = []
