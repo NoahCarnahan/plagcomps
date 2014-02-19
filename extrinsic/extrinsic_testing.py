@@ -75,8 +75,6 @@ class ExtrinsicTester:
                 top_docs = full_atom_classifications[:self.search_n]
                 dids = [x[0][2] for x in top_docs]
                 
-                doc_classifications = []
-
                 # now, compare all paragraphs in the most similar documents to this paragraph
                 for atom_index in xrange(len(acts)):
                     atom_classifications = self.evaluator.classify_passage(doc_name, "paragraph", atom_index, 
@@ -89,12 +87,10 @@ class ExtrinsicTester:
 
                     classifications.append(top_source)
 
-                    doc_classifications.append(top_source)
-
                     print 'atom index:', str(atom_index+1) + '/' + str(len(acts))
                     print 'confidence (actual, guess):', acts[atom_index], (confidence, source_filename, source_atom_index)
 
-                classifications_dict[f] = doc_classifications
+                classifications_dict[f] = classifications
 
             elif self.search_method == 'two_level_pf':
                 print '%d/%d Classifying %s (%s)' % (fi, len(self.suspect_file_list), doc_name, self.search_method)
@@ -128,12 +124,10 @@ class ExtrinsicTester:
 
                     classifications.append(top_source)
 
-                    doc_classifications.append(top_source)
-
                     print 'atom index:', str(atom_index+1) + '/' + str(len(acts))
                     print 'confidence (actual, guess):', acts[atom_index], (confidence, source_filename, source_atom_index)
 
-                classifications_dict[f] = doc_classifications
+                classifications_dict[f] = classifications
                 
             else:
                 acts = ground_truth._query_ground_truth(f, self.base_atom_type, session, self.suspicious_path_start).get_ground_truth(session)
@@ -143,8 +137,6 @@ class ExtrinsicTester:
 
                 print f
                 print '%d/%d Classifying %s' % (fi, len(self.suspect_file_list), doc_name)
-
-                doc_classifications = []
                 
                 for atom_index in xrange(len(acts)):
                     atom_classifications = self.evaluator.classify_passage(doc_name, self.base_atom_type, atom_index, self.fingerprint_method, self.n, self.k, self.hash_len, self.confidence_method, self.mid)
@@ -155,13 +147,11 @@ class ExtrinsicTester:
                     confidence = top_source[1]
 
                     classifications.append(top_source)
-
-                    doc_classifications.append(top_source)
                     
                     print 'atom index:', str(atom_index+1) + '/' + str(len(acts))
                     print 'confidence (actual, guess):', acts[atom_index][0], (confidence, source_filename, source_atom_index)
 
-                classifications_dict[f] = doc_classifications
+                classifications_dict[f] = classifications
 
         return classifications, actuals, classifications_dict, actuals_dict
 
@@ -271,7 +261,7 @@ class ExtrinsicTester:
         falsePositives = {}
         falseNegatives = {}
         # CHOOSE DETECTION THRESHOLD HERE!!
-        if threshold > 1.0 || threshold < 0.0:
+        if threshold > 1.0 or threshold < 0.0:
             print "INVALID THREHOLD VALUE. THRESHOLD MUST BE BETWEEN 0.0 and 1.0"
 
         # Gets atom indexes for falsePositives and falseNegatives and maps them to the appropriate document in the 
@@ -298,8 +288,8 @@ class ExtrinsicTester:
 
         else:
             print "Beginning to print falsePositives to file."
-            filename = "plagcomps/extrinsic/FPR_FNR/falsePositives" + str(time.time()) + "-" + self.fingerprint_method + ".txt", "w"
-            fileFPR = open(filename)
+            filename = "plagcomps/extrinsic/FPR_FNR/falsePositives" + str(time.time()) + "-" + self.fingerprint_method + ".txt"
+            fileFPR = open(filename, "w")
             
             for f in falsePositives.keys():
                 file = open(f + ".txt")
@@ -379,6 +369,6 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
 
         
 if __name__ == "__main__":
-    test("anchor", 5, 0, "paragraph", 10000000, "containment", num_files=3, search_method='normal', search_n=1, save_to_db=True)
-    #evaluate("kth_in_sent", 5, 3, "full", 10000000, "jaccard", num_files=10)
+    # normal, two_level_ff, two_level_pf
+    test("anchor", 5, 0, "paragraph", 10000000, "containment", num_files=5, search_method='two_level_pf', search_n=4, save_to_db=False)
 
