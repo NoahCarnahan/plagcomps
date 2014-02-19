@@ -1,29 +1,28 @@
 from plagcomps.shared.util import BaseUtility, IntrinsicUtility
 from plagcomps.intrinsic.cluster import cluster
 
+import math
+DEBUG = False
 
 def prec_recall_evaluate(reduced_docs, session, features, cluster_type, k, atom_type, corpus='intrinsic', feature_vector_weights=None, 
             metadata={}, cheating=False, cheating_min_len=5000, **clusterargs):
     '''
-    features is a list of strings where each string is the name of a StylometricFeatureEvaluator method.
-    cluster_type is "kmeans", "hmm", or "agglom".
-    k is an integer.
-    docs should be a list of full path strings.
+   
     '''
+    thresholds = [.05 * i for i in range(20)]
 
-    # From a few runs, looks like prec. is almost always bad (and doesn't improve
-    # much with greater thresholds). So we might as well use lower thresholds
-    # to bump up our recall (without hurting prec. very much)
-    thresholds = [.01, .05, .2, .35, .5, .65, .8, .9, 1.1]
     thresh_to_prec = {}
     thresh_to_recall = {}
     thresh_to_fmeasure = {}
+    thresh_to_granularity = {}
+    thresh_to_overall = {}
 
     # doc_to_thresh_to_result[i] = {thresh -> (prec, recall)}
     doc_to_thresh_to_result = []
     
     count = 0
     valid_reduced_docs = []
+
     for i, d in enumerate(reduced_docs):
         doc_to_thresh_to_result.append({})
         count += 1
@@ -48,19 +47,52 @@ def prec_recall_evaluate(reduced_docs, session, features, cluster_type, k, atom_
         # Cluster to get plag probs
         plag_likelihoods = cluster(cluster_type, k, feature_vecs, **clusterargs)
         for thresh in thresholds:
-            prec, rec, fmeasure = _one_doc_precision_and_recall(d, plag_likelihoods, thresh)
-            thresh_to_prec.setdefault(thresh, []).append(prec)
-            thresh_to_recall.setdefault(thresh, []).append(rec)
-            thresh_to_fmeasure.setdefault(thresh, []).append(fmeasure)
-            doc_to_thresh_to_result[i][thresh] = (prec, rec)
+            prec, rec, fmeasure, granularity, overall = _one_doc_all_measures(d, plag_likelihoods, thresh)
+
+            # If measure wasn't well defined, None is returned. NOTE (nj) sneaky bug:
+            # if we use the construct 
+            # if prec:
+            #   <add it to the dict>
+            # never add prec or recall when they're 0. 
+            # Thus we explicitly check for None-ness
+            if prec is not None:
+                thresh_to_prec.setdefault(thresh, []).append(prec)
+            if rec is not None:
+                thresh_to_recall.setdefault(thresh, []).append(rec)
+            if fmeasure is not None:
+                thresh_to_fmeasure.setdefault(thresh, []).append(fmeasure)
+            if granularity is not None:
+                thresh_to_granularity.setdefault(thresh, []).append(granularity)
+            if overall is not None:
+                thresh_to_overall.setdefault(thresh, []).append(overall)
+
+            doc_to_thresh_to_result[i][thresh] = (prec, rec, fmeasure, granularity, overall)
+
+
+    # For a given threshold, how many documents had valid precisions?
+    print 'Valid precision:', sorted([(th, len(l)) for th, l in thresh_to_prec.iteritems()])
+    # For a given threshold, how many documents had valid recall?
+    print 'Valid recall (this number should not change):', sorted([(th, len(l)) for th, l in thresh_to_recall.iteritems()])
 
     thresh_prec_avgs = {t : sum(l) / len(l) for t, l in thresh_to_prec.iteritems()}
     thresh_recall_avgs = {t : sum(l) / len(l) for t, l in thresh_to_recall.iteritems()}
-    thresh_to_fmeasure = {t : sum(l) / len(l) for t, l in thresh_to_fmeasure.iteritems()}
+    thresh_fmeasure_avgs = {t : sum(l) / len(l) for t, l in thresh_to_fmeasure.iteritems()}
+    thresh_granularity_avgs = {t : sum(l) / len(l) for t, l in thresh_to_granularity.iteritems()}
+    thresh_overall_avgs = {t : sum(l) / len(l) for t, l in thresh_to_overall.iteritems()}
 
-    return thresh_prec_avgs, thresh_recall_avgs, thresh_to_fmeasure
+    if DEBUG:
+        for thresh in sorted(thresh_prec_avgs.keys()):
+            print thresh
+            print 'Prec:', thresh_prec_avgs[thresh]
+            print 'Recall:', thresh_recall_avgs[thresh]
+            print 'F-Measure:', thresh_fmeasure_avgs[thresh]
+            print 'Granularity:', thresh_granularity_avgs[thresh]
+            print 'Overall:', thresh_overall_avgs[thresh]
+            print '-'*40
 
-def _one_doc_precision_and_recall(doc, plag_likelihoods, prob_thresh, cheating=False, cheating_min_len=5000, **metadata):
+    return thresh_prec_avgs, thresh_recall_avgs, thresh_fmeasure_avgs, thresh_granularity_avgs, thresh_overall_avgs
+
+def _one_doc_all_measures(doc, plag_likelihoods, prob_thresh, cheating=False, cheating_min_len=5000, **metadata):
     '''
     Returns the precision and recall for a given ReducedDoc <doc> using <plag_likelihoods> and 
     <prob_thresh> as a cutoff for whether or not a given section is called plagiarism. 
@@ -71,35 +103,47 @@ def _one_doc_precision_and_recall(doc, plag_likelihoods, prob_thresh, cheating=F
 
     # Keep the spans above <prob_thresh>
     detected_spans = [spans[i] for i in xrange(len(spans)) if plag_likelihoods[i] > prob_thresh]
-    prec, recall = _benno_precision_and_recall(actual_plag_spans, detected_spans)
 
-    # TODO how is F-Measure defined when both are 0?
-    if (prec + recall) == 0.0:
-        fmeasure = 0.0
+    if DEBUG:
+        print 'Thresh: %f. Detected: %i. Actual: %i' % (prob_thresh, len(detected_spans), len(actual_plag_spans))
+        
+    prec, recall, fmeasure, granularity, overall = get_all_measures(actual_plag_spans, detected_spans)
+
+    return prec, recall, fmeasure, granularity, overall
+
+def get_all_measures(plag_spans, detected_spans):
+    '''
+    Returns all measures:
+    prec, recall, fmeasure, granularity, overall
+    '''
+    prec, recall = _benno_precision_and_recall(plag_spans, detected_spans)
+    if prec is None or recall is None:
+        fmeasure = None
+        granularity = None
+        overall = None
     else:
-        fmeasure = (2 * prec * recall) / (prec + recall)
+        fmeasure = _fmeasure(prec, recall)
+        granularity = _benno_granularity(plag_spans, detected_spans)
+        overall = _benno_overall(fmeasure, granularity)
 
-    return prec, recall, fmeasure
+    return prec, recall, fmeasure, granularity, overall
 
 def _benno_precision_and_recall(plag_spans, detected_spans):
     '''
     Paper referred to is "Overview of the 1st International Competition on Plagiarism Detection"
     <plag_spans> (set S in paper) is a list of spans like (start_char, end_char) of plag. spans
     <detected_spans> (set R in paper) is a list of spans like (start_char, end_char) that we defined as plag.
+
+    Edge cases: if there are no plagiarized spans, there is no notion of recall. Returns None.
+    If we detect nothing, then there is no notion of precision. Returns None.
     '''
     util = BaseUtility()
-    recall_sum = 0.0
 
     if len(plag_spans) == 0:
-        recall = 1.0
-        # TODO -- which of these is the correct definition?
-        # # No plagiarism and we detected none -- recall of 1.0
-        # if len(detected_spans) == 0:
-        #     recall = 1.0
-        # # No plagiarism, but we detected some -- recall of 0.0
-        # else:
-        #     recall = 0.0
+        recall = None
     else:
+        recall_sum = 0.0
+
         # recall defined over all plag spans
         for pspan in plag_spans:
             pspan_len = float(pspan[1] - pspan[0])
@@ -111,16 +155,10 @@ def _benno_precision_and_recall(plag_spans, detected_spans):
         recall = recall_sum / len(plag_spans)
 
     if len(detected_spans) == 0:
-        prec = 1.0
-        # TODO -- which of these is the correct definition?
-        # # Detected no plag., and there wasn't any. precision is 1.0
-        # if len(plag_spans) == 0:
-        #     prec = 1.0
-        # # Detected no plag., but there was some! precision is 0
-        # else:
-        #     prec = 0.0
+        prec = None
     else:
         prec_sum = 0.0
+
         for dspan in detected_spans:
             dspan_len = float(dspan[1] - dspan[0])
 
@@ -132,8 +170,108 @@ def _benno_precision_and_recall(plag_spans, detected_spans):
 
     return prec, recall
 
+def _fmeasure(prec, recall):
+    '''
+    Returns harmonic mean (F-measure) of a given precision and recall
+    '''
+    if prec is None or recall is None:
+        fmeasure = None
+    elif (prec + recall) == 0.0:
+        fmeasure = 0.0
+    else:
+        fmeasure = (2 * prec * recall) / (prec + recall)
+
+    return fmeasure
+
 def _benno_granularity(plag_spans, detected_spans):
-    pass
+    '''
+    Granularity is defined in the paper -- essentially trying to measure
+    how fine-grained a given detected_span is. 
+    '''
+    if len(detected_spans) == 0:
+        return 1.0
+
+    util = BaseUtility()
+    # The S_R defined in the paper: set of plag_spans that overlap 
+    # some detected span
+    detected_overlaps = []
+
+    # The C_s defined in the paper: set of detected_spans that overlap 
+    # plag_span s
+    # actual_overlaps[plag_span] = [list of detected_spans that overlap plag_span]
+    actual_overlaps = {}
+    
+    for pspan in plag_spans:
+        for dspan in detected_spans:
+            if util.overlap(pspan, dspan) > 0:
+                detected_overlaps.append(pspan)
+                actual_overlaps.setdefault(tuple(pspan), []).append(dspan)
+
+    gran_sum = 0.0
+    for d_overlap in detected_overlaps:
+        gran_sum += len(actual_overlaps[tuple(d_overlap)])
+
+    if len(detected_overlaps) == 0:
+        gran = 1.0 
+    else:
+        gran = gran_sum / len(detected_overlaps)
+
+    return gran
+
+def _benno_overall(fmeasure, gran):
+    '''
+    Returns overall measure defined in Stein's paper
+    '''
+    return fmeasure / math.log(1 + gran, 2)
+
+
+def _deprecated_benno_precision_and_recall(plag_spans, detected_spans):
+    '''
+    NOTE (nj) this is the way the competition specified precision and recall, but doesn't
+    seem to make a ton of sense: when choosing a threshold, it's in our best interest to
+    call everything non-plagiarized and get prec and recall values of 1.0 for all the non-plagiarized
+    documents. We could create a corpus of docs containing plag., but that also doesn't seem to
+    be in the spirit of detection in general.
+    
+    Paper referred to is "Overview of the 1st International Competition on Plagiarism Detection"
+    <plag_spans> (set S in paper) is a list of spans like (start_char, end_char) of plag. spans
+    <detected_spans> (set R in paper) is a list of spans like (start_char, end_char) that we defined as plag.
+    '''
+    util = BaseUtility()
+
+    # Edge cases -- defined according to performance_measures script provided online
+    # http://www.uni-weimar.de/medien/webis/research/events/pan-09/pan09-code/pan09-plagiarism-detection-performance-measures.py
+    if len(plag_spans) == 0 and len(detected_spans) == 0:
+        prec = 1.0
+        recall = 1.0
+    elif len(plag_spans) == 0 or len(detected_spans) == 0:
+        prec = 0.0
+        recall = 0.0
+    else:
+        recall_sum = 0.0
+
+        # recall defined over all plag spans
+        for pspan in plag_spans:
+            pspan_len = float(pspan[1] - pspan[0])
+
+            for dspan in detected_spans:
+                temp_recall = util.overlap(pspan, dspan) / pspan_len
+                recall_sum += temp_recall
+
+        recall = recall_sum / len(plag_spans)
+
+   
+        prec_sum = 0.0
+        for dspan in detected_spans:
+            dspan_len = float(dspan[1] - dspan[0])
+
+            for pspan in plag_spans:
+                temp_prec = util.overlap(dspan, pspan) / dspan_len
+                prec_sum += temp_prec
+
+        prec = prec_sum / len(detected_spans)
+
+    return prec, recall
 
 def _test():
     plag_spans = [
@@ -148,11 +286,39 @@ def _test():
     ]
     expected_recall = ((2.0 / 8) + (4.0 / 6)) / 3.0
     expected_prec = ((2.0 / 12) + 4.0 / 10) / 2.0
+    expected_fmeasure = _fmeasure(expected_prec, expected_recall)
+    expected_gran = 1
 
     prec, recall = _benno_precision_and_recall(plag_spans, detected_spans)
+    fmeasure = _fmeasure(prec, recall)
+    gran = _benno_granularity(plag_spans, detected_spans)
+    overall = _benno_overall(fmeasure, gran)
+
     print 'Prec: expected %f, got %f' % (expected_prec, prec)
     print 'Recall: expected %f, got %f' % (expected_recall, recall)
+    print 'Fmeasure: expected %f, got %f' % (expected_fmeasure, fmeasure)
+    print 'Granularity: exepected %f, got %f' % (expected_gran, gran)
+    print 'Overall %f' % overall
+
+def _return_all_plag_test():
+    plag_spans = [
+        [10, 21],
+        [32, 40],
+        [51, 57]
+    ]
+
+    detected_spans = [
+        [0, 65]
+    ]
+
+    prec, recall, fmeasure, granularity, overall = get_all_measures(plag_spans, detected_spans)
+    print 'Prec:', prec
+    print 'Recall:', recall
+    print 'F-Measure:', fmeasure
+    print 'Granularity:', granularity
+    print 'Overall:', overall
 
 
 if __name__ == '__main__':
-    _test()
+    _return_all_plag_test()
+    #_test()

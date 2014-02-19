@@ -12,6 +12,7 @@ import itertools
 import os.path
 import cPickle
 import glob
+import pprint
 
 import numpy
 
@@ -21,8 +22,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import sessionmaker
 
-DASHBOARD_VERSION = 2
+DASHBOARD_VERSION = 3
 DASHBOARD_WEIGHTING_FILENAME = 'weighting_schemes/scheme*.pkl'
+printer = pprint.PrettyPrinter(indent=3)
 
 Base = declarative_base()
 
@@ -57,6 +59,9 @@ class IntrinsicTrial(Base):
     auc = Column(Float)
     precision = Column(Float)
     recall = Column(Float)
+    fmeasure = Column(Float)
+    granularity = Column(Float)
+    overall = Column(Float)
     threshold = Column(Float)
    
     def __init__(self, **args):
@@ -83,7 +88,6 @@ class IntrinsicTrial(Base):
 
         # Metadata
         # 'intrinsic' or 'extrinsic'
-        self.figure_path = args['figure_path']
         self.timestamp = datetime.datetime.now()
         self.version_number = args['version_number']
         self.corpus = args.get('corpus', 'intrinsic')
@@ -91,7 +95,16 @@ class IntrinsicTrial(Base):
 
         # Actual results
         self.time_elapsed = args['time_elapsed']
-        self.auc = args['auc']
+        self.auc = args.get('auc', None)
+        self.figure_path = args.get('figure_path', None)
+        
+        # Benno definitions
+        self.precision = args.get('precision', None)
+        self.recall = args.get('recall', None)
+        self.fmeasure = args.get('fmeasure', None)
+        self.granularity = args.get('granularity', None)
+        self.overall = args.get('overall', None)
+        self.threshold = args.get('threshold', None)
     
 
 def get_feature_sets():
@@ -114,17 +127,12 @@ def all_k_sets_of_features(k=2):
 
     return k_sets
 
-def run_one_trial(feature_set, atom_type, cluster_type, k, first_doc_num, n, min_len, cheating):
+def run_one_trial(feature_set, atom_type, cluster_type, k, first_doc_num, n, min_len, cheating, eval_method='roc'):
     '''
     Runs <evaluate_n_documents> and saves trial to DB
     '''
     session = Session()
 
-    start = time.time()
-    path, auc = evaluate_n_documents(feature_set, cluster_type, k, atom_type, n, min_len=min_len, cheating=cheating)
-    end = time.time()
-
-    time_elapsed = end - start
     version_number = DASHBOARD_VERSION
     trial_results = {
         'atom_type' : atom_type,
@@ -133,20 +141,59 @@ def run_one_trial(feature_set, atom_type, cluster_type, k, first_doc_num, n, min
         'first_doc_num' : first_doc_num,
         'n' : n,
         'min_len' : min_len,
-        'figure_path' : os.path.basename(path),
-        'version_number' : version_number,
-        'time_elapsed' : time_elapsed,
-        'auc' : auc,
-        'cheating' : cheating
+        'version_number' : version_number
     }
-    trial = IntrinsicTrial(**trial_results)
-    session.add(trial)
-    print 'Made a trial!'
+    if eval_method == 'roc':
+        start = time.time()
+        path, auc = evaluate_n_documents(feature_set, cluster_type, k, atom_type, n, min_len=min_len, cheating=cheating, eval_method=eval_method)
+        end = time.time()
+        time_elapsed = end - start
+
+        further_params = {
+            'time_elapsed' : time_elapsed,
+            'auc' : auc,
+            'figure_path' : os.path.basename(path),
+            'cheating' : cheating
+        }
+        trial_results.update(further_params)
+        trial = IntrinsicTrial(**trial_results)
+        session.add(trial)
+
+    elif eval_method == 'prec_recall':
+        start = time.time()
+        thresh_prec_avgs, thresh_recall_avgs, thresh_fmeasure_avgs, thresh_granularity_avgs, thresh_overall_avgs = \
+            evaluate_n_documents(feature_set, cluster_type, k, atom_type, n, min_len=min_len, cheating=cheating, eval_method=eval_method)
+        end = time.time()
+        time_elapsed = end - start
+
+        for thresh in thresh_prec_avgs.keys():
+            precision = thresh_prec_avgs[thresh]
+            recall = thresh_recall_avgs[thresh]
+            fmeasure = thresh_fmeasure_avgs[thresh]
+            granularity = thresh_granularity_avgs[thresh]
+            overall = thresh_overall_avgs[thresh]
+
+            further_params = {
+                'threshold' : thresh,
+                'time_elapsed' : time_elapsed,
+                'precision' : precision,
+                'recall' : recall,
+                'fmeasure' : fmeasure,
+                'granularity' : granularity,
+                'overall' : overall
+            }
+            # Thanks to http://stackoverflow.com/questions/6005066/adding-dictionaries-together-python
+            one_trial_params = dict(trial_results, **further_params)
+            # print 'Would populate with:'
+            # printer.pprint(one_trial_params)
+
+            # print '-'*40
+            trial = IntrinsicTrial(**one_trial_params)
+            session.add(trial)
+            print 'Made a trial!'
 
     session.commit()
     session.close()
-
-    return path, auc
 
 
 def run_one_trial_weighted(feature_set, feature_set_weights, feature_weights_filename, atom_type, cluster_type, k, first_doc_num, n, min_len, cheating):
@@ -190,7 +237,7 @@ def run_one_trial_weighted(feature_set, feature_set_weights, feature_weights_fil
     return trial
 
 
-def run_all_dashboard(num_files, cheating=False, feature_set=None):
+def run_all_dashboard(num_files, cheating=False, feature_set=None, eval_method='roc'):
     '''
     Runs through all parameter options as listed below, writing results to DB as it goes 
     '''
@@ -226,7 +273,7 @@ def run_all_dashboard(num_files, cheating=False, feature_set=None):
             'cheating' : cheating
         }
 
-        trial = run_one_trial(**params)
+        trial = run_one_trial(eval_method=eval_method, **params)
 
     # run_all_weighting_schemes(num_files, atom_type_options, cluster_type_options, min_len_options, cheating)
 
@@ -478,5 +525,7 @@ if __name__ == '__main__':
     #         feature_set_options.append(x)
     # feature_set_options = feature_set_options[50:]
 
-    n = 500
-    run_all_dashboard(n, cheating=False, feature_set=feature_set_options)
+    # All pairs of features
+    feature_set_options = all_k_sets_of_features(k=2)
+    n = 50
+    run_all_dashboard(n, feature_set=feature_set_options, cheating=False, eval_method='prec_recall')

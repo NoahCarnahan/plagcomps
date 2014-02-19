@@ -309,7 +309,9 @@ class ExtrinsicUtility(BaseUtility):
         which the spans are plagiarized.
         '''
         spans = []
+        source_spans = []
         source_filepaths = []
+        obfuscations = []
         tree = xml.etree.ElementTree.parse(xml_path)
 
         for feature in tree.iter("feature"):
@@ -317,8 +319,15 @@ class ExtrinsicUtility(BaseUtility):
                 start = int(feature.get("this_offset"))
                 end = start + int(feature.get("this_length"))
                 spans.append((start, end))
+
+                source_start = int(feature.get("source_offset"))
+                source_end = source_start + int(feature.get("source_length"))
+                source_spans.append((source_start, source_end))
+
+                obfuscations.append(feature.get("obfuscation"))
+
                 source_filepaths.append(self.get_src_abs_path(feature.get("source_reference")))
-        return spans, source_filepaths
+        return spans, source_filepaths, source_spans, obfuscations
 
 
     def get_src_abs_path(self, doc_name):
@@ -330,6 +339,19 @@ class ExtrinsicUtility(BaseUtility):
         possible_dirs = os.listdir(ExtrinsicUtility.CORPUS_SRC_LOC)
         for candidate in possible_dirs:
             full_path = os.path.join(ExtrinsicUtility.CORPUS_SRC_LOC, candidate, doc_name)
+            if os.path.exists(full_path):
+                return full_path
+
+
+    def get_suspect_abs_path(self, doc_name):
+        '''
+        <doc_name> is like "suspect-document10172.txt" -- find which part of 
+        the corpus the source document is in and return an absolute path 
+        (i.e.) /copyCats/......./part6/source-document10172.txt
+        '''
+        possible_dirs = os.listdir(ExtrinsicUtility.CORPUS_SUSPECT_LOC)
+        for candidate in possible_dirs:
+            full_path = os.path.join(ExtrinsicUtility.CORPUS_SUSPECT_LOC, candidate, doc_name)
             if os.path.exists(full_path):
                 return full_path
 

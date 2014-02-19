@@ -58,23 +58,24 @@ class ExtrinsicTester:
         for fi, f in enumerate(self.suspect_file_list, 1):
             print
             doc_name = f.replace(self.suspicious_path_start, "")
+            if ".txt" in doc_name:
+                doc_name = doc_name.replace(".txt", "")
             if self.search_method == 'two_level_ff':
                 print '%d/%d Classifying %s (%s)' % (fi, len(self.suspect_file_list), doc_name, self.search_method)
 
-                acts = ground_truth._query_ground_truth(f, "paragraph", session, self.suspicious_path_start).get_ground_truth(session)
+                acts = ground_truth._query_ground_truth(doc_name, "paragraph", session, self.suspicious_path_start).get_ground_truth(session)
                 actuals += acts
 
                 actuals_dict[f] = acts
+                doc_classifications = []
 
                 # first, get a list of the most similar full documents to this document
-                atom_classifications = self.evaluator.classify_passage(doc_name, "full", 0, self.fingerprint_method,
+                full_atom_classifications = self.evaluator.classify_passage(doc_name, "full", 0, self.fingerprint_method,
                     self.n, self.k, self.hash_len, "containment", outer_search_level_mid)
 
                 top_docs = full_atom_classifications[:self.search_n]
                 dids = [x[0][2] for x in top_docs]
                 
-                doc_classifications = []
-
                 # now, compare all paragraphs in the most similar documents to this paragraph
                 for atom_index in xrange(len(acts)):
                     atom_classifications = self.evaluator.classify_passage(doc_name, "paragraph", atom_index, 
@@ -86,7 +87,6 @@ class ExtrinsicTester:
                     confidence = top_source[1]
 
                     classifications.append(top_source)
-
                     doc_classifications.append(top_source)
 
                     print 'atom index:', str(atom_index+1) + '/' + str(len(acts))
@@ -96,8 +96,11 @@ class ExtrinsicTester:
 
             elif self.search_method == 'two_level_pf':
                 print '%d/%d Classifying %s (%s)' % (fi, len(self.suspect_file_list), doc_name, self.search_method)
-                acts = ground_truth._query_ground_truth(f, "paragraph", session, self.suspicious_path_start).get_ground_truth(session)
+                acts = ground_truth._query_ground_truth(doc_name, "paragraph", session, self.suspicious_path_start).get_ground_truth(session)
                 actuals += acts
+
+                actuals_dict[f] = acts
+                doc_classifications = []
 
                 for atom_index in xrange(len(acts)):
                     # first, find most similar documents to this paragraph
@@ -125,7 +128,6 @@ class ExtrinsicTester:
                     confidence = top_source[1]
 
                     classifications.append(top_source)
-
                     doc_classifications.append(top_source)
 
                     print 'atom index:', str(atom_index+1) + '/' + str(len(acts))
@@ -138,12 +140,11 @@ class ExtrinsicTester:
                 actuals += acts
 
                 actuals_dict[f] = acts
+                doc_classifications = []
 
                 print f
                 print '%d/%d Classifying %s' % (fi, len(self.suspect_file_list), doc_name)
 
-                doc_classifications = []
-                
                 for atom_index in xrange(len(acts)):
                     atom_classifications = self.evaluator.classify_passage(doc_name, self.base_atom_type, atom_index, self.fingerprint_method, self.n, self.k, self.hash_len, self.confidence_method, self.mid)
                     # print atom_classifications
@@ -153,7 +154,6 @@ class ExtrinsicTester:
                     confidence = top_source[1]
 
                     classifications.append(top_source)
-
                     doc_classifications.append(top_source)
                     
                     print 'atom index:', str(atom_index+1) + '/' + str(len(acts))
@@ -213,7 +213,8 @@ class ExtrinsicTester:
         num_plagiarized = 0
         num_called_plagiarized = 0
         num_correctly_identified = 0
-        incorrectly_identified = []
+        false_negatives = []
+        false_positives = []
 
         for trial, ground_truth in zip(trials, ground_truths):
             guessed_doc_name = trial[0][0]
@@ -222,38 +223,65 @@ class ExtrinsicTester:
                 if guessed_doc_name in ground_truth[1]:
                     num_correctly_identified += 1
                 else:
-                    incorrectly_identified.append([trial, ground_truth])
+                    false_negatives.append([trial, ground_truth])
                 if guessed_doc_name != 'dummy':
                     num_called_plagiarized += 1
+            else:
+                if guessed_doc_name != 'dummy':
+                    false_positives.append([trial, ground_truth])
 
         source_accuracy = float(num_correctly_identified) / num_called_plagiarized
         true_source_accuracy = float(num_correctly_identified) / num_plagiarized
-        # uncomment the following lines to print the incorrectly identified passages
-        print num_plagiarized, num_correctly_identified, source_accuracy
+        # uncomment the following lines to print the false positives
+        # print num_plagiarized, num_correctly_identified, source_accuracy
         # print
-        # print 'Incorrect Guesses'
+        # print 'False Negatives'
         # print '================='
-        # for x in incorrectly_identified:
-        #     susppect_name = re.sub(r'/part\d*/', '', x[1][1][0]) + '.txt'
-        #     susupect_path = ExtrinsicUtility().get_src_abs_path(source_name)
-        #     print source_path
+        # for x in false_negatives:
+        #     print x
+        #     suspect_name = re.sub(r'/part\d*/', '', x[0][0][3]) + '.txt'
+        #     suspect_path = ExtrinsicUtility().get_suspect_abs_path(suspect_name)
+        #     if x[0][0][0] != 'dummy':
+        #         guessed_name = re.sub(r'/part\d*/', '', x[0][0][0]) + '.txt'
+        #         guessed_path = ExtrinsicUtility().get_src_abs_path(guessed_name)
+        #     else:
+        #         guessed_name = 'dummy'
+        #         guessed_path = 'no-path'
+
+        #     source_name = re.sub(r'/part\d*/', '', x[1][1][0]) + '.txt'
+        #     source_path = ExtrinsicUtility().get_src_abs_path(source_name)
+        #     source_span = x[1][3][0]
+        #     obfuscation = x[1][4][0]
+            
+        #     print 'actual source:', source_name
+        #     print 'obfuscation level:', obfuscation
         #     span = x[1][2][0]
-        #     print span
+        #     print 'actual span:', span
+        #     print 'actual source span:', source_span
+        #     print 'actual text from suspect document that WE were wrong about:', span
+        #     f = open(suspect_path, 'r')
+        #     text = f.read()
+        #     f.close()
+        #     print text[span[0] : span[1]]
+        #     print
+        #     print '*******************************'
+        #     print 'actual text from source document that WE were wrong about:', source_span
         #     f = open(source_path, 'r')
         #     text = f.read()
         #     f.close()
-        #     print x
-        #     print 'text[%d : %d]:' % (span[0], span[1])
-        #     print text[span[0] : span[1]]
+        #     print text[source_span[0] : source_span[1]]
         #     print
+        #     print
+        #     print
+        #     print '=========================================='
+
 
         # build list of plain confidences and actuals values
         confidences = [x[1] for x in trials]
         actuals = [x[0] for x in ground_truths]
         # UNCOMMENT NEXT LINE TO GET FALSEPOSITIVES AND FALSENEGATIVES
         self.analyze_fpr_fnr(trials_dict, actuals_dict, 0.50)
-        roc_auc = None
-        # roc_auc, path = self.plot_ROC_curve(confidences, actuals)
+        roc_auc, path = self.plot_ROC_curve(confidences, actuals)
         return roc_auc, source_accuracy, true_source_accuracy
 
     def analyze_fpr_fnr(self, trials, actuals, threshold):
@@ -266,10 +294,9 @@ class ExtrinsicTester:
         Creates two files in plagcomps/extrinsic/FPR_FNR/... that reports the falsePositives and falseNegatives
         based on a given threshold.
         '''
-
         falsePositives = {}
         falseNegatives = {}
-        # CHOOSE DETECTION THRESHOLD HERE!!
+
         if threshold > 1.0 or threshold < 0.0:
             print "INVALID THREHOLD VALUE. THRESHOLD MUST BE BETWEEN 0.0 and 1.0"
 
@@ -277,28 +304,27 @@ class ExtrinsicTester:
         # appropriate dictionary
         for key in trials.keys():
             for i in xrange(len(trials[key])):
-                print trials[key][i][1]
-                if trials[key][i][1] >=  threshold:
-                    if actuals[key][i][0] == 0:
+                confidence = trials[key][i]
+                actual = actuals[key][i][0]
+                if confidence > threshold:
+                    if actual == 0:
                         try:
                             falsePositives[key].append(i)
                         except:
                             falsePositives[key] = [i]
                 else:
-                    if actuals[key][i][0] == 1:
+                    if actual == 1:
                         try:
                             falseNegatives[key].append(i)
                         except:
                             falseNegatives[key] = [i]
 
 
-        if not falsePositives:
-            print "Found no FalsePositives!"
-
+        if not len(falsePositives):
+            print "Found no False Positives!"
         else:
-            print "Beginning to print falsePositives to file."
+            print "Beginning to print False Positives to file."
             filename = "plagcomps/extrinsic/FPR_FNR/falsePositives" + str(time.time()) + "-" + self.fingerprint_method + ".txt"
-            print filename
             fileFPR = open(filename, "w")
             
             for f in falsePositives.keys():
@@ -321,10 +347,9 @@ class ExtrinsicTester:
             fileFPR.close()
 
         if not falseNegatives:
-            print "Found no FalseNegatives!"
-
+            print "Found no False Negatives!"
         else:
-            print "Beginning to print falseNegatives to file."
+            print "Beginning to print False Negatives to file."
             filename = "plagcomps/extrinsic/FPR_FNR/falseNegatives" + str(time.time()) + "-" + self.fingerprint_method + ".txt"
             fileFNR = open(filename, "w")
 
@@ -360,18 +385,20 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
     
     
     tester = ExtrinsicTester(atom_type, method, n, k, hash_size, confidence_method, suspect_file_list, source_file_list, search_method, search_n)
+
     # roc_auc, source_accuracy, true_source_accuracy = tester.evaluate(session)
     tester.evaluate(session)
     
-    # # Save the reult
-    # if save_to_db:
-    #     with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) as conn:
-    #         conn.autocommit = True    
-    #         with conn.cursor() as cur:
-    #             num_sources = fingerprintstorage.get_number_sources(fingerprintstorage.get_mid(method, n, k, atom_type, hash_size))
-    #             query = "INSERT INTO extrinsic_results (method_name, n, k, atom_type, hash_size, simmilarity_method, suspect_files, source_files, auc, true_source_accuracy, source_accuracy, search_method, search_n) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
-    #             args = (method, n, k, atom_type, hash_size, confidence_method, num_files, num_sources, roc_auc, true_source_accuracy, source_accuracy, search_method, search_n)
-    #             cur.execute(query, args)
+
+    # Save the result
+    if save_to_db:
+        with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) as conn:
+            conn.autocommit = True    
+            with conn.cursor() as cur:
+                num_sources = fingerprintstorage.get_number_sources(fingerprintstorage.get_mid(method, n, k, atom_type, hash_size))
+                query = "INSERT INTO extrinsic_results (method_name, n, k, atom_type, hash_size, simmilarity_method, suspect_files, source_files, auc, true_source_accuracy, source_accuracy, search_method, search_n) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
+                args = (method, n, k, atom_type, hash_size, confidence_method, num_files, num_sources, roc_auc, true_source_accuracy, source_accuracy, search_method, search_n)
+                cur.execute(query, args)
     
     # print 'ROC auc:', roc_auc
     # print 'Source Accuracy:', source_accuracy
@@ -379,8 +406,8 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
 
         
 if __name__ == "__main__":
+
     # test("anchor", 5, 0, "paragraph", 10000000, "containment", num_files=3, search_method='normal', search_n=1, save_to_db=True)
     #evaluate("kth_in_sent", 5, 3, "full", 10000000, "jaccard", num_files=10)
 
-	test("kth_in_sent", 5, 3, "paragraph", 100000000, "containment", num_files=2, search_method='normal', search_n=1, save_to_db=True)
-
+	test("kth_in_sent", 5, 3, "paragraph", 100000000, "containment", num_files=2, search_method='normal', search_n=1, save_to_db=False)

@@ -77,21 +77,25 @@ class GroundTruth(Base):
             spans = tokenization.tokenize(doc_text.read(), self.atom_type, n=5000)
             doc_text.close()
             
-            plag_spans, source_filepaths = ExtrinsicUtility().get_plagiarized_spans(self._doc_xml_path)
+            plag_spans, source_filepaths, source_plag_spans, obfuscations = ExtrinsicUtility().get_plagiarized_spans(self._doc_xml_path)
             
             _ground_truth = []
             for s in spans:
                 truth = 0
                 filepaths = []
                 plagiarized_spans = []
-                for ps, filepath in zip(plag_spans, source_filepaths):
+                source_plagiarized_spans = []
+                obfuscation_levels = []
+                for ps, filepath, source_plag_span, obfuscation in zip(plag_spans, source_filepaths, source_plag_spans, obfuscations):
                     if BaseUtility().overlap(s, ps) > 0:
                         filepath = filepath.replace(".txt", '')
                         filepath = filepath.replace(ExtrinsicUtility.CORPUS_SRC_LOC, '')
                         filepaths.append(filepath)
                         plagiarized_spans.append(ps)
+                        source_plagiarized_spans.append(source_plag_span)
+                        obfuscation_levels.append(obfuscation)
                         truth = 1
-                _ground_truth.append((truth, filepaths, plagiarized_spans))
+                _ground_truth.append((truth, filepaths, plagiarized_spans, source_plagiarized_spans, obfuscation_levels))
             
             self.ground_truth = cPickle.dumps(_ground_truth)
             session.commit()

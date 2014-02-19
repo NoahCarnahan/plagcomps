@@ -1,6 +1,5 @@
 from ..intrinsic.featureextraction import FeatureExtractor
 from ..shared.util import BaseUtility, IntrinsicUtility, ExtrinsicUtility
-from ..shared.util import BaseUtility
 from ..dbconstants import username
 from ..dbconstants import password
 from ..dbconstants import dbname
@@ -123,29 +122,20 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n, eval_method = 
         session = Session()
         reduced_docs = _get_reduced_docs(atom_type, first_training_files, session, corpus=corpus)
 
-        thresh_prec_avgs, thresh_recall_avgs, thresh_fmeasure_avgs = prec_recall_evaluate(reduced_docs, session, features, cluster_type, k, 
-                                                                        atom_type, corpus=corpus, feature_vector_weights=feature_weights, 
-                                                                        metadata=metadata, cheating=cheating, cheating_min_len=cheating_min_len)
+        thresh_prec_avgs, thresh_recall_avgs, thresh_fmeasure_avgs, thresh_granularity_avgs, thresh_overall_avgs = \
+                prec_recall_evaluate(reduced_docs, session, features, cluster_type, k, 
+                    atom_type, corpus=corpus, feature_vector_weights=feature_weights, 
+                    metadata=metadata, cheating=cheating, cheating_min_len=cheating_min_len)
+
         print '-----'
         print 'features:', features
         print 'cluster_type:', cluster_type
         print 'atom_type:', atom_type
         print 'n:', n
-
-        print 
-        for thresh in sorted(thresh_prec_avgs.keys()):
-            print thresh
-            print 'Prec:', thresh_prec_avgs[thresh]
-            print 'Recall:', thresh_recall_avgs[thresh]
-            print 'F-Measure:', thresh_fmeasure_avgs[thresh]
-
         
-        print 'PREC:', thresh_prec_avgs
-        print 'RECALL:', thresh_recall_avgs
-        print 'F:', thresh_fmeasure_avgs
         session.close()
 
-        return thresh_prec_avgs, thresh_recall_avgs, thresh_fmeasure_avgs
+        return thresh_prec_avgs, thresh_recall_avgs, thresh_fmeasure_avgs, thresh_granularity_avgs, thresh_overall_avgs
 
 
 def evaluate(features, cluster_type, k, atom_type, docs, corpus='intrinsic', save_roc_figure=True, reduced_docs=None, feature_vector_weights=None, 
@@ -207,8 +197,7 @@ def evaluate(features, cluster_type, k, atom_type, docs, corpus='intrinsic', sav
     # Return reduced_docs for caching in case we call <evaluate> multiple times
     return roc_path, roc_auc, reduced_docs
 
-def get_confidences_actuals(session, features, cluster_type, k, atom_type, docs, corpus='intrinsic', save_roc_figure=True, reduced_docs=None, feature_vector_weights=None, 
-            metadata={}, cheating=False, cheating_min_len=5000, **clusterargs):
+def get_confidences_actuals(session, features, cluster_type, k, atom_type, docs, corpus='intrinsic', save_roc_figure=True, reduced_docs=None, feature_vector_weights=None, metadata={}, cheating=False, cheating_min_len=5000, **clusterargs):
     '''
     Return the confidences and acutals for the given list of documents parsed
     by atom_type, using the given features, cluster_type, and number of clusters k.
@@ -224,7 +213,7 @@ def get_confidences_actuals(session, features, cluster_type, k, atom_type, docs,
     if not reduced_docs:
         reduced_docs = _get_reduced_docs(atom_type, docs, session, corpus=corpus)
     plag_likelihoods = []
-    doc_plag_assignments = {}
+    actuals = []
     
     count = 0
     valid_reduced_docs = []
@@ -239,6 +228,12 @@ def get_confidences_actuals(session, features, cluster_type, k, atom_type, docs,
             continue
         valid_reduced_docs.append(d)
 
+       # add to actuals
+        spans = d.get_spans()
+        for i in xrange(len(spans)):
+            span = spans[i]
+            actuals.append(1 if d.span_is_plagiarized(span) else 0)
+ 
         if feature_vector_weights:
             weighted_vecs = []
             for vec in feature_vecs:
@@ -249,12 +244,15 @@ def get_confidences_actuals(session, features, cluster_type, k, atom_type, docs,
             feature_vecs = weighted_vecs
 
         likelihood = cluster(cluster_type, k, feature_vecs, **clusterargs)
-        doc_plag_assignments[d] = likelihood
         plag_likelihoods.append(likelihood)
     
     session.close()
 
-    return plag_likelihoods, None
+    all_confidences = []
+    for likelihood_list in plag_likelihoods:
+        all_confidences += likelihood_list
+
+    return all_confidences, actuals
 
     
 def _output_to_file(assignment_dict, atom_type, cluster_type):
@@ -581,7 +579,7 @@ class ReducedDoc(Base):
             self._full_xml_path = path[:-3] + "xml"
         elif corpus == "extrinsic":
             self._full_xml_path = path + ".xml"
-        print "full_xml_path", self._full_xml_path
+
         # 'intrinsic' or 'extrinsic'
         self.corpus = corpus
         
@@ -903,16 +901,17 @@ def run_individual_features(features, cluster_type, k, atom_type, n, min_len=Non
 # ls -t | grep json | xargs grep auc | awk '{print $1, $3; }' | sort -gk 2 | tail -n 20
 # Replace the 20 with a larger number to see more results
 if __name__ == "__main__":
-    populate_database(['nchars', 'paragraph'], 550, features=None, corpus='extrinsic')
+    #run_individual_features(features, cluster_type, k, atom_type, n, min_len=None, first_doc_num=0)
+    #populate_database(['nchars', 'paragraph'], 550, features=None, corpus='extrinsic')
 
-    # features = [
-    #     'punctuation_percentage',
-    #     'gunning_fog_index',
-    #     'syntactic_complexity',
-    #     'num_chars',
-    #     'vowelness_trigram,C,V,C',
-    #     'avg_internal_word_freq_class'
-    # ]
+    features = [
+        'punctuation_percentage',
+        'gunning_fog_index',
+        'syntactic_complexity',
+        'num_chars',
+        'vowelness_trigram,C,V,C',
+        'avg_internal_word_freq_class'
+    ]
     # features = FeatureExtractor.get_all_feature_function_names()
     # features = [f for f in features if 'evolved' not in f]
     # features = [
@@ -920,11 +919,12 @@ if __name__ == "__main__":
     #    'syntactic_complexity',
     #    'word_unigram,is',
     #    'average_syllables_per_word'
-    #]
-    #cluster_type = 'outlier'
-    #atom_type = 'nchars'
-    #n = 401
-    #evaluate_n_documents(features, cluster_type, 2, atom_type, n, eval_method = 'prec_recall')
+    # ]
+    cluster_type = 'kmeans'
+    atom_type = 'nchars'
+    n = 600
+    print evaluate_n_documents(features, cluster_type, 2, atom_type, n, eval_method = 'prec_recall')
+    #print evaluate_n_documents(features, cluster_type, 2, atom_type, n)
 
                  
     #print evaluate_n_documents(features, "outlier", 2, "nchars", 500, cheating=True, save_roc_figure=True)

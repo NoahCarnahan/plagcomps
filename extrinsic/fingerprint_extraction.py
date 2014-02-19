@@ -293,7 +293,7 @@ class FingerprintEvaluator:
                             source_passages[(passage["doc_name"], passage["atom_number"], passage["did"], filename)] = 0
                             
         if not len(source_passages):
-            source_passages[('dummy', 0, 0, 'dummy')] = 0
+            source_passages[('dummy', 0, 0, filename)] = 0
             
         return sorted(source_passages.items() , key = operator.itemgetter(1), reverse=True)
 
