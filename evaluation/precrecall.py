@@ -1,5 +1,5 @@
 from plagcomps.shared.util import BaseUtility, IntrinsicUtility
-#from plagcomps.intrinsic.cluster import cluster
+from plagcomps.intrinsic.cluster import cluster
 
 import matplotlib.pyplot as plt
 import os
@@ -228,7 +228,6 @@ def _benno_overall(fmeasure, gran):
     '''
     return fmeasure / math.log(1 + gran, 2)
 
-
 def _deprecated_benno_precision_and_recall(plag_spans, detected_spans):
     '''
     NOTE (nj) this is the way the competition specified precision and recall, but doesn't
@@ -290,7 +289,10 @@ def visualize_overlaps(plag_spans, detected_spans, **metadata):
         width = dspan_end - dspan_start
         plt.barh(detected_y, width, height=.01, align='center', left=dspan_start, color='red')
     plt.yticks([.4, .6], ['plag', 'detected'])
-
+    if 'doc_name' in metadata:
+        plt.title(metadata['doc_name'])
+    if 'thresh' in metadata:
+        plt.set_xlabel(metadata['thresh'])
 
     # fig = plt.figure()
     # ax = fig.add_subplot(111)
