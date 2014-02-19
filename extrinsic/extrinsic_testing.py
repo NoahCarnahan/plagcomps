@@ -280,7 +280,7 @@ class ExtrinsicTester:
         confidences = [x[1] for x in trials]
         actuals = [x[0] for x in ground_truths]
         # UNCOMMENT NEXT LINE TO GET FALSEPOSITIVES AND FALSENEGATIVES
-        self.analyze_fpr_fnr(trials_dict, actuals_dict, 0.50)
+        # self.analyze_fpr_fnr(trials_dict, actuals_dict, 0.50)
         roc_auc, path = self.plot_ROC_curve(confidences, actuals)
         return roc_auc, source_accuracy, true_source_accuracy
 
@@ -377,18 +377,12 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
     session = Session()
         
     source_file_list, suspect_file_list = ExtrinsicUtility().get_training_files(n = num_files, include_txt_extension = False)
-    # TODO: get rid of this...
-    # suspect_file_list = ['/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents/part5/suspicious-document09634']
     print suspect_file_list    
     print "Testing first", len(suspect_file_list), "suspect files against how ever many source documents have been populated."
-       
-    
     
     tester = ExtrinsicTester(atom_type, method, n, k, hash_size, confidence_method, suspect_file_list, source_file_list, search_method, search_n)
 
-    # roc_auc, source_accuracy, true_source_accuracy = tester.evaluate(session)
-    tester.evaluate(session)
-    
+    roc_auc, source_accuracy, true_source_accuracy = tester.evaluate(session)
 
     # Save the result
     if save_to_db:
@@ -400,14 +394,11 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
                 args = (method, n, k, atom_type, hash_size, confidence_method, num_files, num_sources, roc_auc, true_source_accuracy, source_accuracy, search_method, search_n)
                 cur.execute(query, args)
     
-    # print 'ROC auc:', roc_auc
-    # print 'Source Accuracy:', source_accuracy
-    # print 'True Source Accuracy:', true_source_accuracy
+    print 'ROC auc:', roc_auc
+    print 'Source Accuracy:', source_accuracy
+    print 'True Source Accuracy:', true_source_accuracy
 
         
 if __name__ == "__main__":
+    test("anchor", 5, 0, "paragraph", 10000000, "containment", num_files=3, search_method='normal', search_n=1, save_to_db=False)
 
-    # test("anchor", 5, 0, "paragraph", 10000000, "containment", num_files=3, search_method='normal', search_n=1, save_to_db=True)
-    #evaluate("kth_in_sent", 5, 3, "full", 10000000, "jaccard", num_files=10)
-
-	test("kth_in_sent", 5, 3, "paragraph", 100000000, "containment", num_files=2, search_method='normal', search_n=1, save_to_db=False)
