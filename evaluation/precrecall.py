@@ -50,8 +50,12 @@ def prec_recall_evaluate(reduced_docs, session, features, cluster_type, k, atom_
 
         # Cluster to get plag probs
         plag_likelihoods = cluster(cluster_type, k, feature_vecs, **clusterargs)
+
+        # thresh => detected_spans
+        all_detected_spans = {}
         for thresh in thresholds:
-            prec, rec, fmeasure, granularity, overall = _one_doc_all_measures(d, plag_likelihoods, thresh)
+            prec, rec, fmeasure, granularity, overall, plag_spans, detected_spans = _one_doc_all_measures(d, plag_likelihoods, thresh)
+            all_detected_spans[thresh] = detected_spans
 
             # If measure wasn't well defined, None is returned. NOTE (nj) sneaky bug:
             # if we use the construct 
@@ -72,6 +76,9 @@ def prec_recall_evaluate(reduced_docs, session, features, cluster_type, k, atom_
 
             doc_to_thresh_to_result[i][thresh] = (prec, rec, fmeasure, granularity, overall)
 
+        # Pass relevant data to plotting function
+        doc_name = os.path.basename(d._short_name).replace('.txt', '')
+        visualize_overlaps(plag_spans, all_detected_spans, doc_name=doc_name)
 
     # For a given threshold, how many documents had valid precisions?
     print 'Valid precision:', sorted([(th, len(l)) for th, l in thresh_to_prec.iteritems()])
@@ -113,7 +120,7 @@ def _one_doc_all_measures(doc, plag_likelihoods, prob_thresh, cheating=False, ch
         
     prec, recall, fmeasure, granularity, overall = get_all_measures(actual_plag_spans, detected_spans)
 
-    return prec, recall, fmeasure, granularity, overall
+    return prec, recall, fmeasure, granularity, overall, actual_plag_spans, detected_spans
 
 def get_all_measures(plag_spans, detected_spans):
     '''
@@ -277,38 +284,40 @@ def _deprecated_benno_precision_and_recall(plag_spans, detected_spans):
     return prec, recall
 
 
-def visualize_overlaps(plag_spans, detected_spans, **metadata):
-    plag_y = .51
-    detected_y = .49
+def visualize_overlaps(plag_spans, thresh_to_detected_spans, **metadata):
+    '''
+    <plag_spans> is a list of plagiarized spans
+    <thresh_to_detected_spans> is a dict of form thresh -> [list of detected spans]
+    '''
+    bottom = 0
+    top_row = len(thresh_to_detected_spans)
+    row_height = 1.0 / top_row
+    sorted_thresh = sorted(thresh_to_detected_spans.keys())
+
+    for row_num, thresh in enumerate(sorted_thresh):
+        detected_spans = thresh_to_detected_spans[thresh]
+        for dspan_start, dspan_end in detected_spans:
+            width = dspan_end - dspan_start
+            plt.barh(1 + row_num, width, height=row_height, align='center', left=dspan_start, color='blue', edgecolor='blue')
 
     for pspan_start, pspan_end in plag_spans:
         width = pspan_end - pspan_start
-        plt.barh(plag_y, width, height=.01, align='center', left=pspan_start, color='blue')
+        print pspan_start, pspan_end
+        print width
+        plt.barh(bottom, width, height=row_height, align='center', left=pspan_start, color='red', edgecolor='red')
 
-    for dspan_start, dspan_end in detected_spans:
-        width = dspan_end - dspan_start
-        plt.barh(detected_y, width, height=.01, align='center', left=dspan_start, color='red')
-    plt.yticks([.4, .6], ['plag', 'detected'])
+    ylabels = ['', 'Actual Plag'] + sorted_thresh + ['']
+    ytick_nums = range(-1, top_row + 2)
+    plt.yticks(ytick_nums, ylabels)
+
+    file_name = ''
     if 'doc_name' in metadata:
         plt.title(metadata['doc_name'])
-    if 'thresh' in metadata:
-        plt.set_xlabel(metadata['thresh'])
+        file_name += metadata['doc_name']
+    
+    file_name += '_' + str(time.time()) + '.pdf'
 
-    # fig = plt.figure()
-    # ax = fig.add_subplot(111)
-    # ax.set_yticks((0, 1))
-    # ax.set_yticklabels(('Plag Spans', 'Detected Spans'))
-    # ax.set_ybound((-.2, 1.2))
-    # ax.set_xlabel('Span Index')
-
-    # for pspan_start, pspan_end in plag_spans:
-    #     ax.hlines(plag_y, pspan_start, pspan_end, colors ='blue', linewidths = 4)
-
-    # for dspan_start, dspan_end in detected_spans:
-    #     ax.hlines(detected_y, dspan_start, dspan_end, colors ='red', linewidths = 4)
-
-
-    path = os.path.join(os.path.dirname(__file__), "../figures/overlap_viz/"+str(time.time())+".pdf")
+    path = os.path.join(os.path.dirname(__file__), "../figures/overlap_viz/" + file_name)
     plt.savefig(path)
 
 def _test():
