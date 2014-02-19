@@ -33,10 +33,11 @@ class CombinationTester:
         def __init__(self, atom_type, fingerprint_method, n, k, hash_len, confidence_method, suspect_file_list, source_file_list, search_method, search_n=1
         '''
 
-        ex_tester = ExtrinsicTester(self.atom_type, self.fingerprint_method, 5, 3, 10000, "containment", self.suspect_documents, self.source_documents, "normal")
-        trials, ground_truths = ex_tester.get_trials(self.session)
-        confidences = [tup[1] for tup in trials]
-        actuals = [tup[0] for tup in ground_truths]
+        ex_tester = ExtrinsicTester(self.atom_type, self.fingerprint_method, 5, 0, 10000, "containment", self.suspect_documents, self.source_documents, search_method="two_level_pf", search_n=4 )
+        #trials, ground_truths =
+        conf_tuples, act_tuples, conf_dict, act_dict = ex_tester.get_trials(self.session)
+        confidences = [tup[1] for tup in conf_tuples]
+        actuals = [tup[0] for tup in act_tuples]
         return confidences, actuals
 
     def _geo_mean(self, x, y):
@@ -74,9 +75,11 @@ class CombinationTester:
     
 if __name__ == "__main__":
     session = Session()
-    num_files = 50
+    num_files = 1
     source_file_list, suspect_file_list = ExtrinsicUtility().get_training_files(n = num_files, include_txt_extension = True)
 
+
+    print suspect_file_list
     tester = CombinationTester(session, suspect_file_list, source_file_list, "nchars", "anchors", "outlier")
 
     tester.combine()
