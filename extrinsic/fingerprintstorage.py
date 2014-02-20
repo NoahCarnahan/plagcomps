@@ -552,6 +552,10 @@ def _populate_variety_of_params():
     
     # Way smaller hash_size
     #populate_database(sus+srs, "kth_in_sent", 5, 3, "nchars", 10000, check_for_duplicate=False)
+    
+    # More documents
+    srs, sus = ExtrinsicUtility().get_training_files(n=400)
+    populate_database(sus+srs, "anchor", 5, 0, "paragraph", 10000001, check_for_duplicate=False)
 
 if __name__ == "__main__":
     print 'DEV_MODE is set to', DEV_MODE

@@ -83,7 +83,7 @@ class ExtrinsicTester:
                     # print 'atom_classifications:', atom_classifications
                     # top_source is a tuple with the form ((source_doc_name, atom_index), confidence, suspect_filename)
                     top_source = atom_classifications[0]
-                    source_filename, source_atom_index, did, suspect_filename = top_source[0]
+                    source_filename, source_atom_index, did, suspect_filename, atom_index = top_source[0]
                     confidence = top_source[1]
 
                     classifications.append(top_source)
@@ -124,7 +124,7 @@ class ExtrinsicTester:
                         # top_source is a tuple with the form ((source_doc_name, atom_index), confidence, suspect_filename)
                         top_source = atom_classifications[0]
                     
-                    source_filename, source_atom_index, did, suspect_filename = top_source[0]
+                    source_filename, source_atom_index, did, suspect_filename, atom_index = top_source[0]
                     confidence = top_source[1]
 
                     classifications.append(top_source)
@@ -150,7 +150,7 @@ class ExtrinsicTester:
                     # print atom_classifications
                     # top_source is a tuple with the form ((source_doc_name, atom_index), confidence)
                     top_source = atom_classifications[0]
-                    source_filename, source_atom_index, did, suspect_filename = top_source[0]
+                    source_filename, source_atom_index, did, suspect_filename, atom_index = top_source[0]
                     confidence = top_source[1]
 
                     classifications.append(top_source)
@@ -201,7 +201,7 @@ class ExtrinsicTester:
 
         return roc_auc, path
 
-    def evaluate(self, session):
+    def evaluate(self, session, ignore_high_obfuscation=False, show_false_negpos_info=False):
         '''
         Run our tool with the given parameters and return the area under the roc.
         If a num_files is given, only run on the first num_file suspicious documents,
@@ -232,57 +232,119 @@ class ExtrinsicTester:
 
         source_accuracy = float(num_correctly_identified) / num_called_plagiarized
         true_source_accuracy = float(num_correctly_identified) / num_plagiarized
-        # uncomment the following lines to print the false positives
-        # print num_plagiarized, num_correctly_identified, source_accuracy
-        # print
-        # print 'False Negatives'
-        # print '================='
-        # for x in false_negatives:
-        #     print x
-        #     suspect_name = re.sub(r'/part\d*/', '', x[0][0][3]) + '.txt'
-        #     suspect_path = ExtrinsicUtility().get_suspect_abs_path(suspect_name)
-        #     if x[0][0][0] != 'dummy':
-        #         guessed_name = re.sub(r'/part\d*/', '', x[0][0][0]) + '.txt'
-        #         guessed_path = ExtrinsicUtility().get_src_abs_path(guessed_name)
-        #     else:
-        #         guessed_name = 'dummy'
-        #         guessed_path = 'no-path'
+        
+        print num_plagiarized, num_correctly_identified, source_accuracy
+        
+        if show_false_negpos_info:
+            self.display_false_negative_info(false_negatives)
+            self.display_false_positive_info(false_positives)
 
-        #     source_name = re.sub(r'/part\d*/', '', x[1][1][0]) + '.txt'
-        #     source_path = ExtrinsicUtility().get_src_abs_path(source_name)
-        #     source_span = x[1][3][0]
-        #     obfuscation = x[1][4][0]
-            
-        #     print 'actual source:', source_name
-        #     print 'obfuscation level:', obfuscation
-        #     span = x[1][2][0]
-        #     print 'actual span:', span
-        #     print 'actual source span:', source_span
-        #     print 'actual text from suspect document that WE were wrong about:', span
-        #     f = open(suspect_path, 'r')
-        #     text = f.read()
-        #     f.close()
-        #     print text[span[0] : span[1]]
-        #     print
-        #     print '*******************************'
-        #     print 'actual text from source document that WE were wrong about:', source_span
-        #     f = open(source_path, 'r')
-        #     text = f.read()
-        #     f.close()
-        #     print text[source_span[0] : source_span[1]]
-        #     print
-        #     print
-        #     print
-        #     print '=========================================='
+        confidences = []
+        actuals = []
+        for trial, ground_truth in zip(trials, ground_truths):
+            if not ignore_high_obfuscation or 'high' not in ground_truth[4]:
+                confidences.append(trial[1])
+                actuals.append(ground_truth[0])
 
-
-        # build list of plain confidences and actuals values
-        confidences = [x[1] for x in trials]
-        actuals = [x[0] for x in ground_truths]
         # UNCOMMENT NEXT LINE TO GET FALSEPOSITIVES AND FALSENEGATIVES
         # self.analyze_fpr_fnr(trials_dict, actuals_dict, 0.50)
         roc_auc, path = self.plot_ROC_curve(confidences, actuals)
         return roc_auc, source_accuracy, true_source_accuracy
+
+
+    def display_false_positive_info(self, false_positives):
+        print
+        print 'False Positives'
+        print '================='
+        for x in false_positives:
+            print 'FALSE POSITIVE'
+            print x
+            suspect_name = re.sub(r'/part\d*/', '', x[0][0][3]) + '.txt'
+            suspect_path = ExtrinsicUtility().get_suspect_abs_path(suspect_name)
+            if x[0][0][0] != 'dummy':
+                guessed_name = re.sub(r'/part\d*/', '', x[0][0][0]) + '.txt'
+                guessed_path = ExtrinsicUtility().get_src_abs_path(guessed_name)
+            else:
+                guessed_name = 'dummy'
+                guessed_path = 'no-path'
+            
+            f = open(suspect_path, 'r')
+            text = f.read()
+            f.close()
+
+            f = open(guessed_path, 'r')
+            guessed_text = f.read()
+            f.close()
+
+            atom_number = x[0][0][4]
+            guessed_atom_number = x[0][0][1]
+            span = tokenize(text, self.base_atom_type, n=5000)[atom_number]
+            guessed_span = tokenize(guessed_text, self.base_atom_type, n=5000)[guessed_atom_number]
+            print 'suspect atom_number:', atom_number
+            print 'suspect span:', span
+            print 'actual text from suspect document that WE were wrong about:'
+            print
+            print text[span[0] : span[1]]
+            print 
+            print '***********************************'
+            print 'guessed source atom_number:', guessed_atom_number
+            print 'guessed source span:', guessed_span
+            print 'actual text from guessed source:'
+            print 
+            print guessed_text[guessed_span[0] : guessed_span[1]]
+            print 
+            print '=========================================='
+            print
+
+
+    def display_false_negative_info(self, false_negatives):
+        '''
+        Print info about the false positives from the given list of <false_negatives>.
+        Each entry in <false_negatives> is a tuple of the ugly form that nobody should
+        ever try and use... Sorry guys.
+        '''
+        print 'False Negatives'
+        print '================='
+        for x in false_negatives:
+            print 'FALSE NEGATIVE'
+            print x
+            suspect_name = re.sub(r'/part\d*/', '', x[0][0][3]) + '.txt'
+            suspect_path = ExtrinsicUtility().get_suspect_abs_path(suspect_name)
+            if x[0][0][0] != 'dummy':
+                guessed_name = re.sub(r'/part\d*/', '', x[0][0][0]) + '.txt'
+                guessed_path = ExtrinsicUtility().get_src_abs_path(guessed_name)
+            else:
+                guessed_name = 'dummy'
+                guessed_path = 'no-path'
+
+            source_name = re.sub(r'/part\d*/', '', x[1][1][0]) + '.txt'
+            source_path = ExtrinsicUtility().get_src_abs_path(source_name)
+            source_span = x[1][3][0]
+            obfuscation = x[1][4][0]
+            
+            print 'actual source:', source_name
+            print 'obfuscation level:', obfuscation
+            span = x[1][2][0]
+            print 'actual span:', span
+            print 'actual source span:', source_span
+            print 'actual text from suspect document that WE were wrong about:', span
+            print
+            f = open(suspect_path, 'r')
+            text = f.read()
+            f.close()
+            print text[span[0] : span[1]]
+            print
+            print '*******************************'
+            print 'actual text from source document that WE were wrong about:', source_span
+            f = open(source_path, 'r')
+            text = f.read()
+            f.close()
+            print text[source_span[0] : source_span[1]]
+            print
+            print
+            print
+            print '=========================================='
+
 
     def analyze_fpr_fnr(self, trials, actuals, threshold):
         '''
@@ -373,7 +435,7 @@ class ExtrinsicTester:
             fileFNR.close()
 
 
-def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all", search_method='normal', search_n=5, save_to_db=True):
+def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all", search_method='normal', search_n=5, save_to_db=True, ignore_high_obfuscation=False, show_false_negpos_info=False):
     session = Session()
         
     source_file_list, suspect_file_list = ExtrinsicUtility().get_training_files(n = num_files, include_txt_extension = False)
@@ -382,7 +444,7 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
     
     tester = ExtrinsicTester(atom_type, method, n, k, hash_size, confidence_method, suspect_file_list, source_file_list, search_method, search_n)
 
-    roc_auc, source_accuracy, true_source_accuracy = tester.evaluate(session)
+    roc_auc, source_accuracy, true_source_accuracy = tester.evaluate(session, ignore_high_obfuscation, show_false_negpos_info)
 
     # Save the result
     if save_to_db:
@@ -400,5 +462,6 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
 
         
 if __name__ == "__main__":
-    test("anchor", 5, 0, "paragraph", 10000000, "containment", num_files=3, search_method='normal', search_n=1, save_to_db=False)
+    test("kth_in_sent", 5, 3, "paragraph", 10000000, "jaccard", num_files=20, search_method='normal', search_n=1, 
+        save_to_db=False, ignore_high_obfuscation=True, show_false_negpos_info=True)
 
