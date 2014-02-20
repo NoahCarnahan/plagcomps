@@ -483,6 +483,12 @@ def _get_reduced_docs(atom_type, docs, session, corpus='intrinsic', create_new=T
                 session.commit()
             else:
                 continue
+        except sqlalchemy.orm.exc.MultipleResultsFound, e:
+            # This is funky.
+            print "========="
+            print "WE HAVE A PROBLEM! THERE ARE MULTIPLE COPIES OF A REDUCED DOC!"
+            print "========="
+            r = session.query(ReducedDoc).filter(and_(ReducedDoc.full_path == doc, ReducedDoc.atom_type == atom_type, ReducedDoc.version_number == DB_VERSION_NUMBER)).first()
         reduced_docs.append(r)
         
     return reduced_docs
@@ -572,7 +578,6 @@ class ReducedDoc(Base):
         elif corpus == "extrinsic":
             self.full_path = path + ".txt"
 
-        print "full_path", self.full_path
         # _short_name example: '/part1/suspicious-document00536'
         self._short_name = "/"+self.full_path.split("/")[-2] +"/"+ self.full_path.split("/")[-1] 
         if corpus == "intrinsic":

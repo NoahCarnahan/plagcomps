@@ -52,7 +52,7 @@ class FeatureExtractor:
         all_methods = inspect.getmembers(FeatureExtractor, predicate=inspect.ismethod)
         all_methods_names = [tup[0] for tup in all_methods]
 
-        print all_methods_names
+        #print all_methods_names
         # We will track different kinds of features to include nested features
         char_features, word_features, sent_features = [], [], []
         not_nestable = ["word_unigram", "pos_trigram", "vowelness_trigram"]
