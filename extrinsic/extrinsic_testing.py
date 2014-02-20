@@ -304,7 +304,7 @@ class ExtrinsicTester:
         # appropriate dictionary
         for key in trials.keys():
             for i in xrange(len(trials[key])):
-                confidence = trials[key][i]
+                confidence = trials[key][i][1]
                 actual = actuals[key][i][0]
                 if confidence > threshold:
                     if actual == 0:
@@ -407,7 +407,7 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
         
 if __name__ == "__main__":
 
-    # test("anchor", 5, 0, "paragraph", 10000000, "containment", num_files=3, search_method='normal', search_n=1, save_to_db=True)
+    #test("anchor", 5, 0, "paragraph", 10000000, "containment", num_files=3, search_method='normal', search_n=1, save_to_db=True)
     #evaluate("kth_in_sent", 5, 3, "full", 10000000, "jaccard", num_files=10)
 
 	test("kth_in_sent", 5, 3, "paragraph", 100000000, "containment", num_files=2, search_method='normal', search_n=1, save_to_db=False)

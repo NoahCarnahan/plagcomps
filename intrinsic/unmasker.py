@@ -45,6 +45,8 @@ def Unmask(features, cluster_type, k, atom_type, n, corpus='intrinsic', save_roc
         'first_doc_num' : first_doc_num
     }
 
+    first_training_files = [first_training_files[n-1]]
+
     dataPoints["control"] = evaluate_confidences(features, cluster_type, k, atom_type, first_training_files)
 
     for i in xrange(len(features)):
@@ -54,12 +56,6 @@ def Unmask(features, cluster_type, k, atom_type, n, corpus='intrinsic', save_roc
 
     	dataPoints[features[i]] = evaluate_confidences(subSet, cluster_type, k, atom_type, first_training_files)
     	# evaluate_confidences([f], cluster_type, k, atom_type, first_training_files)
-
-
-    # for subFeatures in combinations(features, 7):
-    #     print list(subFeatures)
-    #     evaluate_confidences(list(subFeatures), cluster_type, k, atom_type, first_training_files)
-
 
 
 def evaluate_confidences(features, cluster_type, k, atom_type, docs, corpus='intrinsic', save_roc_figure=True, min_len=None, first_doc_num=0, feature_weights=None, feature_confidence_weights=None, **clusterargs):
@@ -74,7 +70,7 @@ def evaluate_confidences(features, cluster_type, k, atom_type, docs, corpus='int
     count = 0
     for d in reduced_docs:
         feature_vecs = d.get_feature_vectors(features, session)
-        kMeans_cluster(feature_vecs, 2)
+        # kMeans_cluster(feature_vecs, 2)
         likelihood = cluster(cluster_type, k, feature_vecs, **clusterargs)
         # print likelihood
         doc_plag_assignments[d] = likelihood
@@ -92,7 +88,7 @@ def classify(confidences):
     non_plag = 0
     total = 0
     for confidence in confidences:
-        if confidence > .50:
+        if confidence > 0.50:
             plag += 1
         else:
             non_plag += 1
@@ -170,5 +166,5 @@ if __name__ == "__main__":
         # 'pos_trigram,VB,IN,DT',
 
     # Unmask(["average_sentence_length", "pos_trigram,NNS,IN,DT", "word_unigram,of"], "kmeans", 2, "paragraph", 10)
-    Unmask(features, "kmeans", 2, "paragraph", 1)
+    Unmask(features, "outlier", 2, "paragraph", 15)
     visualize(dataPoints)
