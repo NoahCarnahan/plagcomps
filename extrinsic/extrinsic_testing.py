@@ -201,7 +201,7 @@ class ExtrinsicTester:
 
         return roc_auc, path
 
-    def evaluate(self, session):
+    def evaluate(self, session, ignore_high_obfuscation=False, show_false_negpos_info=False):
         '''
         Run our tool with the given parameters and return the area under the roc.
         If a num_files is given, only run on the first num_file suspicious documents,
@@ -235,12 +235,17 @@ class ExtrinsicTester:
         
         print num_plagiarized, num_correctly_identified, source_accuracy
         
-        self.display_false_negative_info(false_negatives)
-        self.display_false_positive_info(false_positives)
+        if show_false_negpos_info:
+            self.display_false_negative_info(false_negatives)
+            self.display_false_positive_info(false_positives)
 
-        # build list of plain confidences and actuals values
-        confidences = [x[1] for x in trials]
-        actuals = [x[0] for x in ground_truths]
+        confidences = []
+        actuals = []
+        for trial, ground_truth in zip(trials, ground_truths):
+            if not ignore_high_obfuscation or 'high' not in ground_truth[4]:
+                confidences.append(trial[1])
+                actuals.append(ground_truth[0])
+
         # UNCOMMENT NEXT LINE TO GET FALSEPOSITIVES AND FALSENEGATIVES
         # self.analyze_fpr_fnr(trials_dict, actuals_dict, 0.50)
         roc_auc, path = self.plot_ROC_curve(confidences, actuals)
@@ -430,7 +435,7 @@ class ExtrinsicTester:
             fileFNR.close()
 
 
-def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all", search_method='normal', search_n=5, save_to_db=True):
+def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all", search_method='normal', search_n=5, save_to_db=True, ignore_high_obfuscation=False, show_false_negpos_info=False):
     session = Session()
         
     source_file_list, suspect_file_list = ExtrinsicUtility().get_training_files(n = num_files, include_txt_extension = False)
@@ -439,7 +444,7 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
     
     tester = ExtrinsicTester(atom_type, method, n, k, hash_size, confidence_method, suspect_file_list, source_file_list, search_method, search_n)
 
-    roc_auc, source_accuracy, true_source_accuracy = tester.evaluate(session)
+    roc_auc, source_accuracy, true_source_accuracy = tester.evaluate(session, ignore_high_obfuscation, show_false_negpos_info)
 
     # Save the result
     if save_to_db:
@@ -457,5 +462,6 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
 
         
 if __name__ == "__main__":
-    test("anchor", 5, 0, "paragraph", 10000000, "containment", num_files=3, search_method='normal', search_n=1, save_to_db=False)
+    test("kth_in_sent", 5, 3, "paragraph", 10000000, "jaccard", num_files=20, search_method='normal', search_n=1, 
+        save_to_db=False, ignore_high_obfuscation=True, show_false_negpos_info=True)
 
