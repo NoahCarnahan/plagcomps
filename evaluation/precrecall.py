@@ -30,7 +30,7 @@ def prec_recall_evaluate(reduced_docs, session, features, cluster_type, k, atom_
     for i, d in enumerate(reduced_docs):
         doc_to_thresh_to_result.append({})
         count += 1
-        
+
         print "On document", d, ". The", count, "th document."
 
         feature_vecs = d.get_feature_vectors(features, session, cheating=cheating, cheating_min_len=cheating_min_len)
@@ -48,13 +48,20 @@ def prec_recall_evaluate(reduced_docs, session, features, cluster_type, k, atom_
                 weighted_vecs.append(cur_weight_vec)
             feature_vecs = weighted_vecs
 
+        # Grab the plagiarized spans
+        spans = d.get_spans(cheating, cheating_min_len)
+        actual_plag_spans = d.get_plag_spans()
         # Cluster to get plag probs
         plag_likelihoods = cluster(cluster_type, k, feature_vecs, **clusterargs)
+
+        # Make sure we have a confidence level for every span
+        assert(len(spans) == len(plag_likelihoods))
 
         # thresh => detected_spans
         all_detected_spans = {}
         for thresh in thresholds:
-            prec, rec, fmeasure, granularity, overall, plag_spans, detected_spans = _one_doc_all_measures(d, plag_likelihoods, thresh)
+            prec, rec, fmeasure, granularity, overall, plag_spans, detected_spans = \
+                get_all_measures(actual_plag_spans, spans, plag_likelihoods, thresh, cheating=cheating, cheating_min_len=cheating_min_len)
             all_detected_spans[thresh] = detected_spans
 
             # If measure wasn't well defined, None is returned. NOTE (nj) sneaky bug:
@@ -78,7 +85,7 @@ def prec_recall_evaluate(reduced_docs, session, features, cluster_type, k, atom_
 
         # Pass relevant data to plotting function
         doc_name = os.path.basename(d._short_name).replace('.txt', '')
-        visualize_overlaps(plag_spans, all_detected_spans, doc_name=doc_name)
+        #visualize_overlaps(plag_spans, all_detected_spans, doc_name=doc_name)
 
     # For a given threshold, how many documents had valid precisions?
     print 'Valid precision:', sorted([(th, len(l)) for th, l in thresh_to_prec.iteritems()])
@@ -103,26 +110,22 @@ def prec_recall_evaluate(reduced_docs, session, features, cluster_type, k, atom_
 
     return thresh_prec_avgs, thresh_recall_avgs, thresh_fmeasure_avgs, thresh_granularity_avgs, thresh_overall_avgs
 
-def _one_doc_all_measures(doc, plag_likelihoods, prob_thresh, cheating=False, cheating_min_len=5000, **metadata):
+def get_all_measures(actual_plag_spans, atom_spans, plag_likelihoods, prob_thresh, cheating=False, cheating_min_len=5000, **metadata):
     '''
-    Returns the precision and recall for a given ReducedDoc <doc> using <plag_likelihoods> and 
+    Returns the precision and recall for ground truth <actual_plag_spans> using <plag_likelihoods> and 
     <prob_thresh> as a cutoff for whether or not a given section is called plagiarism. 
     '''
-    spans = doc.get_spans(cheating, cheating_min_len)
-    assert len(spans) == len(plag_likelihoods)
-    actual_plag_spans = doc.get_plag_spans()
-
     # Keep the spans above <prob_thresh>
-    detected_spans = [spans[i] for i in xrange(len(spans)) if plag_likelihoods[i] > prob_thresh]
+    detected_spans = [atom_spans[i] for i in xrange(len(atom_spans)) if plag_likelihoods[i] > prob_thresh]
 
     if DEBUG:
         print 'Thresh: %f. Detected: %i. Actual: %i' % (prob_thresh, len(detected_spans), len(actual_plag_spans))
         
-    prec, recall, fmeasure, granularity, overall = get_all_measures(actual_plag_spans, detected_spans)
+    prec, recall, fmeasure, granularity, overall = _calc_all_measures(actual_plag_spans, detected_spans)
 
     return prec, recall, fmeasure, granularity, overall, actual_plag_spans, detected_spans
 
-def get_all_measures(plag_spans, detected_spans):
+def _calc_all_measures(plag_spans, detected_spans):
     '''
     Returns all measures:
     prec, recall, fmeasure, granularity, overall
@@ -359,7 +362,7 @@ def _return_all_plag_test():
         [0, 65]
     ]
 
-    prec, recall, fmeasure, granularity, overall = get_all_measures(plag_spans, detected_spans)
+    prec, recall, fmeasure, granularity, overall = _calc_all_measures(plag_spans, detected_spans)
     print 'Prec:', prec
     print 'Recall:', recall
     print 'F-Measure:', fmeasure
