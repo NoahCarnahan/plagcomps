@@ -159,6 +159,7 @@ class IntrinsicUtility(BaseUtility):
     CORPUS_LOC = '/copyCats/pan-plagiarism-corpus-2009/intrinsic-detection-corpus/suspicious-documents'
     # TRAINING_LOC = os.path.join(UTIL_LOC, '..', 'sample_corpus/sample_files.txt')
     # CORPUS_LOC = os.path.join(UTIL_LOC, '..', 'sample_corpus/')
+    TESTING_LOC = os.path.join(UTIL_LOC, '..', 'corpus_partition/test_and_tuning_set_files.txt')
 
     def read_corpus_file(self, rel_path):
         '''
@@ -173,7 +174,7 @@ class IntrinsicUtility(BaseUtility):
 
         return text
 
-    def get_n_training_files(self, n=None, include_txt_extension=True, min_len=None, first_doc_num=0, pct_plag=None):
+    def get_n_training_files(self, n=None, include_txt_extension=True, min_len=None, first_doc_num=0, pct_plag=None, corpus_type='training'):
         '''
         Returns first <n> training files, or all of them if <n> is not specified
 
@@ -185,7 +186,12 @@ class IntrinsicUtility(BaseUtility):
 
         If <pct_plag> is specified, then <pct_plag> of the <n> returned files will contain plagiarism 
         '''
-        all_training_files = self.read_file_list(IntrinsicUtility.TRAINING_LOC, 
+        if corpus_type == 'testing':
+            all_training_files = self.read_file_list(IntrinsicUtility.TESTING_LOC, 
+                                                 IntrinsicUtility.CORPUS_LOC,
+                                                 include_txt_extension=include_txt_extension)
+        else:
+            all_training_files = self.read_file_list(IntrinsicUtility.TRAINING_LOC, 
                                                  IntrinsicUtility.CORPUS_LOC,
                                                  include_txt_extension=include_txt_extension)
         
