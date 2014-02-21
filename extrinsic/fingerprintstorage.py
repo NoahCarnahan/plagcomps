@@ -555,11 +555,11 @@ def _populate_variety_of_params():
     
     # More documents
     srs, sus = ExtrinsicUtility().get_training_files(n=400)
-    populate_database(sus+srs, "anchor", 5, 0, "paragraph", 10000001, check_for_duplicate=False)
+    populate_database(sus+srs, "anchor", 5, 0, "nchars", 10000001, check_for_duplicate=False)
 
 if __name__ == "__main__":
     print 'DEV_MODE is set to', DEV_MODE
-    #_populate_variety_of_params()
+    _populate_variety_of_params()
     #_test()
     #_test_get_fp_query()
     #_test_reverse_lookup()
