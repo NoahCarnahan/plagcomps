@@ -106,7 +106,7 @@ class GroundTruth(Base):
 def populate_database():
     session = Session()
 
-    _, suspect_filenames = ExtrinsicUtility().get_training_files()
+    _, suspect_filenames = ExtrinsicUtility().get_corpus_files()
     
     counter = 0
     for filename in suspect_filenames[:5]:

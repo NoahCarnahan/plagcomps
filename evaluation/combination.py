@@ -110,7 +110,7 @@ if __name__ == "__main__":
     #args = {"search_method":"two_level_ff", "search_n":4}
     args = {"combination_method": "power_mean", "combination_parameter":4}
 
-    source_file_list, suspect_file_list = ExtrinsicUtility().get_training_files(n = num_files, include_txt_extension = True)
+    source_file_list, suspect_file_list = ExtrinsicUtility().get_corpus_files(n = num_files, include_txt_extension = True)
 
     tester = CombinationTester(session, suspect_file_list, source_file_list) #, **args)
 

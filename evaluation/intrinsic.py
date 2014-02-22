@@ -68,7 +68,7 @@ def populate_database(atom_types, num, features=None, corpus='intrinsic', corpus
         first_training_files = util.get_n_training_files(num, corpus_type=corpus_type)
     elif corpus == 'extrinsic':
         util = ExtrinsicUtility()
-        first_training_files = util.get_training_files(n=num, path_type="absolute", file_type='suspect', include_txt_extension=True)
+        first_training_files = util.get_corpus_files(n=num, path_type="absolute", file_type='suspect', include_txt_extension=True)
     else:
         raise Exception("Invalid corpus specified: " + str(corpus))
         
