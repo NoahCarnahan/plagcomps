@@ -560,6 +560,8 @@ def _populate_variety_of_params():
     #populate_database(sus+srs, "winnow-k", 6, 15, "nchars", 10000000, check_for_duplicate=False)
     #populate_database(sus+srs, "winnow-k", 8, 15, "nchars", 10000000, check_for_duplicate=False)
 
+    #populate_database(sus+srs, "full", 5, 0, "paragraph", 10000000, check_for_duplicate=False)
+
     # Ten times bigger hash_size
     #populate_database(sus+srs, "kth_in_sent", 5, 3, "full", 100000000, check_for_duplicate=False)
     #populate_database(sus+srs, "kth_in_sent", 5, 3, "nchars", 100000000, check_for_duplicate=False)
@@ -576,6 +578,7 @@ def _populate_variety_of_params():
     # More documents
     #srs, sus = ExtrinsicUtility().get_training_files(n=400)
     #populate_database(sus+srs, "anchor", 5, 0, "paragraph", 10000001, check_for_duplicate=False)
+    
 
 if __name__ == "__main__":
     print 'DEV_MODE is set to', DEV_MODE

@@ -495,6 +495,5 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
 
         
 if __name__ == "__main__":
-    test("kth_in_sent", 5, 3, "paragraph", 10000000, "jaccard", num_files=20, search_method='normal', search_n=1, 
-        save_to_db=False, ignore_high_obfuscation=True, show_false_negpos_info=False)
-
+    test("full", 5, 0, "paragraph", 10000000, "jaccard", num_files=20, search_method='normal', search_n=1, 
+        save_to_db=True, ignore_high_obfuscation=False, show_false_negpos_info=False)
