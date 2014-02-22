@@ -582,7 +582,7 @@ def _populate_variety_of_params():
 
 if __name__ == "__main__":
     print 'DEV_MODE is set to', DEV_MODE
-    #_populate_variety_of_params()
+    _populate_variety_of_params()
     #_test()
     #_test_get_fp_query()
     #_test_reverse_lookup()

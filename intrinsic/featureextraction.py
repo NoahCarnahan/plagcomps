@@ -648,8 +648,10 @@ class FeatureExtractor:
         feature_vectors = self.features["evolved_feature_two"][para_spans_index_start:para_spans_index_end]
 
         D, H, L, P, X, Y = [sum([feature_tuple[i] for feature_tuple in feature_vectors]) for i in range(len(feature_vectors[0]))]
-        computed = (((((1.5*D)-Y)-(-12.0**10.0))+(((L+10.0)+10.0)+10.0))*(10.0*(((1.5+P)**(-12.0-H))-((X*-12.0)+-1.0))))
-
+        try:
+            computed = (((((1.5*D)-Y)-(-12.0**10.0))+(((L+10.0)+10.0)+10.0))*(10.0*(((1.5+P)**(-12.0-H))-((X*-12.0)+-1.0))))
+        except:
+            computed = 1.0e+255
         return computed
 
     def _init_evolved_feature_three(self):
@@ -720,7 +722,7 @@ class FeatureExtractor:
                 computed = 5 * 4 ** ( (1.5 - J)**int(B) - B - J - 3)
             else:
                 computed = 5 * 4 ** ( (1.5 - J)**B - B - J - 3)
-        except OverflowError:
+        except:
             # on overflow, return max value
             return 1.0e+255
 
@@ -743,8 +745,10 @@ class FeatureExtractor:
         feature_vectors = self.features["evolved_feature_six"][para_spans_index_start:para_spans_index_end]
 
         F, H, X, Y, d = [sum([feature_tuple[i] for feature_tuple in feature_vectors]) for i in range(len(feature_vectors[0]))]
-        computed = 20 * d * H * 6.5 ** (X ** Y ) + F
-
+        try:
+            computed = 20 * d * H * 6.5 ** (X ** Y ) + F
+        except:
+            computed = 1.0e+255
         return computed
 
     def _init_num_complex_words(self):

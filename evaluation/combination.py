@@ -43,6 +43,7 @@ class CombinationTester:
         self.search_method = kwargs.get("search_method", "normal")
         self.search_n = kwargs.get("search_n", "1")
         self.combination_method = kwargs.get("combination_method", "geo_mean")
+        self.combination_parameter = kwargs.get("combination_parameter", 2)
 
     def test_intrinsic(self):
         '''
@@ -56,8 +57,8 @@ class CombinationTester:
 
     def test_extrinsic(self):
         
-        print "fingerprint_method=", self.fingerprint_method
-        ex_tester = ExtrinsicTester(self.atom_type, self.fingerprint_method, 5, 0, 10000000, "containment", self.ex_suspect_documents, self.ex_source_documents, search_method=self.search_method, search_n=self.search_n)
+        #print "fingerprint_method=", self.fingerprint_method
+        ex_tester = ExtrinsicTester(self.atom_type, self.fingerprint_method, 5, 0, 10000001, "containment", self.ex_suspect_documents, self.ex_source_documents, search_method=self.search_method, search_n=self.search_n)
 
         #ex_tester = ExtrinsicTester(self.atom_type, self.fingerprint_method, 5, 0, 10000000, "containment", self.suspect_documents, self.source_documents, search_method="normal", search_n=1 )
         #trials, ground_truths =
@@ -73,12 +74,13 @@ class CombinationTester:
         e = .001
         return [((x[i] + e) * (y[i] + e)) ** 0.5 for i in range(len(x))]
 
-    def _power_mean(self, x, y, power):
+    def _power_mean(self, x, y):
         #smoothing constant e
         e = .001
+        power = self.combination_parameter
         return [(((x[i] + e) ** power + (y[i] + e) ** power)/2) ** (float(1) / power) for i in range(len(x))]
 
-    def combine(self, method="geo_mean", **kwargs):
+    def combine(self):
         ex_confidences, ex_actuals = self.test_extrinsic()
         in_confidences, in_actuals = self.test_intrinsic()
         
@@ -87,10 +89,10 @@ class CombinationTester:
         assert ex_actuals == in_actuals
         actuals = ex_actuals
 
-        if method == "geo_mean":
+        if self.combination_method == "geo_mean":
            combined_confidences = self._geo_mean(ex_confidences, in_confidences)
-        elif method == "power_mean":
-           combined_confidences = self._power_mean(ex_confidences, in_confidences, kwargs.get("power", 2))
+        elif self.combination_method == "power_mean":
+           combined_confidences = self._power_mean(ex_confidences, in_confidences)
 
         metadata = {'n': len(actuals)}
         combined_path, combined_roc_auc = BaseUtility.draw_roc(actuals, combined_confidences, save_figure=False, **metadata)
@@ -103,9 +105,10 @@ class CombinationTester:
     
 if __name__ == "__main__":
     session = Session()
-    num_files = 10
+    num_files = 250
 
     #args = {"search_method":"two_level_ff", "search_n":4}
+    args = {"combination_method": "power_mean", "combination_parameter":4}
 
     source_file_list, suspect_file_list = ExtrinsicUtility().get_training_files(n = num_files, include_txt_extension = True)
 
