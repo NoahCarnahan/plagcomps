@@ -80,6 +80,9 @@ class CombinationTester:
         power = self.combination_parameter
         return [(((x[i] + e) ** power + (y[i] + e) ** power)/2) ** (float(1) / power) for i in range(len(x))]
 
+    def _max(self, x, y):
+        return [max(x[i], y[i]) for i in range(len(x))]
+
     def combine(self):
         ex_confidences, ex_actuals = self.test_extrinsic()
         in_confidences, in_actuals = self.test_intrinsic()
@@ -93,6 +96,8 @@ class CombinationTester:
            combined_confidences = self._geo_mean(ex_confidences, in_confidences)
         elif self.combination_method == "power_mean":
            combined_confidences = self._power_mean(ex_confidences, in_confidences)
+        elif self.combination_method == "max":
+            combined_confidences = self._max(ex_confidences, in_confidences)
 
         metadata = {'n': len(actuals)}
         combined_path, combined_roc_auc = BaseUtility.draw_roc(actuals, combined_confidences, save_figure=False, **metadata)
@@ -108,7 +113,7 @@ if __name__ == "__main__":
     num_files = 250
 
     #args = {"search_method":"two_level_ff", "search_n":4}
-    args = {"combination_method": "power_mean", "combination_parameter":4}
+    args = {"combination_method": "max", "combination_parameter":10}
 
     source_file_list, suspect_file_list = ExtrinsicUtility().get_training_files(n = num_files, include_txt_extension = True)
 
