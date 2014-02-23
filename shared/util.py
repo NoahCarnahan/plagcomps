@@ -32,28 +32,31 @@ class BaseUtility:
         '''
         fpr, tpr, thresholds = sklearn.metrics.roc_curve(actuals, confidences, pos_label=1)
         roc_auc = sklearn.metrics.auc(fpr, tpr)
+        figure_path = ''
         
-        # The following code is from http://scikit-learn.org/stable/auto_examples/plot_roc.html
-        pyplot.clf()
-        pyplot.plot(fpr, tpr, label='ROC curve (area = %0.2f)' % roc_auc)
-        pyplot.plot([0, 1], [0, 1], 'k--')
-        pyplot.xlim([0.0, 1.0])
-        pyplot.ylim([0.0, 1.0])
-        pyplot.xlabel('False Positive Rate')
-        pyplot.ylabel('True Positive Rate')
-
-        title = 'ROC'
-
-        for arg_name, arg_val in metadata.iteritems():
-            title += ', ' + str(arg_val)
-
-        pyplot.title(title)
-        pyplot.legend(loc="lower right")
-        
-        figure_path = os.path.join(os.path.dirname(__file__), "../figures/roc"+str(time.time())+".pdf")
-        json_path = figure_path.replace('pdf', 'json')
-        
+        # Don't do any plotting unless we're saving it
         if save_figure:
+            # The following code is from http://scikit-learn.org/stable/auto_examples/plot_roc.html
+            pyplot.clf()
+            pyplot.plot(fpr, tpr, label='ROC curve (area = %0.2f)' % roc_auc)
+            pyplot.plot([0, 1], [0, 1], 'k--')
+            pyplot.xlim([0.0, 1.0])
+            pyplot.ylim([0.0, 1.0])
+            pyplot.xlabel('False Positive Rate')
+            pyplot.ylabel('True Positive Rate')
+
+            title = 'ROC'
+
+            for arg_name, arg_val in metadata.iteritems():
+                title += ', ' + str(arg_val)
+
+            pyplot.title(title)
+            pyplot.legend(loc="lower right")
+            
+            figure_path = os.path.join(os.path.dirname(__file__), "../figures/roc"+str(time.time())+".pdf")
+            json_path = figure_path.replace('pdf', 'json')
+            
+            
             pyplot.savefig(figure_path)
 
             # Save a JSON file of metadata about figure

@@ -9,6 +9,7 @@ intrinsic/textAnalysis/*.txt
 # Add these manually with git add -f figures/foo.pdf
 figures/*.pdf
 figures/*json
+figures/overlap_viz/*.pdf
 
 *.py[cod]
 
