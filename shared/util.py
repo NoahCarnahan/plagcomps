@@ -250,18 +250,23 @@ class ExtrinsicUtility(BaseUtility):
     
     CORPUS_SRC_LOC = '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/source-documents'
     CORPUS_SUSPECT_LOC = '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents'
-    TRAINING_CORP_LOC = 'extrinsic_corpus_partition/crisp_var_corp.txt'
+    TRAINING_CORP_LOC = 'extrinsic_corpus_partition/crisp_TRAIN_var_corp.txt'
+    TEST_CORP_LOC = 'extrinsic_corpus_partition/crisp_TEST_var_corp.txt'
 
-    def get_training_files(self, n="all", path_type="absolute", file_type='both', include_txt_extension=True):
+    def get_corpus_files(self, corpus="TRAINING_SET", n="all", path_type="absolute", file_type='both', include_txt_extension=True):
         '''
-        Returns first <n> training files, or all of them if <n> is not specified
-        <file_type> should be 'source', 'suspect', or 'both'.
-        If 'both', return both lists (source files first, suspect files second)
-        
+        Returns first <n> files, or all of them if <n> is not specified. <file_type>
+        should be 'source', 'suspect', or 'both'. If 'both', return both lists
+        (source files first, suspect files second).
         If path_type is "name" then just /part1/suspicious-file-XXXXX is returned.
+        
+        The <corpus> argument determines if the training set or test set file will be returned.
+        DO NOT pass corpus = "TEST_SET" until development on this project is finished!!!
         '''
 
-        loc = os.path.join(os.path.dirname(__file__), "..", ExtrinsicUtility.TRAINING_CORP_LOC)
+        corpus_location = ExtrinsicUtility.TEST_CORP_LOC if corpus == "TEST_SET" else ExtrinsicUtility.TRAINING_CORP_LOC            
+
+        loc = os.path.join(os.path.dirname(__file__), "..", corpus_location)
         f = open(loc, "r")
         lines = f.readlines()
         f.close()
@@ -365,9 +370,14 @@ class ExtrinsicUtility(BaseUtility):
 if __name__ == '__main__':
     # To test gen_n_training_files:
     # python -m plagcomps.shared.util | xargs grep -m 1 "artificial-plagiarism" | wc -l
-    # which should output n*pct_plag 
+    # which should output n*pct_plag
+    util = ExtrinsicUtility()
+    print util.get_corpus_files(n=5)
+    print util.get_corpus_files(corpus="TEST_SET", n=5)
+    
     util = IntrinsicUtility()
     trainers = util.get_n_training_files(n=200, first_doc_num=0, pct_plag=.5)
     xmls = [x.replace('txt', 'xml') for x in trainers]
     for x in xmls:
-        print x
+        #print x
+        pass

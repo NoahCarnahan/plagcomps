@@ -439,7 +439,7 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
     session = Session()
     
     # Get the list of suspect files to test on
-    source_file_list, suspect_file_list = ExtrinsicUtility().get_training_files(n = num_files, include_txt_extension = False)
+    source_file_list, suspect_file_list = ExtrinsicUtility().get_corpus_files(n = num_files, include_txt_extension = False)
     
     # Confirm that these suspects and enough source documents have been populated
     num_suspect_documents = len(suspect_file_list)
@@ -495,6 +495,5 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
 
         
 if __name__ == "__main__":
-    test("kth_in_sent", 5, 3, "paragraph", 10000000, "jaccard", num_files=20, search_method='normal', search_n=1, 
-        save_to_db=False, ignore_high_obfuscation=True, show_false_negpos_info=False)
-
+    test("anchor", 5, 0, "paragraph", 10000000, "jaccard", num_files=20, search_method='normal', search_n=1, 
+        save_to_db=True, ignore_high_obfuscation=False, show_false_negpos_info=False)

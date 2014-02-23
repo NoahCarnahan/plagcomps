@@ -72,7 +72,7 @@ def _get_connection(autocommit=False):
 def populate_database(files, method_name, n, k, atom_type, hash_size, check_for_duplicate=True):
     '''
     Example usages:
-    srs, sus = ExtrinsicUtility().get_training_files(n=10)
+    srs, sus = ExtrinsicUtility().get_corpus_files(n=10)
     populate_database(srs+sus, "kth_in_sent", n, k, "paragraph", 10000)
     
     If <check_for_duplicate>, a query for a duplicate row is made before creating a new row 
@@ -476,7 +476,7 @@ def _test():
     atom_type = 'paragraph'
     hash_len = 10000
 
-    srs, sus = ExtrinsicUtility().get_training_files(n=12)
+    srs, sus = ExtrinsicUtility().get_corpus_files(n=12)
     populate_database(srs+sus, method, n, k, atom_type, hash_len)
 
 def _test_get_fp_query():
@@ -488,7 +488,7 @@ def _test_get_fp_query():
     k = 3
     atom_type = 'paragraph'
     hash_len = 10000
-    srcs, sus = ExtrinsicUtility().get_training_files(n=1)
+    srcs, sus = ExtrinsicUtility().get_corpus_files(n=1)
     mid = get_mid(method, n, k, atom_type, hash_len)
 
     for doc in srcs + sus:
@@ -508,7 +508,7 @@ def _test_reverse_lookup():
     k = 3
     atom_type = 'paragraph'
     hash_len = 10000
-    srcs, sus = ExtrinsicUtility().get_training_files(n=1)
+    srcs, sus = ExtrinsicUtility().get_corpus_files(n=1)
     mid = get_mid(method, n, k, atom_type, hash_len)
     
     for s in sus:
@@ -531,7 +531,7 @@ def _populate_variety_of_params():
     # is already in it. Yes I am aware this is an extremely error prone and stupid way to
     # keep track of this.
     
-    srs, sus = ExtrinsicUtility().get_training_files(n=20)
+    srs, sus = ExtrinsicUtility().get_corpus_files(n=20)
 
     #populate_database(sus+srs, "kth_in_sent", 5, 3, "full", 10000000, check_for_duplicate=False)
     #populate_database(sus+srs, "kth_in_sent", 3, 3, "full", 10000000, check_for_duplicate=False)
@@ -560,6 +560,8 @@ def _populate_variety_of_params():
     #populate_database(sus+srs, "winnow-k", 6, 15, "nchars", 10000000, check_for_duplicate=False)
     #populate_database(sus+srs, "winnow-k", 8, 15, "nchars", 10000000, check_for_duplicate=False)
 
+    #populate_database(sus+srs, "full", 5, 0, "paragraph", 10000000, check_for_duplicate=False)
+
     # Ten times bigger hash_size
     #populate_database(sus+srs, "kth_in_sent", 5, 3, "full", 100000000, check_for_duplicate=False)
     #populate_database(sus+srs, "kth_in_sent", 5, 3, "nchars", 100000000, check_for_duplicate=False)
@@ -574,12 +576,13 @@ def _populate_variety_of_params():
     #populate_database(sus+srs, "kth_in_sent", 5, 3, "nchars", 10000, check_for_duplicate=False)
     
     # More documents
-    #srs, sus = ExtrinsicUtility().get_training_files(n=400)
+    #srs, sus = ExtrinsicUtility().get_corpus_files(n=400)
     #populate_database(sus+srs, "anchor", 5, 0, "paragraph", 10000001, check_for_duplicate=False)
+    
 
 if __name__ == "__main__":
     print 'DEV_MODE is set to', DEV_MODE
-    _populate_variety_of_params()
+    #_populate_variety_of_params()
     #_test()
     #_test_get_fp_query()
     #_test_reverse_lookup()
