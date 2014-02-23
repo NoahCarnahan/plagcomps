@@ -10,6 +10,7 @@ intrinsic/textAnalysis/*.txt
 figures/*.pdf
 figures/*json
 figures/overlap_viz/*.pdf
+figures/prf/*.pdf
 
 *.py[cod]
 

@@ -3,6 +3,27 @@ import matplotlib as mpl
 import os
 import time
 
+def visualize_perc_recall_fmeasure(thresholds, percisions, recalls, fmeasures):
+    '''
+    <thresholds>, <percisions>, <recalls>, and <fmeasures> should be lists of equal lengths where
+    each index corresponds to percision, recall, and fmeasure of a trial performed at a given threshold.
+    '''
+    plt.clf()
+    plt.plot(thresholds, percisions, label='Percision')
+    plt.plot(thresholds, recalls, label='Recall')
+    plt.plot(thresholds, fmeasures, label='F-Measure')
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.0])
+    plt.xlabel('Threshold')
+    plt.legend(loc="lower right")
+    
+    file_name = str(time.time()) + '.pdf'
+    
+    path = os.path.join(os.path.dirname(__file__), "../figures/prf/" + file_name)
+    plt.savefig(path)
+    plt.close()
+    return path
+
 def visualize_overlaps(plag_spans, thresh_to_detected_spans, **metadata):
     '''
     <plag_spans> is a list of plagiarized spans
@@ -86,4 +107,10 @@ def visualize_confidence_overaps(plag_spans, detection_methods, list_of_spans, l
 
 
 if __name__ == '__main__':
-    pass
+    
+    # Test visualize_perc_recall_fmeasure
+    ts = [0,.1,.2,.3,.4,.5,.6,.7,.8,.9, 1]
+    ps = [0,.1,.2,.3,.4,.5,.6,.7,.8,.9, 1]
+    rs = [.9, .82, .74, .6, .5, .4, .3, .2, .1, .5, 0]
+    fs = [.3, .6, .2, .1, .7, .8, .9, .5, .6, .55, .45]
+    print visualize_perc_recall_fmeasure(ts, ps, rs, fs)
