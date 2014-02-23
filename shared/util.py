@@ -250,8 +250,8 @@ class ExtrinsicUtility(BaseUtility):
     
     CORPUS_SRC_LOC = '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/source-documents'
     CORPUS_SUSPECT_LOC = '/copyCats/pan-plagiarism-corpus-2009/external-detection-corpus/suspicious-documents'
-    TRAINING_CORP_LOC = 'extrinsic_corpus_partition/crisp_var_corp.txt'
-    TEST_CORP_LOC = 'extrinsic_corpus_partition/TEST_SET_crisp_var_corp.txt'
+    TRAINING_CORP_LOC = 'extrinsic_corpus_partition/crisp_TRAIN_var_corp.txt'
+    TEST_CORP_LOC = 'extrinsic_corpus_partition/crisp_TEST_var_corp.txt'
 
     def get_corpus_files(self, corpus="TRAINING_SET", n="all", path_type="absolute", file_type='both', include_txt_extension=True):
         '''
@@ -373,11 +373,11 @@ if __name__ == '__main__':
     # which should output n*pct_plag
     util = ExtrinsicUtility()
     print util.get_corpus_files(n=5)
-    print util.get_corpus_files(corpus="TESsT_SET", n=5)
     print util.get_corpus_files(corpus="TEST_SET", n=5)
     
     util = IntrinsicUtility()
     trainers = util.get_n_training_files(n=200, first_doc_num=0, pct_plag=.5)
     xmls = [x.replace('txt', 'xml') for x in trainers]
     for x in xmls:
-        print x
+        #print x
+        pass
