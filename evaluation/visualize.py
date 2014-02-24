@@ -3,13 +3,13 @@ import matplotlib as mpl
 import os
 import time
 
-def visualize_perc_recall_fmeasure(thresholds, percisions, recalls, fmeasures):
+def visualize_prec_recall_fmeasure(thresholds, precisions, recalls, fmeasures):
     '''
-    <thresholds>, <percisions>, <recalls>, and <fmeasures> should be lists of equal lengths where
-    each index corresponds to percision, recall, and fmeasure of a trial performed at a given threshold.
+    <thresholds>, <precisions>, <recalls>, and <fmeasures> should be lists of equal lengths where
+    each index corresponds to precision, recall, and fmeasure of a trial performed at a given threshold.
     '''
     plt.clf()
-    plt.plot(thresholds, percisions, label='Percision')
+    plt.plot(thresholds, precisions, label='Precision')
     plt.plot(thresholds, recalls, label='Recall')
     plt.plot(thresholds, fmeasures, label='F-Measure')
     plt.xlim([0.0, 1.0])
@@ -108,9 +108,9 @@ def visualize_confidence_overaps(plag_spans, detection_methods, list_of_spans, l
 
 if __name__ == '__main__':
     
-    # Test visualize_perc_recall_fmeasure
+    # Test visualize_prec_recall_fmeasure
     ts = [0,.1,.2,.3,.4,.5,.6,.7,.8,.9, 1]
     ps = [0,.1,.2,.3,.4,.5,.6,.7,.8,.9, 1]
     rs = [.9, .82, .74, .6, .5, .4, .3, .2, .1, .5, 0]
     fs = [.3, .6, .2, .1, .7, .8, .9, .5, .6, .55, .45]
-    print visualize_perc_recall_fmeasure(ts, ps, rs, fs)
+    print visualize_prec_recall_fmeasure(ts, ps, rs, fs)
