@@ -74,14 +74,24 @@ class CombinationTester:
         e = .001
         return [((x[i] + e) * (y[i] + e)) ** 0.5 for i in range(len(x))]
 
-    def _power_mean(self, x, y):
+    def _arith_mean(self, x, y):
+        return [(x[i] + y[i])/2.0 for i in range(len(x))]
+
+    def _power_mean(self, x, y, power = None):
         #smoothing constant e
         e = .001
-        power = self.combination_parameter
+        if power == None:
+            power = self.combination_parameter
         return [(((x[i] + e) ** power + (y[i] + e) ** power)/2) ** (float(1) / power) for i in range(len(x))]
 
     def _max(self, x, y):
         return [max(x[i], y[i]) for i in range(len(x))]
+
+    def _min(self, x, y):
+        return [min(x[i], y[i]) for i in range(len(x))]
+
+    def _sum(self, x, y):
+        return [x[i] + y[i] for i in range(len(x))]
 
     def combine(self):
         ex_confidences, ex_actuals = self.test_extrinsic()
@@ -92,28 +102,44 @@ class CombinationTester:
         assert ex_actuals == in_actuals
         actuals = ex_actuals
 
-        if self.combination_method == "geo_mean":
-           combined_confidences = self._geo_mean(ex_confidences, in_confidences)
-        elif self.combination_method == "power_mean":
-           combined_confidences = self._power_mean(ex_confidences, in_confidences)
-        elif self.combination_method == "max":
-            combined_confidences = self._max(ex_confidences, in_confidences)
+       # if self.combination_method == "geo_mean":
+       #    combined_confidences = self._geo_mean(ex_confidences, in_confidences)
+       # elif self.combination_method == "power_mean":
+       #    combined_confidences = self._power_mean(ex_confidences, in_confidences)
+       # elif self.combination_method == "max":
+       #     combined_confidences = self._max(ex_confidences, in_confidences)
+
+        combos = {}
+        combos["geo"] = self._geo_mean(ex_confidences, in_confidences)
+        combos["pow-1"] = self._power_mean(ex_confidences, in_confidences, power=-1)
+        combos["pow1"] = self._power_mean(ex_confidences, in_confidences, power=1)
+        combos["pow2"] = self._power_mean(ex_confidences, in_confidences, power=2)
+        combos["pow10"] = self._power_mean(ex_confidences, in_confidences, power=10)
+        combos["max"] = self._max(ex_confidences, in_confidences)
+        combos["min"] = self._min(ex_confidences, in_confidences)
+        combos["arith"] = self._arith_mean(ex_confidences, in_confidences)
+        combos["sum"] = self._sum(ex_confidences, in_confidences)
 
         metadata = {'n': len(actuals)}
-        combined_path, combined_roc_auc = BaseUtility.draw_roc(actuals, combined_confidences, save_figure=False, **metadata)
+        #combined_path, combined_roc_auc = BaseUtility.draw_roc(actuals, combined_confidences, save_figure=False, **metadata)
+        auc = {}
+        for key in combos:
+                path, combos[key] = BaseUtility.draw_roc(actuals, combos[key], save_figure=False, **metadata)
         in_path, in_roc_auc = BaseUtility.draw_roc(actuals, in_confidences, save_figure=False, **metadata)
         ex_path, ex_roc_auc = BaseUtility.draw_roc(actuals, ex_confidences, save_figure=False, **metadata)
 
         print "Intrinsic AUC:", in_roc_auc
         print "Extrinsic AUC:", ex_roc_auc
-        print "Combined AUC:", combined_roc_auc
+        #print "Combined AUC:", combined_roc_auc
+        for key in combos:
+            print key, "AUC:", combos[key]
     
 if __name__ == "__main__":
     session = Session()
-    num_files = 250
+    num_files = "all"
 
     #args = {"search_method":"two_level_ff", "search_n":4}
-    args = {"combination_method": "max", "combination_parameter":10}
+    #args = {"combination_method": "max", "combination_parameter":10}
 
     source_file_list, suspect_file_list = ExtrinsicUtility().get_corpus_files(n = num_files, include_txt_extension = True)
 
