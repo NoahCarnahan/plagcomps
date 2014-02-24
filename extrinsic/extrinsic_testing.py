@@ -13,6 +13,7 @@ import fingerprintstorage
 import ground_truth
 from ..shared.util import ExtrinsicUtility
 from ..tokenization import *
+from plagcomps.evaluation.precrecall import get_all_measures
 
 from ..dbconstants import username, password, dbname
 import psycopg2
@@ -208,7 +209,9 @@ class ExtrinsicTester:
         otherwise run on all of them.
         '''
         trials, ground_truths, trials_dict, actuals_dict = self.get_trials(session)
-
+        # avg_benno_results[i] = (thresh, avg_prec, avg_recall, avg_fmeasure)
+        avg_benno_results = self._benno_evaluate(trials_dict, actuals_dict)
+      
         print 'Computing source accuracy...'
         num_plagiarized = 0
         num_called_plagiarized = 0
@@ -251,6 +254,59 @@ class ExtrinsicTester:
         roc_auc, path = self.plot_ROC_curve(confidences, actuals)
         return roc_auc, source_accuracy, true_source_accuracy
 
+    def _benno_evaluate(self, trials_dict, actuals_dict, thresholds=[]):
+        if len(thresholds) == 0:
+            thresholds = [i * .05 for i in xrange(20)]
+
+        # thresh_to_prec[thresh][i] == precision on document number <i> using <thresh>
+        thresh_to_prec = {}
+        thresh_to_recall = {}
+        thresh_to_fmeasure = {}
+
+        for doc_name, gt_data in actuals_dict.iteritems():
+            # Actuals are stored as second elements
+            actual_plag_spans = set()
+            for x in gt_data:
+                if len(x[2]) > 0:
+                    actual_plag_spans.update(set(x[2]))
+            
+            with open(doc_name + '.txt') as f:
+                text = f.read()
+            # assert that len(doc_spans) == len(plag_confs)
+            doc_spans = tokenize(text, self.base_atom_type, n=5000)
+
+            plag_confs = []
+            predicted_dict = trials_dict[doc_name]
+            for x in predicted_dict:
+                span_num = x[0][4]
+                conf = x[1]
+                plag_confs.append(conf)
+            # plag_confs[i] == confidence that characters between doc_spans[i]
+            # were plagiarized
+            assert(len(plag_confs) == len(doc_spans))
+
+            for thresh in thresholds:
+                prec, recall, fmeasure, _, _, _, _ = get_all_measures(actual_plag_spans, doc_spans, plag_confs, thresh)
+                if prec is not None:
+                    thresh_to_prec.setdefault(thresh, []).append(prec)
+                if recall is not None:
+                    thresh_to_recall.setdefault(thresh, []).append(recall)
+                if fmeasure is not None:
+                    thresh_to_fmeasure.setdefault(thresh, []).append(fmeasure)
+
+            print '-'*20
+
+        thresh_prec_avgs = {t : sum(l) / float(len(l)) for t, l in thresh_to_prec.iteritems()}
+        thresh_recall_avgs = {t : sum(l) / float(len(l)) for t, l in thresh_to_recall.iteritems()}
+        thresh_fmeasure_avgs = {t : sum(l) / float(len(l)) for t, l in thresh_to_fmeasure.iteritems()}
+
+        thresh_results = []
+        for thresh in thresholds:
+            one_result = (thresh, thresh_prec_avgs[thresh], thresh_recall_avgs[thresh], thresh_fmeasure_avgs[thresh])
+            print one_result
+            thresh_results.append(one_result)
+
+        return thresh_results
 
     def display_false_positive_info(self, false_positives):
         print
@@ -495,5 +551,5 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
 
         
 if __name__ == "__main__":
-    test("anchor", 5, 0, "paragraph", 10000000, "jaccard", num_files=20, search_method='normal', search_n=1, 
-        save_to_db=True, ignore_high_obfuscation=False, show_false_negpos_info=False)
+    test("anchor", 5, 0, "paragraph", 10000000, "jaccard", num_files=8, search_method='normal', search_n=1, 
+        save_to_db=False, ignore_high_obfuscation=False, show_false_negpos_info=False)
