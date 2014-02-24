@@ -836,7 +836,104 @@ def _one_run():
     n = 250
     first_doc_num = 0
     
-    print evaluate_n_documents(features, cluster_type, k, atom_type, n, first_doc_num=first_doc_num) 
+    print evaluate_n_documents(features, cluster_type, k, atom_type, n, first_doc_num=first_doc_num)
+
+def find_trans_actuals(n, first_doc_num=0):
+    first_training_files = IntrinsicUtility().get_n_training_files(n, first_doc_num=first_doc_num)
+    features = [
+        'punctuation_percentage',
+        'gunning_fog_index',
+        'syntactic_complexity',
+        'num_chars',
+        'vowelness_trigram,C,V,C',
+        'avg_internal_word_freq_class'
+    ]
+    session = Session()
+    
+    reduced_docs = _get_reduced_docs('nchars', first_training_files, session, corpus='intrinsic')
+    #reduced_docs = _get_reduced_docs('paragraph', first_training_files, session, corpus='intrinsic')
+
+    actuals = []
+
+    #for d in reduced_docs:
+    #    spans = d.get_spans()
+    #
+    #for i in xrange(len(spans)):
+    #    span = spans[i]
+    #    actuals.append(1 if d.span_is_plagiarized(span) else 0)
+
+    for doc_index in xrange(len(reduced_docs)):
+        doc = reduced_docs[doc_index]
+        spans = doc.get_spans()
+
+        for span_index in xrange(len(spans)):
+            span = spans[span_index]
+            actuals.append(1 if doc.span_is_plagiarized(span) else 0)
+            
+    return actuals
+
+def find_trans_actuals_main():
+    '''
+    this is code to be included in the main of testing to find transition probabilities, included for reference
+
+    increment = 0
+    transProbs = []
+
+    while (increment<50):
+
+        list_actuals = find_trans_actuals(1,first_doc_num=increment)
+        start = list_actuals[0]
+
+        countTrans = 0
+
+        stay0 = 0
+        stay1 = 0
+        change0 = 0
+        change1 = 1
+
+        prev = start
+
+        for i in range(len(list_actuals)):
+            #print 'list_actual[i] is ', list_actuals[i]
+            cur = list_actuals[i]
+            if (i==0):
+                pass
+            else:
+                if (prev == cur):
+                    if (cur==0):
+                        stay0 +=1
+                    else:
+                        stay1 +=1
+                    prev = cur
+                else :
+                    countTrans +=1
+                    if (prev == 0):
+                        change0 +=1
+                    else:
+                        change1 +=1
+                    prev = cur
+
+
+        if (countTrans == 0):
+            transProbs.append([0.01,0.99])
+        else:
+            transProbs.append([float(change0)/(stay0+change0),float(change1)/(stay1+change1)])
+
+        increment+=1
+
+    print transProbs
+
+    sum1 = [0,0]
+
+    for i in range(len(transProbs)):
+        sum1[0] += transProbs[i][0]
+        sum1[1] += transProbs[i][1]
+
+    sum1[0] = sum1[0]/len(transProbs)
+    sum1[1] = sum1[1]/len(transProbs)
+
+    print sum1
+    ''' 
 
 # To see our best runs by AUC (according to the attached JSON files),
 # navigate to the figures directory and run:
@@ -897,3 +994,4 @@ if __name__ == "__main__":
     atom_type = 'nchars'
     n = 20
     print evaluate_n_documents(features, cluster_type, 2, atom_type, n)
+    #print evaluate_n_documents(features, 'hmm', 2, atom_type, n)

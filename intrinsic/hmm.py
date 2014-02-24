@@ -32,7 +32,10 @@ class _State :
 def get_confidences1(stylo_vectors, centroids, cluster_assignments):
 	'''
 	Given the stylo vector list, centroid values and cluster assignments, returns a list of confidences
-	where confidences[i] pertains to stylo_vectors[i] -- only works for 2 clusters'''
+	where confidences[i] pertains to stylo_vectors[i] -- only works for 2 clusters
+	TODO: modularize get_confidences()
+	measures of confidence should first calculate confidence in cluster assignment and then return a useable
+	version of confidence which is defined : confidence vector is plagiarized'''
 	
 	list_nonplag_tuples = []
 	list_plag_tuples = []
@@ -148,17 +151,159 @@ def get_confidences2(stylo_vectors, centroids, cluster_assignments):
 	#print 'confidences are: ', confidences
 	return confidences
 
+def get_confidences3(stylo_vectors, centroids, cluster_assignments):
+	list_nonplag_tuples = []
+	list_plag_tuples = []
+	confidences = [0 for z in xrange(len(stylo_vectors))]
+	list_indicies = [z for z in xrange(len(stylo_vectors))]
+	list_abs_difference_from_assign = [0 for q in xrange(len(stylo_vectors))]
+	list_abs_difference_from_other = [0 for q in xrange(len(stylo_vectors))]
+
+	for i in xrange(len(stylo_vectors)):
+		#confidence will be the average of distance from assigned
+		# and distance from unassigned centroid
+		diff_vector = []
+		temp = 0
+		for a, b in zip(stylo_vectors[i], centroids[cluster_assignments[i]]) :
+			diff_vector.append(math.fabs(a-b))
+		for y in diff_vector:
+			temp += y*y
+		list_abs_difference_from_assign[i] = math.sqrt(temp)
+
+		#math.fabs(stylo_vectors[i] - centroids[cluster_assignments[i]])
+		#for each centroid, create a list of tuples where tuples are (list_differences[i],i)
+	for i in xrange(len(stylo_vectors)):
+		if (cluster_assignments[i] == 0): 
+			list_nonplag_tuples.append((list_abs_difference_from_assign[i],i))
+		else: list_plag_tuples.append((list_abs_difference_from_assign[i],i))
+		#the two lists should now be sorted by ascending i values
+	list_nonplag_tuples.sort(); list_plag_tuples.sort()
+		#they should be sorted by ascending first element of the Tuple, Python default for sort
+		#normalize by dividing by largest distance,
+	#print 'list_plag_tuples is :', list_plag_tuples
+	#print 'last element is :', list_plag_tuples[-1]
+	
+	if (len(list_plag_tuples) != 0) :
+		maxdisttuple = list_plag_tuples[-1]
+		for x in xrange(len(list_plag_tuples)) :
+			temp = list_plag_tuples[x]
+			list_plag_tuples[x] = (1 - temp[0] / (maxdisttuple[0] + 0.000001), temp[1])
+	#print 'normalized list_nonplag_tuples is: ', list_plag_tuples
+	
+	if (len(list_nonplag_tuples) != 0) :
+		maxdisttuple = list_nonplag_tuples[-1]
+		for y in xrange(len(list_nonplag_tuples)) :
+			temp = list_nonplag_tuples[y]
+			list_nonplag_tuples[y] = (1 - temp[0] / (maxdisttuple[0] + 0.000001), temp[1])
+	#now the lists have normalized distances from centroid
+	
+
+	#CURRENTLY THIS IS THE DIFFERENCE BETWEEN GETCONFIDENCES1 AND GETCONFIDENCES2 AND GETCONFIDENCES3
+	for vtuple in list_plag_tuples :
+		confidences[vtuple[1]] = 1 - vtuple[0] 
+	for vectuple in list_nonplag_tuples :
+		confidences[vectuple[1]] = 1 - vectuple[0]
+		#confidences[vectuple[1]] = vectuple[0] / 2
+	#return a list called confidences where confidences[i] = (normlized_distance of stylo_vectors[i])
+	#print 'confidences are: ', confidences
+	return confidences
+
+def get_confidences4(stylo_vectors, centroids, cluster_assignments):
+	'''
+	Given the stylo vector list, centroid values and cluster assignments, returns a list of confidences
+	where confidences[i] pertains to stylo_vectors[i] -- only works for 2 clusters'''
+	
+	list_nonplag_tuples = []
+	list_plag_tuples = []
+	confidences = [0 for z in xrange(len(stylo_vectors))]
+	list_indicies = [z for z in xrange(len(stylo_vectors))]
+	list_abs_differences = [0 for q in xrange(len(stylo_vectors))]
+	'''
+	for vector, assigned_centroid, y in zip(stylo_vectors, cluster_assignments, list_indicies) :
+		for a, b in zip(vector, assigned_centroid) :
+
+			list_abs_differences[y] = math.fabs(stylo_vectors[i] - centroids[cluster_assignments[i]])'''
+
+	for i in xrange(len(stylo_vectors)):
+		#confidence distance is currently calculated via distance from assigned centroid
+		diff_vector = []
+		temp = 0
+		for a, b in zip(stylo_vectors[i], centroids[cluster_assignments[i]]) :
+			diff_vector.append(math.fabs(a-b))
+		for y in diff_vector:
+			temp += y*y
+		list_abs_differences[i] = math.sqrt(temp)
+
+		#math.fabs(stylo_vectors[i] - centroids[cluster_assignments[i]])
+		#for each centroid, create a list of tuples where tuples are (list_differences[i],i)
+	for i in xrange(len(stylo_vectors)):
+		if (cluster_assignments[i] == 0): 
+			list_nonplag_tuples.append((list_abs_differences[i],i))
+		else: list_plag_tuples.append((list_abs_differences[i],i))
+		#the two lists should now be sorted by ascending i values
+	list_nonplag_tuples.sort(); list_plag_tuples.sort()
+		#they should be sorted by ascending first element of the Tuple, Python default for sort
+		#normalize by dividing by largest distance,
+	#print 'list_plag_tuples is :', list_plag_tuples
+	#print 'last element is :', list_plag_tuples[-1]
+	
+	if (len(list_plag_tuples) != 0) :
+		maxdisttuple = list_plag_tuples[-1]
+		for x in xrange(len(list_plag_tuples)) :
+			temp = list_plag_tuples[x]
+			list_plag_tuples[x] = (1 - temp[0] / (maxdisttuple[0] + 0.000001), temp[1])
+	#print 'normalized list_nonplag_tuples is: ', list_plag_tuples
+	
+	if (len(list_nonplag_tuples) != 0) :
+		maxdisttuple = list_nonplag_tuples[-1]
+		for y in xrange(len(list_nonplag_tuples)) :
+			temp = list_nonplag_tuples[y]
+			list_nonplag_tuples[y] = (1 - temp[0] / (maxdisttuple[0] + 0.000001), temp[1])
+	#now the lists have normalized distances from centroid
+	
+	for vtuple in list_plag_tuples :
+		#confidences[vtuple[1]] = 1 - (vtuple[0] / 2 + 0.5)
+		confidences[vtuple[1]] = 1 - (vtuple[0] / 2 + 0.5)
+	for vectuple in list_nonplag_tuples :
+		#confidences[vectuple[1]] = 1 - 0.1
+		confidences[vectuple[1]] = 0.1
+		#confidences[vectuple[1]] = vectuple[0] / 2
+	#return a list called confidences where confidences[i] = (normlized_distance of stylo_vectors[i])
+	#print 'confidences are: ', confidences
+	return confidences
 
 def hmm_cluster(stylo_vectors, k):
 	'''
 	Return a list of k centroids and a list of the assigned clusters.
 	'''
+	# initialilize trained transition probabilities for nchars
+	trans_probs = {}
+	trans_probs[0] = {}
+	trans_probs[1] = {}
+	trans_probs[0][0] = math.log(0.9368)
+	trans_probs[0][1] = math.log(0.0632)
+	trans_probs[1][0] = math.log(0.1406)
+	trans_probs[1][1] = math.log(0.8594)
+
+	'''# initialilize trained transition probabilities for paragraphs
+	trans_probs = {}
+	trans_probs[0] = {}
+	trans_probs[1] = {}
+	trans_probs[0][0] = math.log(0.9786)
+	trans_probs[0][1] = math.log(0.0214)
+	trans_probs[1][0] = math.log(0.3036)
+	trans_probs[1][1] = math.log(0.6964)'''
+	
+	'''
+	this section should/can be used for non-trained initialization
 	# initialize uniform transition probabilities with respect to k
 	trans_probs = {}
 	for i in xrange(k):
 		trans_probs[i] = {}
 		for j in xrange(k):
-			trans_probs[i][j] = math.log(1.0/k)
+			if (i == j):	#this says there is a 1% chance of changing to any other state
+				trans_probs[i][j] = math.log(1 - 0.01*k)
+			else: trans_probs[i][j] = math.log(0.01)'''
 	
 	# calculate variances of observed outputs with each state
 	means_sum = [0 for j in xrange(len(stylo_vectors[0]))]
@@ -169,14 +314,21 @@ def hmm_cluster(stylo_vectors, k):
 		means_sum[i] /= float(len(stylo_vectors))
 	
 	variances = [0.0000001 for j in xrange(len(stylo_vectors[0]))]
+	varianceSmall = [0.0000001 for j in xrange(len(stylo_vectors[0]))]
+	varianceLarge = [0.0000001 for j in xrange(len(stylo_vectors[0]))]
 	# we occasionally divide by variances so it's good to not initialize to 0
+
 	for vector in stylo_vectors:
 		for i in xrange(len(vector)):
 			variances[i] += (vector[i] - means_sum[i])**2
+			variances[i] /= float(len(stylo_vectors))
 	for i in xrange(len(variances)):
-		variances[i] /= float(len(stylo_vectors))
+		varianceSmall[i] = variances[i]/2	#expect that this will be the nonplag cluster
+		varianceLarge[i] = variances[i]*2	#expect that this will be an outlier cluster
+	varStore = [varianceSmall, varianceLarge]
 	
-	states = [_State(i, stylo_vectors[0], trans_probs[i].copy(), stylo_vectors[len(stylo_vectors)/k*i], variances[:]) for i in range(k)]
+	#states = [_State(i, stylo_vectors[0], trans_probs[i].copy(), stylo_vectors[len(stylo_vectors)/k*i], variances[:]) for i in range(k)]	#this isn't bad for random initialization
+	states = [_State(i, stylo_vectors[0], trans_probs[i].copy(), means_sum, varStore[i]) for i in range(k)]	#states have same mean but different variance
 	# initial probabilitis are uniform
 	initial_state_probs = [math.log(1.0/k)]*k
 	
