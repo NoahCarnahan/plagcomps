@@ -252,7 +252,7 @@ class ExtrinsicTester:
         # UNCOMMENT NEXT LINE TO GET FALSEPOSITIVES AND FALSENEGATIVES
         # self.analyze_fpr_fnr(trials_dict, actuals_dict, 0.50)
         roc_auc, path = self.plot_ROC_curve(confidences, actuals)
-        return roc_auc, source_accuracy, true_source_accuracy
+        return roc_auc, source_accuracy, true_source_accuracy, path
 
     def _benno_evaluate(self, trials_dict, actuals_dict, thresholds=[]):
         if len(thresholds) == 0:
@@ -534,15 +534,15 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
     
     tester = ExtrinsicTester(atom_type, method, n, k, hash_size, confidence_method, suspect_file_list, source_file_list, search_method, search_n)
 
-    roc_auc, source_accuracy, true_source_accuracy = tester.evaluate(session, ignore_high_obfuscation, show_false_negpos_info)
+    roc_auc, source_accuracy, true_source_accuracy, roc_path = tester.evaluate(session, ignore_high_obfuscation, show_false_negpos_info)
 
     # Save the result
     if save_to_db:
         with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) as conn:
             conn.autocommit = True    
             with conn.cursor() as cur:
-                query = "INSERT INTO extrinsic_results (method_name, n, k, atom_type, hash_size, simmilarity_method, suspect_files, source_files, auc, true_source_accuracy, source_accuracy, search_method, search_n, ignore_high_obfuscation) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
-                args = (method, n, k, atom_type, hash_size, confidence_method, num_files, num_populated_sources, roc_auc, true_source_accuracy, source_accuracy, search_method, search_n, ignore_high_obfuscation)
+                query = "INSERT INTO extrinsic_results (method_name, n, k, atom_type, hash_size, simmilarity_method, suspect_files, source_files, auc, true_source_accuracy, source_accuracy, search_method, search_n, ignore_high_obfuscation, roc_path) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
+                args = (method, n, k, atom_type, hash_size, confidence_method, num_files, num_populated_sources, roc_auc, true_source_accuracy, source_accuracy, search_method, search_n, ignore_high_obfuscation, roc_path)
                 cur.execute(query, args)
     
     print 'ROC auc:', roc_auc
@@ -551,5 +551,10 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
 
         
 if __name__ == "__main__":
+<<<<<<< HEAD
     test("anchor", 5, 0, "paragraph", 10000000, "jaccard", num_files=8, search_method='normal', search_n=1, 
         save_to_db=False, ignore_high_obfuscation=False, show_false_negpos_info=False)
+=======
+    test("anchor", 5, 0, "paragraph", 10000000, "jaccard", num_files=15, search_method='normal', search_n=1, 
+        save_to_db=True, ignore_high_obfuscation=False, show_false_negpos_info=False)
+>>>>>>> origin/master
