@@ -76,7 +76,7 @@ import psycopg2
 import os
 
 import fingerprint_extraction
-from ..dbconstants import username, password, dbname
+from ..dbconstants import username, password, extrinsicdbname
 from ..shared.util import ExtrinsicUtility
 from ..tokenization import tokenize
 
@@ -89,7 +89,7 @@ def _get_connection(autocommit=False):
     '''
     Get a connection object to the database.
     '''
-    conn = psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432)
+    conn = psycopg2.connect(user = username, password = password, database = extrinsicdbname, host="localhost", port = 5432)
     conn.autocommit = autocommit
     return conn
 
@@ -107,6 +107,9 @@ def populate_database(files, method_name, n, k, atom_type, hash_size, check_for_
     not to create duplicates (which is why its default is to make the extra check)
     
     '''
+    
+    print method_name, n, k, atom_type, hash_size
+    
     with _get_connection(autocommit=True) as conn:
                 
         # Get the mid (method id) for the given parameters. Create it if it does not already exist.
@@ -555,59 +558,32 @@ def _populate_variety_of_params():
     # is already in it. Yes I am aware this is an extremely error prone and stupid way to
     # keep track of this.
     
-    srs, sus = ExtrinsicUtility().get_corpus_files(n=20)
+    srs, sus = ExtrinsicUtility().get_corpus_files(n=850)
 
-    #populate_database(sus+srs, "kth_in_sent", 5, 3, "full", 10000000, check_for_duplicate=False)
-    #populate_database(sus+srs, "kth_in_sent", 3, 3, "full", 10000000, check_for_duplicate=False)
-    #populate_database(sus+srs, "kth_in_sent", 5, 3, "nchars", 10000000, check_for_duplicate=False)
-    #populate_database(sus+srs, "kth_in_sent", 3, 3, "nchars", 10000000, check_for_duplicate=False)
-    #populate_database(sus+srs, "kth_in_sent", 5, 3, "paragraph", 10000000, check_for_duplicate=False)
-    #populate_database(sus+srs, "kth_in_sent", 3, 3, "paragraph", 10000000, check_for_duplicate=False)
-    
-    #populate_database(sus+srs, "anchor", 5, 0, "full", 10000000, check_for_duplicate=False)
-    #populate_database(sus+srs, "anchor", 5, 0, "nchars", 10000000, check_for_duplicate=False)
-    #populate_database(sus+srs, "anchor", 5, 0, "paragraph", 10000000, check_for_duplicate=False)
-    #populate_database(sus+srs, "anchor", 3, 0, "full", 10000000, check_for_duplicate=False)
-    #populate_database(sus+srs, "anchor", 3, 0, "nchars", 10000000, check_for_duplicate=False)
-    #populate_database(sus+srs, "anchor", 3, 0, "paragraph", 10000000, check_for_duplicate=False)
+    for atom in ["full", "paragraph", "nchars"]:
 
-    #populate_database(sus+srs, "winnow-k", 6, 13, "full", 10000000, check_for_duplicate=False)
-    #populate_database(sus+srs, "winnow-k", 8, 13, "full", 10000000, check_for_duplicate=False)
-    #populate_database(sus+srs, "winnow-k", 6, 13, "paragraph", 10000000, check_for_duplicate=False)
-    #populate_database(sus+srs, "winnow-k", 8, 13, "paragraph", 10000000, check_for_duplicate=False)
-    #populate_database(sus+srs, "winnow-k", 6, 13, "nchars", 10000000, check_for_duplicate=False)
-    #populate_database(sus+srs, "winnow-k", 8, 13, "nchars", 10000000, check_for_duplicate=False)
-    #populate_database(sus+srs, "winnow-k", 6, 15, "full", 10000000, check_for_duplicate=False)
-    #populate_database(sus+srs, "winnow-k", 8, 15, "full", 10000000, check_for_duplicate=False)
-    #populate_database(sus+srs, "winnow-k", 6, 15, "paragraph", 10000000, check_for_duplicate=False)
-    #populate_database(sus+srs, "winnow-k", 8, 15, "paragraph", 10000000, check_for_duplicate=False)
-    #populate_database(sus+srs, "winnow-k", 6, 15, "nchars", 10000000, check_for_duplicate=False)
-    #populate_database(sus+srs, "winnow-k", 8, 15, "nchars", 10000000, check_for_duplicate=False)
+        populate_database(sus+srs, "kth_in_sent", 5, 3, atom, 10000000, check_for_duplicate=False)
+        populate_database(sus+srs, "kth_in_sent", 3, 3, atom, 10000000, check_for_duplicate=False)
+        populate_database(sus+srs, "kth_in_sent", 5, 5, atom, 10000000, check_for_duplicate=False)
+        populate_database(sus+srs, "kth_in_sent", 3, 5, atom, 10000000, check_for_duplicate=False)
+        populate_database(sus+srs, "kth_in_sent", 5, 0, atom, 10000000, check_for_duplicate=False)
+        populate_database(sus+srs, "kth_in_sent", 5, 8, atom, 10000000, check_for_duplicate=False)
+        
+        populate_database(sus+srs, "anchor", 3, 0, atom, 10000000, check_for_duplicate=False)
+        populate_database(sus+srs, "anchor", 4, 0, atom, 10000000, check_for_duplicate=False)
+        populate_database(sus+srs, "anchor", 5, 0, atom, 10000000, check_for_duplicate=False)
+        
+        populate_database(sus+srs, "winnow-k", 8, 13, atom, 10000000, check_for_duplicate=False)
+        populate_database(sus+srs, "winnow-k", 8, 15, atom, 10000000, check_for_duplicate=False)
+        populate_database(sus+srs, "winnow-k", 6, 13, atom, 10000000, check_for_duplicate=False)
+        populate_database(sus+srs, "winnow-k", 6, 15, atom, 10000000, check_for_duplicate=False)
+        
+        populate_database(sus+srs, "full", 3, 0, atom, 10000000, check_for_duplicate=False)
+        populate_database(sus+srs, "full", 4, 0, atom, 10000000, check_for_duplicate=False)
+        populate_database(sus+srs, "full", 5, 0, atom, 10000000, check_for_duplicate=False)
 
-    #populate_database(sus+srs, "full", 5, 0, "paragraph", 10000000, check_for_duplicate=False)
-
-    # Ten times bigger hash_size
-    #populate_database(sus+srs, "kth_in_sent", 5, 3, "full", 100000000, check_for_duplicate=False)
-    #populate_database(sus+srs, "kth_in_sent", 5, 3, "nchars", 100000000, check_for_duplicate=False)
-    #populate_database(sus+srs, "kth_in_sent", 5, 3, "paragraph", 100000000, check_for_duplicate=False)
-    
-    # Ten times smaller hash_size
-    #populate_database(sus+srs, "kth_in_sent", 5, 3, "full", 1000000, check_for_duplicate=False)
-    #populate_database(sus+srs, "kth_in_sent", 5, 3, "nchars", 1000000, check_for_duplicate=False)
-    #populate_database(sus+srs, "kth_in_sent", 5, 3, "paragraph", 1000000, check_for_duplicate=False)
-    
-    # Way smaller hash_size
-    #populate_database(sus+srs, "kth_in_sent", 5, 3, "nchars", 10000, check_for_duplicate=False)
-    
-    # More documents
-    #srs, sus = ExtrinsicUtility().get_corpus_files(n=400)
-    #populate_database(sus+srs, "anchor", 5, 0, "paragraph", 10000001, check_for_duplicate=False)
-    
 
 if __name__ == "__main__":
     print 'DEV_MODE is set to', DEV_MODE
-    #_populate_variety_of_params()
-    #_test()
-    #_test_get_fp_query()
-    #_test_reverse_lookup()
+    _populate_variety_of_params()
     

@@ -256,7 +256,7 @@ class ExtrinsicUtility(BaseUtility):
     TRAINING_CORP_LOC = 'extrinsic_corpus_partition/crisp_TRAIN_var_corp.txt'
     TEST_CORP_LOC = 'extrinsic_corpus_partition/crisp_TEST_var_corp.txt'
 
-    def get_corpus_files(self, corpus="TRAINING_SET", n="all", path_type="absolute", file_type='both', include_txt_extension=True):
+    def get_corpus_files(self, corpus="TEST_SET", n="all", path_type="absolute", file_type='both', include_txt_extension=True):
         '''
         Returns first <n> files, or all of them if <n> is not specified. <file_type>
         should be 'source', 'suspect', or 'both'. If 'both', return both lists

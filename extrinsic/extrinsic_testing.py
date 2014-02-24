@@ -16,7 +16,7 @@ from ..tokenization import *
 from ..evaluation.visualize import visualize_prec_recall_fmeasure
 from plagcomps.evaluation.precrecall import get_all_measures
 
-from ..dbconstants import username, password, dbname
+from ..dbconstants import username, password, dbname, extrinsicdbname
 import psycopg2
 import sqlalchemy
 
@@ -542,7 +542,7 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
 
     # Save the result
     if save_to_db:
-        with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) as conn:
+        with psycopg2.connect(user = username, password = password, database = extrinsicdbname, host="localhost", port = 5432) as conn:
             conn.autocommit = True    
             with conn.cursor() as cur:
                 for i in range(len(thresholds)):
@@ -560,5 +560,5 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
 
         
 if __name__ == "__main__":
-    test("anchor", 5, 0, "paragraph", 10000000, "jaccard", num_files=15, search_method='normal', search_n=1, 
+    test("anchor", 5, 0, "paragraph", 10000000, "jaccard", num_files=19, search_method='normal', search_n=1, 
         save_to_db=True, ignore_high_obfuscation=False, show_false_negpos_info=False)

@@ -9,7 +9,7 @@ from .. import tokenization
 from ..shared.util import ExtrinsicUtility
 
 import psycopg2
-from ..dbconstants import username, password, dbname
+from ..dbconstants import username, password, extrinsicdbname
 import fingerprintstorage
 
 # TODO: omit words tokenized by nltk that are just puncuation
@@ -276,7 +276,7 @@ class FingerprintEvaluator:
         # Get the fingerprint of the passage in question
         fingerprint = fingerprintstorage.get_passage_fingerprint(full_path, atom_index, passage_atom_type, passage_mid)
         
-        with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) as conn:
+        with psycopg2.connect(user = username, password = password, database = extrinsicdbname, host="localhost", port = 5432) as conn:
             conn.autocommit = True
             
             source_passages = {}
