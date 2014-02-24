@@ -48,7 +48,7 @@ CREATE TABLE extrinsic_results (
     source_accuracy         real,
     ignore_high_obfuscation boolean,
     threshold               real,
-    percision               real,
+    precision               real,
     recall                  real,
     fmeasure                real,
     prf_fig_path            text,

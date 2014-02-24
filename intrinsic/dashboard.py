@@ -205,9 +205,9 @@ def run_one_trial_weighted(feature_set, feature_set_weights, feature_weights_fil
 
     start = time.time()
     if cluster_type == "combine_confidences":
-        path, auc = evaluate_n_documents(feature_set, cluster_type, k, atom_type, n, min_len=min_len, feature_confidence_weights=feature_set_weights, cheating=cheating)
+        path, auc, _, _, _, _, _ = evaluate_n_documents(feature_set, cluster_type, k, atom_type, n, min_len=min_len, feature_confidence_weights=feature_set_weights, cheating=cheating)
     else:
-        path, auc = evaluate_n_documents(feature_set, cluster_type, k, atom_type, n, min_len=min_len, feature_weights=feature_set_weights, cheating=cheating)
+        path, auc, _, _, _, _, _ = evaluate_n_documents(feature_set, cluster_type, k, atom_type, n, min_len=min_len, feature_weights=feature_set_weights, cheating=cheating)
     end = time.time()
 
     time_elapsed = end - start
