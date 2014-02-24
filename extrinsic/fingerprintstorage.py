@@ -32,6 +32,29 @@ CREATE TABLE crisp_hashes (
     hash_value  integer
 );
 
+CREATE TABLE extrinsic_results (
+    n                   integer,
+    k                   integer,
+    atom_type           text,
+    hash_size           integer,
+    simmilarity_method  text,
+    suspect_files       integer,
+    source_files        integer,
+    auc                     real,
+    true_source_accuracy    real,
+    timestamp               timestamp without time zone default now(),
+    search_method           text,
+    search_n                integer,
+    source_accuracy         real,
+    ignore_high_obfuscation boolean,
+    threshold               real,
+    precision               real,
+    recall                  real,
+    fmeasure                real,
+    prf_fig_path            text,
+    roc_path                text
+);
+
 Next create the following indexes
     CREATE INDEX idx_crisp_did ON crisp_passages(did);
     CREATE INDEX idx_crisp_atom_num ON crisp_passages(atom_num);
@@ -45,6 +68,7 @@ After population, create the following indexes for rapid searching:
     CREATE INDEX idx_crisp_is_source ON     crisp_hashes(is_source);
     CREATE INDEX idx_crisp_mid ON           crisp_hashes(mid);
     CREATE INDEX idx_crisp_pid ON           crisp_hashes(pid);
+    CREATE INDEX idx_crisp_foo ON           crisp_hashes(pid, mid);
     
 '''
 

@@ -108,7 +108,7 @@ class FeatureVectorWeightsEvolver:
 
     def eval_func_raw_features(self, feature_weights):
         feature_weights = [max(0.00001, x) for x in feature_weights]
-        roc_path, roc_auc = evaluate_n_documents(self.features, self.cluster_type, 2, self.atom_type, self.num_documents, save_roc_figure=False, feature_weights=feature_weights, first_doc_num=self.first_doc_num)
+        roc_path, roc_auc, _, _, _, _, _ = evaluate_n_documents(self.features, self.cluster_type, 2, self.atom_type, self.num_documents, save_roc_figure=False, feature_weights=feature_weights, first_doc_num=self.first_doc_num)
         print 'evaluated:', roc_auc, [w for w in feature_weights]
         return roc_auc
 

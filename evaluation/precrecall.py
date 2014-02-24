@@ -1,5 +1,6 @@
 from plagcomps.shared.util import BaseUtility, IntrinsicUtility
 from plagcomps.intrinsic.cluster import cluster
+from plagcomps.evaluation.visualize import visualize_overlaps
 
 import matplotlib.pyplot as plt
 import os

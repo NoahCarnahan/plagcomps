@@ -35,24 +35,6 @@ Base = declarative_base()
 DEBUG = True
 DB_VERSION_NUMBER = 5
 
-def populate_EVERYTHING():
-    '''
-    Populate the database with ReducedDocs for all documents, atom types, and features.
-    This takes days.
-    ACTUALY DOES NOT DO WORD ATOMS!!!
-    '''
-
-    all_test_files = IntrinsicUtility().get_n_training_files()
-
-    session = Session()
-
-    for doc in all_test_files:
-        for atom_type in ["sentence", "paragraph",]:
-            for feature in ['avg(num_chars)', "std(num_chars)", 'stopword_percentage', 'average_sentence_length', 'punctuation_percentage', "syntactic_complexity", "syntactic_complexity_average", "avg_internal_word_freq_class", "avg_external_word_freq_class", "flesch_reading_ease"]:
-                d = _get_reduced_docs(atom_type, [doc], session)[0]
-                print "Calculating", feature, "for", str(d), str(datetime.datetime.now())
-                d.get_feature_vectors([feature], session)
-    session.close()
 
 def populate_database(atom_types, num, features=None, corpus='intrinsic', corpus_type='training'):
     '''
@@ -111,35 +93,33 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n, eval_method = 
         'first_doc_num' : first_doc_num
     }
 
-    if eval_method == 'roc':
-        roc_path, roc_auc, _ = evaluate(features, cluster_type, k, atom_type, first_training_files, corpus=corpus, save_roc_figure=save_roc_figure, 
-                                        feature_vector_weights=feature_weights, feature_confidence_weights=feature_confidence_weights, metadata=metadata,
-                                        cheating=cheating, cheating_min_len=cheating_min_len)
-        return roc_path, roc_auc
+    # (nj) in order to keep DB logic out of precrecall.py, create the session
+    # and grab the reduced docs first and pass them
+    session = Session()
+    reduced_docs = _get_reduced_docs(atom_type, first_training_files, session, corpus=corpus)
 
-    elif eval_method == 'prec_recall':
-        # (nj) in order to keep DB logic out of precrecall.py, create the session
-        # and grab the reduced docs first and pass them
-        session = Session()
-        reduced_docs = _get_reduced_docs(atom_type, first_training_files, session, corpus=corpus)
+    roc_path, roc_auc = \
+        evaluate(reduced_docs, session, features, cluster_type, k, atom_type, first_training_files, corpus=corpus, save_roc_figure=save_roc_figure, 
+                                    feature_vector_weights=feature_weights, feature_confidence_weights=feature_confidence_weights, metadata=metadata,
+                                    cheating=cheating, cheating_min_len=cheating_min_len)
 
-        thresh_prec_avgs, thresh_recall_avgs, thresh_fmeasure_avgs, thresh_granularity_avgs, thresh_overall_avgs = \
-                prec_recall_evaluate(reduced_docs, session, features, cluster_type, k, 
-                    atom_type, corpus=corpus, feature_vector_weights=feature_weights, 
-                    metadata=metadata, cheating=cheating, cheating_min_len=cheating_min_len)
+    thresh_prec_avgs, thresh_recall_avgs, thresh_fmeasure_avgs, thresh_granularity_avgs, thresh_overall_avgs = \
+            prec_recall_evaluate(reduced_docs, session, features, cluster_type, k, 
+                atom_type, corpus=corpus, feature_vector_weights=feature_weights, 
+                metadata=metadata, cheating=cheating, cheating_min_len=cheating_min_len)
 
-        print '-----'
-        print 'features:', features
-        print 'cluster_type:', cluster_type
-        print 'atom_type:', atom_type
-        print 'n:', n
-        
-        session.close()
+    print '-----'
+    print 'features:', features
+    print 'cluster_type:', cluster_type
+    print 'atom_type:', atom_type
+    print 'n:', n
+    
+    session.close()
 
-        return thresh_prec_avgs, thresh_recall_avgs, thresh_fmeasure_avgs, thresh_granularity_avgs, thresh_overall_avgs
+    return roc_path, roc_auc, thresh_prec_avgs, thresh_recall_avgs, thresh_fmeasure_avgs, thresh_granularity_avgs, thresh_overall_avgs
 
 
-def evaluate(features, cluster_type, k, atom_type, docs, corpus='intrinsic', save_roc_figure=True, reduced_docs=None, feature_vector_weights=None, 
+def evaluate(reduced_docs, session, features, cluster_type, k, atom_type, docs, corpus='intrinsic', save_roc_figure=True, feature_vector_weights=None, 
             metadata={}, cheating=False, cheating_min_len=5000, **clusterargs):
     '''
     Return the roc curve path and area under the roc curve for the given list of documents parsed
@@ -151,11 +131,7 @@ def evaluate(features, cluster_type, k, atom_type, docs, corpus='intrinsic', sav
     atom_type is "word", "sentence", or "paragraph".
     docs should be a list of full path strings.
     '''
-    # TODO: Return more statistics, not just roc curve things.
-    session = Session()
     # If previous call cached <reduced_docs>, don't re-query the DB
-    if not reduced_docs:
-        reduced_docs = _get_reduced_docs(atom_type, docs, session, corpus=corpus)
     plag_likelihoods = []
     doc_plag_assignments = {}
     
@@ -184,8 +160,6 @@ def evaluate(features, cluster_type, k, atom_type, docs, corpus='intrinsic', sav
         likelihood = cluster(cluster_type, k, feature_vecs, **clusterargs)
         doc_plag_assignments[d] = likelihood
         plag_likelihoods.append(likelihood)
-    print 'valid:', valid_reduced_docs
-    # _output_to_file(doc_plag_assignments, atom_type, cluster_type)
     
     metadata['features'] = features
     metadata['cluster_type'] = cluster_type
@@ -193,10 +167,9 @@ def evaluate(features, cluster_type, k, atom_type, docs, corpus='intrinsic', sav
     metadata['atom_type'] = atom_type
     metadata['n'] = len(reduced_docs)
     roc_path, roc_auc = _roc(valid_reduced_docs, plag_likelihoods, save_roc_figure=save_roc_figure, cheating=cheating, cheating_min_len=cheating_min_len, **metadata)
-    session.close()
 
     # Return reduced_docs for caching in case we call <evaluate> multiple times
-    return roc_path, roc_auc, reduced_docs
+    return roc_path, roc_auc
 
 def get_confidences_actuals(session, features, cluster_type, k, atom_type, docs, corpus='intrinsic', save_roc_figure=True, reduced_docs=None, feature_vector_weights=None, metadata={}, cheating=False, cheating_min_len=5000, **clusterargs):
     '''
@@ -326,7 +299,9 @@ def compare_outlier_params(n, features=None, min_len=None):
     
     for atom_type in atom_types:
         for c in center_at_mean:
-            roc_path, roc_auc, reduced_docs = \
+            # NOTE (nj) this will break now, but we don't care since we've
+            # already set our outlier params
+            roc_path, roc_auc = \
                 evaluate(features, 'outlier', 2, atom_type, docs, center_at_mean=c)
 
             one_trial = (atom_type, min_len, c, roc_path, roc_auc)
@@ -863,43 +838,6 @@ def _one_run():
     
     print evaluate_n_documents(features, cluster_type, k, atom_type, n, first_doc_num=first_doc_num) 
 
-def _try_k_feature_combinations(num_features=4):
-    '''
-    '''
-    features = FeatureExtractor.get_all_feature_function_names()
-
-    cluster_type = 'outlier'
-    k = 2
-    atom_type = 'nchars'
-    n = 200
-    first_doc_num = 0
-
-    results = {}
-    for feature_set in itertools.combinations(features, num_features):
-        print 'Working on:', feature_set
-        trial = evaluate_n_documents(feature_set, cluster_type, k, atom_type, n, first_doc_num=first_doc_num) 
-        print trial
-        results[tuple(feature_set)] = trial
-    print results
-
-def run_individual_features(features, cluster_type, k, atom_type, n, min_len=None, first_doc_num=0):
-    # List of tuples like (AUC, feature, PDF path)
-    results = []
-
-    for feat in features:
-        trial = evaluate_n_documents([feat], cluster_type, k, atom_type, n, first_doc_num=first_doc_num) 
-        results.append((trial[1], feat, trial[0]))
-        for f, t, _ in results:
-            print f
-            print t
-            print '-'*20
-
-    # Sorts by first element by default -- make [0]th element the 
-    # largest AUC
-    results.sort(reverse=True)
-
-    return results
-    
 # To see our best runs by AUC (according to the attached JSON files),
 # navigate to the figures directory and run:
 # ls -t | grep json | xargs grep auc | awk '{print $1, $3; }' | sort -gk 2 | tail -n 20
@@ -938,16 +876,15 @@ if __name__ == "__main__":
         'word_unigram,the',
         'yule_k_characteristic',
     ]
-    populate_database(['nchars'], 550, features=features, corpus='intrinsic', corpus_type='testing')
 
-    # features = [
-    #     'punctuation_percentage',
-    #     'gunning_fog_index',
-    #     'syntactic_complexity',
-    #     'num_chars',
-    #     'vowelness_trigram,C,V,C',
-    #     'avg_internal_word_freq_class'
-    # ]
+    features = [
+        'punctuation_percentage',
+        'gunning_fog_index',
+        'syntactic_complexity',
+        'num_chars',
+        'vowelness_trigram,C,V,C',
+        'avg_internal_word_freq_class'
+    ]
     # features = FeatureExtractor.get_all_feature_function_names()
     # features = [f for f in features if 'evolved' not in f]
     # features = [
@@ -956,12 +893,7 @@ if __name__ == "__main__":
     #    'word_unigram,is',
     #    'average_syllables_per_word'
     # ]
-    # cluster_type = 'kmeans'
-    # atom_type = 'nchars'
-    # n = 600
-    # print evaluate_n_documents(features, cluster_type, 2, atom_type, n, eval_method = 'prec_recall')
-    #print evaluate_n_documents(features, cluster_type, 2, atom_type, n)
-
-                 
-    #print evaluate_n_documents(features, "outlier", 2, "nchars", 500, cheating=True, save_roc_figure=True)
-    # print evaluate_n_documents(features, "outlier", 2, "nchars", 500, cheating=True, cheating_min_len=5000, save_roc_figure=False, corpus_type='training')
+    cluster_type = 'kmeans'
+    atom_type = 'nchars'
+    n = 20
+    print evaluate_n_documents(features, cluster_type, 2, atom_type, n)

@@ -143,6 +143,69 @@ class FeatureExtractor:
             'avg_external_word_freq_class'
         ]
 
+    @staticmethod
+    def get_training_quality_features():
+        '''
+        Quality features that are populated for the intrinsic training set
+        '''
+        return [
+            'average_sentence_length',
+            'average_syllables_per_word',
+            'avg_external_word_freq_class',
+            'avg_internal_word_freq_class',
+            'flesch_kincaid_grade',
+            'flesch_reading_ease',
+            'gunning_fog_index',
+            'honore_r_measure',
+            'num_chars',
+            'punctuation_percentage',
+            'stopword_percentage',
+            'syntactic_complexity',
+            'vowelness_trigram,C,V,V',
+            'vowelness_trigram,C,V,C',
+            'word_unigram,been',
+            'word_unigram,is',
+            'word_unigram,of',
+            'word_unigram,the',
+            'yule_k_characteristic'
+        ]
+
+    @staticmethod
+    def get_test_quality_features():
+        '''
+        '''
+        return [
+            'average_sentence_length',
+            'average_syllables_per_word',
+            'avg_external_word_freq_class',
+            'avg_internal_word_freq_class',
+            'flesch_kincaid_grade',
+            'flesch_reading_ease',
+            'gunning_fog_index',
+            'honore_r_measure',
+            'num_chars',
+            'punctuation_percentage',
+            'stopword_percentage',
+            'syntactic_complexity',
+            'vowelness_trigram,C,V,V',
+            'vowelness_trigram,C,V,C',
+            'word_unigram,been',
+            'word_unigram,is',
+            'word_unigram,of',
+            'word_unigram,the',
+            'yule_k_characteristic',
+            'avg(average_syllables_per_word)',
+            'std(average_syllables_per_word)',
+            'avg(std(average_syllables_per_word))',
+            'avg(avg_external_word_freq_class)',
+            'std(avg_external_word_freq_class)',
+            'avg(avg_internal_word_freq_class)',
+            'std(avg_internal_word_freq_class)',
+            'avg(num_chars)',
+            'std(num_chars)',
+            'avg(stopword_percentage)'
+        ]
+
     def __init__(self, text, char_span_length=5000):
         self.text = text
         self.word_spans = tokenization.tokenize(text, "word")
