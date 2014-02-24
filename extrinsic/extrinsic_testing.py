@@ -41,8 +41,7 @@ class ExtrinsicTester:
         self.search_method = search_method
         self.search_n = search_n
 
-
-    def get_trials(self, session):
+    def get_trials(self, session, fingerprint_m):
         '''
         For each suspect document, split the document into atoms and classify each atom
         as plagiarized or not-plagiarized. Build a list of classifications and a list
@@ -53,7 +52,7 @@ class ExtrinsicTester:
         classifications_dict = {}
         actuals_dict = {}
 
-        outer_search_level_mid = fingerprintstorage.get_mid(self.fingerprint_method, self.n, self.k, "full", self.hash_len)
+        outer_search_level_mid = fingerprintstorage.get_mid(fingerprint_m, self.n, self.k, "full", self.hash_len)
 
         for fi, f in enumerate(self.suspect_file_list, 1):
             print
@@ -70,7 +69,7 @@ class ExtrinsicTester:
                 doc_classifications = []
 
                 # first, get a list of the most similar full documents to this document
-                full_atom_classifications = self.evaluator.classify_passage(doc_name, "full", 0, self.fingerprint_method,
+                full_atom_classifications = self.evaluator.classify_passage(doc_name, "full", 0, fingerprint_m,
                     self.n, self.k, self.hash_len, "containment", outer_search_level_mid)
 
                 top_docs = full_atom_classifications[:self.search_n]
@@ -79,7 +78,7 @@ class ExtrinsicTester:
                 # now, compare all paragraphs in the most similar documents to this paragraph
                 for atom_index in xrange(len(acts)):
                     atom_classifications = self.evaluator.classify_passage(doc_name, "paragraph", atom_index, 
-                        self.fingerprint_method, self.n, self.k, self.hash_len, self.confidence_method, self.mid, dids=dids)
+                        fingerprint_m, self.n, self.k, self.hash_len, self.confidence_method, self.mid, dids=dids)
                     # print 'atom_classifications:', atom_classifications
                     # top_source is a tuple with the form ((source_doc_name, atom_index), confidence, suspect_filename)
                     top_source = atom_classifications[0]
@@ -105,10 +104,10 @@ class ExtrinsicTester:
                 for atom_index in xrange(len(acts)):
                     # first, find most similar documents to this paragraph
                     full_atom_classifications = self.evaluator.classify_passage(doc_name, "full", atom_index,
-                        self.fingerprint_method, self.n, self.k, self.hash_len, "containment",
-                        fingerprintstorage.get_mid(self.fingerprint_method, self.n, self.k, "full", self.hash_len),
+                        fingerprint_m, self.n, self.k, self.hash_len, "containment",
+                        fingerprintstorage.get_mid(fingerprint_m, self.n, self.k, "full", self.hash_len),
                         passage_atom_type="paragraph",
-                        passage_mid=fingerprintstorage.get_mid(self.fingerprint_method, self.n, self.k, "paragraph", self.hash_len))
+                        passage_mid=fingerprintstorage.get_mid(fingerprint_m, self.n, self.k, "paragraph", self.hash_len))
 
                     top_docs = full_atom_classifications[:self.search_n]
                     dids = [x[0][2] for x in top_docs]
@@ -119,7 +118,7 @@ class ExtrinsicTester:
                     else:
                         # now, compare this paragraph to all paragraphs in <top_docs>
                         atom_classifications = self.evaluator.classify_passage(doc_name, "paragraph", atom_index, 
-                            self.fingerprint_method, self.n, self.k, self.hash_len, self.confidence_method, self.mid, dids=dids)
+                            fingerprint_m, self.n, self.k, self.hash_len, self.confidence_method, self.mid, dids=dids)
                         # print 'atom_classifications:', atom_classifications
                         # top_source is a tuple with the form ((source_doc_name, atom_index), confidence, suspect_filename)
                         top_source = atom_classifications[0]
@@ -146,7 +145,7 @@ class ExtrinsicTester:
                 print '%d/%d Classifying %s' % (fi, len(self.suspect_file_list), doc_name)
 
                 for atom_index in xrange(len(acts)):
-                    atom_classifications = self.evaluator.classify_passage(doc_name, self.base_atom_type, atom_index, self.fingerprint_method, self.n, self.k, self.hash_len, self.confidence_method, self.mid)
+                    atom_classifications = self.evaluator.classify_passage(doc_name, self.base_atom_type, atom_index, fingerprint_m, self.n, self.k, self.hash_len, self.confidence_method, self.mid)
                     # print atom_classifications
                     # top_source is a tuple with the form ((source_doc_name, atom_index), confidence)
                     top_source = atom_classifications[0]
@@ -164,7 +163,6 @@ class ExtrinsicTester:
         # classifications = self.screen_crap(classifications, classifications_dict)
 
         return classifications, actuals, classifications_dict, actuals_dict
-
 
     def plot_ROC_curve(self, confidences, actuals):
         '''
@@ -203,13 +201,40 @@ class ExtrinsicTester:
 
         return roc_auc, path
 
-    def evaluate(self, session, ignore_high_obfuscation=False, show_false_negpos_info=False):
+    def evaluate(self, session, ignore_high_obfuscation=False, show_false_negpos_info=False, get_best_of=False):
         '''
         Run our tool with the given parameters and return the area under the roc.
         If a num_files is given, only run on the first num_file suspicious documents,
         otherwise run on all of them.
         '''
-        trials, ground_truths, trials_dict, actuals_dict = self.get_trials(session)
+
+        # trials = {}
+        # if get_best_of:
+        #     for method in ['kth_in_sent', 'anchor', 'winnow-k']:
+        #         if method == 'winnow-k':
+        #             self.n = 8
+        #             self.k = 13
+        #         elif method =='kth_in_sent':
+        #             self.k = 3
+        #         trials[method], ground_truths, trials_dict, actuals_dict = self.get_trials(session, method)
+        # else:
+        #     trials[self.fingerprint_method], ground_truths, trials_dict, actuals_dict = self.get_trials(session, self.fingerprint_method)
+
+        # final_trials = []
+        # for i in xrange(len(trials[self.fingerprint_method])):
+        #     confidence = 0
+        #     index = None
+        #     for key in trials.keys():
+        #         print key
+        #         if trials[key][i][1] > confidence:
+        #             print "SWITCHED!"
+        #             confidence = trials[key][i][1]
+        #             index = trials[key][i]
+        #     if index == None:
+        #         index = trials[key][i]
+        #     final_trials.append(index)
+
+        trials, ground_truths, trials_dict, actuals_dict = self.get_trials(session, self.fingerprint_method)
 
         print 'Computing source accuracy...'
         num_plagiarized = 0
@@ -232,10 +257,10 @@ class ExtrinsicTester:
                 if guessed_doc_name != 'dummy':
                     false_positives.append([trial, ground_truth])
 
-        # source_accuracy = float(num_correctly_identified) / num_called_plagiarized
-        # true_source_accuracy = float(num_correctly_identified) / num_plagiarized
+        source_accuracy = float(num_correctly_identified) / num_called_plagiarized
+        true_source_accuracy = float(num_correctly_identified) / num_plagiarized
         
-        # print num_plagiarized, num_correctly_identified, source_accuracy
+        print num_plagiarized, num_correctly_identified, source_accuracy
         
         if show_false_negpos_info:
             self.display_false_negative_info(false_negatives)
@@ -249,11 +274,9 @@ class ExtrinsicTester:
                 actuals.append(ground_truth[0])
 
         # UNCOMMENT NEXT LINE TO GET FALSEPOSITIVES AND FALSENEGATIVES
-        self.analyze_fpr_fnr(trials_dict, actuals_dict, 0.50)
+        # self.analyze_fpr_fnr(trials_dict, actuals_dict, 0.50)
         roc_auc, path = self.plot_ROC_curve(confidences, actuals)
         return roc_auc, source_accuracy, true_source_accuracy, path
-
-
 
     def display_false_positive_info(self, false_positives):
         print
@@ -298,7 +321,6 @@ class ExtrinsicTester:
             print 
             print '=========================================='
             print
-
 
     def display_false_negative_info(self, false_negatives):
         '''
@@ -364,8 +386,6 @@ class ExtrinsicTester:
                 running_atom_count += 1
 
         return classifications
-
-
 
     def analyze_fpr_fnr(self, trials, actuals, threshold):
         '''
@@ -456,7 +476,7 @@ class ExtrinsicTester:
             fileFNR.close()
 
 
-def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all", search_method='normal', search_n=5, save_to_db=True, ignore_high_obfuscation=False, show_false_negpos_info=False):
+def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all", search_method='normal', search_n=5, save_to_db=True, ignore_high_obfuscation=False, show_false_negpos_info=False, get_best_of=False):
     session = Session()
     
     # Get the list of suspect files to test on
@@ -499,7 +519,7 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
     
     tester = ExtrinsicTester(atom_type, method, n, k, hash_size, confidence_method, suspect_file_list, source_file_list, search_method, search_n)
 
-    roc_auc, source_accuracy, true_source_accuracy, roc_path = tester.evaluate(session, ignore_high_obfuscation, show_false_negpos_info)
+    roc_auc, source_accuracy, true_source_accuracy, roc_path = tester.evaluate(session, ignore_high_obfuscation, show_false_negpos_info, get_best_of)
 
     # Save the result
     if save_to_db:
@@ -521,5 +541,5 @@ if __name__ == "__main__":
     #evaluate("kth_in_sent", 5, 3, "full", 10000000, "jaccard", num_files=10)
 
 
-    test("anchor", 5, 0, "paragraph", 10000000, "jaccard", num_files=15, search_method='normal', search_n=1, 
-        save_to_db=True, ignore_high_obfuscation=False, show_false_negpos_info=False)
+    test("winnow-k", 8, 13, "paragraph", 10000000, "containment", num_files=15, search_method='normal', search_n=1, 
+        save_to_db=False, ignore_high_obfuscation=False, show_false_negpos_info=False, get_best_of=False)
