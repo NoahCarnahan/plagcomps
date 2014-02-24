@@ -161,6 +161,8 @@ class ExtrinsicTester:
 
                 classifications_dict[f] = doc_classifications
 
+        # classifications = self.screen_crap(classifications, classifications_dict)
+
         return classifications, actuals, classifications_dict, actuals_dict
 
 
@@ -230,10 +232,10 @@ class ExtrinsicTester:
                 if guessed_doc_name != 'dummy':
                     false_positives.append([trial, ground_truth])
 
-        source_accuracy = float(num_correctly_identified) / num_called_plagiarized
-        true_source_accuracy = float(num_correctly_identified) / num_plagiarized
+        # source_accuracy = float(num_correctly_identified) / num_called_plagiarized
+        # true_source_accuracy = float(num_correctly_identified) / num_plagiarized
         
-        print num_plagiarized, num_correctly_identified, source_accuracy
+        # print num_plagiarized, num_correctly_identified, source_accuracy
         
         if show_false_negpos_info:
             self.display_false_negative_info(false_negatives)
@@ -247,9 +249,11 @@ class ExtrinsicTester:
                 actuals.append(ground_truth[0])
 
         # UNCOMMENT NEXT LINE TO GET FALSEPOSITIVES AND FALSENEGATIVES
-        # self.analyze_fpr_fnr(trials_dict, actuals_dict, 0.50)
+        self.analyze_fpr_fnr(trials_dict, actuals_dict, 0.50)
         roc_auc, path = self.plot_ROC_curve(confidences, actuals)
-        return roc_auc, source_accuracy, true_source_accuracy
+        # return roc_auc, source_accuracy, true_source_accuracy
+        return roc_auc, None, None
+
 
 
     def display_false_positive_info(self, false_positives):
@@ -344,6 +348,24 @@ class ExtrinsicTester:
             print
             print
             print '=========================================='
+
+    def screen_crap(self, classifications, info_dict):
+
+        running_atom_count = 0;
+        for f in info_dict.keys():
+            document = open(f + '.txt')
+            text = document.read()
+            spans = tokenize(text, self.base_atom_type)
+            document.close()
+            for i in xrange(len(spans)):
+                if self.base_atom_type == 'paragraph':
+                    if spans[i][1]-spans[i][0] < 20:
+                        classifications[running_atom_count] = (classifications[running_atom_count][0], 0)
+                        info_dict[f][i] = (classifications[running_atom_count][0], 0)
+                running_atom_count += 1
+
+        return classifications
+
 
 
     def analyze_fpr_fnr(self, trials, actuals, threshold):
@@ -465,4 +487,4 @@ if __name__ == "__main__":
     #test("anchor", 5, 0, "paragraph", 10000000, "containment", num_files=3, search_method='normal', search_n=1, save_to_db=True)
     #evaluate("kth_in_sent", 5, 3, "full", 10000000, "jaccard", num_files=10)
 
-	test("kth_in_sent", 5, 3, "paragraph", 100000000, "containment", num_files=2, search_method='normal', search_n=1, save_to_db=False)
+	test("winnow-k", 8, 15, "paragraph", 100000000, "containment", num_files=2, search_method='normal', search_n=1, save_to_db=False)

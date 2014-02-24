@@ -365,4 +365,4 @@ if __name__ == '__main__':
     f = open("/copyCats/itty-bitty-corpus/suspicious/einstein.txt","r")
     text = f.read()
     f.close()
-    print ex.get_fingerprint(text, 5, "kth_in_sent", 5)
+    print ex.get_fingerprint(text, 5, "winnow-k", 8)

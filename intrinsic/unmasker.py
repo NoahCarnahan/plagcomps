@@ -84,6 +84,7 @@ def evaluate_confidences(features, cluster_type, k, atom_type, docs, corpus='int
     return float(point[0])/float(point[1])
 
 def classify(confidences):
+    print confidences
     plag = 0
     non_plag = 0
     total = 0
@@ -148,7 +149,10 @@ def visualize(dataset):
     for key in dataset.keys():
         plt.annotate(key, xy=(x[i],y[i]), xytext=(x[i],y[i]))
         i+=1
-    plt.show(block=True)
+
+    path = os.path.join(os.path.dirname(__file__), "../figures/unmask/unmask_"+str(time.time())+"_"+self.fingerprint_method+".pdf")
+    # plt.show(block=True)
+    plt.savefig(path)
 
 
 if __name__ == "__main__":
@@ -166,5 +170,5 @@ if __name__ == "__main__":
         # 'pos_trigram,VB,IN,DT',
 
     # Unmask(["average_sentence_length", "pos_trigram,NNS,IN,DT", "word_unigram,of"], "kmeans", 2, "paragraph", 10)
-    Unmask(features, "outlier", 2, "paragraph", 15)
+    Unmask(features, "outlier", 2, "paragraph", 8)
     visualize(dataPoints)
