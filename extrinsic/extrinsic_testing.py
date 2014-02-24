@@ -251,8 +251,7 @@ class ExtrinsicTester:
         # UNCOMMENT NEXT LINE TO GET FALSEPOSITIVES AND FALSENEGATIVES
         self.analyze_fpr_fnr(trials_dict, actuals_dict, 0.50)
         roc_auc, path = self.plot_ROC_curve(confidences, actuals)
-        # return roc_auc, source_accuracy, true_source_accuracy
-        return roc_auc, None, None
+        return roc_auc, source_accuracy, true_source_accuracy, path
 
 
 
@@ -459,23 +458,56 @@ class ExtrinsicTester:
 
 def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all", search_method='normal', search_n=5, save_to_db=True, ignore_high_obfuscation=False, show_false_negpos_info=False):
     session = Session()
+    
+    # Get the list of suspect files to test on
+    source_file_list, suspect_file_list = ExtrinsicUtility().get_corpus_files(n = num_files, include_txt_extension = False)
+    
+    # Confirm that these suspects and enough source documents have been populated
+    num_suspect_documents = len(suspect_file_list)
+    num_source_documents = len(source_file_list)
+    
+    mid = fingerprintstorage.get_mid(method, n, k, atom_type, hash_size)
+    num_populated_suspects = fingerprintstorage.get_number_suspects(mid)
+    num_populated_sources = fingerprintstorage.get_number_sources(mid)
+    
+    if num_populated_suspects < num_suspect_documents or num_populated_sources < num_source_documents:
+        raise ValueError("Not all of the documents used in this test have been populated (only "+str(num_populated_sources)+" sources, "+str(num_populated_suspects)+" suspects have been populated). Populate them first with fingerprintstorage.")
+    
+    # If the search method is two level, we need to check that additional things are in the database
+    if search_method == "two_level_ff" or search_method == "two_level_pf":
+        full_mid = fingerprintstorage.get_mid(method, n, k, "full", hash_size)
+        para_mid = fingerprintstorage.get_mid(method, n, k, "paragraph", hash_size)
         
-    source_file_list, suspect_file_list = ExtrinsicUtility().get_training_files(n = num_files, include_txt_extension = False)
+        num_populated_full_suspects = fingerprintstorage.get_number_suspects(full_mid)
+        num_populated_para_suspects = fingerprintstorage.get_number_suspects(para_mid)
+        
+        num_populated_full_sources = fingerprintstorage.get_number_sources(full_mid)
+        num_populated_para_sources = fingerprintstorage.get_number_sources(para_mid)
+        
+        num_populated_sources = num_populated_full_sources
+        num_populated_suspects = num_populated_full_suspects
+        
+        if num_populated_full_suspects < num_suspect_documents or num_populated_para_suspects < num_suspect_documents \
+            or num_populated_full_sources < num_source_documents or num_populated_para_sources < num_source_documents \
+            or num_populated_para_sources < num_populated_full_sources \
+            or num_populated_para_suspects < num_populated_full_suspects:
+            raise ValueError("Not all of the documents used in this test have been populated (only "+str(num_populated_sources)+" sources, "+str(num_populated_suspects)+" suspects have been populated). Populate them first with fingerprintstorage.")
+    
+    
     print suspect_file_list    
-    print "Testing first", len(suspect_file_list), "suspect files against how ever many source documents have been populated."
+    print "Testing first", suspect_file_list, "suspect files against", num_populated_sources, "source documents."
     
     tester = ExtrinsicTester(atom_type, method, n, k, hash_size, confidence_method, suspect_file_list, source_file_list, search_method, search_n)
 
-    roc_auc, source_accuracy, true_source_accuracy = tester.evaluate(session, ignore_high_obfuscation, show_false_negpos_info)
+    roc_auc, source_accuracy, true_source_accuracy, roc_path = tester.evaluate(session, ignore_high_obfuscation, show_false_negpos_info)
 
     # Save the result
     if save_to_db:
         with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) as conn:
             conn.autocommit = True    
             with conn.cursor() as cur:
-                num_sources = fingerprintstorage.get_number_sources(fingerprintstorage.get_mid(method, n, k, atom_type, hash_size))
-                query = "INSERT INTO extrinsic_results (method_name, n, k, atom_type, hash_size, simmilarity_method, suspect_files, source_files, auc, true_source_accuracy, source_accuracy, search_method, search_n) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
-                args = (method, n, k, atom_type, hash_size, confidence_method, num_files, num_sources, roc_auc, true_source_accuracy, source_accuracy, search_method, search_n)
+                query = "INSERT INTO extrinsic_results (method_name, n, k, atom_type, hash_size, simmilarity_method, suspect_files, source_files, auc, true_source_accuracy, source_accuracy, search_method, search_n, ignore_high_obfuscation, roc_path) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
+                args = (method, n, k, atom_type, hash_size, confidence_method, num_files, num_populated_sources, roc_auc, true_source_accuracy, source_accuracy, search_method, search_n, ignore_high_obfuscation, roc_path)
                 cur.execute(query, args)
     
     print 'ROC auc:', roc_auc
@@ -484,7 +516,10 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
 
         
 if __name__ == "__main__":
+
     #test("anchor", 5, 0, "paragraph", 10000000, "containment", num_files=3, search_method='normal', search_n=1, save_to_db=True)
     #evaluate("kth_in_sent", 5, 3, "full", 10000000, "jaccard", num_files=10)
 
-	test("winnow-k", 8, 15, "paragraph", 100000000, "containment", num_files=2, search_method='normal', search_n=1, save_to_db=False)
+
+    test("anchor", 5, 0, "paragraph", 10000000, "jaccard", num_files=15, search_method='normal', search_n=1, 
+        save_to_db=True, ignore_high_obfuscation=False, show_false_negpos_info=False)

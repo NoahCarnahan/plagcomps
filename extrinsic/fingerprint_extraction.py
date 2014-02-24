@@ -317,26 +317,37 @@ def get_plagiarism_confidence(suspect_fingerprint, source_fingerprint, confidenc
         return jaccard_similarity(suspect_fingerprint, source_fingerprint)
     elif confidence_method == "containment":
         return containment_similarity(suspect_fingerprint, source_fingerprint)
+    elif confidence_method == "jaccard-alt1":
+        return jaccard_similarity(suspect_fingerprint, source_fingerprint, min_overlap = 2)
+    elif confidence_method == "containment-alt1":
+        return containment_similarity(suspect_fingerprint, source_fingerprint, min_overlap = 2)
     else:
         raise Exception("Invalid plagiarism confidence method: " + confidence_method)
 
-def jaccard_similarity(a, b):
+def jaccard_similarity(a, b, min_overlap = None):
     '''
-    Measures the jaccard similarity of input sets a and b
+    Measures the jaccard similarity of input sets a and b.
+    If a min_overlap is provided, then returns 0 if the intersection of the two sets is
+    less than min_overlap.
     '''
     intersection_size = len(set(a).intersection(set(b)))
-    # len([k for k in a if k in b])
+    if min_overlap:
+        intersection_size = 0 if intersection_size < min_overlap else intersection_size
     union_size = len(a) + len(b) - intersection_size
     if union_size > 0:
         return float(intersection_size) / union_size
     else:
         return 0
 
-def containment_similarity(a, b):
+def containment_similarity(a, b, min_overlap = None):
     '''
     Measures the percent of elements in set a that are also contained in set b.
+    If a min_overlap is provided, then returns 0 if the intersection of the two sets is
+    less than min_overlap.
     '''
     intersection_size = len(set(a).intersection(set(b)))
+    if min_overlap:
+        intersection_size = 0 if intersection_size < min_overlap else intersection_size
     if len(a) > 0:
         return float(intersection_size) / len(a)
     else:

@@ -54,7 +54,7 @@ def populate_EVERYTHING():
                 d.get_feature_vectors([feature], session)
     session.close()
 
-def populate_database(atom_types, num, features=None, corpus='intrinsic'):
+def populate_database(atom_types, num, features=None, corpus='intrinsic', corpus_type='training'):
     '''
     Populate the database with the first num training files parsed with the given atom_types.
     Uses the features passed as an optional parameter, or all of them.
@@ -65,10 +65,10 @@ def populate_database(atom_types, num, features=None, corpus='intrinsic'):
     # Get the first num training files
     if corpus == 'intrinsic':
         util = IntrinsicUtility()
-        first_training_files = util.get_n_training_files(num)
+        first_training_files = util.get_n_training_files(num, corpus_type=corpus_type)
     elif corpus == 'extrinsic':
         util = ExtrinsicUtility()
-        first_training_files = util.get_training_files(n=num, path_type="absolute", file_type='suspect', include_txt_extension=True)
+        first_training_files = util.get_corpus_files(n=num, path_type="absolute", file_type='suspect', include_txt_extension=True)
     else:
         raise Exception("Invalid corpus specified: " + str(corpus))
         
@@ -79,6 +79,7 @@ def populate_database(atom_types, num, features=None, corpus='intrinsic'):
         
     i = 0
     for doc in first_training_files:
+        print doc
         i += 1
         for atom_type in atom_types:
             d = _get_reduced_docs(atom_type, [doc], session, corpus=corpus)[0]
@@ -90,7 +91,7 @@ def populate_database(atom_types, num, features=None, corpus='intrinsic'):
     session.close()
 
 def evaluate_n_documents(features, cluster_type, k, atom_type, n, eval_method = 'roc', corpus='intrinsic', save_roc_figure=True, min_len=None,
-                        first_doc_num=0, feature_weights=None, feature_confidence_weights=None, cheating=False, cheating_min_len=5000):
+                        first_doc_num=0, feature_weights=None, feature_confidence_weights=None, cheating=False, cheating_min_len=5000, corpus_type='training'):
     '''
     Return the evaluation (roc curve path, area under the roc curve) of the first n training
     documents parsed by atom_type, using the given features, cluster_type, and number of clusters k.
@@ -103,7 +104,7 @@ def evaluate_n_documents(features, cluster_type, k, atom_type, n, eval_method = 
     # get <n> files which all contain at least 35000 (or some length) characters, like:
     # first_training_files = IntrinsicUtility().get_n_training_files(n, min_len=35000)
     # as is done in Stein's paper
-    first_training_files = IntrinsicUtility().get_n_training_files(n, min_len=min_len, first_doc_num=first_doc_num)
+    first_training_files = IntrinsicUtility().get_n_training_files(n, min_len=min_len, first_doc_num=first_doc_num, corpus_type=corpus_type)
     # Also returns reduced_docs from <first_training_files>
     metadata = {
         'min_len' : min_len,
@@ -183,7 +184,7 @@ def evaluate(features, cluster_type, k, atom_type, docs, corpus='intrinsic', sav
         likelihood = cluster(cluster_type, k, feature_vecs, **clusterargs)
         doc_plag_assignments[d] = likelihood
         plag_likelihoods.append(likelihood)
-
+    print 'valid:', valid_reduced_docs
     # _output_to_file(doc_plag_assignments, atom_type, cluster_type)
     
     metadata['features'] = features
@@ -483,6 +484,12 @@ def _get_reduced_docs(atom_type, docs, session, corpus='intrinsic', create_new=T
                 session.commit()
             else:
                 continue
+        except sqlalchemy.orm.exc.MultipleResultsFound, e:
+            # This is funky.
+            print "========="
+            print "WE HAVE A PROBLEM! THERE ARE MULTIPLE COPIES OF A REDUCED DOC!"
+            print "========="
+            r = session.query(ReducedDoc).filter(and_(ReducedDoc.full_path == doc, ReducedDoc.atom_type == atom_type, ReducedDoc.version_number == DB_VERSION_NUMBER)).first()
         reduced_docs.append(r)
         
     return reduced_docs
@@ -517,7 +524,9 @@ def _roc(reduced_docs, plag_likelihoods, save_roc_figure=True, cheating=False, c
             span = spans[span_index]
             actuals.append(1 if doc.span_is_plagiarized(span) else 0)
             confidences.append(plag_likelihoods[doc_index][span_index])
-
+    print reduced_docs
+    print actuals
+    print confidences
     # actuals is a list of ground truth classifications for passages
     # confidences is a list of confidence scores for passages
     # So, if confidences[i] = .3 and actuals[i] = 1 then passage i is plagiarized and
@@ -567,18 +576,13 @@ class ReducedDoc(Base):
         '''
         if '.txt' in path or '.xml' in path:
             path = path[:-4]
-        if corpus == "intrinsic":
-            self.full_path = path
-        elif corpus == "extrinsic":
-            self.full_path = path + ".txt"
+        
+        self.full_path = path + ".txt"
 
-        print "full_path", self.full_path
         # _short_name example: '/part1/suspicious-document00536'
         self._short_name = "/"+self.full_path.split("/")[-2] +"/"+ self.full_path.split("/")[-1] 
-        if corpus == "intrinsic":
-            self._full_xml_path = path[:-3] + "xml"
-        elif corpus == "extrinsic":
-            self._full_xml_path = path + ".xml"
+
+        self._full_xml_path = path + ".xml"
 
         # 'intrinsic' or 'extrinsic'
         self.corpus = corpus
@@ -901,17 +905,49 @@ def run_individual_features(features, cluster_type, k, atom_type, n, min_len=Non
 # ls -t | grep json | xargs grep auc | awk '{print $1, $3; }' | sort -gk 2 | tail -n 20
 # Replace the 20 with a larger number to see more results
 if __name__ == "__main__":
-    #run_individual_features(features, cluster_type, k, atom_type, n, min_len=None, first_doc_num=0)
-    #populate_database(['nchars', 'paragraph'], 550, features=None, corpus='extrinsic')
+    # all_features = FeatureExtractor.get_all_feature_function_names(include_nested=True)
+    # old_features = FeatureExtractor.get_all_feature_function_names(include_nested=False)
+    # nested_features = []
+    # for f in all_features:
+    #     if f not in old_features:
+    #         nested_features.append(f)
 
     features = [
-        'punctuation_percentage',
+        'average_sentence_length',
+        'average_syllables_per_word',
+        'avg_external_word_freq_class',
+        'avg_internal_word_freq_class',
+        'eissen_feature',
+        'flesch_kincaid_grade',
+        'flesch_reading_ease',
+        'frequency_of_word_been',
+        'frequency_of_word_is',
+        'frequency_of_word_of',
+        'frequency_of_word_the',
         'gunning_fog_index',
-        'syntactic_complexity',
+        'honore_r_measure',
         'num_chars',
+        'punctuation_percentage',
+        'stopword_percentage',
+        'syntactic_complexity',
+        'vowelness_trigram,C,V,V',
         'vowelness_trigram,C,V,C',
-        'avg_internal_word_freq_class'
+        'word_unigram,been',
+        'word_unigram,is',
+        'word_unigram,of',
+        'word_unigram,the',
+        'yule_k_characteristic',
     ]
+    populate_database(['nchars'], 550, features=features, corpus='intrinsic', corpus_type='testing')
+
+    # features = [
+    #     'punctuation_percentage',
+    #     'gunning_fog_index',
+    #     'syntactic_complexity',
+    #     'num_chars',
+    #     'vowelness_trigram,C,V,C',
+    #     'avg_internal_word_freq_class'
+    # ]
     # features = FeatureExtractor.get_all_feature_function_names()
     # features = [f for f in features if 'evolved' not in f]
     # features = [
@@ -920,12 +956,12 @@ if __name__ == "__main__":
     #    'word_unigram,is',
     #    'average_syllables_per_word'
     # ]
-    cluster_type = 'kmeans'
-    atom_type = 'nchars'
-    n = 600
-    print evaluate_n_documents(features, cluster_type, 2, atom_type, n, eval_method = 'prec_recall')
+    # cluster_type = 'kmeans'
+    # atom_type = 'nchars'
+    # n = 600
+    # print evaluate_n_documents(features, cluster_type, 2, atom_type, n, eval_method = 'prec_recall')
     #print evaluate_n_documents(features, cluster_type, 2, atom_type, n)
 
                  
     #print evaluate_n_documents(features, "outlier", 2, "nchars", 500, cheating=True, save_roc_figure=True)
-    #print evaluate_n_documents(features, "outlier", 2, "nchars", 3, cheating=True, cheating_min_len=5000, save_roc_figure=True)
+    # print evaluate_n_documents(features, "outlier", 2, "nchars", 500, cheating=True, cheating_min_len=5000, save_roc_figure=False, corpus_type='training')

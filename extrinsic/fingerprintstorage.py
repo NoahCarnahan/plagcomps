@@ -32,6 +32,29 @@ CREATE TABLE crisp_hashes (
     hash_value  integer
 );
 
+CREATE TABLE extrinsic_results (
+    n                   integer,
+    k                   integer,
+    atom_type           text,
+    hash_size           integer,
+    simmilarity_method  text,
+    suspect_files       integer,
+    source_files        integer,
+    auc                     real,
+    true_source_accuracy    real,
+    timestamp               timestamp without time zone default now(),
+    search_method           text,
+    search_n                integer,
+    source_accuracy         real,
+    ignore_high_obfuscation boolean,
+    threshold               real,
+    percision               real,
+    recall                  real,
+    fmeasure                real,
+    prf_fig_path            text,
+    roc_path                text
+);
+
 Next create the following indexes
     CREATE INDEX idx_crisp_did ON crisp_passages(did);
     CREATE INDEX idx_crisp_atom_num ON crisp_passages(atom_num);
@@ -45,6 +68,7 @@ After population, create the following indexes for rapid searching:
     CREATE INDEX idx_crisp_is_source ON     crisp_hashes(is_source);
     CREATE INDEX idx_crisp_mid ON           crisp_hashes(mid);
     CREATE INDEX idx_crisp_pid ON           crisp_hashes(pid);
+    CREATE INDEX idx_crisp_foo ON           crisp_hashes(pid, mid);
     
 '''
 
@@ -61,10 +85,18 @@ TMP_LOAD_FILE = "/tmp/dbimport.txt"
 DEBUG = True
 DEV_MODE = False
 
+def _get_connection(autocommit=False):
+    '''
+    Get a connection object to the database.
+    '''
+    conn = psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432)
+    conn.autocommit = autocommit
+    return conn
+
 def populate_database(files, method_name, n, k, atom_type, hash_size, check_for_duplicate=True):
     '''
     Example usages:
-    srs, sus = ExtrinsicUtility().get_training_files(n=10)
+    srs, sus = ExtrinsicUtility().get_corpus_files(n=10)
     populate_database(srs+sus, "kth_in_sent", n, k, "paragraph", 10000)
     
     If <check_for_duplicate>, a query for a duplicate row is made before creating a new row 
@@ -75,9 +107,7 @@ def populate_database(files, method_name, n, k, atom_type, hash_size, check_for_
     not to create duplicates (which is why its default is to make the extra check)
     
     '''
-    with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) \
-            as conn:
-        conn.autocommit = True
+    with _get_connection(autocommit=True) as conn:
                 
         # Get the mid (method id) for the given parameters. Create it if it does not already exist.
         with conn.cursor() as cur:
@@ -178,10 +208,31 @@ def populate_database(files, method_name, n, k, atom_type, hash_size, check_for_
                 _copy_and_write_to_hash_table(copy_file_string, cur)
 
 
+def get_number_suspects(mid):
+    '''
+    Return the number of suspect documents that have been populated for the given method.
+    '''
+    with _get_connection(autocommit=True) as conn:
+        
+        if DEV_MODE:
+            query = '''SELECT COUNT(DISTINCT(dev_passages.did)) FROM dev_hashes, dev_passages WHERE
+                        dev_hashes.mid = %s AND
+                        dev_hashes.pid = dev_passages.pid AND
+                        dev_hashes.is_source = FALSE;'''
+        else:
+            query = '''SELECT COUNT(DISTINCT(crisp_passages.did)) FROM crisp_hashes, crisp_passages WHERE
+                        crisp_hashes.mid = %s AND
+                        crisp_hashes.pid = crisp_passages.pid AND
+                        crisp_hashes.is_source = FALSE;'''
+        with conn.cursor() as cur:
+            cur.execute(query, (mid,))
+            return cur.fetchone()[0]
 
 def get_number_sources(mid):
-    with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) as conn:
-        conn.autocommit = True
+    '''
+    Return the number of source documents that have been populated for the given method.
+    '''
+    with _get_connection(autocommit=True) as conn:
         
         if DEV_MODE:
             query = ''' SELECT COUNT(DISTINCT(dev_passages.did)) FROM dev_hashes, dev_passages WHERE
@@ -195,7 +246,7 @@ def get_number_sources(mid):
                             crisp_hashes.is_source = TRUE; '''
         with conn.cursor() as cur:
             cur.execute(query, (mid,))
-            return cur.fetchone()
+            return cur.fetchone()[0]
 
 def get_passage_fingerprint(full_path, passage_num, atom_type, mid):
     '''
@@ -203,9 +254,7 @@ def get_passage_fingerprint(full_path, passage_num, atom_type, mid):
     using the parameters that correspond to the given <mid> (method id).
     '''
     # With statement cleans up the connection
-    with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) \
-            as conn:
-        conn.autocommit = True
+    with _get_connection(autocommit=True) as conn:
         
         if DEV_MODE:
             fp_query = '''SELECT hash_value FROM dev_hashes, dev_documents, dev_passages WHERE
@@ -261,9 +310,7 @@ def get_mid(method, n, k, atom_type, hash_size):
     Return the method id (mid) for the given method name, n, k, atom_type, and hash_size.
     Return None if no mid exists for these parameters.
     '''
-    with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) \
-            as conn:
-        conn.autocommit = True
+    with _get_connection(autocommit=True) as conn:
         with conn.cursor() as cur:
             if DEV_MODE:
                 query = "SELECT mid FROM dev_methods WHERE atom_type = %s AND method_name = %s AND n = %s AND k = %s AND hash_size = %s;"
@@ -281,7 +328,8 @@ def get_matching_passages(target_hash_value, mid, conn, dids=None):
     Returns a list of dictionaries like this:
     {"pid":1, "doc_name":"foo", "atom_number":34}, ...]
     
-    Only returns dictionaries where <target_hash_value> is part of its fingerprint.
+    Only returns dictionaries where <target_hash_value> is part of its fingerprint. If <dids> are
+    given, then only returns passages that come from documents indicated by <dids>
     '''
         
     # Get passages (and their atom_numbers and doc_names) with target_hash_value and mid            
@@ -339,8 +387,7 @@ def get_matching_passages_with_fingerprints(target_hash_value, mid):
     Only returns dictionaries where <target_hash_value> is part of its fingerprint.
     '''
     
-    with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) \
-        as conn:
+    with _get_connection(autocommit=True) as conn:
         conn.autocommit = True
         
         passages = get_matching_passages(target_hash_value, mid, conn)    
@@ -355,9 +402,7 @@ def get_passage_ids_by_hash(target_hash_value, mid):
     as part of its fingerprint. NOTE: only returns pids for source passages. 
     '''
 
-    with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) \
-            as conn:
-        conn.autocommit = True
+    with _get_connection(autocommit=True) as conn:
         
         if DEV_MODE:
             query = '''SELECT pid FROM dev_hashes WHERE hash_value = %s AND mid = %s AND is_source = 't';'''
@@ -417,11 +462,10 @@ def _get_doc_metadata(abs_path):
 def _row_already_exists(pid, mid):
     '''
     Checks if a row with the provided parameters already exists by querying the DB. Used to make 
-    sure we don't overwrite/re-fingerprint documents
+    sure we don't overwrite/re-fingerprint documents.
     '''
-    with psycopg2.connect(user = username, password = password, database = dbname.split("/")[1], host="localhost", port = 5432) \
-            as conn:
-        conn.autocommit = True
+    with _get_connection(autocommit=True) as conn:
+
         if DEV_MODE:
             existence_query = "SELECT * FROM dev_hashes WHERE pid = %s AND mid = %s LIMIT 1;"
         else:
@@ -456,7 +500,7 @@ def _test():
     atom_type = 'paragraph'
     hash_len = 10000
 
-    srs, sus = ExtrinsicUtility().get_training_files(n=12)
+    srs, sus = ExtrinsicUtility().get_corpus_files(n=12)
     populate_database(srs+sus, method, n, k, atom_type, hash_len)
 
 def _test_get_fp_query():
@@ -468,7 +512,7 @@ def _test_get_fp_query():
     k = 3
     atom_type = 'paragraph'
     hash_len = 10000
-    srcs, sus = ExtrinsicUtility().get_training_files(n=1)
+    srcs, sus = ExtrinsicUtility().get_corpus_files(n=1)
     mid = get_mid(method, n, k, atom_type, hash_len)
 
     for doc in srcs + sus:
@@ -488,7 +532,7 @@ def _test_reverse_lookup():
     k = 3
     atom_type = 'paragraph'
     hash_len = 10000
-    srcs, sus = ExtrinsicUtility().get_training_files(n=1)
+    srcs, sus = ExtrinsicUtility().get_corpus_files(n=1)
     mid = get_mid(method, n, k, atom_type, hash_len)
     
     for s in sus:
@@ -511,7 +555,7 @@ def _populate_variety_of_params():
     # is already in it. Yes I am aware this is an extremely error prone and stupid way to
     # keep track of this.
     
-    srs, sus = ExtrinsicUtility().get_training_files(n=20)
+    srs, sus = ExtrinsicUtility().get_corpus_files(n=20)
 
     #populate_database(sus+srs, "kth_in_sent", 5, 3, "full", 10000000, check_for_duplicate=False)
     #populate_database(sus+srs, "kth_in_sent", 3, 3, "full", 10000000, check_for_duplicate=False)
@@ -540,6 +584,8 @@ def _populate_variety_of_params():
     #populate_database(sus+srs, "winnow-k", 6, 15, "nchars", 10000000, check_for_duplicate=False)
     #populate_database(sus+srs, "winnow-k", 8, 15, "nchars", 10000000, check_for_duplicate=False)
 
+    #populate_database(sus+srs, "full", 5, 0, "paragraph", 10000000, check_for_duplicate=False)
+
     # Ten times bigger hash_size
     #populate_database(sus+srs, "kth_in_sent", 5, 3, "full", 100000000, check_for_duplicate=False)
     #populate_database(sus+srs, "kth_in_sent", 5, 3, "nchars", 100000000, check_for_duplicate=False)
@@ -554,8 +600,9 @@ def _populate_variety_of_params():
     #populate_database(sus+srs, "kth_in_sent", 5, 3, "nchars", 10000, check_for_duplicate=False)
     
     # More documents
-    srs, sus = ExtrinsicUtility().get_training_files(n=400)
-    populate_database(sus+srs, "anchor", 5, 0, "paragraph", 10000001, check_for_duplicate=False)
+    #srs, sus = ExtrinsicUtility().get_corpus_files(n=400)
+    #populate_database(sus+srs, "anchor", 5, 0, "paragraph", 10000001, check_for_duplicate=False)
+    
 
 if __name__ == "__main__":
     print 'DEV_MODE is set to', DEV_MODE
