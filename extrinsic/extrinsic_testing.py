@@ -16,7 +16,7 @@ from ..tokenization import *
 from ..evaluation.visualize import visualize_prec_recall_fmeasure
 from plagcomps.evaluation.precrecall import get_all_measures
 
-from ..dbconstants import username, password, dbname, extrinsicdbname
+from ..dbconstants import username, password, dbname, extrinsicdbname2
 import psycopg2
 import sqlalchemy
 
@@ -211,6 +211,8 @@ class ExtrinsicTester:
         '''
         trials, ground_truths, trials_dict, actuals_dict = self.get_trials(session)
         # avg_benno_results[i] = (thresh, avg_prec, avg_recall, avg_fmeasure)
+        print trials_dict
+        print actuals_dict
         avg_benno_results = self._benno_evaluate(trials_dict, actuals_dict)
       
         print 'Computing source accuracy...'
@@ -253,6 +255,9 @@ class ExtrinsicTester:
         # UNCOMMENT NEXT LINE TO GET FALSEPOSITIVES AND FALSENEGATIVES
         # self.analyze_fpr_fnr(trials_dict, actuals_dict, 0.50)
         roc_auc, roc_path = self.plot_ROC_curve(confidences, actuals)
+        
+        
+        print avg_benno_results
         
         thresholds, precisions, recalls, fmeasures = zip(*avg_benno_results)
         prf_path = visualize_prec_recall_fmeasure(thresholds, precisions, recalls, fmeasures)
@@ -299,7 +304,7 @@ class ExtrinsicTester:
                 if fmeasure is not None:
                     thresh_to_fmeasure.setdefault(thresh, []).append(fmeasure)
 
-            print '-'*20
+            #print '-'*20
 
         thresh_prec_avgs = {t : sum(l) / float(len(l)) for t, l in thresh_to_prec.iteritems()}
         thresh_recall_avgs = {t : sum(l) / float(len(l)) for t, l in thresh_to_recall.iteritems()}
@@ -307,7 +312,10 @@ class ExtrinsicTester:
 
         thresh_results = []
         for thresh in thresholds:
-            one_result = (thresh, thresh_prec_avgs[thresh], thresh_recall_avgs[thresh], thresh_fmeasure_avgs[thresh])
+            try:
+                one_result = (thresh, thresh_prec_avgs[thresh], thresh_recall_avgs[thresh], thresh_fmeasure_avgs[thresh])
+            except KeyError:
+                one_result = (thresh, None, None, None)
             thresh_results.append(one_result)
 
         return thresh_results
@@ -542,7 +550,7 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
 
     # Save the result
     if save_to_db:
-        with psycopg2.connect(user = username, password = password, database = extrinsicdbname, host="localhost", port = 5432) as conn:
+        with psycopg2.connect(user = username, password = password, database = extrinsicdbname2, host="localhost", port = 5432) as conn:
             conn.autocommit = True    
             with conn.cursor() as cur:
                 for i in range(len(thresholds)):

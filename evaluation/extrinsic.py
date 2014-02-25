@@ -61,7 +61,7 @@ def exec_q(query):
             cur.execute(query)
 
 def main():
-    num_sus = 10
+    num_sus = 16
     print "Getting documents"
     srs, sus = ExtrinsicUtility().get_corpus_files(n=num_sus)
 

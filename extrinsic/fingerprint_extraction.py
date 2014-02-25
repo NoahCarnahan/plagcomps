@@ -9,7 +9,7 @@ from .. import tokenization
 from ..shared.util import ExtrinsicUtility
 
 import psycopg2
-from ..dbconstants import username, password, extrinsicdbname
+from ..dbconstants import username, password, extrinsicdbname2
 import fingerprintstorage
 
 # TODO: omit words tokenized by nltk that are just puncuation
@@ -276,7 +276,7 @@ class FingerprintEvaluator:
         # Get the fingerprint of the passage in question
         fingerprint = fingerprintstorage.get_passage_fingerprint(full_path, atom_index, passage_atom_type, passage_mid)
         
-        with psycopg2.connect(user = username, password = password, database = extrinsicdbname, host="localhost", port = 5432) as conn:
+        with psycopg2.connect(user = username, password = password, database = extrinsicdbname2, host="localhost", port = 5432) as conn:
             conn.autocommit = True
             
             source_passages = {}
@@ -376,4 +376,5 @@ if __name__ == '__main__':
     f = open("/copyCats/itty-bitty-corpus/suspicious/einstein.txt","r")
     text = f.read()
     f.close()
-    print ex.get_fingerprint(text, 5, "kth_in_sent", 5)
+    text = "But on the edge of town, drills were driven out of his mind by something else. As he sat in the usual morning traffic jam, he couldn't help noticing that there seemed to be a lot of strangely dressed people about. People in cloaks. Mr. Dursley couldn't bear people who dressed in funny clothes -- the getups you saw on young people! He supposed this was some stupid new fashion. He drummed his fingers on the steering wheel and his eyes fell on a huddle of these weirdos standing quite close by. They were whispering excitedly together."
+    print ex.get_fingerprint(text, 5, "anchor", 0)
