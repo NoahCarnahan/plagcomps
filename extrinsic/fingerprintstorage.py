@@ -76,7 +76,7 @@ import psycopg2
 import os
 
 import fingerprint_extraction
-from ..dbconstants import username, password, extrinsicdbname
+from ..dbconstants import username, password, extrinsicdbname, extrinsicdbname2
 from ..shared.util import ExtrinsicUtility
 from ..tokenization import tokenize
 
@@ -89,7 +89,7 @@ def _get_connection(autocommit=False):
     '''
     Get a connection object to the database.
     '''
-    conn = psycopg2.connect(user = username, password = password, database = extrinsicdbname, host="localhost", port = 5432)
+    conn = psycopg2.connect(user = username, password = password, database = extrinsicdbname2, host="localhost", port = 5432)
     conn.autocommit = autocommit
     return conn
 

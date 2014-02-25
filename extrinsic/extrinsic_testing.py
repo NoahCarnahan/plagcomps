@@ -560,5 +560,45 @@ def test(method, n, k, atom_type, hash_size, confidence_method, num_files="all",
 
         
 if __name__ == "__main__":
-    test("anchor", 5, 0, "paragraph", 10000000, "jaccard", num_files=19, search_method='normal', search_n=1, 
-        save_to_db=True, ignore_high_obfuscation=False, show_false_negpos_info=False)
+
+    for atom in ["nchars", "paragraph"]:
+        for comp in ["jaccard", "containment"]:
+            test("kth_in_sent", 5, 3, atom, 10000000, comp, num_files=800, search_method='normal', search_n=1, 
+                save_to_db=True, ignore_high_obfuscation=False, show_false_negpos_info=False)
+            test("kth_in_sent", 3, 3, atom, 10000000, comp, num_files=800, search_method='normal', search_n=1, 
+                save_to_db=True, ignore_high_obfuscation=False, show_false_negpos_info=False)
+            test("kth_in_sent", 5, 5, atom, 10000000, comp, num_files=800, search_method='normal', search_n=1, 
+                save_to_db=True, ignore_high_obfuscation=False, show_false_negpos_info=False)
+            test("kth_in_sent", 3, 5, atom, 10000000, comp, num_files=800, search_method='normal', search_n=1, 
+                save_to_db=True, ignore_high_obfuscation=False, show_false_negpos_info=False)
+            test("kth_in_sent", 5, 0, atom, 10000000, comp, num_files=800, search_method='normal', search_n=1, 
+                save_to_db=True, ignore_high_obfuscation=False, show_false_negpos_info=False)
+            test("kth_in_sent", 5, 8, atom, 10000000, comp, num_files=800, search_method='normal', search_n=1, 
+                save_to_db=True, ignore_high_obfuscation=False, show_false_negpos_info=False)
+            
+            test("anchor", 3, 0, atom, 10000000, comp, num_files=800, search_method='normal', search_n=1, 
+                save_to_db=True, ignore_high_obfuscation=False, show_false_negpos_info=False)
+            test("anchor", 4, 0, atom, 10000000, comp, num_files=800, search_method='normal', search_n=1, 
+                save_to_db=True, ignore_high_obfuscation=False, show_false_negpos_info=False)
+            test("anchor", 5, 0, atom, 10000000, comp, num_files=800, search_method='normal', search_n=1, 
+                save_to_db=True, ignore_high_obfuscation=False, show_false_negpos_info=False)
+            
+            test("winnow-k", 8, 13, atom, 10000000, comp, num_files=800, search_method='normal', search_n=1, 
+                save_to_db=True, ignore_high_obfuscation=False, show_false_negpos_info=False)
+            test("winnow-k", 8, 15, atom, 10000000, comp, num_files=800, search_method='normal', search_n=1, 
+                save_to_db=True, ignore_high_obfuscation=False, show_false_negpos_info=False)
+            test("winnow-k", 6, 13, atom, 10000000, comp, num_files=800, search_method='normal', search_n=1, 
+                save_to_db=True, ignore_high_obfuscation=False, show_false_negpos_info=False)
+            test("winnow-k", 6, 15, atom, 10000000, comp, num_files=800, search_method='normal', search_n=1, 
+                save_to_db=True, ignore_high_obfuscation=False, show_false_negpos_info=False)
+            
+            test("full", 3, 0, atom, 10000000, comp, num_files=800, search_method='normal', search_n=1, 
+                save_to_db=True, ignore_high_obfuscation=False, show_false_negpos_info=False)
+            test("full", 4, 0, atom, 10000000, comp, num_files=800, search_method='normal', search_n=1, 
+                save_to_db=True, ignore_high_obfuscation=False, show_false_negpos_info=False)
+            test("full", 5, 0, atom, 10000000, comp, num_files=800, search_method='normal', search_n=1, 
+                save_to_db=True, ignore_high_obfuscation=False, show_false_negpos_info=False)
+          
+        
+        
+        
