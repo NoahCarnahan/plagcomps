@@ -43,7 +43,7 @@ class ExtrinsicTester:
         self.search_method = search_method
         self.search_n = search_n
 
-    def get_trials(self, session, fingerprint_m):
+    def get_trials(self, session, fingerprint_m=None):
         '''
         For each suspect document, split the document into atoms and classify each atom
         as plagiarized or not-plagiarized. Build a list of classifications and a list
@@ -53,6 +53,8 @@ class ExtrinsicTester:
         actuals = []
         classifications_dict = {}
         actuals_dict = {}
+        if fingerprint_m is None:
+            fingerprint_m = self.fingerprint_method
 
         outer_search_level_mid = fingerprintstorage.get_mid(fingerprint_m, self.n, self.k, "full", self.hash_len)
 
