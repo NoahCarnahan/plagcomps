@@ -5,8 +5,8 @@ from ..shared.util import ExtrinsicUtility, BaseUtility
 
 import sqlalchemy
 from sqlalchemy.orm import sessionmaker
-from ..dbconstants import username, password, dbname
-url = "postgresql://%s:%s@%s" % (username, password, dbname)
+from ..dbconstants import username, password, dbname, extrinsicdbname2
+url = "postgresql://%s:%s@%s" % (username, password, extrinsicdbname2)
 engine = sqlalchemy.create_engine(url)
 Session = sqlalchemy.orm.sessionmaker(bind=engine)
 
@@ -40,6 +40,7 @@ class CombinationTester:
         self.atom_type = kwargs.get("atom_type", "nchars")
         self.cluster_type = kwargs.get("cluster_type", "outlier")
         self.fingerprint_method = kwargs.get("fingerprint_method", "anchor")
+        self.similarity_measure = kwargs.get("similarity_measure", "jaccard")
         self.search_method = kwargs.get("search_method", "normal")
         self.search_n = kwargs.get("search_n", "1")
         self.combination_method = kwargs.get("combination_method", "geo_mean")
@@ -58,7 +59,7 @@ class CombinationTester:
     def test_extrinsic(self):
         
         #print "fingerprint_method=", self.fingerprint_method
-        ex_tester = ExtrinsicTester(self.atom_type, self.fingerprint_method, 5, 0, 10000001, "containment", self.ex_suspect_documents, self.ex_source_documents, search_method=self.search_method, search_n=self.search_n)
+        ex_tester = ExtrinsicTester(self.atom_type, self.fingerprint_method, 5, 0, 10000000, self.similarity_measure, self.ex_suspect_documents, self.ex_source_documents, search_method=self.search_method, search_n=self.search_n)
 
         #ex_tester = ExtrinsicTester(self.atom_type, self.fingerprint_method, 5, 0, 10000000, "containment", self.suspect_documents, self.source_documents, search_method="normal", search_n=1 )
         #trials, ground_truths =
@@ -110,15 +111,15 @@ class CombinationTester:
        #     combined_confidences = self._max(ex_confidences, in_confidences)
 
         combos = {}
-        combos["geo"] = self._geo_mean(ex_confidences, in_confidences)
-        combos["pow-1"] = self._power_mean(ex_confidences, in_confidences, power=-1)
-        combos["pow1"] = self._power_mean(ex_confidences, in_confidences, power=1)
-        combos["pow2"] = self._power_mean(ex_confidences, in_confidences, power=2)
-        combos["pow10"] = self._power_mean(ex_confidences, in_confidences, power=10)
-        combos["max"] = self._max(ex_confidences, in_confidences)
-        combos["min"] = self._min(ex_confidences, in_confidences)
+        #combos["geo"] = self._geo_mean(ex_confidences, in_confidences)
+        #combos["pow-1"] = self._power_mean(ex_confidences, in_confidences, power=-1)
+        #combos["pow1"] = self._power_mean(ex_confidences, in_confidences, power=1)
+        #combos["pow2"] = self._power_mean(ex_confidences, in_confidences, power=2)
+        #combos["pow10"] = self._power_mean(ex_confidences, in_confidences, power=10)
+        #combos["max"] = self._max(ex_confidences, in_confidences)
+        #combos["min"] = self._min(ex_confidences, in_confidences)
         combos["arith"] = self._arith_mean(ex_confidences, in_confidences)
-        combos["sum"] = self._sum(ex_confidences, in_confidences)
+        #combos["sum"] = self._sum(ex_confidences, in_confidences)
 
         metadata = {'n': len(actuals)}
         #combined_path, combined_roc_auc = BaseUtility.draw_roc(actuals, combined_confidences, save_figure=False, **metadata)
@@ -136,14 +137,20 @@ class CombinationTester:
     
 if __name__ == "__main__":
     session = Session()
-    num_files = "all"
 
     #args = {"search_method":"two_level_ff", "search_n":4}
     #args = {"combination_method": "max", "combination_parameter":10}
+    args1 = {"fingerprint_method":"full", "similarity_measure":"jaccard"}
+    args2 = {"fingerprint_method":"kth_in_sent", "similarity_measure":"jaccard"}
+
+    num_files = 2
 
     source_file_list, suspect_file_list = ExtrinsicUtility().get_corpus_files(n = num_files, include_txt_extension = True)
 
-    tester = CombinationTester(session, suspect_file_list, source_file_list) #, **args)
+    tester = CombinationTester(session, suspect_file_list, source_file_list, **args1)
+
+    tester.combine()
+    tester = CombinationTester(session, suspect_file_list, source_file_list, **args2)
 
     tester.combine()
     

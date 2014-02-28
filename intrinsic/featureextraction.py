@@ -1423,7 +1423,20 @@ def _test():
         print "honore_r_measure test passed"
     else:
         print "honore_r_measure test FAILED"
-    
+
+def rowlings_austen_test():
+    f = FeatureExtractor("But on the edge of town, drills were driven out of his mind by something else. As he sat in the usual morning traffic jam, he couldn't help noticing that there seemed to be a lot of strangely dressed people about. People in cloaks. Mr. Dursley couldn't bear people who dressed in funny clothes -- the getups you saw on young people! He supposed this was some stupid new fashion. He drummed his fingers on the steering wheel and his eyes fell on a huddle of these weirdos standing quite close by. They were whispering excitedly together. \n\n Mr. Dursley was enraged to see that a couple of them weren't young at all; why, that man had to be older than he was, and wearing an emerald-green cloak! The nerve of him! But then it struck Mr. Dursley that this was probably some silly stunt -- these people were obviously collecting for something -- yes, that would be it. The traffic moved on and a few minutes later, Mr. Dursley arrived in the parking lot, his mind back on drills.\n\n The evil of the actual disparity in their ages (and Mr. Woodhouse had not married early) was much increased by his constitution and habits; for having been a valetudinarian all his life, without activity of mind or body, he was a much older man in ways than in years; and though everywhere beloved for the friendliness of his heart and his amiable temper, his talents could not have recommended him at any time")
+    print f.get_spans("paragraph")
+    features = ["average_sentence_length", "avg(syntactic_complexity)", "syntactic_complexity_average"]
+    vectors = f.get_feature_vectors(features, "paragraph")
+    for i, v in enumerate(vectors):
+        print "passage", i, "has", "\t".join([str(x) for x in v])
+
+   # print 
+   # print 
+   # print FeatureExtractor.get_all_feature_function_names(include_nested=True)
+ 
 if __name__ == "__main__":
-    _test()
+    #_test()
+    rowlings_austen_test()
 
