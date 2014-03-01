@@ -32,7 +32,7 @@ import scipy, random
 
 Base = declarative_base()
 
-DEBUG = True
+DEBUG = False
 DB_VERSION_NUMBER = 5
 
 
@@ -137,8 +137,10 @@ def evaluate(reduced_docs, session, features, cluster_type, k, atom_type, docs, 
     
     count = 0
     valid_reduced_docs = []
+    print "intrinsic:", 
     for d in reduced_docs:
         count += 1
+        print count, 
         if DEBUG:
             print "On document", d, ". The", count, "th document."
 
@@ -168,6 +170,7 @@ def evaluate(reduced_docs, session, features, cluster_type, k, atom_type, docs, 
     metadata['n'] = len(reduced_docs)
     roc_path, roc_auc = _roc(valid_reduced_docs, plag_likelihoods, save_roc_figure=save_roc_figure, cheating=cheating, cheating_min_len=cheating_min_len, **metadata)
 
+    print
     # Return reduced_docs for caching in case we call <evaluate> multiple times
     return roc_path, roc_auc
 
@@ -190,9 +193,11 @@ def get_confidences_actuals(session, features, cluster_type, k, atom_type, docs,
     actuals = []
     
     count = 0
+    print "intrinsic:",
     valid_reduced_docs = []
     for d in reduced_docs:
         count += 1
+        print count,
         if DEBUG:
             print "On document", d, ". The", count, "th document."
 
@@ -220,6 +225,7 @@ def get_confidences_actuals(session, features, cluster_type, k, atom_type, docs,
         likelihood = cluster(cluster_type, k, feature_vecs, **clusterargs)
         plag_likelihoods.append(likelihood)
     
+    print
     session.close()
 
     all_confidences = []

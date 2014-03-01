@@ -57,13 +57,15 @@ class ExtrinsicTester:
 
         outer_search_level_mid = fingerprintstorage.get_mid(self.fingerprint_method, self.n, self.k, "full", self.hash_len)
 
+        print "extrinsic:", 
         for fi, f in enumerate(self.suspect_file_list, 1):
-            print
+            print fi, 
+            #zach print
             doc_name = f.replace(self.suspicious_path_start, "")
             if ".txt" in doc_name:
                 doc_name = doc_name.replace(".txt", "")
             if self.search_method == 'two_level_ff':
-                print '%d/%d Classifying %s (%s)' % (fi, len(self.suspect_file_list), doc_name, self.search_method)
+                #zach print '%d/%d Classifying %s (%s)' % (fi, len(self.suspect_file_list), doc_name, self.search_method)
 
                 acts = ground_truth._query_ground_truth(doc_name, self.base_atom_type, session, self.suspicious_path_start).get_ground_truth(session)
                 actuals += acts
@@ -91,13 +93,13 @@ class ExtrinsicTester:
                     classifications.append(top_source)
                     doc_classifications.append(top_source)
 
-                    print 'atom index:', str(atom_index+1) + '/' + str(len(acts))
-                    print 'confidence (actual, guess):', acts[atom_index], (confidence, source_filename, source_atom_index)
+                    #zach print 'atom index:', str(atom_index+1) + '/' + str(len(acts))
+                    #zach print 'confidence (actual, guess):', acts[atom_index], (confidence, source_filename, source_atom_index)
 
                 classifications_dict[f] = doc_classifications
 
             elif self.search_method == 'two_level_pf':
-                print '%d/%d Classifying %s (%s)' % (fi, len(self.suspect_file_list), doc_name, self.search_method)
+                #zach print '%d/%d Classifying %s (%s)' % (fi, len(self.suspect_file_list), doc_name, self.search_method)
                 acts = ground_truth._query_ground_truth(doc_name, self.base_atom_type, session, self.suspicious_path_start).get_ground_truth(session)
                 actuals += acts
 
@@ -132,8 +134,8 @@ class ExtrinsicTester:
                     classifications.append(top_source)
                     doc_classifications.append(top_source)
 
-                    print 'atom index:', str(atom_index+1) + '/' + str(len(acts))
-                    print 'confidence (actual, guess):', acts[atom_index], (confidence, source_filename, source_atom_index)
+                    #zach print 'atom index:', str(atom_index+1) + '/' + str(len(acts))
+                    #zach print 'confidence (actual, guess):', acts[atom_index], (confidence, source_filename, source_atom_index)
 
                 classifications_dict[f] = doc_classifications
                 
@@ -144,8 +146,8 @@ class ExtrinsicTester:
                 actuals_dict[f] = acts
                 doc_classifications = []
 
-                print f
-                print '%d/%d Classifying %s' % (fi, len(self.suspect_file_list), doc_name)
+                #zach print f
+                #zach print '%d/%d Classifying %s' % (fi, len(self.suspect_file_list), doc_name)
 
                 for atom_index in xrange(len(acts)):
                     atom_classifications = self.evaluator.classify_passage(doc_name, self.base_atom_type, atom_index, self.fingerprint_method, self.n, self.k, self.hash_len, self.confidence_method, self.mid)
@@ -158,11 +160,12 @@ class ExtrinsicTester:
                     classifications.append(top_source)
                     doc_classifications.append(top_source)
                     
-                    print 'atom index:', str(atom_index+1) + '/' + str(len(acts))
-                    print 'confidence (actual, guess):', acts[atom_index][0], (confidence, source_filename, source_atom_index)
+                    #zach print 'atom index:', str(atom_index+1) + '/' + str(len(acts))
+                    #zach print 'confidence (actual, guess):', acts[atom_index][0], (confidence, source_filename, source_atom_index)
 
                 classifications_dict[f] = doc_classifications
 
+        print
         return classifications, actuals, classifications_dict, actuals_dict
 
 

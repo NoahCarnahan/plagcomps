@@ -95,5 +95,14 @@ def main():
                     test(method, n, k, atom_type, 10000000, compare_method, num_files=num_sus, search_method='normal', search_n=1, save_to_db=True, ignore_high_obfuscation=False, show_false_negpos_info=False)
 
 if __name__ == "__main__":
-    main()
+    #main()
+    num_sus = 64
+    srs, sus = ExtrinsicUtility().get_corpus_files(n=num_sus)
+    docs = srs + sus
+
+    exec_q(drop_tables_query)
+    exec_q(create_tables_query)
+    populate_database(sus+srs, "full", 5, 0, "nchars", 10000000, check_for_duplicate=False)
+    populate_database(sus+srs, "kth_in_sent", 5, 5, "nchars", 10000000, check_for_duplicate=False)
+    exec_q(create_indices_query)
 
