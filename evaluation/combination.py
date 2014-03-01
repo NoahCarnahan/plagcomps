@@ -102,43 +102,43 @@ class CombinationTester:
         #print "ex confidences, ex_actuals", ex_confidences, ex_actuals
         #print "in_confidences, in_actuals", in_confidences, in_actuals
         assert ex_actuals == in_actuals
-        print "ex_actuals == in_actuals"
+        #print "ex_actuals == in_actuals"
         actuals = in_actuals
 
         #if self.combination_method == "geo_mean":
         #   combined_confidences = self._geo_mean(ex_confidences, in_confidences)
         #elif self.combination_method == "power_mean":
         #   combined_confidences = self._power_mean(ex_confidences, in_confidences)
+        combined_confidences = self._arith_mean(ex_confidences, in_confidences)
 
-        combos = {}
-        combos["geo"] = self._geo_mean(ex_confidences, in_confidences)
-        combos["pow-1"] = self._power_mean(ex_confidences, in_confidences, power=-1)
-        combos["pow1"] = self._power_mean(ex_confidences, in_confidences, power=1)
-        combos["pow2"] = self._power_mean(ex_confidences, in_confidences, power=2)
-        combos["pow10"] = self._power_mean(ex_confidences, in_confidences, power=10)
-        combos["max"] = self._max(ex_confidences, in_confidences)
-        combos["min"] = self._min(ex_confidences, in_confidences)
-        combos["arith"] = self._arith_mean(ex_confidences, in_confidences)
-        combos["sum"] = self._sum(ex_confidences, in_confidences)
+        #combos = {}
+        #combos["geo"] = self._geo_mean(ex_confidences, in_confidences)
+        #combos["pow-1"] = self._power_mean(ex_confidences, in_confidences, power=-1)
+        #combos["pow1"] = self._power_mean(ex_confidences, in_confidences, power=1)
+        #combos["pow2"] = self._power_mean(ex_confidences, in_confidences, power=2)
+        #combos["pow10"] = self._power_mean(ex_confidences, in_confidences, power=10)
+        #combos["max"] = self._max(ex_confidences, in_confidences)
+        #combos["min"] = self._min(ex_confidences, in_confidences)
+        #combos["arith"] = self._arith_mean(ex_confidences, in_confidences)
+        #combos["sum"] = self._sum(ex_confidences, in_confidences)
 
         paths = {}
         metadata = {'n': len(actuals)}
-        for key in combos:
-                paths[key], combos[key] = BaseUtility.draw_roc(actuals, combos[key], save_figure=True, **metadata)
-        #combined_path, combined_roc_auc = BaseUtility.draw_roc(actuals, combined_confidences, save_figure=True, **metadata)
+        #for key in combos:
+        #        paths[key], combos[key] = BaseUtility.draw_roc(actuals, combos[key], save_figure=True, **metadata)
+        combined_path, combined_roc_auc = BaseUtility.draw_roc(actuals, combined_confidences, save_figure=True, **metadata)
         in_path, in_roc_auc = BaseUtility.draw_roc(actuals, in_confidences, save_figure=True, **metadata)
         ex_path, ex_roc_auc = BaseUtility.draw_roc(actuals, ex_confidences, save_figure=True, **metadata)
 
         print "Intrinsic AUC:", in_roc_auc, in_path
         print "Extrinsic AUC:", ex_roc_auc, ex_path
-        #print "Combined AUC:", combined_roc_auc
-        for key in combos:
-            print key, "AUC:", combos[key], paths[key]
+        print "Combined AUC:", combined_roc_auc, combined_path
+        #for key in combos:
+        #    print key, "AUC:", combos[key], paths[key]
     
 if __name__ == "__main__":
-    print "glajsfdldasjflka"
     session = Session()
-    num_files = 64
+    num_files = 16
 
     #args = {"search_method":"two_level_ff", "search_n":4}
     args1 = {"fingerprint_method":"full", "similarity_measure":"jaccard"}
