@@ -1,7 +1,5 @@
 plagcomps
 =========
 
-NLTK is a required dependency. Download it [here](http://nltk.org/install.html).
-The nltk corpora must also be installed with `import nltk; nltk.download();` in the python interpreter.
-
-Scipy is also a required dependency.
+For more information, feel free to contact us and check out our project's
+home page (when it's up and running!)
