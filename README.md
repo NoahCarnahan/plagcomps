@@ -2,4 +2,4 @@ plagcomps
 =========
 
 For more information, feel free to contact us and check out our project's
-home page (when it's up and running!)
+web page at: http://www.cs.carleton.edu/cs_comps/1314/dlibenno/final-results/index.html
